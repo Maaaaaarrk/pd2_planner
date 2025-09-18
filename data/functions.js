@@ -88,7 +88,12 @@ function startup(choice) {
 // reset - Calls startup() with the specified class name
 //	name: string class name
 // ---------------------------------
-function reset(name) { startup(name.toLowerCase()); }
+function reset(name) {
+startup(name.toLowerCase());
+// document.getElementById("quests").checked = 1;
+ //toggleQuests(true);
+ resetQuests();
+ }
 
 // init - Initiates mouse functions
 // ---------------------------------
@@ -208,7 +213,7 @@ function resetSkills() {
 		skills[s].extra_levels = 0
 		skills[s].force_levels = 0
 		document.getElementById("p"+skills[s].key).innerHTML = ""
-		document.getElementById("s"+skills[s].key).onmouseover = function() {mouseOut};
+		//document.getElementById("s"+skills[s].key).onmouseover = function() {mouseOut};
 		document.getElementById("s"+skills[s].key).onclick = function() {mouseOut};
 		document.getElementById("s"+skills[s].key).oncontextmenu = function() {mouseOut};
 	}
@@ -273,6 +278,22 @@ function toggleQuests(quests) {
 	// Den of Evil, Radament's Lair, The Golden Bird, Lam Esen's Tome, The Fallen Angel, Prison of Ice
 }
 
+function resetQuests() {
+    //if (character.skillpoints < 12 || character.statpoints < 15){
+            character.quests_completed =1
+            var toggle = character.quests_completed
+            character.skillpoints += (12*toggle)
+            character.statpoints += (15*toggle)
+            character.life += (60*toggle)
+            character.fRes += (30*toggle)
+            character.cRes += (30*toggle)
+            character.lRes += (30*toggle)
+            character.pRes += (30*toggle)
+            updatePrimaryStats()
+            updateOther()
+   // }
+}
+
 // toggleRunning - Toggles whether the character is running or walking/standing
 //	running: name identifier for 'Running' checkbox element
 // ---------------------------------
@@ -299,6 +320,7 @@ function changeVersion(v, char_class) {
 			document.getElementById("equipment_corruptions").style.display = "none"
 			document.getElementById("equipment_a").style.display = "none"
 			document.getElementById("equipment_b").style.display = "none"
+			document.getElementById("equipment_c").style.display = "none"
 			document.getElementById("side").style.display = "none"
 			document.getElementById("nav_autocast").style.display = "none"
 			document.getElementById("nav_running").style.display = "none"
@@ -315,6 +337,7 @@ function changeVersion(v, char_class) {
 			document.getElementById("equipment_corruptions").style.display = "block"
 			document.getElementById("equipment_a").style.display = "block"
 			document.getElementById("equipment_b").style.display = "block"
+			document.getElementById("equipment_c").style.display = "block"
 			document.getElementById("side").style.display = "block"
 			document.getElementById("nav_autocast").style.display = "block"
 			document.getElementById("nav_running").style.display = "block"
@@ -325,10 +348,11 @@ function changeVersion(v, char_class) {
 			character_all = {amazon:character_pd2_amazon, assassin:character_pd2_assassin, barbarian:character_pd2_barbarian, druid:character_pd2_druid, necromancer:character_pd2_necromancer, paladin:character_pd2_paladin, sorceress:character_pd2_sorceress, any:character_pd2_any}
 			document.getElementById("stats").style.display = "none"
 			document.getElementById("skill_details_active").style.display = "none"
-			document.getElementById("gui_equipment").style.display = "none"
-			document.getElementById("equipment_corruptions").style.display = "none"
-			document.getElementById("equipment_a").style.display = "none"
-			document.getElementById("equipment_b").style.display = "none"
+			document.getElementById("gui_equipment").style.display = "block"
+			document.getElementById("equipment_corruptions").style.display = "block"
+			document.getElementById("equipment_a").style.display = "block"
+			document.getElementById("equipment_b").style.display = "block"
+			document.getElementById("equipment_c").style.display = "none"
 			document.getElementById("side").style.display = "none"
 			document.getElementById("nav_autocast").style.display = "none"
 			document.getElementById("nav_running").style.display = "none"
@@ -337,7 +361,7 @@ function changeVersion(v, char_class) {
 			//document.getElementById("skill_details_inactive").innerHTML = "<br>Additional features aren't implemented for this version"
 			settings.autocast = 1
 		}
-		
+
 		// character class handling
 		char_class = char_class.toLowerCase()
 		var rand_class = character.class_name;
@@ -347,7 +371,7 @@ function changeVersion(v, char_class) {
 			var rand_class = classes[random];
 		}
 		if (classes.includes(char_class) == false) { char_class = rand_class }
-		
+
 		// reset some things		TODO: fix normal reset functionality & updating 		...this is only necessary for Lightning Mastery when switching from PD2 to PoD? Why? ...something to do with the other masteries (Fire & Cold) being oskills?
 		for (id in effects) {
 			effects[id].info.enabled = 0
@@ -357,7 +381,7 @@ function changeVersion(v, char_class) {
 			disableEffect(id)
 			removeEffect(id,null)
 		}
-		
+
 		// update URL
 		params.set('v', v)
 		if (settings.parameters == 1) {
@@ -367,7 +391,7 @@ function changeVersion(v, char_class) {
 			else if (v == 3) { window.history.replaceState({}, '', `${location.pathname}?v=PD2`) }
 			else { window.history.replaceState({}, '', `${location.pathname}`) }
 		}
-		
+
 		reset(char_class)
 	}
 }
@@ -493,17 +517,17 @@ function loadParams() {
 		//params_string = params_string.split(",").join("%2C")
 		//params_string = params_string.split("~").join("%C2%AD")
 		//params = new URLSearchParams(params_string);
-		
+
 		var spent_skillpoints = 0;
 		var param_level = Math.floor(Math.max(1,Math.min(99,~~params.get('level'))));
 		var param_diff = ~~params.get('difficulty');
-		var param_quests = ~~params.get('quests');
+		var param_quests = 1;//~~params.get('quests');
 		var param_run = ~~params.get('running');
 		var param_str = Math.max(0,Math.min(505,~~params.get('strength')));
 		var param_dex = Math.max(0,Math.min(505,~~params.get('dexterity')));
 		var param_vit = Math.max(0,Math.min(505,~~params.get('vitality')));
 		var param_ene = Math.max(0,Math.min(505,~~params.get('energy')));
-		var param_url = ~~params.get('url');
+		var param_url = 1;//~~params.get('url');
 		var param_coupling = 1;
 		if (params.has('coupling') == true) { param_coupling = params.get('coupling') }
 		var param_autocast = 1;
@@ -512,7 +536,7 @@ function loadParams() {
 		if (params.has('skills') == true) { param_skills = params.get('skills') }
 		var param_charms = [];
 		if (params.has('charm') == true) { param_charms = params.getAll('charm') }
-		
+
 		var param_effects = [];											// per effect: id,enabled,snapshot ...if snapshot=1: ,origin,index ...per affix: ,affix,value
 		if (params.has('effect') == true) { param_effects = params.getAll('effect') }
 		var param_mercenary = "none";									// name ...per merc group: ,itemname
@@ -527,11 +551,11 @@ function loadParams() {
 			for (group in corruptsEquipped) { param_equipped[group] = params.get(group).split(',') }
 		}
 		for (e in param_effects) { param_effects[e] = param_effects[e].split(',') }
-		
+
 		if (param_quests != 1) { param_quests = 0 }
 		if (param_run != 1) { param_run = 0 }
 		if ((param_str+param_dex+param_vit+param_ene) > (5*param_level + 15*param_quests)) { param_str = 0; param_dex = 0; param_vit = 0; param_ene = 0; }
-		
+
 		character.level = param_level
 		character.strength_added = param_str
 		character.dexterity_added = param_dex
@@ -576,9 +600,9 @@ function loadParams() {
 		character.life += (character.levelup_life*(character.level-1))
 		character.mana += (character.levelup_mana*(character.level-1))
 		character.stamina += (character.levelup_stamina*(character.level-1))
-		
+
 		//if (game_version == 2) {	// these features are only available on the PoD version
-			
+
 			// setup equipment
 			if (param_equipped != 0) {
 				for (group in corruptsEquipped) { if (param_equipped[group][0] != "none") {	// equipment
@@ -604,7 +628,7 @@ function loadParams() {
 				for (group in socketed) { for (let i = 3; i < param_equipped[group].length; i++) { if (param_equipped[group][i] != "") { addSocketable(param_equipped[group][i]); inv[tempSetup].load = group; tempSetup = 0; } } }
 				for (let s = 1; s < inv[0].in.length; s++) { if (inv[s].empty != 1) { inv[0].onpickup = inv[0].in[s]; handleSocket(null,inv[s].load,s); } }	// socketables get moved to equipment
 			}
-			
+
 			// setup mercenary & iron golem
 			if (param_mercenary != "none") {
 				setMercenary(param_mercenary[0])
@@ -623,7 +647,7 @@ function loadParams() {
 				for (let i = 0; i < options.length; i++) { if (options[i].innerHTML == param_irongolem) { document.getElementById("dropdown_golem").selectedIndex = i } }
 				setIronGolem(param_irongolem)
 			}
-			
+
 			// setup effects
 			if (param_effects != []) {
 				for (e in param_effects) { for (let i = 1; i < non_items.length; i++) {		// shrine effects
@@ -654,7 +678,7 @@ function loadParams() {
 				} }
 				if (effects != {}) { for (effect in effects) { if (typeof(effects[effect].info.enabled) != 'undefined') { for (e in param_effects) { if (param_effects[e][0] == effect) { if (param_effects[e][1] != effects[effect].info.enabled) { toggleEffect(effect) } } } } } }
 			}
-			
+
 			selectedSkill[0] = param_selected[0]
 			selectedSkill[1] = param_selected[1]
 		//}
@@ -691,7 +715,7 @@ function loadParams() {
 	addCharm
 	addSocketable
 */
-	
+
 // corrupt - Sets a corruption outcome for an item
 //	group: name of item's group
 //	val: name of corruption
@@ -822,7 +846,7 @@ function equip(group, val) {
 	var set = "";
 	var set_before = 0;
 	var set_after = 0;
-	
+
 	// check if item was imported from a different category (offhand weapons)
 	var src_group = group;
 	var found = 0;
@@ -831,12 +855,12 @@ function equip(group, val) {
 	var itemType = "";
 	var twoHanded = 0;
 	for (item in equipment[src_group]) { if (equipment[src_group][item].name == val) { twoHanded = ~~equipment[src_group][item].twoHanded; if (typeof(equipment[src_group][item].type) != 'undefined') { itemType = equipment[src_group][item].type } } }
-	
+
 	for (old_affix in equipped[group]) { if (old_affix == "set_bonuses") { old_set_bonuses = equipped[group].set_bonuses } }
 	for (item in equipment[src_group]) { if (equipment[src_group][item].name == val) { if (typeof(equipment[src_group][item].set_bonuses) != 'undefined') { set_bonuses = equipment[src_group][item].set_bonuses } } }
 	if (set_bonuses != "") { set = set_bonuses[0]; set_before = character[set]; }
 	if (old_set_bonuses != "") { old_set = old_set_bonuses[0]; old_set_before = character[old_set]; }
-	
+
 	// if replacing an item, previous item's affixes are removed from character
 	for (old_affix in equipped[group]) {
 		if (typeof(character[old_affix]) != 'undefined') { character[old_affix] -= equipped[group][old_affix] }
@@ -1060,7 +1084,7 @@ function equip(group, val) {
 		document.getElementById(group+"_image").src = img
 		document.getElementById("tooltip_inventory").style.display = "none"
 	}
-	
+
 	if (auraName != "" && auraLevel != 0) {		// TODO: Why does this break things if called earlier? (item image wasn't appearing)
 		addEffect("aura",auraName,auraLevel,group)
 	}
@@ -1110,7 +1134,7 @@ function reloadOffhandCorruptions(kind) {
 	for (affix in socketed.offhand.totals) { character[affix] -= socketed.offhand.totals[affix] }
 	socketed.offhand.totals = {}
 	for (let i = 0; i < socketed.offhand.items.length; i++) { socketed.offhand.items[i] = {id:socketed.offhand.items[i].id,name:socketed.offhand.items[i].name} }
-	
+
 	corrupt("offhand", "offhand")
 	var choices = "<option>­ ­ ­ ­ Corruption</option>";
 	for (let m = 1; m < corruptions["offhand"].length; m++) {
@@ -1172,7 +1196,7 @@ function addCharm(val) {
 		else if (val == "everything") { charmHeight = "29"; charmImage = charm_img.prefix+"debug_face.png"; charm_y = 1; }
 		else { charmHeight = "29"; charmImage = charm_img.prefix+"debug_skull.png"; charm_y = 1; }
 	}
-	
+
 	var allow = 1;
 	for (let c = 1; c <= inv[0].in.length; c++) {
 		if (inv[0].in[c] == val) {
@@ -1253,10 +1277,10 @@ function addSocketable(val) {
 	else if (item.type == "rune" || item.type == "gem") { itemImage = prefix + item.type+"/" + item.name.split(' ').join('_') + ".png" }
 	else if (item.type == "other") { itemImage = prefix + item.name+".png" }
 	else { itemImage = prefix + "debug_plus.png" }
-	
+
 	var append = "_" + Math.floor((Math.random() * 999999) + 1);	// generate "unique" ID for item
 	val = val + append
-	
+
 	var socketable = 'socketable';
 	var itemHTML = '<img style="width: 28; height: 28; pointer-events: auto; z-index:5;" id="' + val + '" src="' + itemImage + '" draggable="true" ondragstart="dragSocketable(event)" width="28" height="28" oncontextmenu="trashSocketable(event,this.id,0)" onmouseover="itemHover(event, this.value)" onmouseout="itemOut()" onclick="socketableSelect(event)">';
 	var insertion = "";
@@ -1282,7 +1306,7 @@ function addSocketable(val) {
 		document.getElementById(insertion).innerHTML += itemHTML;
 	}
 	document.getElementById("dropdown_socketables").selectedIndex = 0
-	
+
 	return val;	// currently UNUSED
 }
 
@@ -1565,7 +1589,7 @@ function initializeEffect(origin, name, num, other) {
 	if (origin == "oskill") { prefix = "./images/skills/"+oskills_info["oskill_"+id].native_class+"/"; }
 	var iconOff = prefix+"dark/"+name+" dark.png";
 	var iconOn = prefix+name+fileType;
-	
+
 	var newDiv = document.createElement("div");
 	var dClass = document.createAttribute("class");			dClass.value = "effect-container";				newDiv.setAttributeNode(dClass);
 	var dId = document.createAttribute("id");			dId.value = id;							newDiv.setAttributeNode(dId);
@@ -1573,24 +1597,24 @@ function initializeEffect(origin, name, num, other) {
 	var dHoverOff = document.createAttribute("onmouseout");		dHoverOff.value = "hoverEffectOff()";				newDiv.setAttributeNode(dHoverOff);
 	var dClickLeft = document.createAttribute("onclick");		dClickLeft.value = "leftClickEffect(event,this.id)";		newDiv.setAttributeNode(dClickLeft);
 	var dClickRight = document.createAttribute("oncontextmenu");	dClickRight.value = "rightClickEffect(event,this.id,1)";	newDiv.setAttributeNode(dClickRight);
-	
+
 	var newEffect = document.createElement("img");
 	var eClass = document.createAttribute("class");			eClass.value = "effect";					newEffect.setAttributeNode(eClass);
 	var eId = document.createAttribute("id");			eId.value = id+"_e";						newEffect.setAttributeNode(eId);
 	var eSrc = document.createAttribute("src");			eSrc.value = iconOff;						newEffect.setAttributeNode(eSrc);
 	newDiv.appendChild(newEffect)
-	
+
 	var newEffectSnapshot = document.createElement("img");
 	var oClass = document.createAttribute("class");			oClass.value = "effect";					newEffectSnapshot.setAttributeNode(oClass);
 	var oId = document.createAttribute("id");			oId.value = id+"_ss";						newEffectSnapshot.setAttributeNode(oId);
 	var oSrc = document.createAttribute("src");			oSrc.value = "./images/skills/none.png";			newEffectSnapshot.setAttributeNode(oSrc);
 	newDiv.appendChild(newEffectSnapshot)
-	
+
 	var effectGUI = document.getElementById("side");
 	effectGUI.appendChild(newDiv);
-	
+
 	if (typeof(effects[id]) == 'undefined') { effects[id] = {info:{}} }
-	
+
 	effects[id].info.enabled = 0
 	effects[id].info.imageOff = iconOff
 	effects[id].info.imageOn = iconOn
@@ -1600,7 +1624,7 @@ function initializeEffect(origin, name, num, other) {
 	effects[id].info.snapshot = 0
 	effects[id].info.level = num
 	setEffectData(origin,name,num,other)
-	
+
 	if (settings.autocast == 1) { toggleEffect(id) }	// TODO: should also toggle-on if effect is always-active
 	adjustStackedAuras()
 }
@@ -1900,7 +1924,7 @@ function updateEffect(id) {
 	var active = effects[id].info.enabled;
 	var old_data = {}
 	for (affix in effects[id]) { if (affix != "info") { old_data[affix] = effects[id][affix] } }
-	
+
 	setEffectData(origin,name,index,other)
 	if (active == 1) {
 		for (affix in old_data) { character[affix] -= old_data[affix] }
@@ -2077,13 +2101,13 @@ function getAuraData(aura, lvl, source) {
 	if (character.class_name == "Paladin") {
 		if (aura == "Cleansing") { result.life_replenish = Math.min(1,(skills[0].level+skills[0].force_levels))*~~(skills[0].data.values[0][skills[0].level+skills[0].extra_levels]); }
 		else if (aura == "Meditation") { result.life_replenish = Math.min(1,(skills[0].level+skills[0].force_levels))*~~(skills[0].data.values[0][skills[0].level+skills[0].extra_levels]); }
-		else if (aura == "Holy Fire") { 
+		else if (aura == "Holy Fire") {
 			result.fDamage_min = auras[a].data.values[0][lvl] * (1 + 0.04*skills[1].level + 0.06*skills[9].level);
 			result.fDamage_max = auras[a].data.values[1][lvl] * (1 + 0.04*skills[1].level + 0.06*skills[9].level); }
-		else if (aura == "Holy Freeze") { 
+		else if (aura == "Holy Freeze") {
 			result.cDamage_min = auras[a].data.values[0][lvl] * (1 + 0.04*skills[3].level + 0.06*skills[9].level);
 			result.cDamage_max = auras[a].data.values[1][lvl] * (1 + 0.04*skills[3].level + 0.06*skills[9].level); }
-		else if (aura == "Holy Shock") { 
+		else if (aura == "Holy Shock") {
 			result.lDamage_min = auras[a].data.values[0][lvl] * (1 + 0.04*skills[5].level + 0.06*skills[9].level);
 			result.lDamage_max = auras[a].data.values[1][lvl] * (1 + 0.04*skills[5].level + 0.06*skills[9].level); }
 	}
@@ -2175,7 +2199,7 @@ function getCTCSkillData(name, lvl, group) {
 		}
 	}
 	// Necromancer
-	else if (name == "Flesh Offering") { result.duration = skill.data.values[0][lvl]; result.radius = skill.data.values[1][lvl]; }	// TODO: implement for summons: result.fcr = skill.data.values[2][lvl]; result.ias_skill = skill.data.values[3][lvl]; result.velocity = skill.data.values[4][lvl]; 
+	else if (name == "Flesh Offering") { result.duration = skill.data.values[0][lvl]; result.radius = skill.data.values[1][lvl]; }	// TODO: implement for summons: result.fcr = skill.data.values[2][lvl]; result.ias_skill = skill.data.values[3][lvl]; result.velocity = skill.data.values[4][lvl];
 	return result;
 }
 
@@ -2268,7 +2292,7 @@ function saveTextAsFile() {
 	var textToSave = document.getElementById("inputTextToSave").value;
 	var textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"});
 	var textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob);
-	
+
 	var file_prefix = "";
 	if (game_version == 2) { file_prefix = "pod_" }
 	else if (game_version == 3) { file_prefix = "pd2_" }
@@ -2310,7 +2334,7 @@ function loadFileAsText() {
 // ---------------------------------
 function parseFile(file) {
 	fileInfo = {character:{class_name:""},skills:[],equipped:{charms:[]},corruptsEquipped:{},mercEquipped:{},socketed:{helm:[],armor:[],weapon:[],offhand:[]},effects:{},selectedSkill:["",""],mercenary:"",settings:{},ironGolem:""};	// reset fileInfo
-	
+
 	if (file.includes("version:")) {
 		var new_version = file.split("version:")[1].split(",character:")[0];
 		fileInfo.version = ~~new_version
@@ -2617,18 +2641,43 @@ function itemHover(ev, id) {
 	var name = val.split("_")[0];
 	var height = 1;
 	if (typeof(equipped["charms"][val]) == 'undefined') { for (let k = 0; k < socketables.length; k++) { if (socketables[k].name == name) { type = socketables[k].type; index = k; } } }
-	if (type == "charm") {
-		//name = equipped.charms[val].name
-		color = "Indigo"
-		if (name == "Annihilus" || name == "Hellfire Torch" || name == "Gheed's Fortune" || name == "Horadric Sigil") { color = "Gold" }
-		if (equipped["charms"][val].size != "small" && equipped["charms"][val].size != "large" && equipped["charms"][val].size != "grand") { color = "Red" }
-		lastCharm = name
-		if (equipped["charms"][val].size == "large") { height = 2; base = "<br>Large Charm"; }
-		else if (equipped["charms"][val].size == "grand") { height = 3; base = "<br>Grand Charm"; }
-		else { base = "<br>Small Charm" }
-		if (name.substr(0,3) == "+1 " && height == 3) { name = name.substr(3) }
-		if (equipped["charms"][val].rarity == "magic" || equipped["charms"][val].debug == 1) { base = "" }
-	} else {
+	if (type === "charm") {
+        // Safely check if equipped["charms"] and equipped["charms"][val] exist
+        if (equipped && equipped["charms"] && equipped["charms"][val]) {
+            let charm = equipped["charms"][val];
+
+            // name = charm.name; // uncomment if you want to set name from equipped
+            color = "Indigo";
+
+            if (name === "Annihilus" || name === "Hellfire Torch" || name === "Gheed's Fortune" || name === "Horadric Sigil") {
+                color = "Gold";
+            }
+
+            if (charm.size !== "small" && charm.size !== "large" && charm.size !== "grand") {
+                color = "Red";
+            }
+
+            lastCharm = name;
+
+            if (charm.size === "large") {
+                height = 2;
+                base = "<br>Large Charm";
+            } else if (charm.size === "grand") {
+                height = 3;
+                base = "<br>Grand Charm";
+            } else {
+                base = "<br>Small Charm";
+            }
+
+            if (typeof name === "string" && name.substr(0, 3) === "+1 " && height === 3) {
+                name = name.substr(3);
+            }
+
+            if (charm.rarity === "magic" || charm.debug === 1) {
+                base = "";
+            }
+        }
+    } else {
 		if (type == "rune") { color = "Orange" }
 		else if (socketables[index].rarity == "unique") { color = "Gold" }
 		else if (socketables[index].rarity == "magic") { color = "Blue" }
@@ -2638,11 +2687,27 @@ function itemHover(ev, id) {
 		if (type == "jewel" && socketables[index].rarity != "magic") { base = "<br>Jewel" }
 	}
 
-	var cell_x = id[1]-1; if (cell_x == -1) { cell_x = 9 }
-	var cell_y = id[2]-1 + height;
+	let cell_x = 9; // default
+    let cell_y = 0; // default
+
+    if (typeof id === "string") {
+        if (id.length > 1) {
+            cell_x = parseInt(id[1], 10) - 1;
+            if (cell_x === -1) {
+                cell_x = 9;
+            }
+        }
+
+        if (id.length > 2) {
+            let y = parseInt(id[2], 10) - 1;
+            if (!isNaN(y)) {
+                cell_y = y + height;
+            }
+        }
+    }
 	var offset_x = 350;
 	var offset_y = 433;
-	if (game_version != 2) { offset_y = 313 }
+//	if (game_version != 2) { offset_y = 313 }
 	offset_x += (10+cell_x*28)
 	offset_y += (124+cell_y*29)
 	var main_affixes = "";
@@ -2689,19 +2754,19 @@ function itemHover(ev, id) {
 	document.getElementById("tooltip_inventory").style.top = offset_y+"px"
 	document.getElementById("tooltip_inventory").style.left = (offset_x-wid)+"px"
 	if (name == "") { document.getElementById("tooltip_inventory").style.left = 950+"px" }
-	
+
 	// TODO better system:
-	
+
 	// start with cell divs at high z-index
 	// on mouseover, use cell info...
 	// if cell is not empty
 	//	if cell is not main-cell of occupying item			// main-cell: top cell when traversing inv[].in
 	//		lower z-index of cell  (pushes the item above, so it can be grabbed while all its other individual cells are surfaced)
-	// then, 
-	// on mouseout: raise z-level of cell 
+	// then,
+	// on mouseout: raise z-level of cell
 	//
 	// ...this should fix the bug that prevents charms from being moved into an overlapping space below themselves (or to the right for future items wider than 1 space)
-	
+
 }
 
 // itemOut - hides item tooltip for Charm Inventory
@@ -2737,7 +2802,7 @@ function equipmentHover(group) {
 	else if (equipped[group].size == "small") { base = "Small Charm" }
 	else if (equipped[group].size == "large") { base = "Large Charm" }
 	else if (equipped[group].size == "grand") { base = "Grand Charm" }
-	
+
 	if (equipped[group].name != "none") { name = equipped[group].name.split(" ­ ")[0].split(" (")[0]; }
 	if (base.split("_")[0] != "Special") { base = "<br>"+base }
 	if (equipped[group].rarity == "common" || equipped[group].rarity == "magic") { base = "" }
@@ -2896,7 +2961,7 @@ function equipmentHover(group) {
 	document.getElementById("item_set_affixes").innerHTML = set_affixes
 	document.getElementById("item_socketed_affixes").innerHTML = socketed_affixes
 	document.getElementById("item_group_affixes").innerHTML = set_group_affixes
-	
+
 	var textColor = "Gold";
 	if (equipped[group].rarity == "set") { textColor = "Green" }
 	else if (equipped[group].rarity == "magic") { textColor = "Blue" }
@@ -2906,7 +2971,7 @@ function equipmentHover(group) {
 	else if (equipped[group].rarity == "common" || equipped[group].rarity == "rw") { textColor = "White" }
 	document.getElementById("item_name").style.color = colors[textColor]
 	document.getElementById("tooltip_inventory").style.display = "block"
-	
+
 	var wid = Math.floor(document.getElementById(groupId).getBoundingClientRect().width/2 - document.getElementById("tooltip_inventory").getBoundingClientRect().width/2);
 	if (name != "") {
 		if (groupId == "helm_") { offset_x += 2*30+wid; offset_y += 60;
@@ -3057,7 +3122,7 @@ function changeBase(group, change) {
 				character[affix] -= equipped[group][affix]
 				equipped[group][affix] = Math.ceil(multEth*multED*bases[base][affix])
 				character[affix] += equipped[group][affix]
-			} else 
+			} else
 		*/	if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "throw_min" || affix == "throw_max" || affix == "base_min_alternate" || affix == "base_max_alternate") {
 				character[affix] -= equipped[group][affix]
 				equipped[group][affix] = Math.ceil(multEth*bases[base][affix])
@@ -3168,7 +3233,7 @@ function drop(ev,cell) {
 	var data = ev.dataTransfer.getData("text");
 	ev.target.appendChild(document.getElementById(data));
 	for (s = 1; s <= inv[0].in.length; s++) {
-		if (inv[0].in[s] == inv[0].onpickup) { inv[s].empty = 1; inv[0].in[s] = ""; 
+		if (inv[0].in[s] == inv[0].onpickup) { inv[s].empty = 1; inv[0].in[s] = "";
 			inv[s].y = 1;
 			document.getElementById(inv[s].id).style = "position: absolute; width: 29px; height: 29px; z-index: 3;";
 		}
@@ -3178,7 +3243,7 @@ function drop(ev,cell) {
 	if (inv[0].pickup_y > 1) { inv[cell+10].empty = 0; inv[0].in[cell+10] = inv[0].onpickup; inv[cell].y = 2; }
 	if (inv[0].pickup_y > 2) { inv[cell+20].empty = 0; inv[0].in[cell+20] = inv[0].onpickup; inv[cell].y = 3; }
 	inv[0].onpickup = "none"
-	
+
 	// Remove affixes if unsocketed from equipment
 	var socketable = 0;
 	var name = val.split('_')[0];
@@ -3226,7 +3291,7 @@ function trash(ev) {
 		}
 	}
 	ev.target.remove();
-	
+
 	// find/remove duplicates
 	var dup = 0;
 	if (ev.shiftKey) { dup = 9 }
@@ -3416,9 +3481,9 @@ function trashSocketable(event, ident, override) {
 			inv[0].in[s] = "";
 		}
 	}
-	
+
 	target.remove()
-	
+
 	// find/remove duplicates
 	if (dup > 0) {
 		for (let d = 0; d < inv[0].in.length; d++) {
@@ -3431,7 +3496,7 @@ function trashSocketable(event, ident, override) {
 			}
 		}
 	}
-	
+
 	// update
 	calculateSkillAmounts()
 	updateStats()
@@ -3634,7 +3699,7 @@ function skillHover(skill) {
 		next_value = round(next_value)
 		if (next_value < 0 && next_display.endsWith("+")) { next_display = next_display.substr(0,next_display.length-1) }
 		next_display += next_value
-		
+
 		current_display += skill.text[i]
 		//if (skill.level+skill.extra_levels <= LIMIT) { levels = skill.level+skill.extra_levels } else { levels = LIMIT }
 		levels = skill.level+skill.extra_levels
@@ -3642,7 +3707,7 @@ function skillHover(skill) {
 		current_value = round(current_value)
 		if (current_value < 0 && current_display.endsWith("+")) { current_display = current_display.substr(0,current_display.length-1) }
 		current_display += current_value
-		
+
 		if (skill.index[0] == (i+1)) {
 			if (skill.level > 0) { pre_display += current_display } else { pre_display += next_display }
 			current_display = ""
@@ -3665,15 +3730,15 @@ function skillHover(skill) {
 	document.getElementById("next").innerHTML = next_display
 	document.getElementById("current").innerHTML = current_display
 	document.getElementById("pretext").innerHTML = pre_display
-	
+
 	if (skill.level == 0 || (skill.level > 0 && skill.index[0] > 0)) {
 		document.getElementById("description").innerHTML = skill.description + "<br>"
 	}
-	
+
 	calculateSkillAmounts()
 	updateStats()
 	showBaseLevels(skill)
-	
+
 	document.getElementById("tooltip").style.display = "block"
 	document.getElementById("tooltip").style.visibility = "visible"
 	document.getElementById("tooltip").style.left = "0px"
@@ -3683,7 +3748,7 @@ function skillHover(skill) {
 	var tty = [0,82,150,218,286,354,422][skill.key[1]];
 	var style = "display: block; top: "+tty+"px; left: "+ttx+"px;"
 	document.getElementById("tooltip").style = style
-	
+
 	// moves the tooltip up if it's cutoff below the viewable screen area
 	var rect = document.getElementById("tooltip").getBoundingClientRect();
 	if (rect.bottom > (window.innerHeight || document.documentElement.clientHeight)) {
@@ -3783,7 +3848,7 @@ function getWeaponDamage(str, dex, group, thrown) {
 	if (group == "offhand") { other = "weapon" }
 	// multiplier from stats
 	var statBonus = 0;
-	if (typeof(type) != 'undefined') { 
+	if (typeof(type) != 'undefined') {
 		if (type == "hammer") { statBonus = (str*1.1/100) }
 		else if ((type == "spear" || type == "javelin") && equipped[group].only == "amazon") { statBonus = ((str*0.8/100)+(dex*0.5/100)) }
 		else if (type == "bow" || type == "crossbow" || type == "javelin") { statBonus = (dex/100) }						// check if javelins are counted as missile weapons or throwing weapons
@@ -3815,7 +3880,7 @@ function getWeaponDamage(str, dex, group, thrown) {
 	var phys_mult = (1+statBonus+(c.damage_bonus+weapon_skillup)/100);
 	if (phys_max < phys_min) { phys_max = phys_min + 1 };
 	var values = [phys_min, phys_max, phys_mult];
-	
+
 	return values
 }
 
@@ -3872,11 +3937,11 @@ function updatePrimaryStats() {
 	var dexTotal = (c.dexterity + c.all_attributes + c.level*c.dexterity_per_level);
 	var vitTotal = (c.vitality + c.all_attributes + c.level*c.vitality_per_level);
 	var energyTotal = (c.energy + c.all_attributes)*(1+c.max_energy/100);
-	
+
 	var life_addon = (vitTotal-c.starting_vitality)*c.life_per_vitality;
 	var stamina_addon = (vitTotal-c.starting_vitality)*c.stamina_per_vitality;
 	var mana_addon = (energyTotal-c.starting_energy)*c.mana_per_energy;
-	
+
 	var item_def = 0;
 	for (group in corruptsEquipped) {
 		if (typeof(equipped[group].base_defense) != 'undefined') { if (equipped[group].base_defense != unequipped.base_defense) {
@@ -3900,7 +3965,7 @@ function updatePrimaryStats() {
 	}
 	var def = (item_def + c.defense + c.level*c.defense_per_level + Math.floor(dexTotal/4)) * (1 + (c.defense_bonus + c.defense_skillup)/100);
 	var ar = ((dexTotal - 7) * 5 + c.ar + c.level*c.ar_per_level + c.ar_const + (c.ar_per_socketed*socketed.offhand.socketsFilled)) * (1+(c.ar_skillup + c.ar_skillup2 + c.ar_bonus + c.level*c.ar_bonus_per_level)/100) * (1+c.ar_shrine_bonus/100);
-	
+
 /*	// Poison Calculation Testing
 	var pDamage = c.pDamage_all;
 	var pDuration = c.pDamage_duration;
@@ -3930,7 +3995,7 @@ function updatePrimaryStats() {
 			if (basic_min_offhand > 0 || basic_max_offhand > 0) { document.getElementById("basic_attack").innerHTML = basic_min_offhand + "-" + basic_max_offhand + " {"+Math.ceil((basic_min_offhand+basic_max_offhand)/2)+"}"; document.getElementById("offhand_basic").style.display = "none"; }
 		}
 	}
-	
+
 	var block_shield = c.block;
 	if (c.class_name == "Amazon" || c.class_name == "Assassin" || c.class_name == "Barbarian") { block_shield -= 5 }
 	if (c.class_name == "Druid" || (c.class_name == "Necromancer" && equipped.offhand.only != "necromancer") || c.class_name == "Sorceress") { block_shield -= 10 }
@@ -3944,7 +4009,7 @@ function updatePrimaryStats() {
 		document.getElementById("block_label").style.visibility = "hidden"
 		document.getElementById("block").innerHTML = ""
 	}
-	
+
 	//var enemy_lvl = ~~MonStats[monsterID][4+c.difficulty];
 	var enemy_lvl = Math.min(~~c.level,89);	// temp, sets 'area level' at the character's level (or as close as possible if the area level isn't available in the selected difficulty)
 	if (c.difficulty == 1) { enemy_lvl = Math.min(43,enemy_lvl) }
@@ -3983,7 +4048,7 @@ function updatePrimaryStats() {
 	if (c.mRes > 0 || c.mDamage_reduced > 0) { magicRes += "%" }
 	if (c.mDamage_reduced > 0) { magicRes += (" +"+c.mDamage_reduced) }
 	document.getElementById("mres").innerHTML = magicRes
-	
+
 	var ias = c.ias + Math.floor(dexTotal/8)*c.ias_per_8_dexterity;
 	if (offhandType == "weapon" && typeof(equipped.offhand.ias) != 'undefined') { ias -= equipped.offhand.ias }
 	var ias_total = ias + c.ias_skill;
@@ -4036,7 +4101,7 @@ function updatePrimaryStats() {
 // ---------------------------------
 function updateSecondaryStats() {
 	var c = character;
-	
+
 	var physRes = ""; if (c.pdr > 0) { physRes = Math.min(50,c.pdr)+"% " }
 	if (c.damage_reduced > 0) { physRes += ("+"+c.damage_reduced) }
 	if (c.pdr == 0 && c.damage_reduced == 0) { physRes = 0 }
@@ -4055,13 +4120,13 @@ function updateSecondaryStats() {
 	if (c.lAbsorb == 0 && c.lAbsorb_flat == 0) { lAbs = 0 }
 	document.getElementById("labsorb").innerHTML = lAbs
 	document.getElementById("mabsorb").innerHTML = c.mAbsorb_flat
-	
+
 	document.getElementById("cdr").innerHTML = c.cdr; if (c.cdr > 0) { document.getElementById("cdr").innerHTML += "%" }
 	var fcrTotal = c.fcr + Math.floor(c.level*c.fcr_per_level);
-	
+
 	var fcr_f = c.fcr_frames;
 	for (let i = 1; i < c.fcr_bp.length; i++) { if (fcrTotal >= c.fcr_bp[i]) { fcr_f -= 1 } }
-	
+
 	var fhr_f = c.fhr_frames;
 	for (let i = 1; i < c.fhr_bp.length; i++) { if (c.fhr >= c.fhr_bp[i]) { fhr_f -= 1 } }
 	if (c.class_name == "Paladin") { if (equipped.weapon.type == "spear" || equipped.weapon.type == "staff") {
@@ -4072,7 +4137,7 @@ function updateSecondaryStats() {
 		fhr_f = c.fhr_frames_alt;
 		for (let i = 1; i < c.fhr_bp_alt.length; i++) { if (c.fhr >= c.fhr_bp_alt[i]) { fhr_f -= 1 } }
 	} }
-	
+
 	var fbr_f = c.fbr_frames;
 	for (let i = 1; i < c.fbr_bp.length; i++) { if (c.fbr >= c.fbr_bp[i]) { fbr_f -= 1 } }
 	if (c.class_name == "Amazon") { if (equipped.weapon.twoHanded != 1 && (equipped.weapon.type == "axe" || equipped.weapon.type == "mace" || equipped.weapon.type == "sword" || equipped.weapon.type == "wand")) {	// TODO: Also include throwing axes?
@@ -4083,7 +4148,7 @@ function updateSecondaryStats() {
 		fbr_f = c.fbr_frames_alt;
 		for (let i = 1; i < c.fbr_bp_alt.length; i++) { if (c.fbr >= c.fbr_bp_alt[i]) { fbr_f -= 1 } }
 	} } } }
-	
+
 	if (effects["Werebear"] != null) { if (typeof(effects["Werebear"].info.enabled) != 'undefined') { if (effects["Werebear"].info.enabled == 1) {
 		fcr_f = character_all.druid.fcr_frames_werebear
 		for (let i = 1; i < character_all.druid.fcr_bp_werebear.length; i++) { if (fcrTotal >= character_all.druid.fcr_bp_werebear[i]) { fcr_f -= 1 } }
@@ -4100,14 +4165,14 @@ function updateSecondaryStats() {
 		fbr_f = character_all.druid.fbr_frames_werewolf
 		for (let i = 1; i < character_all.druid.fbr_bp_werewolf.length; i++) { if (c.fbr >= character_all.druid.fbr_bp_werewolf[i]) { fbr_f -= 1 } }
 	} } }
-	
+
 	document.getElementById("fcr").innerHTML = fcrTotal; if (fcrTotal > 0) { document.getElementById("fcr").innerHTML += "%" }
 	document.getElementById("fhr").innerHTML = c.fhr; if (c.fhr > 0) { document.getElementById("fhr").innerHTML += "%" }
 	document.getElementById("fbr").innerHTML = c.fbr; if (c.fbr > 0) { document.getElementById("fbr").innerHTML += "%" }
 	if (fcrTotal > 0 || equipped.weapon.name != "none" || equipped.offhand.name != "none") { document.getElementById("fcr").innerHTML += " ("+fcr_f+"f)" }
 	if (c.fhr > 0 || equipped.weapon.name != "none" || equipped.offhand.name != "none") { document.getElementById("fhr").innerHTML += " ("+fhr_f+"f)" }
 	if (c.fbr > 0 || c.block > 0 || c.block_skillup > 0) { document.getElementById("fbr").innerHTML += " ("+fbr_f+"f)" }
-	
+
 	// actual movespeed
 	var movespeed = 9;
 	var movement = (1 + (Math.floor(150*c.frw/(150+c.frw)) + c.frw_skillup + c.velocity)/100);
@@ -4115,7 +4180,7 @@ function updateSecondaryStats() {
 	document.getElementById("velocity").innerHTML = movespeed + " yds/s"
 	document.getElementById("frw").innerHTML = Math.floor(c.frw + c.frw_skillup); if (c.frw > 0 || c.frw_skillup > 0) { document.getElementById("frw").innerHTML += "%" }
 	//document.getElementById("frw").innerHTML += " ("+movespeed+" yds/s)"
-	
+
 	document.getElementById("life_leech").innerHTML = c.life_leech; if (c.life_leech > 0) { document.getElementById("life_leech").innerHTML += "%" }
 	document.getElementById("mana_leech").innerHTML = c.mana_leech; if (c.mana_leech > 0) { document.getElementById("mana_leech").innerHTML += "%" }
 	var LPH = c.life_per_hit + "m , " + c.life_per_ranged_hit + "r";
@@ -4124,7 +4189,7 @@ function updateSecondaryStats() {
 	var MPH = c.mana_per_hit + "m , " + c.mana_per_ranged_hit + "r";
 	if (MPH == "0m , 0r") { MPH = 0 }
 	document.getElementById("mana_per_hit").innerHTML = MPH
-	
+
 	document.getElementById("fdamage").innerHTML = c.fDamage; if (c.fDamage > 0) { document.getElementById("fdamage").innerHTML += "%" }
 	document.getElementById("cdamage").innerHTML = c.cDamage; if (c.cDamage > 0) { document.getElementById("cdamage").innerHTML += "%" }
 	document.getElementById("ldamage").innerHTML = c.lDamage; if (c.lDamage > 0) { document.getElementById("ldamage").innerHTML += "%" }
@@ -4133,23 +4198,23 @@ function updateSecondaryStats() {
 	document.getElementById("cpierce").innerHTML = c.cPierce; if (c.cPierce > 0) { document.getElementById("cpierce").innerHTML += "%" }
 	document.getElementById("lpierce").innerHTML = c.lPierce; if (c.lPierce > 0) { document.getElementById("lpierce").innerHTML += "%" }
 	document.getElementById("ppierce").innerHTML = c.pPierce; if (c.pPierce > 0) { document.getElementById("ppierce").innerHTML += "%" }
-	
+
 	document.getElementById("pierce").innerHTML = c.pierce + c.pierce_skillup; if (c.pierce > 0 || c.pierce_skillup > 0) { document.getElementById("pierce").innerHTML += "%" }
 	document.getElementById("cblow").innerHTML = c.cblow; if (c.cblow > 0) { document.getElementById("cblow").innerHTML += "%" }
 	document.getElementById("dstrike").innerHTML = c.dstrike + Math.floor(c.level*c.dstrike_per_level); if (c.dstrike > 0 || c.dstrike_per_level > 0) { document.getElementById("dstrike").innerHTML += "%" }
 	document.getElementById("cstrike").innerHTML = c.cstrike + c.cstrike_skillup; if (c.cstrike > 0 || c.cstrike_skillup > 0) { document.getElementById("cstrike").innerHTML += "%" }
 	document.getElementById("owounds").innerHTML = c.owounds; if (c.owounds > 0) { document.getElementById("owounds").innerHTML += "%" }
-	
+
 	var mf = Math.floor(c.mf + c.level*c.mf_per_level);
 	var eMF = Math.floor(mf*250/(mf+250));
 	document.getElementById("mf").innerHTML = mf; if (c.mf != 0 || c.mf_per_level != 0) { document.getElementById("mf").innerHTML += "% ("+eMF+"%)" }
 	document.getElementById("gf").innerHTML = c.gf; if (c.gf != 0) { document.getElementById("gf").innerHTML += "%" }
-	
+
 	document.getElementById("damage_vs_demons").innerHTML = c.damage_vs_demons; if (c.damage_vs_demons > 0) { document.getElementById("damage_vs_demons").innerHTML += "%" }
 	document.getElementById("damage_vs_undead").innerHTML = Math.floor(c.damage_vs_undead + c.level*c.damage_vs_undead_per_level); if (c.damage_vs_undead > 0 || c.damage_vs_undead_per_level > 0) { document.getElementById("damage_vs_undead").innerHTML += "%" }
 	document.getElementById("ar_vs_demons").innerHTML = c.ar_vs_demons
 	document.getElementById("ar_vs_undead").innerHTML = Math.floor(c.ar_vs_undead + c.level*c.ar_vs_undead_per_level)
-	
+
 	if (c.life_per_demon_kill > 0) { document.getElementById("life_per_kill").innerHTML = c.life_per_kill + " , " + c.life_per_demon_kill + " (demons)" } else { document.getElementById("life_per_kill").innerHTML = c.life_per_kill }
 	document.getElementById("mana_per_kill").innerHTML = c.mana_per_kill
 	var lifeRegen = "";
@@ -4158,9 +4223,9 @@ function updateSecondaryStats() {
 	document.getElementById("mana_regen").innerHTML = Math.round(c.mana_regen,1)+"%"	// TODO: mana_regen should multiply base regen (1.66%) instead of being additive? Or is the 1.66 value meant to be 166%?
 	//var manaTotal = Math.floor((c.mana + c.level*c.mana_per_level + mana_addon) * (1 + c.max_mana/100));
 	//var manaRegeneratedPerSecond = 25 * Math.floor(Math.floor(256*manaTotal/(25*120)) * ((100+c.mana_regen)/100)) / 256;
-	
+
 	document.getElementById("damage_to_mana").innerHTML = c.damage_to_mana; if (c.damage_to_mana > 0) { document.getElementById("damage_to_mana").innerHTML += "%" }
-	
+
 	document.getElementById("enemy_fres").innerHTML = c.enemy_fRes; if (c.enemy_fRes < 0) { document.getElementById("enemy_fres").innerHTML += "%" }
 	document.getElementById("enemy_cres").innerHTML = c.enemy_cRes; if (c.enemy_cRes < 0) { document.getElementById("enemy_cres").innerHTML += "%" }
 	document.getElementById("enemy_lres").innerHTML = c.enemy_lRes; if (c.enemy_lRes < 0) { document.getElementById("enemy_lres").innerHTML += "%" }
@@ -4203,7 +4268,7 @@ function updateTertiaryStats() {
 	document.getElementById("blind_on_hit").innerHTML = enemyBlind
 	if (c.flee_on_hit > 0) { document.getElementById("flee_on_hit").innerHTML = "Hit Causes Monster to Flee " + Math.min(100,c.flee_on_hit) + "%<br>" } else { document.getElementById("flee_on_hit").innerHTML = "" }
 	if (c.discount > 0) { document.getElementById("discount").innerHTML = "Vendor Prices Reduced by " + c.discount + "%<br>" } else { document.getElementById("discount").innerHTML = "" }
-	
+
 	if (c.itd > 0) { document.getElementById("itd").innerHTML = "Ignore Target Defense<br>" } else { document.getElementById("itd").innerHTML = "" }
 	if (c.pmh > 0) { document.getElementById("pmh").innerHTML = "Prevent Monster Heal<br>" } else { document.getElementById("pmh").innerHTML = "" }
 	if (c.cbf > 0) { document.getElementById("cbf").innerHTML = "Cannot Be Frozen<br>" }
@@ -4322,7 +4387,7 @@ function updateOther() {
 	}
 	updateSkillIcons()
 	checkRequirements()
-	
+
 	// update available sockets - TODO: move this to a more suitable 'update' function
 	for (group in socketed) {
 		socketed[group].sockets = (~~(equipped[group].sockets) + ~~(corruptsEquipped[group].sockets))
@@ -4451,7 +4516,7 @@ function updateSkills() {
 			k++
 		}
 	}
-	
+
 	// TODO: make less inefficient, include oskills
 	for (let s = 0; s < skills.length; s++) {
 		if (skills[s].level == 0 && skills[s].force_levels == 0) {
@@ -4488,7 +4553,7 @@ function checkSkill(skillName, num) {
 		native_skill = 1
 		skill = skills[s]
 	} }
-	
+
 	var c = character;
 	var strTotal = (c.strength + c.all_attributes + c.level*c.strength_per_level);
 	var dexTotal = (c.dexterity + c.all_attributes + c.level*c.dexterity_per_level);
@@ -4503,12 +4568,12 @@ function checkSkill(skillName, num) {
 	dmg = getNonPhysWeaponDamage("weapon")
 	var nonPhys_min = Math.floor(dmg.fMin + dmg.cMin + dmg.lMin + dmg.pMin + dmg.mMin);
 	var nonPhys_max = Math.floor(dmg.fMax + dmg.cMax + dmg.lMax + dmg.pMax + dmg.mMax);
-	
+
 	if (skillName != " ­ ­ ­ ­ Skill 1" && skillName != " ­ ­ ­ ­ Skill 2") {
 		var outcome = {min:0,max:0,ar:0};
 		if (native_skill == 0) { outcome = character_all.any.getSkillDamage(skillName, ar, physDamage[0], physDamage[1], physDamage[2], nonPhys_min, nonPhys_max); }
 		else { outcome = c.getSkillDamage(skill, ar, physDamage[0], physDamage[1], physDamage[2], nonPhys_min, nonPhys_max); }
-		
+
 		//var enemy_lvl = ~~MonStats[monsterID][4+c.difficulty];
 		var enemy_lvl = Math.min(~~c.level,89);	// temp, sets 'area level' at the character's level (or as close as possible if the area level isn't available in the selected difficulty)
 		if (c.difficulty == 1) { enemy_lvl = Math.min(43,enemy_lvl) }
@@ -4517,7 +4582,7 @@ function checkSkill(skillName, num) {
 		var enemy_def = (MonStats[monsterID][8] * MonLevel[enemy_lvl][c.difficulty])/100;
 		enemy_def = Math.max(0,enemy_def + enemy_def*(c.enemy_defense+c.target_defense)/100+c.enemy_defense_flat)
 		var hit_chance = Math.round(Math.max(5,Math.min(95,(100 * outcome.ar / (outcome.ar + enemy_def)) * (2 * c.level / (c.level + enemy_lvl)))));
-		
+
 		var output = ": " + outcome.min + "-" + outcome.max + " {"+Math.ceil((outcome.min+outcome.max)/2)+"}";
 		if (~~outcome.min != 0 && ~~outcome.max != 0) { document.getElementById("skill"+num+"_info").innerHTML = output } else { document.getElementById("skill"+num+"_info").innerHTML = ":" }
 		if (outcome.ar != 0) { document.getElementById("ar_skill"+num).innerHTML = "AR: " + outcome.ar + " ("+hit_chance+"%)" } else { document.getElementById("ar_skill"+num).innerHTML = "" }
@@ -4543,7 +4608,7 @@ function checkSkill(skillName, num) {
 		for (let i = 1; i < c.fcr_bp_alt.length; i++) { if (fcrTotal >= c.fcr_bp_alt[i]) { fcr_f -= 1 } }
 		document.getElementById("ar_skill"+num).innerHTML = "Cast Rate: "+fcr_f+" frames"
 	}
-	
+
 	updateSkills()
 }
 
@@ -4588,7 +4653,7 @@ function updateSocketTotals() {
 function updateURL() {
 	var param_quests = ~~character.quests_completed; if (param_quests == -1) { param_quests = 0 };
 	var param_run = ~~character.running; if (param_run == -1) { param_run = 0 };
-	
+
 	//params.set('v', game_version)		// handled elsewhere currently
 	params.set('class', character.class_name.toLowerCase())
 	params.set('level', ~~character.level)
@@ -4616,8 +4681,8 @@ function updateURL() {
 	params.delete('effect')
 	params.delete('mercenary')
 	params.delete('irongolem')
-	
-	if (game_version == 2) {	// these features are only available on the PoD version
+
+	//if (game_version == 2) {	// these features are only available on the PoD version
 		params.set('selected', selectedSkill[0]+','+selectedSkill[1])
 		for (group in corruptsEquipped) {
 			var param_equipped = equipped[group].name+','+equipped[group].tier+','+corruptsEquipped[group].name
@@ -4628,7 +4693,7 @@ function updateURL() {
 			} }
 			params.set(group, param_equipped)
 		}
-	}
+	//}
 	
 	for (id in effects) { if (typeof(effects[id].info.enabled) != 'undefined') {
 		var param_effect = id+','+effects[id].info.enabled+','+effects[id].info.snapshot;

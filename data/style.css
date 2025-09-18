@@ -24,7 +24,6 @@
   -webkit-user-select: none;	/* for safari & chrome browsers */
   -moz-user-select: none;   	/* for mozilla browsers */
   -ms-user-select: none;    	/* for IE10+ */
-  background-color: black;
 }
 .hover {
   position: absolute;
@@ -96,7 +95,7 @@
   background-color: #161616;
 }
 .background {
-  background-color: black;
+    background-image: url(../images/bg2.jpg);
 }
 .dropdown-skill {
   background-color: black;
