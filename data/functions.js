@@ -1057,7 +1057,7 @@ function equip(group, val) {
 		}
 	}
 	// remove incompatible corruptions
-	if (equipped[group].ethereal > 0 || equipped[group].sockets > 0 || equipped[group].rarity == "rw" || equipped[group].rarity == "common" || (group == "offhand" && (equipped[group].type == "shield" || equipped[group].type == "quiver") && equipped[group].type != corruptsEquipped[group].base)) { corrupt(group, group) }
+	if (equipped[group].ethereal > 0 || equipped[group].rarity == "rw" || equipped[group].rarity == "common" || (group == "offhand" && (equipped[group].type == "shield" || equipped[group].type == "quiver") && equipped[group].type != corruptsEquipped[group].base)) { corrupt(group, group) }
 	if (corruptsEquipped[group].name == "+ Sockets") { adjustCorruptionSockets(group) }
 	if (group == "offhand") {
 		// reload corruption options when the selected type changes
@@ -2749,7 +2749,9 @@ function itemHover(ev, id) {
 	document.getElementById("item_set_affixes").innerHTML = ""
 	document.getElementById("item_socketed_affixes").innerHTML = ""
 	document.getElementById("item_group_affixes").innerHTML = ""
-	document.getElementById("tooltip_inventory").style.display = "block"
+	if((name+base).length>0) {
+	    document.getElementById("tooltip_inventory").style.display = "block"
+	}
 	var wid = Math.floor(document.getElementById("tooltip_inventory").getBoundingClientRect().width/2);
 	document.getElementById("tooltip_inventory").style.top = offset_y+"px"
 	document.getElementById("tooltip_inventory").style.left = (offset_x-wid)+"px"
@@ -2970,7 +2972,11 @@ function equipmentHover(group) {
 	else if ((equipped[group].rarity == "common" || equipped[group].rarity == "rw") && equipped[group].ethereal == 1) { textColor = "Gray" }
 	else if (equipped[group].rarity == "common" || equipped[group].rarity == "rw") { textColor = "White" }
 	document.getElementById("item_name").style.color = colors[textColor]
-	document.getElementById("tooltip_inventory").style.display = "block"
+	if(document.getElementById("item_info").innerHTML === "") {
+	   document.getElementById("tooltip_inventory").style.display = "none"
+	} else {
+	   document.getElementById("tooltip_inventory").style.display = "block"
+	}
 
 	var wid = Math.floor(document.getElementById(groupId).getBoundingClientRect().width/2 - document.getElementById("tooltip_inventory").getBoundingClientRect().width/2);
 	if (name != "") {

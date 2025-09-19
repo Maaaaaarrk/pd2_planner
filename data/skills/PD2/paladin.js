@@ -27,12 +27,12 @@ var character_pd2_paladin = {class_name:"Paladin", strength:25, dexterity:20, vi
 
 		if (skill.name == "Might" && elem == 1) {				result = skill.data.values[2][lvl]/2 }
 		if (skill.name == "Blessed Aim" && elem == 0) {			result = skill.level }
-		if (skill.name == "Holy Fire" && elem>0 && elem<5) {	result *= ((1 + 0.15*skills[1].level + 0.15*skills[9].level + 0.15*skills[13].level) * (1+character.fDamage/100)) }
-		if (skill.name == "Holy Freeze" && elem < 4) {			result *= ((1 + 0.12*skills[3].level + 0.12*skills[9].level + 0.12*skills[13].level) * (1+character.cDamage/100)) }
+		if (skill.name == "Holy Fire" && elem>0 && elem<5) {	result *= ((1 + 0.16*skills[1].level + 0.16*skills[9].level + 0.16*skills[13].level) * (1+character.fDamage/100)) }
+		if (skill.name == "Holy Freeze" && elem < 4) {			result *= ((1 + 0.11*skills[3].level + 0.11*skills[9].level + 0.11*skills[13].level) * (1+character.cDamage/100)) }
 		if (skill.name == "Holy Shock" && (elem == 0 || elem == 2)) {	result *= (1+character.lDamage/100) }	// synergies don't apply to minimum lightning damage
 		if (skill.name == "Holy Shock" && (elem == 1 || elem == 3)) {	result *= ((1 + 0.09*skills[5].level + 0.09*skills[9].level + 0.09*skills[13].level) * (1+character.lDamage/100)) }	// excludes minimum lightning damage (synergies don't apply)
-		if (skill.name == "Sanctuary" && elem>0 && elem<3) {	result *= ((1 + 0.08*skills[10].level + 0.08*skills[13].level + 0.08*skills[27].level)) }								// attack
-		if (skill.name == "Sanctuary" && elem>2 && elem<5) {	result *= ((1 + 0.08*skills[10].level + 0.08*skills[13].level + 0.08*skills[27].level) * (1+character.mDamage/100)) }	// aura
+		if (skill.name == "Sanctuary" && elem>0 && elem<3) {	result *= ((1 + 0.10*skills[10].level + 0.10*skills[13].level + 0.10*skills[27].level)) }								// attack
+		if (skill.name == "Sanctuary" && elem>2 && elem<5) {	result *= ((1 + 0.10*skills[10].level + 0.10*skills[13].level + 0.10*skills[27].level) * (1+character.mDamage/100)) }	// aura
 		if (skill.name == "Thorns" && elem == 1) {				result *= (1 + 0.20*skills[10].level + 0.20*skills[2].level) }
 		if (skill.name == "Concentration" && elem == 1) {		result = skill.data.values[2][lvl]/2 }									// party damage
 		if (skill.name == "Concentration" && elem == 4) {		result = ((skill.data.values[2][lvl]/2) * (1+character.mDamage/100)) }	// magic hammer skill damage
@@ -40,15 +40,15 @@ var character_pd2_paladin = {class_name:"Paladin", strength:25, dexterity:20, vi
 
 		if (skill.name == "Joust" && elem == 0) {				result = skill.data.values[elem][Math.max(1,skill.level)] }
 		if (skill.name == "Sacrifice" && elem == 2) {			result += (25*skills[8].level + 25*skills[18].level) }
-		if (skill.name == "Zeal" && elem == 1) {				result += (15*skills[20].level) }
+		if (skill.name == "Zeal" && elem == 1) {				result += (20*skills[20].level) }
 		if (skill.name == "Vengeance" && elem == 2) {			result += (2*skills[11].level + 2*skills[15].level + 2*skills[16].level + 2*skills[19].level) }
-		if (skill.name == "Charge" && elem == 0) {				result += (20*skills[6].level + 20*skills[10].level) }
-		if (skill.name == "Holy Shield" && elem < 2) {			result *= (1 + 0.04*skills[21].level + 0.04*skills[2].level) }
+		if (skill.name == "Charge" && elem == 0) {				result += (15*skills[6].level + 15*skills[10].level) }
+		if (skill.name == "Holy Shield" && elem < 2) {			result *= (1 + 0.05*skills[21].level + 0.05*skills[2].level) }
 		if (skill.name == "Holy Shield" && elem == 3) {			result += (15*skills[2].level) }
 		if (skill.name == "Blessed Hammer" && elem < 2) {		result *= ((1 + 0.12*skills[13].level + 0.12*skills[6].level) * (1+character.mDamage/100)) }
-		if (skill.name == "Holy Bolt" && elem < 2) {			result *= ((1 + 0.09*skills[31].level + 0.09*skills[29].level + 0.09*skills[32].level) * (1+character.mDamage/100)) }
+		if (skill.name == "Holy Bolt" && elem < 2) {			result *= ((1 + 0.11*skills[31].level + 0.11*skills[29].level + 0.11*skills[32].level) * (1+character.mDamage/100)) }
 		if (skill.name == "Holy Bolt" && elem>1 && elem<4) {	result *= (1 + 0.05*skills[0].level) }
-		if (skill.name == "Holy Light" && elem == 0) {			result += (5*skills[0].level) }
+		if (skill.name == "Holy Light" && elem == 0) {			result += (10*skills[0].level) }
 		if (skill.name == "Holy Light" && elem == 1) {			result += (10*skills[0].level) }
 		if (skill.name == "Holy Nova" && elem < 2) {			result *= ((1 + 0.15*skills[22].level + 0.15*skills[29].level) * (1+character.mDamage/100)) }
 		if (skill.name == "Holy Nova" && elem == 2) {			result += (10*skills[0].level + 10*skills[31].level) }

@@ -16,20 +16,20 @@ var character_pd2_amazon = {class_name:"Amazon", strength:20, dexterity:25, vita
 	getSkillData : function(skill, lvl, elem) {
 		var result = skill.data.values[elem][lvl];
 
-		if (skill.name == "Jab" && elem == 1) { 							result += (14*skills[7].level) }
-		if (skill.name == "Fend" && elem == 1) { 							result += (15*skills[0].level) }
+		if (skill.name == "Jab" && elem == 1) { 							result += (18*skills[7].level) }
+		if (skill.name == "Fend" && elem == 1) { 							result += (20*skills[0].level) }
 		if (skill.name == "Poison Javelin" && elem < 2) { 					result *= ((1 + 0.24*skills[3].level + 0.24*skills[6].level) * (1+character.pDamage/100)) }
 		if (skill.name == "Plague Javelin" && elem > 0 && elem < 3) { 		result *= ((1 + 0.06*skills[3].level + 0.12*skills[2].level) * (1+character.pDamage/100)) }
 		if (skill.name == "Power Strike" && elem == 1) { 					result *= (1+character.lDamage/100) }	// synergies don't apply to minimum lightning damage
 		if (skill.name == "Power Strike" && elem > 1 && elem < 5) { 		result *= ((1 + 0.20*skills[4].level + 0.20*skills[8].level) * (1+character.lDamage/100)) }	// excludes non-nova minimum lightning damage (synergies don't apply)
 		if (skill.name == "Lightning Bolt" && elem == 0) { 					result *= (1+character.lDamage/100) }	// synergies don't apply to minimum lightning damage
-		if (skill.name == "Lightning Bolt" && elem == 1) { 					result *= ((1 + 0.14*skills[1].level + 0.14*skills[9].level) * (1+character.lDamage/100)) }	// excludes minimum lightning damage (synergies don't apply)
+		if (skill.name == "Lightning Bolt" && elem == 1) { 					result *= ((1 + 0.15*skills[1].level + 0.15*skills[9].level) * (1+character.lDamage/100)) }	// excludes minimum lightning damage (synergies don't apply)
 		if (skill.name == "Charged Strike" && elem == 1) { 					result *= (1+character.lDamage/100) }	// synergies don't apply to minimum lightning damage
-		if (skill.name == "Charged Strike" && elem == 2) { 					result *= ((1 + 0.05*skills[1].level + 0.05*skills[8].level + 0.05*skills[9].level) * (1+character.lDamage/100)) }	// excludes minimum lightning damage (synergies don't apply)
+		if (skill.name == "Charged Strike" && elem == 2) { 					result *= ((1 + 0.08*skills[1].level + 0.05*skills[8].level + 0.08*skills[9].level) * (1+character.lDamage/100)) }	// excludes minimum lightning damage (synergies don't apply)
 		if (skill.name == "Lightning Strike" && elem == 1) { 				result *= (1+character.lDamage/100) }	// synergies don't apply to minimum lightning damage
-		if (skill.name == "Lightning Strike" && elem == 2) { 				result *= ((1 + 0.10*skills[1].level + 0.10*skills[5].level) * (1+character.lDamage/100)) }	// excludes minimum lightning damage (synergies don't apply)
+		if (skill.name == "Lightning Strike" && elem == 2) { 				result *= ((1 + 0.08*skills[1].level + 0.08*skills[5].level) * (1+character.lDamage/100)) }	// excludes minimum lightning damage (synergies don't apply)
 		if (skill.name == "Lightning Fury" && elem == 1) { 					result *= (1+character.lDamage/100) }	// synergies don't apply to minimum lightning damage
-		if (skill.name == "Lightning Fury" && elem == 2) { 					result *= ((1 + 0.02*skills[1].level + 0.02*skills[4].level) * (1+character.lDamage/100)) }	// excludes minimum lightning damage (synergies don't apply)
+		if (skill.name == "Lightning Fury" && elem == 2) { 					result *= ((1 + 0.03*skills[1].level + 0.03*skills[4].level) * (1+character.lDamage/100)) }	// excludes minimum lightning damage (synergies don't apply)
 
 		if (skill.name == "Penetrate" && elem == 0) { 						result = -5 - skill.level*1 }
 		if (skill.name == "Decoy" && elem < 2) { 							result *= (1 + 0.10*skills[18].level + 0.10*skills[27].level) }
@@ -38,19 +38,19 @@ var character_pd2_amazon = {class_name:"Amazon", strength:20, dexterity:25, vita
 		if (skill.name == "Valkyrie" && elem == 3) { 						result += (40*skills[15].level) }
 
 		if (skill.name == "Magic Arrow" && elem == 0) { 					result = 1 + Math.floor(skill.level/5) }
-		if (skill.name == "Magic Arrow" && elem > 1 && elem < 4) { 			result *= (1 + 0.18*skills[10].level + 0.18*skills[12].level + 0.18*skills[25].level) }		// TODO: does the skill include the magic damage multiplier, or would that only show up for character sheet calculations?
+		if (skill.name == "Magic Arrow" && elem > 1 && elem < 4) { 			result *= (1 + 0.20*skills[10].level + 0.20*skills[12].level + 0.20*skills[25].level) }		// TODO: does the skill include the magic damage multiplier, or would that only show up for character sheet calculations?
 		if (skill.name == "Guided Arrow" && elem == 0) { 					result = Math.floor(skills[21].level/2) }
-		if (skill.name == "Cold Arrow" && elem > 1 && elem < 4) { 			result *= ((1 + 0.20*skills[21].level + 0.20*skills[24].level) * (1+character.cDamage/100)) }
+		if (skill.name == "Cold Arrow" && elem > 1 && elem < 4) { 			result *= ((1 + 0.17*skills[21].level + 0.17*skills[24].level) * (1+character.cDamage/100)) }
 		if (skill.name == "Ice Arrow" && elem > 0 && elem < 3) { 			result *= ((1 + 0.16*skills[21].level + 0.10*skills[20].level + 0.10*skills[29].level) * (1+character.cDamage/100)) }
 		if (skill.name == "Ice Arrow" && elem == 3) { 						result = 1 * (1 + 0.05*skills[20].level + 0.05*skills[29].level) }
 		if (skill.name == "Freezing Arrow" && elem == 0) { 					result = skill.data.values[elem][Math.max(1,skill.level)] }
 		if (skill.name == "Freezing Arrow" && elem > 1 && elem < 4) { 		result *= ((1 + 0.06*skills[20].level + 0.06*skills[24].level) * (1+character.cDamage/100)) }
-		if (skill.name == "Fire Arrow" && elem > 1 && elem < 4) { 			result *= ((1 + 0.21*skills[21].level + 0.21*skills[28].level) * (1+character.fDamage/100)) }
+		if (skill.name == "Fire Arrow" && elem > 1 && elem < 4) { 			result *= ((1 + 0.18*skills[21].level + 0.18*skills[28].level) * (1+character.fDamage/100)) }
 		if (skill.name == "Exploding Arrow" && elem == 0) { 				result = skill.data.values[elem][Math.max(1,skill.level)] }
 		if (skill.name == "Exploding Arrow" && elem > 1 && elem < 4) { 		result *= ((1 + 0.18*skills[21].level + 0.18*skills[28].level) * (1+character.fDamage/100)) }
 		if (skill.name == "Immolation Arrow" && elem > 2 && elem < 5) { 	result *= ((1 + 0.16*skills[21].level) * (1+character.fDamage/100)) }
 		if (skill.name == "Immolation Arrow" && elem > 0 && elem < 3) { 	result *= ((1 + 0.08*skills[23].level + 0.08*skills[26].level) * (1+character.fDamage/100)) }
-		if (skill.name == "Strafe" && elem == 2) { 							result *= (1 + 0.18*skills[15].level) }
+		if (skill.name == "Strafe" && elem == 2) { 							result *= (1 + 0.12*skills[15].level) }
 
 	return result
 	},

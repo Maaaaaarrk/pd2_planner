@@ -40,14 +40,14 @@ var character_pd2_druid = {class_name:"Druid", strength:15, dexterity:20, vitali
 		if (skill.name == "Hunger" && elem == 0) {						result = 3 + Math.floor(skill.level/4) }
 		if (skill.name == "Feral Rage" && elem == 4) {					result += (6*skills[20].level) }
 		if (skill.name == "Shock Wave" && elem == 0) {					result = 4 + Math.floor(lvl/5) }
-		if (skill.name == "Shock Wave" && elem > 0 && elem < 3) {		result *= (1 + 0.18*skills[13].level + 0.18*skills[6].level + 0.18*skills[8].level) }
+		if (skill.name == "Shock Wave" && elem > 0 && elem < 3) {		result *= (1 + 0.22*skills[13].level + 0.22*skills[6].level + 0.18*skills[8].level) }
 		if (skill.name == "Rabies" && elem > 0 && elem < 3) {			result *= ((1 + 0.10*skills[22].level + 0.10*skills[14].level + 0.10*skills[12].level) * (1+character.pDamage/100)) }
 		if (skill.name == "Fire Claws" && elem == 0) {					result = 4 + Math.floor(skill.level/5) }
 		if (skill.name == "Fire Claws" && elem > 0 && elem < 3) {		result *= ((1 + 0.24*skills[1].level + 0.24*skills[9].level) * (1+character.fDamage/100)) }
 		if (skill.name == "Fury" && elem == 1) {						result += (8*skills[14].level) }
 
 		if (skill.name == "Poison Creeper" && elem == 0) {				result = skill.data.values[elem][character.difficulty][lvl] }
-		if (skill.name == "Poison Creeper" && elem > 1 && elem < 4) {	result *= ((1 + 0.30*skills[25].level + 0.30*skills[28].level + 0.30*skills[16].level) * (1+character.pDamage/100)) }
+		if (skill.name == "Poison Creeper" && elem > 1 && elem < 4) {	result *= ((1 + 0.14*skills[25].level + 0.14*skills[28].level + 0.14*skills[16].level) * (1+character.pDamage/100)) }
 		if (skill.name == "Carrion Vine" && elem == 0) {				result = skill.data.values[elem][character.difficulty][lvl] }
 		if (skill.name == "Carrion Vine" && elem == 1) {				result += (2*skills[26].level + 2*skills[28].level) }
 		if (skill.name == "Carrion Vine" && elem == 2) {				result += (4*skills[26].level + 4*skills[28].level) }
@@ -56,7 +56,7 @@ var character_pd2_druid = {class_name:"Druid", strength:15, dexterity:20, vitali
 		if (skill.name == "Solar Creeper" && elem == 2) {				result += (3*skills[26].level + 3*skills[25].level) }
 		if (skill.name == "Heart of Wolverine" && elem == 0) {			result = skill.data.values[elem][character.difficulty][lvl] }
 		if (skill.name == "Spirit of Barbs" && elem == 0) {				result = skill.data.values[elem][character.difficulty][lvl] }
-		if (skill.name == "Spirit of Barbs" && elem == 1) {				result *= (1 + 0.05*skills[25].level) }
+		if (skill.name == "Spirit of Barbs" && elem == 1) {				result *= (1 + 0.07*skills[25].level) }
 		if (skill.name == "Oak Sage" && elem == 0) {					result = skill.data.values[elem][character.difficulty][lvl] }
 		if (skill.name == "Oak Sage" && elem == 1) {					result = 12 + (12*skills[25].level + 12*skills[28].level) }
 		if (skill.name == "Raven" && elem < 4) {						result *= (1 + 0.12*skills[24].level + 0.12*skills[27].level + 0.12*skills[30].level) }

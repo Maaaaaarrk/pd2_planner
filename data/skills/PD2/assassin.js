@@ -18,43 +18,43 @@ var character_pd2_assassin = {class_name:"Assassin", strength:20, dexterity:20, 
 		if (skill.name == "Fists of Fire" && elem < 6) { 				result *= ((1 + 0.26*skills[0].level + 0.26*skills[31].level) * (1+character.fDamage/100)) }
 		if (skill.name == "Claws of Thunder" && elem == 0) { 			result *= (1+character.lDamage/100) }	// synergies don't apply to minimum lightning damage
 		if (skill.name == "Claws of Thunder" && elem > 0 && elem < 6) { result *= ((1 + 0.16*skills[31].level) * (1+character.lDamage/100)) }	// excludes minimum lightning damage for first charge (synergies don't apply)
-		if (skill.name == "Blades of Ice" && elem < 2) { 				result *= ((1 + 0.22*skills[31].level) * (1+character.cDamage/100)) }
-		if (skill.name == "Phoenix Strike" && elem < 2) { 				result *= ((1 + 0.16*skills[2].level) * (1+character.fDamage/100)) }
+		if (skill.name == "Blades of Ice" && elem < 2) { 				result *= ((1 + 0.15*skills[31].level) * (1+character.cDamage/100)) }
+		if (skill.name == "Phoenix Strike" && elem < 2) { 				result *= ((1 + 0.14*skills[2].level) * (1+character.fDamage/100)) }
 		if (skill.name == "Phoenix Strike" && elem > 1 && elem < 4) { 	result *= ((1 + 0.10*skills[2].level) * (1+character.fDamage/100)) }
-		if (skill.name == "Phoenix Strike" && elem > 3 && elem < 6) { 	result *= ((1 + 0.14*skills[5].level) * (1+character.lDamage/100)) }	// synergies DO apply to minimum lightning damage
-		if (skill.name == "Phoenix Strike" && elem > 5 && elem < 8) { 	result *= ((1 + 0.14*skills[7].level) * (1+character.cDamage/100)) }
-		if (skill.name == "Dragon Talon" && elem == 1) { 				result += (10*skills[6].level + 10*skills[8].level) }
-		if (skill.name == "Dragon Claw" && elem == 0) { 				result += (14*skills[9].level + 14*skills[13].level) }
+		if (skill.name == "Phoenix Strike" && elem > 3 && elem < 6) { 	result *= ((1 + 0.10*skills[5].level) * (1+character.lDamage/100)) }	// synergies DO apply to minimum lightning damage
+		if (skill.name == "Phoenix Strike" && elem > 5 && elem < 8) { 	result *= ((1 + 0.10*skills[7].level) * (1+character.cDamage/100)) }
+		if (skill.name == "Dragon Talon" && elem == 1) { 				result += (22*skills[6].level + 22*skills[8].level) }
+		if (skill.name == "Dragon Claw" && elem == 0) { 				result += (20*skills[9].level + 20*skills[13].level) }
 		if (skill.name == "Dragon Tail" && elem == 0) { 				result += (8*skills[1].level + 8*skills[8].level) }
 		if (skill.name == "Cobra Strike" && (elem < 2 || elem == 3 || elem == 4)) { result *= ((1 + 0.20*skills[18].level) * (1+character.pDamage/100)) }
 
-		if (skill.name == "Psychic Hammer" && elem > 0 && elem < 3) {	result *= ((1 + 0.15*skills[17].level + 0.15*skills[14].level + 0.15*skills[16].level) * (1+character.mDamage/100)) }
+		if (skill.name == "Psychic Hammer" && elem > 0 && elem < 3) {	result *= ((1 + 0.20*skills[17].level + 0.20*skills[14].level + 0.20*skills[16].level) * (1+character.mDamage/100)) }
 		if (skill.name == "Mind Blast" && elem == 0) { 					result = 2 - 2*Math.ceil((skill.level-1)/20) }
 		if (skill.name == "Mind Blast" && elem == 1) { 					result = skill.data.values[elem][Math.max(1,skill.level)] }
 		if (skill.name == "Mind Blast" && elem > 1 && elem < 4) { 		result *= (1 + 0.13*skills[10].level + 0.13*skills[14].level + 0.13*skills[16].level) }
-		if (skill.name == "Venom" && elem < 2) { 						result *= ((1 + 0.08*skills[4].level) * (1+character.pDamage/100)) }		// poison damage is only applied on attack, not cast (no longer "double dips") but the skill tooltip still includes it
+		if (skill.name == "Venom" && elem < 2) { 						result *= ((1 + 0.12*skills[4].level) * (1+character.pDamage/100)) }		// poison damage is only applied on attack, not cast (no longer "double dips") but the skill tooltip still includes it
 		if (skill.name == "Burst of Speed" && elem == 0) { 				result = skill.data.values[elem][Math.max(1,skill.level)] }
 		if (skill.name == "Shadow Warrior" && elem == 0) {				result = skill.data.values[elem][character.difficulty][lvl] }
 		if (skill.name == "Shadow Master" && elem == 0) {				result = skill.data.values[elem][character.difficulty][lvl] }
 
 		if (skill.name == "Fire Blast" && elem == 0) { 					result = 1 + Math.floor(skill.level/4) }
-		if (skill.name == "Fire Blast" && elem > 0 && elem < 3) { 		result *= ((1 + 0.14*skills[21].level + 0.14*skills[23].level + 0.14*skills[26].level + 0.14*skills[30].level + 0.14*skills[24].level + 0.14*skills[27].level) * (1+character.fDamage/100)) }
+		if (skill.name == "Fire Blast" && elem > 0 && elem < 3) { 		result *= ((1 + 0.18*skills[21].level + 0.18*skills[23].level + 0.18*skills[26].level + 0.18*skills[30].level + 0.18*skills[24].level + 0.18*skills[27].level) * (1+character.fDamage/100)) }
 		if (skill.name == "Wake of Fire" && elem < 2) { 				result *= ((1 + 0.08*skills[20].level + 0.08*skills[27].level) * (1+character.fDamage/100)) }
 		if (skill.name == "Wake of Inferno" && elem < 2) { 				result *= ((1 + 0.065*skills[20].level + 0.065*skills[24].level) * (1+character.fDamage/100)) }
 		if (skill.name == "Death Sentry" && elem == 0) {				result = 10 + Math.floor(skill.level/3) }
 		if (skill.name == "Death Sentry" && elem > 0 && elem < 3) { 	result *= (1 + 0.08*skills[20].level + 0.08*skills[27].level) }
 		if (skill.name == "Death Sentry" && elem > 2 && elem < 5) { 	result *= ((1 + 0.08*skills[20].level + 0.08*skills[27].level) * (1+character.fDamage/100)) }
 		if (skill.name == "Shock Web" && elem == 1) { 					result *= (1+character.lDamage/100) }	// synergies don't apply to minimum lightning damage
-		if (skill.name == "Shock Web" && elem == 2) { 					result *= ((1 + 0.14*skills[23].level + 0.14*skills[24].level + 0.14*skills[30].level + 0.14*skills[28].level + 0.14*skills[26].level + 0.14*skills[27].level) * (1+character.lDamage/100)) }	// excludes minimum lightning damage (synergies don't apply)
+		if (skill.name == "Shock Web" && elem == 2) { 					result *= ((1 + 0.17*skills[23].level + 0.17*skills[24].level + 0.17*skills[30].level + 0.17*skills[28].level + 0.17*skills[26].level + 0.17*skills[27].level) * (1+character.lDamage/100)) }	// excludes minimum lightning damage (synergies don't apply)
 		if (skill.name == "Charged Bolt Sentry" && elem == 0) { 		result = 4 + Math.floor(skill.level/4) }
 		if (skill.name == "Charged Bolt Sentry" && elem == 1) { 		result *= (1+character.lDamage/100) }	// synergies don't apply to minimum lightning damage
 		if (skill.name == "Charged Bolt Sentry" && elem == 2) { 		result *= ((1 + 0.08*skills[20].level + 0.08*skills[26].level + 0.08*skills[30].level) * (1+character.lDamage/100)) }	// excludes minimum lightning damage (synergies don't apply)
 		if (skill.name == "Lightning Sentry" && elem == 0) { 			result *= (1+character.lDamage/100) }	// synergies don't apply to minimum lightning damage
 		if (skill.name == "Lightning Sentry" && elem == 1) { 			result *= ((1 + 0.16*skills[20].level + 0.16*skills[23].level + 0.16*skills[30].level) * (1+character.lDamage/100)) }	// excludes minimum lightning damage (synergies don't apply)
 		if (skill.name == "Chain Lightning Sentry" && elem == 0) { 		result *= (1+character.lDamage/100) }	// synergies don't apply to minimum lightning damage
-		if (skill.name == "Chain Lightning Sentry" && elem == 1) { 		result *= ((1 + 0.15*skills[20].level + 0.15*skills[23].level + 0.15*skills[26].level) * (1+character.lDamage/100)) }	// excludes minimum lightning damage (synergies don't apply)
+		if (skill.name == "Chain Lightning Sentry" && elem == 1) { 		result *= ((1 + 0.13*skills[20].level + 0.13*skills[23].level + 0.13*skills[26].level) * (1+character.lDamage/100)) }	// excludes minimum lightning damage (synergies don't apply)
 		if (skill.name == "Blade Sentinel" && elem > 0 && elem < 3) { 	result *= (1 + 0.12*skills[25].level + 0.12*skills[29].level) }
-		if (skill.name == "Blade Fury" && elem > 0 && elem < 3) { 		result *= (1 + 0.10*skills[22].level + 0.10*skills[29].level) }
+		if (skill.name == "Blade Fury" && elem > 0 && elem < 3) { 		result *= (1 + 0.15*skills[22].level + 0.15*skills[29].level) }
 		if (skill.name == "Blade Shield" && elem == 0) { 				result = Math.floor(10*skill.data.values[elem][Math.max(1,skill.level)])/10 }
 		if (skill.name == "Blade Shield" && elem > 0 && elem < 3) { 	result *= (1 + 0.10*skills[22].level + 0.10*skills[25].level) }
 

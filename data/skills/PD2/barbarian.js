@@ -15,7 +15,7 @@ var character_pd2_barbarian = {class_name:"Barbarian", strength:30, dexterity:20
 	getSkillData : function(skill, lvl, elem) {
 		var result = skill.data.values[elem][lvl];
 
-		if (skill.name == "War Cry" && elem < 2) { 			result *= (1 + 0.15*skills[0].level + 0.15*skills[5].level + 0.12*skills[2].level + 0.12*skills[3].level + 0.12*skills[6].level + 0.12*skills[9].level) }
+		if (skill.name == "War Cry" && elem < 2) { 			result *= (1 + 0.16*skills[0].level + 0.16*skills[5].level + 0.12*skills[2].level + 0.12*skills[3].level + 0.12*skills[6].level + 0.12*skills[9].level) }
 		if (skill.name == "Battle Command" && elem == 0) { 	result = 1+Math.floor(skill.level/10) }
 //temp	if (skill.name == "Find Item" && elem == 0) { 		result += (1*skills[1].level) }
 		if (skill.name == "Taunt" && elem == 0) {			result = 2 + Math.floor(0.25*skill.level) }
@@ -26,16 +26,16 @@ var character_pd2_barbarian = {class_name:"Barbarian", strength:30, dexterity:20
 		if (skill.name == "Deep Wounds" && elem == 0) { 	result *= (1 + 0.04*skills[7].level) }
 
 		if (skill.name == "Bash" && elem == 0) { 			result += (10*skills[19].level) }
-		if (skill.name == "Bash" && elem == 1) { 			result += (15*skills[21].level + 15*skills[19].level) }
-		if (skill.name == "Frenzy" && elem == 0) { 			result += (15*skills[28].level + 15*skills[21].level) }
+		if (skill.name == "Bash" && elem == 1) { 			result += (18*skills[21].level + 18*skills[19].level) }
+		if (skill.name == "Frenzy" && elem == 0) { 			result += (20*skills[28].level + 20*skills[21].level) }
 		if (skill.name == "Stun" && elem == 2) { 			result += (10*skills[19].level) }
-		if (skill.name == "Double Swing" && elem == 0) { 	result += (18*skills[18].level + 18*skills[21].level) }
+		if (skill.name == "Double Swing" && elem == 0) { 	result += (20*skills[18].level + 20*skills[21].level) }
 		if (skill.name == "Leap" && elem == 0) { 			result = skill.data.values[elem][Math.max(1,skill.level)] }
 		if (skill.name == "Concentrate" && elem == 0) { 	result = 30 + skill.level*2  }
-		if (skill.name == "Concentrate" && elem == 3) { 	result += (20*skills[24].level + 20*skills[9].level) }
+		if (skill.name == "Concentrate" && elem == 3) { 	result += (25*skills[24].level + 25*skills[9].level) }
 		if (skill.name == "Double Throw" && elem == 0) { 	result += (6*skills[28].level + 6*skills[18].level) }
 		if (skill.name == "Leap Attack" && elem == 0) { 	result += (8*skills[22].level + 8*skills[24].level) }
-		if (skill.name == "Berserk" && elem == 1) { 		result += (10*skills[2].level + 10*skills[14].level) }
+		if (skill.name == "Berserk" && elem == 1) { 		result += (12*skills[2].level + 12*skills[14].level) }
 
 	return result
 	},
