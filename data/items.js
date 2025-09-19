@@ -1187,7 +1187,7 @@ var socketables = [
 var corruptions = {	// pdr
 	helm: [
 		{name:"Helm"},
-		{name:"+ Sockets", sockets:3},
+		{name:"+ Sockets Helm", sockets:3},
 		{name:"+ Skill", all_skills:1, sockets:2},
 		{name:"+ CBF", cbf:1, sockets:2},
 		{name:"+ PDR", pdr:6, sockets:2},
@@ -1199,7 +1199,7 @@ var corruptions = {	// pdr
 	],
 	armor: [
 		{name:"Armor"},
-		{name:"+ Sockets", sockets:3},
+		{name:"+ Sockets Chest", sockets:3},
 		{name:"+ Skill", all_skills:1, sockets:2},
 		{name:"+ Faster Cast Rate", fcr:10, sockets:2},
 		{name:"+ Skill", all_skills:1, sockets:2},
@@ -1272,7 +1272,7 @@ var corruptions = {	// pdr
 	ring2: [],	// copied from ring1
 	weapon: [
 		{name:"Weapon"},
-		{name:"+ Sockets", sockets:6},
+		{name:"+ Sockets Weapon", sockets:6},
 		{name:"+ Faster Cast Rate", fcr:20, sockets:4},
 		{name:"+ All Skills", all_skills:1, sockets:4},
 		{name:"+ IAS Crushing Blow", cblow:30, ias:30, sockets:4},
@@ -1287,7 +1287,7 @@ var corruptions = {	// pdr
 	offhand: [
 		{name:"Offhand"},
 		// weapon
-		{name:"+ Sockets", base:"weapon", sockets:6},
+		{name:"+ Sockets Weapon", base:"weapon", sockets:6},
 		{name:"+ Faster Cast Rate", base:"weapon", fcr:20, sockets:4},
 		{name:"+ All Skills", base:"weapon", all_skills:1, sockets:4},
 		{name:"+ IAS Crushing Blow", base:"weapon", cblow:30, ias:30, sockets:4},
@@ -1299,7 +1299,7 @@ var corruptions = {	// pdr
 		{name:"+ Light Pierce", base:"weapon", base:"quiver", enemy_lRes:10, sockets:4},
 		{name:"+ Psn Pierce", base:"weapon", base:"quiver", enemy_pRes:10, sockets:4},
 		// shield
-		{name:"+ Sockets", base:"shield", sockets:3},
+		{name:"+ Sockets Off-hand", base:"shield", sockets:3},
 		{name:"+ All Skills", base:"shield", all_skills:1, sockets:2},
 		{name:"+ CBF", base:"shield", cbf:1, sockets:2},
 		{name:"+ Faster Cast Rate", base:"shield", fcr:10, sockets:2},

@@ -96,6 +96,7 @@
 }
 .background {
     background-image: url(../images/bg2.jpg);
+    margin:0
 }
 .dropdown-skill {
   background-color: black;
@@ -267,9 +268,10 @@ input[type="file"] {
 
 .navbar {
   overflow: hidden;
-  background-color: #333;
+    background-image: url(../images/thin_bg.gif);
   font-family: Montserrat, sans-serif;
-  min-width: 911px;
+  min-width: 869px;
+  max-width: 869px;
 }
 
 /* The dropdown container */
