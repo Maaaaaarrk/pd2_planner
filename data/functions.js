@@ -1437,6 +1437,7 @@ function loadCorruptions() {
 // loadGolem - Loads options for the Iron Golem minion
 // ---------------------------------
 function loadGolem() {
+/* TODO
 	var choices = "<option>­ ­ ­ ­ Iron Golem</option>";
 	for (group in corruptsEquipped) {
 		for (itemNew in equipment[group]) {
@@ -1454,6 +1455,7 @@ function loadGolem() {
 		}
 	}
 	document.getElementById("dropdown_golem").innerHTML = choices
+	*/
 }
 
 // loadMerc - Loads mercenaries to the 'Mercenary' dropdown menu

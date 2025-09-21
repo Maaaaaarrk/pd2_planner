@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The itemmap class serves as a utility container for mapping and managing certain properties and types.
@@ -19,6 +16,27 @@ import java.util.Map;
  */
 public final class itemmap {
 
+
+    /*
+
+    javelin
+    spear
+    claw
+    orb
+    scepter
+    sword
+    staff
+    wand
+    scepter
+    club
+    axe
+    dagger
+    polearm
+    thrown
+    crossbow
+
+
+     */
     public static final Map<String, String> PROP_MAP;
     public static final Map<String, String> TYPE_MAP;
     public static final ArrayList<String> TYPES;
@@ -722,6 +740,73 @@ public final class itemmap {
         t.put("wyrrnhide boots", "Boots");
         t.put("zakarum shield", "Offhand");
         TYPE_MAP = Collections.unmodifiableMap(t);
+    }
+
+    private static final Set<String> AMAZON_BASES = Set.of(
+            // Bows
+            "stag bow", "reflex bow", "matriarchal bow",
+            // Javelins
+            "maiden javelin", "ceremonial javelin", "matriarchal javelin",
+            // Spears
+            "maiden spear", "ceremonial spear", "matriarchal spear"
+    );
+
+    private static final Set<String> ASSASSIN_BASES = Set.of(
+            // Normal claws
+            "katar", "wrist blade", "hatchet hands", "cestus", "claws", "blade talons", "scissors katar",
+            // Exceptional claws
+            "quhab", "wrist spike", "fascia", "hand scythe", "greater claws", "greater talons", "scissors quhab",
+            // Elite claws
+            "suwayyah", "wrist sword", "war fist", "battle cestus", "feral claws", "runic talons", "scissors suwayyah"
+    );
+
+    private static final Set<String> BARBARIAN_BASES = Set.of(
+            // Barbarian helms
+            "jawbone cap", "fanged helm", "horned helm",
+            "assault helmet", "avenger guard", "savage helmet",
+            "slayer guard", "fury visor", "destroyer helm", "conqueror crown", "guardian crown"
+    );
+
+    private static final Set<String> DRUID_BASES = Set.of(
+            // Druid pelts
+            "wolf head", "hawk helm", "antlers", "falcon mask", "spirit mask",
+            "alpha helm", "griffon headdress", "hunter's guise", "sacred feathers", "totemic mask",
+            "blood spirit", "sun spirit", "earth spirit", "sky spirit", "dream spirit"
+    );
+
+    private static final Set<String> NECROMANCER_BASES = Set.of(
+            // Shrunken heads
+            "preserved head", "zombie head", "unraveller head", "gargoyle head", "demon head",
+            "mummified trophy", "fetish trophy", "sexton trophy", "cantor trophy", "hierophant trophy",
+            "minion skull", "hellspawn skull", "overseer skull", "succubus skull", "bloodlord skull"
+    );
+
+    private static final Set<String> PALADIN_BASES = Set.of(
+            // Auric shields
+            "targe", "rondache", "heraldic shield", "aerin shield", "crown shield",
+            "akaran targe", "akaran rondache", "protector shield", "gilded shield", "royal shield",
+            "sacred targe", "sacred rondache", "kurast shield", "zakarum shield", "vortex shield"
+    );
+
+    private static final Set<String> SORCERESS_BASES = Set.of(
+            // Orbs
+            "eagle orb", "sacred globe", "smoked sphere", "clasped orb", "jared's stone",
+            "glowing orb", "crystalline globe", "cloudy sphere", "sparkling ball", "swirling crystal",
+            "heavenly stone", "eldritch orb", "demon heart", "vortex orb", "dimensional shard"
+    );
+
+    // Returns the class name if the base is class-specific; otherwise null.
+    public static String classForBaseOrNull(String baseName) {
+        if (baseName == null) return null;
+        String checkBaseName = baseName.toLowerCase();
+        if (AMAZON_BASES.contains(checkBaseName)) return "amazon";
+        if (ASSASSIN_BASES.contains(checkBaseName)) return "assassin";
+        if (BARBARIAN_BASES.contains(checkBaseName)) return "barbarian";
+        if (DRUID_BASES.contains(checkBaseName)) return "druid";
+        if (NECROMANCER_BASES.contains(checkBaseName)) return "necromancer";
+        if (PALADIN_BASES.contains(checkBaseName)) return "paladin";
+        if (SORCERESS_BASES.contains(checkBaseName)) return "sorceress";
+        return null; // Not class-specific
     }
 
     private itemmap() {

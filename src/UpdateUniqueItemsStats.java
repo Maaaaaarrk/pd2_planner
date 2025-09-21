@@ -14,9 +14,11 @@ public class UpdateUniqueItemsStats {
     private static final String UNIQUE_ITEMS_PATH = dir + "UniqueItems.txt";
     private static final String OUTPUT_DIR = dir;
 
-
     // File naming: new file each run like equipment-YYYYMMDD-HHmmss.js
     private static final String OUTPUT_BASENAME = "equipment";
+
+    private static final boolean buildProd = false;
+    private static final String PROD_OUTPUT_BASENAME = "items_equipment.js";
 
     public static void main(String[] args) {
 
@@ -77,6 +79,13 @@ public class UpdateUniqueItemsStats {
                 if (!baseType.equalsIgnoreCase("ring") && !baseType.equalsIgnoreCase("amulet"))
                     row.put("base", baseType);
                 row.put("req_level", parseNumericOrString(reqLevel));
+                String onlyClass = itemmap.classForBaseOrNull(baseType);
+                if (onlyClass != null) {
+                    row.put("only", onlyClass);
+                }
+                if (TwoHandedWeaponUtil.isTwoHandedBase(baseType)) {
+                    row.put("twoHanded", 1);
+                }
 
                 // Add prop1..prop11 with their max values, using the prop value as the key
                 for (int p = 1; p <= 11; p++) {
@@ -88,23 +97,39 @@ public class UpdateUniqueItemsStats {
                     String maxValStr = safeGet(cols, mIdx).trim();
                     if (propKey.isEmpty() || maxValStr.isEmpty()) continue;
 
-                    // Convert numeric where possible (integers preferred)
                     Object val = parseNumericOrString(maxValStr);
                     String plannerPropKey = itemmap.PROP_MAP.get(propKey);
+
+                    // Skip unknown properties instead of inserting a null key
+                    if (plannerPropKey == null || plannerPropKey.isBlank()) {
+                        continue;
+                    }
+                    if (propKey.contains("%"))
+                        continue;// TODO remove
+                    if (propKey.contains("-"))
+                        continue;// TODO remove
+                    if (propKey.contains("/"))
+                        continue;// TODO remove
                     row.put(plannerPropKey, val);
                 }
 
                 String groupBaseType = itemmap.TYPE_MAP.get(baseType);
                 if (groupBaseType != null && !groupBaseType.isEmpty()) {
                     if (itemmap.TYPES.contains(groupBaseType)) {
+                        String itemGroupType = WeaponGroupTypeUtil.groupOf(baseType);
+                        if (itemGroupType != null) {
+                            row.put("type", itemGroupType);
+                        } else if (groupBaseType.equals("Offhand")) {
+                            row.put("type", "Shield");
+                        }
                         if (!groupBaseType.equals("Amulet") && !groupBaseType.equals("Ring1"))
                             row.put("img", name.replace(" ", "_"));
                         String groupBaseTypeKeyname = groupBaseType.toLowerCase();
-                        if (!grouped.containsKey(groupBaseTypeKeyname)) {
+                       /* if (!grouped.containsKey(groupBaseTypeKeyname)) {
                             Map<String, Object> rowheader = new LinkedHashMap<>();
                             rowheader.put("name", groupBaseType.replace("1", ""));
                             grouped.computeIfAbsent(groupBaseTypeKeyname, k -> new ArrayList<>()).add(rowheader);
-                        }
+                        }*/
                         grouped.computeIfAbsent(groupBaseTypeKeyname, k -> new ArrayList<>()).add(row);
                         keptRows++;
                     } else {
@@ -121,7 +146,12 @@ public class UpdateUniqueItemsStats {
             Files.createDirectories(outDir);
 
             String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"));
-            Path outFile = outDir.resolve(OUTPUT_BASENAME + "-" + timestamp + ".js");
+            final Path outFile;
+            if (buildProd) {
+                outFile = outDir.resolve(PROD_OUTPUT_BASENAME);
+            } else {
+                outFile = outDir.resolve(OUTPUT_BASENAME + "-" + timestamp + ".js");
+            }
             Files.write(outFile, js.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE_NEW);
 
             System.out.println("Wrote: " + outFile.toAbsolutePath());
@@ -170,9 +200,14 @@ public class UpdateUniqueItemsStats {
         for (Map.Entry<String, List<Map<String, Object>>> ge : grouped.entrySet()) {
             String groupKey = ge.getKey();
             List<Map<String, Object>> rows = ge.getValue();
+            // Sort Alphabetically
+            rows.sort(Comparator.comparing(
+                    (Map<String, Object> m) -> m.get("name") == null ? null : m.get("name").toString(),
+                    Comparator.nullsLast(String.CASE_INSENSITIVE_ORDER)
+            ));
 
-            sb.append("  \"").append(escapeJsString(groupKey)).append("\": [\n");
-
+            //sb.append("  \"").append(escapeJsString(groupKey)).append("\": [\n");
+            sb.append(groupKey).append(": [\n{name:\"" + groupKey + "\"},\n");
             for (int i = 0; i < rows.size(); i++) {
                 Map<String, Object> row = rows.get(i);
                 sb.append("    {");
@@ -190,21 +225,23 @@ public class UpdateUniqueItemsStats {
                     if (++ci < csize) sb.append(", ");
                 }
                 sb.append("}");
-                //  if (i + 1 < rows.size())
                 sb.append(",");
                 sb.append("\n");
             }
 
             sb.append("  ]");
-            if (++gi < gsize) sb.append(",");
+            sb.append(",");
             sb.append("\n");
         }
-
+        sb.append(footer);
         sb.append("};\n");
         return sb.toString();
     }
 
     private static String escapeJsString(String s) {
+        if (s == null) {
+            return "";
+        }
         StringBuilder out = new StringBuilder(s.length() + 16);
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
@@ -237,4 +274,52 @@ public class UpdateUniqueItemsStats {
         }
         return out.toString();
     }
+
+
+    private static final String footer = "\n ring2: [],\n\n    charms: [\n" +
+            "{name:\"Charms\"},\n" +
+            "{name:\"Annihilus\", size:\"small\", req_level:80, all_skills:1, all_attributes:20, all_res:20, experience:10},\n" +
+            "{name:\"Hellfire Torch\", size:\"large\", req_level:75, skills_class:2, vitality:60, energy:20, all_res:20, light_radius:8},\n" +
+            "{name:\"Gheed's Fortune\", size:\"grand\", req_level:62, gf:160, mf:40, discount:15, pod:1},\n" +
+            "{only:\"amazon\", rarity:\"magic\", name:\"+1 Harpoonist's Grand Charm\", size:\"grand\", req_level:42, skills_javelins:1},\n" +
+            "{only:\"amazon\", rarity:\"magic\", name:\"+1 Acrobat's Grand Charm\", size:\"grand\", req_level:42, skills_passives:1},\n" +
+            "{only:\"amazon\", rarity:\"magic\", name:\"+1 Fletcher's Grand Charm\", size:\"grand\", req_level:42, skills_bows:1},\n" +
+            "{only:\"assassin\", rarity:\"magic\", name:\"+1 Shogukusha's Grand Charm\", size:\"grand\", req_level:42, skills_martial:1},\n" +
+            "{only:\"assassin\", rarity:\"magic\", name:\"+1 Mentalist's Grand Charm\", size:\"grand\", req_level:42, skills_shadow:1},\n" +
+            "{only:\"assassin\", rarity:\"magic\", name:\"+1 Entrapping Grand Charm\", size:\"grand\", req_level:42, skills_traps:1},\n" +
+            "{only:\"barbarian\", rarity:\"magic\", name:\"+1 Sounding Grand Charm\", size:\"grand\", req_level:42, skills_warcries:1},\n" +
+            "{only:\"barbarian\", rarity:\"magic\", name:\"+1 Fanatic Grand Charm\", size:\"grand\", req_level:42, skills_masteries:1},\n" +
+            "{only:\"barbarian\", rarity:\"magic\", name:\"+1 Expert's Grand Charm\", size:\"grand\", req_level:42, skills_combat_barbarian:1},\n" +
+            "{only:\"druid\", rarity:\"magic\", name:\"+1 Nature's Grand Charm\", size:\"grand\", req_level:42, skills_elemental:1},\n" +
+            "{only:\"druid\", rarity:\"magic\", name:\"+1 Spiritual Grand Charm\", size:\"grand\", req_level:42, skills_shapeshifting:1},\n" +
+            "{only:\"druid\", rarity:\"magic\", name:\"+1 Trainer's Grand Charm\", size:\"grand\", req_level:42, skills_summoning_druid:1},\n" +
+            "{only:\"necromancer\", rarity:\"magic\", name:\"+1 Graverobber's Grand Charm\", size:\"grand\", req_level:42, skills_summoning_necromancer:1},\n" +
+            "{only:\"necromancer\", rarity:\"magic\", name:\"+1 Fungal Grand Charm\", size:\"grand\", req_level:42, skills_poisonBone:1},\n" +
+            "{only:\"necromancer\", rarity:\"magic\", name:\"+1 Hexing Grand Charm\", size:\"grand\", req_level:42, skills_curses:1},\n" +
+            "{only:\"paladin\", rarity:\"magic\", name:\"+1 Preserver's Grand Charm\", size:\"grand\", req_level:42, skills_defensive:1},\n" +
+            "{only:\"paladin\", rarity:\"magic\", name:\"+1 Captain's Grand Charm\", size:\"grand\", req_level:42, skills_offensive:1},\n" +
+            "{only:\"paladin\", rarity:\"magic\", name:\"+1 Lion Branded Grand Charm\", size:\"grand\", req_level:42, skills_combat_paladin:1},\n" +
+            "{only:\"sorceress\", rarity:\"magic\", name:\"+1 Chilling Grand Charm\", size:\"grand\", req_level:42, skills_cold:1},\n" +
+            "{only:\"sorceress\", rarity:\"magic\", name:\"+1 Sparking Grand Charm\", size:\"grand\", req_level:42, skills_lightning:1},\n" +
+            "{only:\"sorceress\", rarity:\"magic\", name:\"+1 Burning Grand Charm\", size:\"grand\", req_level:42, skills_fire:1},\n" +
+            "{rarity:\"magic\", name:\"Serpent's Small Charm of Vita\", size:\"small\", req_level:40, mana:17, life:20, pd2:1},\n" +
+            "{rarity:\"magic\", name:\"Shimmering Small Charm of Inertia\", size:\"small\", req_level:36, all_res:5, frw:3, pd2:1},\n" +
+            "{rarity:\"magic\", name:\"Shimmering Small Charm of Good Luck\", size:\"small\", req_level:33, all_res:5, mf:7, pd2:1},\n" +
+            "{rarity:\"magic\", name:\"Shimmering Small Charm of Vita\", size:\"small\", req_level:39, all_res:5, life:20, pd2:1},\n" +
+            "{rarity:\"magic\", name:\"Ruby Small Charm of Vita\", size:\"small\", req_level:39, fRes:11, life:20, pd2:1},\n" +
+            "{rarity:\"magic\", name:\"Sapphire Small Charm of Vita\", size:\"small\", req_level:39, cRes:11, life:20, pd2:1},\n" +
+            "{rarity:\"magic\", name:\"Amber Small Charm of Vita\", size:\"small\", req_level:39, lRes:11, life:20, pd2:1},\n" +
+            "{rarity:\"magic\", name:\"Emerald Small Charm of Vita\", size:\"small\", req_level:39, pRes:11, life:20, pd2:1},\n" +
+            "{rarity:\"magic\", name:\"Fine Small Charm of Balance\", size:\"small\", req_level:29, damage_max:3, ar:20, fhr:5, pd2:1},\n" +
+            "{rarity:\"magic\", name:\"Fine Small Charm of Inertia\", size:\"small\", req_level:36, damage_max:3, ar:20, frw:3, pd2:1},\n" +
+            "{rarity:\"magic\", name:\"Pestilent Small Charm of Anthrax\", size:\"small\", req_level:80, pDamage_all:451, pDamage_duration:12, pod:1},\n" +
+            "{rarity:\"magic\", name:\"Fine Small Charm of Vita\", size:\"small\", req_level:39, damage_max:3, ar:20, life:20, pd2:1},\n" +
+            "{rarity:\"magic\", name:\"Sharp Large Charm of Vita\", size:\"large\", req_level:66, damage_max:6, ar:48, life:35, pd2:1},\n" +
+            "{rarity:\"magic\", name:\"Sharp Grand Charm of Vita\", size:\"grand\", req_level:83, damage_max:10, ar:76, life:45, pd2:1},\n" +
+            "{rarity:\"magic\", name:\"+3% Inferno Large Charm\", size:\"large\", req_level:42, fDamage:3, pd2:1},\n" +
+            "{rarity:\"magic\", name:\"+3% Numbing Large Charm\", size:\"large\", req_level:42, cDamage:3, pd2:1},\n" +
+            "{rarity:\"magic\", name:\"+3% Conduit Large Charm\", size:\"large\", req_level:42, lDamage:3, pd2:1},\n" +
+            "{rarity:\"magic\", name:\"+3% Infectious Large Charm\", size:\"large\", req_level:42, pDamage:3, pd2:1},\n" +
+            "{rarity:\"magic\", name:\"+3% Scintillating Large Charm\", size:\"large\", req_level:42, mDamage:3, pd2:1}," +
+            "]";
 }
