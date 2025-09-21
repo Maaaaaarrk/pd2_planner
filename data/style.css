@@ -1,3 +1,10 @@
+@font-face {
+  font-family: "exocet";
+  src: url("../data/fonts/exocet.ttf") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
 .portal-logo {
   float:left;
   margin-left:5px;
@@ -95,6 +102,7 @@
   background-color: #161616;
 }
 .background {
+  font-family: "exocet", sans-serif;
     background-image: url(../images/bg2.jpg);
     margin:0
 }
@@ -269,7 +277,7 @@ input[type="file"] {
 .navbar {
   overflow: hidden;
     background-image: url(../images/thin_bg.gif);
-  font-family: Montserrat, sans-serif;
+ /* font-family: Montserrat, sans-serif;*/
   min-width: 869px;
   max-width: 869px;
 }
@@ -289,7 +297,7 @@ input[type="file"] {
   color: #ddd;
   padding: 4px 16px;
   background-color: inherit;
-  font-family: inherit;
+ /* font-family: inherit;*/
   font-size: 14px;
   text-decoration: none;
   text-transform: uppercase;

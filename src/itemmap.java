@@ -17,29 +17,10 @@ import java.util.*;
 public final class itemmap {
 
 
-    /*
-
-    javelin
-    spear
-    claw
-    orb
-    scepter
-    sword
-    staff
-    wand
-    scepter
-    club
-    axe
-    dagger
-    polearm
-    thrown
-    crossbow
-
-
-     */
     public static final Map<String, String> PROP_MAP;
     public static final Map<String, String> TYPE_MAP;
     public static final ArrayList<String> TYPES;
+    public static final Map<String, String> NAME_CORRECTION_MAP;
 
     //	:0, dexterity:0,, mana:0,  stamina:0, block:0, base_defense:0,
     // main stats			*/	, mRes_max:0,,
@@ -663,7 +644,7 @@ public final class itemmap {
         t.put("blood spirit", "Helm");
         t.put("bloodlord skull", "Offhand");
         t.put("bone visage", "Helm");
-        t.put("boneweave boots", "Offhand");
+        t.put("boneweave boots", "Boots");
         t.put("caduceus", "Weapon");
         t.put("colossus crossbow", "Weapon");
         t.put("conqueror crown", "Helm");
@@ -740,6 +721,18 @@ public final class itemmap {
         t.put("wyrrnhide boots", "Boots");
         t.put("zakarum shield", "Offhand");
         TYPE_MAP = Collections.unmodifiableMap(t);
+
+
+        LinkedHashMap<String, String> ncc = new LinkedHashMap<>();
+        ncc.put("Jo Stalf", "Jo Staff");
+        ncc.put("Darkforge Spawn", "Darkforce Spawn");
+        Map<String, String> lowercased = new LinkedHashMap<>(ncc.size());
+        for (Map.Entry<String, String> e : ncc.entrySet()) {
+            String key = e.getKey();
+            lowercased.put(key == null ? null : key.toLowerCase(java.util.Locale.ROOT), e.getValue());
+        }
+        NAME_CORRECTION_MAP = Collections.unmodifiableMap(lowercased);
+
     }
 
     private static final Set<String> AMAZON_BASES = Set.of(
@@ -810,5 +803,18 @@ public final class itemmap {
     }
 
     private itemmap() {
+    }
+
+    public static String checkForRename(String trim) {
+        String check = norm(trim);
+        if (NAME_CORRECTION_MAP.containsKey(check)) {
+            return NAME_CORRECTION_MAP.get(check);
+        }
+        return trim;
+    }
+
+    // Normalize to lower-case for exact, case-insensitive matching
+    public static String norm(String s) {
+        return s.trim().toLowerCase(java.util.Locale.ROOT);
     }
 }

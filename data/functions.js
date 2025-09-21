@@ -505,7 +505,11 @@ function getId(name) {
 // return: the base ID (base with spaces, hyphens, and apostrophes removed)
 // ---------------------------------
 function getBaseId(base_name) {
-	return base_name.split(" ").join("_").split("-").join("_").split("s'").join("s").split("'s").join("s");
+  return base_name
+    .replaceAll(" ", "_")
+    .replaceAll("-", "_")
+    .replaceAll("s'", "s")
+    .replaceAll("'s", "s");
 }
 
 // loadParams - load character details from URL parameters

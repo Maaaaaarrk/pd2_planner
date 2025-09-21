@@ -3,10 +3,6 @@ public final class WeaponGroupTypeUtil {
     private WeaponGroupTypeUtil() {
     }
 
-    // Normalize to lower-case for exact, case-insensitive matching
-    private static String norm(String s) {
-        return s.trim().toLowerCase(java.util.Locale.ROOT);
-    }
 
     // -------------------------
     // Group sets (readable case)
@@ -194,7 +190,7 @@ public final class WeaponGroupTypeUtil {
 
     private static void putAll(java.util.Map<String, String> m, java.util.Set<String> names, String group) {
         for (String raw : names) {
-            String key = norm(raw);
+            String key = itemmap.norm(raw);
             String existing = m.putIfAbsent(key, group);
             if (existing != null && !existing.equals(group)) {
                 throw new IllegalStateException("Base name present in multiple groups: " + raw + " -> " + existing + " and " + group);
@@ -209,8 +205,8 @@ public final class WeaponGroupTypeUtil {
     // Returns the group for the exact base name, or empty if unknown.
     public static String groupOf(String baseName) {
         if (baseName == null) return null;
-        String normBaseName = norm(baseName.toLowerCase());
-        return NAME_TO_GROUP.get(norm(normBaseName));
+        String normBaseName = itemmap.norm(baseName.toLowerCase());
+        return NAME_TO_GROUP.get(itemmap.norm(normBaseName));
     }
 
     // For validation or introspection (e.g., unit tests)
