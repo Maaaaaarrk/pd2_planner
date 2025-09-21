@@ -723,17 +723,7 @@ public final class itemmap {
         t.put("wyrrnhide boots", "Boots");
         t.put("zakarum shield", "Offhand");
         t.put("Chain Gloves", "Gloves");
-        t.put("Jo Staff", "Weapon");
         t.put("Lacerator", "Weapon");
-        t.put("hierophant trophy", "Offhand");
-        t.put("Death's Web", "Weapon");
-        Map<String, String> lowercasType = new LinkedHashMap<>(t.size());
-        for (Map.Entry<String, String> e : t.entrySet()) {
-            String key = e.getKey();
-            lowercasType.put(key == null ? null : key.toLowerCase(java.util.Locale.ROOT), e.getValue());
-        }
-
-        TYPE_MAP = lowercasType;
 
         LinkedHashMap<String, String> ncc = new LinkedHashMap<>();
         ncc.put("Jo Stalf", "Jo Staff");
@@ -742,6 +732,8 @@ public final class itemmap {
         ncc.put("Irices Shard", "Spectral Shard");
         ncc.put("Heirophant Trophy", "Hierophant Trophy");
         ncc.put("Deaths's Web", "Death's Web");
+        ncc.put("Akarats Devotion", "Akarat's Devotion");
+
         Map<String, String> lowercased = new LinkedHashMap<>(ncc.size());
         ArrayList<String> correctionNames = new ArrayList<>(ncc.size());
         for (Map.Entry<String, String> e : ncc.entrySet()) {
@@ -756,6 +748,21 @@ public final class itemmap {
         ArrayList<String> skipNames = new ArrayList<>();
         skipNames.add("Khalim");
         SKIP_NAME_PART = skipNames;
+
+
+        Map<String, String> lowercasType = new LinkedHashMap<>(t.size());
+        for (Map.Entry<String, String> e : t.entrySet()) {
+            String key = e.getKey();
+            if (key != null) {
+                String correctedCheck = NAME_CORRECTION_MAP.get(norm(key));
+                if (correctedCheck != null) {
+                    lowercasType.put(correctedCheck.toLowerCase(java.util.Locale.ROOT), e.getValue());
+                }
+            }
+            lowercasType.put(key == null ? null : key.toLowerCase(java.util.Locale.ROOT), e.getValue());
+        }
+
+        TYPE_MAP = lowercasType;
 
     }
 

@@ -88,6 +88,18 @@ public final class WeaponGroupTypeUtil {
             "Walking Stick", "Stalagmite", "Elder Staff", "Shillelagh", "Archon Staff"
     );
 
+    // Bows
+    private static final java.util.Set<String> BOW = java.util.Set.of(
+            // Normal
+            "Short Bow", "Hunter's Bow", "Long Bow", "Composite Bow", "Short Battle Bow", "Long Battle Bow", "Short War Bow", "Long War Bow",
+            // Exceptional
+            "Edge Bow", "Razor Bow", "Cedar Bow", "Double Bow", "Short Siege Bow", "Long Siege Bow", "Rune Bow", "Gothic Bow",
+            // Elite
+            "Spider Bow", "Blade Bow", "Shadow Bow", "Great Bow", "Diamond Bow", "Crusader Bow", "Hydra Bow", "Ward Bow",
+            // Amazon-only
+            "Stag Bow", "Ashwood Bow", "Matriarchal Bow"
+    );
+
     // Wands
     private static final java.util.Set<String> WAND = java.util.Set.of(
             // Normal
@@ -98,14 +110,21 @@ public final class WeaponGroupTypeUtil {
             "Polished Wand", "Ghost Wand", "Lich Wand", "Unearthed Wand"
     );
 
-    // Clubs / maces / hammers (grouped under "club" per your list)
-    private static final java.util.Set<String> CLUB = java.util.Set.of(
-            // Normal
+    // Clubs/Maces/Hammers (1H + 2H)
+    // If you already have CLUB defined, replace it with the version below to include the 2H maces.
+    private static final java.util.Set<String> MACE = java.util.Set.of(
+            // Normal 1H
             "Club", "Spiked Club", "Mace", "Morning Star", "Flail", "War Hammer",
-            // Exceptional
+            // Normal 2H
+            "Maul", "Great Maul",
+            // Exceptional 1H
             "Cudgel", "Barbed Club", "Flanged Mace", "Jagged Star", "Knout", "Battle Hammer",
-            // Elite
-            "Truncheon", "Tyrant Club", "Reinforced Mace", "Devil Star", "Scourge", "Legendary Mallet"
+            // Exceptional 2H
+            "War Club", "Martel de Fer",
+            // Elite 1H
+            "Truncheon", "Tyrant Club", "Reinforced Mace", "Devil Star", "Scourge", "Legendary Mallet",
+            // Elite 2H
+            "Ogre Maul", "Thunder Maul"
     );
 
     // Axes
@@ -178,7 +197,7 @@ public final class WeaponGroupTypeUtil {
         putAll(m, SWORD, "sword");
         putAll(m, STAFF, "staff");
         putAll(m, WAND, "wand");
-        putAll(m, CLUB, "club");
+        putAll(m, MACE, "mace");
         putAll(m, AXE, "axe");
         putAll(m, DAGGER, "dagger");
         putAll(m, POLEARM, "polearm");
@@ -223,14 +242,9 @@ public final class WeaponGroupTypeUtil {
         v.put("orb", java.util.Collections.unmodifiableSet(ORB));
         v.put("scepter", java.util.Collections.unmodifiableSet(SCEPTER));
         v.put("sword", java.util.Collections.unmodifiableSet(SWORD));
-        v.put("staff", java.util.Collections.unmodifiableSet(STAFF));
+        v.put("bow", java.util.Collections.unmodifiableSet(BOW));
         v.put("wand", java.util.Collections.unmodifiableSet(WAND));
-        v.put("club", java.util.Collections.unmodifiableSet(CLUB));
-        v.put("axe", java.util.Collections.unmodifiableSet(AXE));
-        v.put("dagger", java.util.Collections.unmodifiableSet(DAGGER));
-        v.put("polearm", java.util.Collections.unmodifiableSet(POLEARM));
-        v.put("thrown", java.util.Collections.unmodifiableSet(THROWN));
-        v.put("crossbow", java.util.Collections.unmodifiableSet(CROSSBOW));
+        v.put("mace", java.util.Collections.unmodifiableSet(MACE));
         return java.util.Collections.unmodifiableMap(v);
     }
 }
