@@ -5,7 +5,7 @@ import java.util.Locale;
 
 public class BulkRenameWebpToPng {
 
-    private static final String dir = System.getProperty("user.dir") + "\\images\\";
+    private static final String dir = System.getProperty("user.dir") + "\\images\\items\\";
 
     public static void main(String[] args) {
 
