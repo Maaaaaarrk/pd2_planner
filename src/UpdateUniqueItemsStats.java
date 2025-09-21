@@ -71,6 +71,9 @@ public class UpdateUniqueItemsStats {
                 String baseType = itemmap.checkForRename(safeGet(cols, idxType).trim());
                 String name = itemmap.checkForRename(safeGet(cols, idxName).trim());
 
+                if (itemmap.skipCheck(name)) {
+                    continue;
+                }
                 String reqLevel = safeGet(cols, idxReqLevel).trim();
 
                 if (baseType.isEmpty() || name.isEmpty()) continue;
@@ -105,23 +108,25 @@ public class UpdateUniqueItemsStats {
                     if (plannerPropKey == null || plannerPropKey.isBlank()) {
                         continue;
                     }
-                    if (propKey.contains("%"))
+                    if (plannerPropKey.contains("%"))
                         continue;// TODO remove
-                    if (propKey.contains("-"))
+                    if (plannerPropKey.contains("-"))
                         continue;// TODO remove
-                    if (propKey.contains("/"))
+                    if (plannerPropKey.contains("/"))
                         continue;// TODO remove
                     row.put(plannerPropKey, val);
                 }
 
-                String groupBaseType = itemmap.TYPE_MAP.get(baseType);
+                String groupBaseType = itemmap.getGroupBaseType(baseType);
                 if (groupBaseType != null && !groupBaseType.isEmpty()) {
-                    if (itemmap.TYPES.contains(groupBaseType)) {
+                    if (itemmap.typeChecker(groupBaseType)) {
                         String itemGroupType = WeaponGroupTypeUtil.groupOf(baseType);
                         if (itemGroupType != null) {
                             row.put("type", itemGroupType);
                         } else if (groupBaseType.equals("Offhand")) {
-                            row.put("type", "Shield");
+                            row.put("type", "shield");
+                        } else {
+                            //    System.err.println("itemGroupType = null for " + baseType);
                         }
                         if (!groupBaseType.equals("Amulet") && !groupBaseType.equals("Ring1"))
                             row.put("img", name.replace(" ", "_"));
@@ -137,7 +142,8 @@ public class UpdateUniqueItemsStats {
                         System.err.println("No type match on: " + baseType);
                     }
                 } else {
-                    // System.err.println("No match on: " + baseType);
+                    if (!(baseType.equals("charm") || baseType.equals("jewel") || baseType.startsWith("t5")))
+                        System.err.println("No match on: " + baseType);
                 }
             }
 

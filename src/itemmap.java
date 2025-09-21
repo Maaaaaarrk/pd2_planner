@@ -21,6 +21,8 @@ public final class itemmap {
     public static final Map<String, String> TYPE_MAP;
     public static final ArrayList<String> TYPES;
     public static final Map<String, String> NAME_CORRECTION_MAP;
+    public static final ArrayList<String> CORRECTED_NAMES;
+    public static final ArrayList<String> SKIP_NAME_PART;
 
     //	:0, dexterity:0,, mana:0,  stamina:0, block:0, base_defense:0,
     // main stats			*/	, mRes_max:0,,
@@ -720,18 +722,40 @@ public final class itemmap {
         t.put("wrist sword", "Weapon");
         t.put("wyrrnhide boots", "Boots");
         t.put("zakarum shield", "Offhand");
-        TYPE_MAP = Collections.unmodifiableMap(t);
+        t.put("Chain Gloves", "Gloves");
+        t.put("Jo Staff", "Weapon");
+        t.put("Lacerator", "Weapon");
+        t.put("hierophant trophy", "Offhand");
+        t.put("Death's Web", "Weapon");
+        Map<String, String> lowercasType = new LinkedHashMap<>(t.size());
+        for (Map.Entry<String, String> e : t.entrySet()) {
+            String key = e.getKey();
+            lowercasType.put(key == null ? null : key.toLowerCase(java.util.Locale.ROOT), e.getValue());
+        }
 
+        TYPE_MAP = lowercasType;
 
         LinkedHashMap<String, String> ncc = new LinkedHashMap<>();
         ncc.put("Jo Stalf", "Jo Staff");
         ncc.put("Darkforge Spawn", "Darkforce Spawn");
+        ncc.put("Bracers", "Chain Gloves");
+        ncc.put("Irices Shard", "Spectral Shard");
+        ncc.put("Heirophant Trophy", "Hierophant Trophy");
+        ncc.put("Deaths's Web", "Death's Web");
         Map<String, String> lowercased = new LinkedHashMap<>(ncc.size());
+        ArrayList<String> correctionNames = new ArrayList<>(ncc.size());
         for (Map.Entry<String, String> e : ncc.entrySet()) {
             String key = e.getKey();
             lowercased.put(key == null ? null : key.toLowerCase(java.util.Locale.ROOT), e.getValue());
+            correctionNames.add(e.getValue());
         }
+
+        CORRECTED_NAMES = correctionNames;
         NAME_CORRECTION_MAP = Collections.unmodifiableMap(lowercased);
+
+        ArrayList<String> skipNames = new ArrayList<>();
+        skipNames.add("Khalim");
+        SKIP_NAME_PART = skipNames;
 
     }
 
@@ -756,13 +780,13 @@ public final class itemmap {
     private static final Set<String> BARBARIAN_BASES = Set.of(
             // Barbarian helms
             "jawbone cap", "fanged helm", "horned helm",
-            "assault helmet", "avenger guard", "savage helmet",
+            "assault helmet", "avenger guard", "savage helmet", "lion helm",
             "slayer guard", "fury visor", "destroyer helm", "conqueror crown", "guardian crown"
     );
 
     private static final Set<String> DRUID_BASES = Set.of(
             // Druid pelts
-            "wolf head", "hawk helm", "antlers", "falcon mask", "spirit mask",
+            "wolf head", "hawk helm", "antlers", "falcon mask", "spirit mask", "jawbone visor",
             "alpha helm", "griffon headdress", "hunter's guise", "sacred feathers", "totemic mask",
             "blood spirit", "sun spirit", "earth spirit", "sky spirit", "dream spirit"
     );
@@ -771,7 +795,8 @@ public final class itemmap {
             // Shrunken heads
             "preserved head", "zombie head", "unraveller head", "gargoyle head", "demon head",
             "mummified trophy", "fetish trophy", "sexton trophy", "cantor trophy", "hierophant trophy",
-            "minion skull", "hellspawn skull", "overseer skull", "succubus skull", "bloodlord skull"
+            "minion skull", "hellspawn skull", "overseer skull", "succubus skull", "bloodlord skull",
+            "succubae skull"
     );
 
     private static final Set<String> PALADIN_BASES = Set.of(
@@ -808,6 +833,7 @@ public final class itemmap {
     public static String checkForRename(String trim) {
         String check = norm(trim);
         if (NAME_CORRECTION_MAP.containsKey(check)) {
+            //   System.err.println("Renamed: " + check);
             return NAME_CORRECTION_MAP.get(check);
         }
         return trim;
@@ -816,5 +842,22 @@ public final class itemmap {
     // Normalize to lower-case for exact, case-insensitive matching
     public static String norm(String s) {
         return s.trim().toLowerCase(java.util.Locale.ROOT);
+    }
+
+    public static String getGroupBaseType(String baseType) {
+        return TYPE_MAP.get(norm(baseType));
+    }
+
+    public static boolean typeChecker(String groupBaseType) {
+        return itemmap.TYPES.contains(groupBaseType);
+    }
+
+    public static boolean skipCheck(String name) {
+        for (int i = 0; i < itemmap.SKIP_NAME_PART.size(); i++) {
+            if (name.contains(itemmap.SKIP_NAME_PART.get(i))) {
+                return true;
+            }
+        }
+        return false;
     }
 }

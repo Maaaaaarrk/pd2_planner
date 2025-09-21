@@ -1474,10 +1474,14 @@ function loadMerc() {
 //	merc: selected mercenary name
 // ---------------------------------
 function setMercenary(merc) {
-	var mercEquipmentGroups = ["helm", "armor", "weapon", "offhand"];
-	var mercEquipmentDropdowns = ["dropdown_merc_helm", "dropdown_merc_armor", "dropdown_merc_weapon", "dropdown_merc_offhand"];
+	var mercEquipmentGroups = ["helm", "armor", "gloves", "boots", "belt", "weapon", "offhand"];
+	var mercEquipmentDropdowns = ["dropdown_merc_helm", "dropdown_merc_armor","dropdown_merc_gloves",
+	 "dropdown_merc_boots", "dropdown_merc_belt", "dropdown_merc_weapon", "dropdown_merc_offhand"];
 	if (document.getElementById("dropdown_merc_helm").innerHTML != "") { equipMerc('helm', 'helm'); }
 	if (document.getElementById("dropdown_merc_armor").innerHTML != "") { equipMerc('armor', 'armor'); }
+	if (document.getElementById("dropdown_merc_gloves").innerHTML != "") { equipMerc('gloves', 'gloves'); }
+	if (document.getElementById("dropdown_merc_boots").innerHTML != "") { equipMerc('boots', 'boots'); }
+	if (document.getElementById("dropdown_merc_belt").innerHTML != "") { equipMerc('belt', 'belt'); }
 	if (document.getElementById("dropdown_merc_weapon").innerHTML != "") { equipMerc('weapon', 'weapon'); }
 	if (document.getElementById("dropdown_merc_offhand").innerHTML != "") { equipMerc('offhand', 'offhand'); }
 	if (mercenary.base_aura != "") { removeEffect(mercenary.base_aura.split(' ').join('_')+"-mercenary"); mercenary.base_aura = ""; }
@@ -1503,6 +1507,9 @@ function setMercenary(merc) {
 	mercenary.name = merc
 	if (document.getElementById("dropdown_merc_helm").innerHTML == "") { document.getElementById("dropdown_merc_helm").style.display = "none" } else { document.getElementById("dropdown_merc_helm").style.display = "block" }
 	if (document.getElementById("dropdown_merc_armor").innerHTML == "") { document.getElementById("dropdown_merc_armor").style.display = "none" } else { document.getElementById("dropdown_merc_armor").style.display = "block" }
+	if (document.getElementById("dropdown_merc_armor").innerHTML == "") { document.getElementById("dropdown_merc_gloves").style.display = "none" } else { document.getElementById("dropdown_merc_gloves").style.display = "block" }
+	if (document.getElementById("dropdown_merc_armor").innerHTML == "") { document.getElementById("dropdown_merc_boots").style.display = "none" } else { document.getElementById("dropdown_merc_boots").style.display = "block" }
+	if (document.getElementById("dropdown_merc_armor").innerHTML == "") { document.getElementById("dropdown_merc_belt").style.display = "none" } else { document.getElementById("dropdown_merc_belt").style.display = "block" }
 	if (document.getElementById("dropdown_merc_weapon").innerHTML == "") { document.getElementById("dropdown_merc_weapon").style.display = "none" } else { document.getElementById("dropdown_merc_weapon").style.display = "block" }
 	if (document.getElementById("dropdown_merc_offhand").innerHTML == "") { document.getElementById("dropdown_merc_offhand").style.display = "none" } else { document.getElementById("dropdown_merc_offhand").style.display = "block" }
 	if (merc == "none" || merc == "­ ­ ­ ­ Mercenary") { document.getElementById("mercenary_spacing").style.display = "none" } else { document.getElementById("mercenary_spacing").style.display = "block" }
