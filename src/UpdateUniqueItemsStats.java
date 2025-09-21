@@ -10,14 +10,16 @@ import java.util.*;
 
 public class UpdateUniqueItemsStats {
     // Configuration: replace with your actual paths
-    private static final String dir = "";
+    private static final String dir = System.getProperty("user.dir") + "\\data\\";
     private static final String UNIQUE_ITEMS_PATH = dir + "UniqueItems.txt";
     private static final String OUTPUT_DIR = dir;
+
 
     // File naming: new file each run like equipment-YYYYMMDD-HHmmss.js
     private static final String OUTPUT_BASENAME = "equipment";
 
     public static void main(String[] args) {
+
         try {
             List<String> lines = Files.readAllLines(Paths.get(UNIQUE_ITEMS_PATH), StandardCharsets.UTF_8);
             if (lines.isEmpty()) {
@@ -72,7 +74,8 @@ public class UpdateUniqueItemsStats {
 
                 Map<String, Object> row = new LinkedHashMap<>();
                 row.put("name", name);
-                row.put("base", baseType);
+                if (!baseType.equalsIgnoreCase("ring") && !baseType.equalsIgnoreCase("amulet"))
+                    row.put("base", baseType);
                 row.put("req_level", parseNumericOrString(reqLevel));
 
                 // Add prop1..prop11 with their max values, using the prop value as the key
@@ -91,10 +94,11 @@ public class UpdateUniqueItemsStats {
                     row.put(plannerPropKey, val);
                 }
 
-                row.put("img", name.replace(" ", "_"));
                 String groupBaseType = itemmap.TYPE_MAP.get(baseType);
                 if (groupBaseType != null && !groupBaseType.isEmpty()) {
                     if (itemmap.TYPES.contains(groupBaseType)) {
+                        if (!groupBaseType.equals("Amulet") && !groupBaseType.equals("Ring1"))
+                            row.put("img", name.replace(" ", "_"));
                         String groupBaseTypeKeyname = groupBaseType.toLowerCase();
                         if (!grouped.containsKey(groupBaseTypeKeyname)) {
                             Map<String, Object> rowheader = new LinkedHashMap<>();
@@ -175,7 +179,8 @@ public class UpdateUniqueItemsStats {
                 int ci = 0;
                 int csize = row.size();
                 for (Map.Entry<String, Object> ce : row.entrySet()) {
-                    sb.append("\"").append(escapeJsString(ce.getKey())).append("\": ");
+                    // sb.append("\"").append(escapeJsString(ce.getKey())).append("\": ");
+                    sb.append(escapeJsString(ce.getKey())).append(": ");
                     Object val = ce.getValue();
                     if (val instanceof Number) {
                         sb.append(val.toString());
@@ -185,7 +190,8 @@ public class UpdateUniqueItemsStats {
                     if (++ci < csize) sb.append(", ");
                 }
                 sb.append("}");
-                if (i + 1 < rows.size()) sb.append(",");
+                //  if (i + 1 < rows.size())
+                sb.append(",");
                 sb.append("\n");
             }
 

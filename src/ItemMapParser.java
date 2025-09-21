@@ -39,9 +39,9 @@ import java.util.*;
 public class ItemMapParser {
 
     public static void main(String[] args) {
-        String dir = "";
-        String inputPath = args.length > 0 ? args[0] : dir + "UniqueItems.txt";
-        String outputPath = args.length > 1 ? args[1] : dir + "itemmapNEW.java";
+        String dir = System.getProperty("user.dir");
+        String inputPath = args.length > 0 ? args[0] : dir + "\\data\\" + "UniqueItems.txt";
+        String outputPath = args.length > 1 ? args[1] : dir + "\\src\\" + "itemmapNEW.java";
 
 
         try {
