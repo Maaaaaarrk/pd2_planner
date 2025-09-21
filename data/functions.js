@@ -868,7 +868,15 @@ function equip(group, val) {
 	// if replacing an item, previous item's affixes are removed from character
 	for (old_affix in equipped[group]) {
 		if (typeof(character[old_affix]) != 'undefined') { character[old_affix] -= equipped[group][old_affix] }
-		if (old_affix == "aura") { removeEffect(equipped[group][old_affix].split(' ').join('_')+"-"+group) }
+		if (old_affix == "aura") {
+
+			if(equipped[group][old_affix] == null){
+        	} else if(typeof equipped[group][old_affix] === "string"){
+
+		 removeEffect(equipped[group][old_affix].split(' ').join('_')+"-"+group) ;
+        	}
+
+		 }
 		if (old_affix == "cskill") {
 			for (let i = 0; i < equipped[group].cskill.length; i++) {
 				var cskill_name = equipped[group].cskill[i][1];
@@ -1580,10 +1588,13 @@ function getMercenaryAuraLevel(hlvl) {
 // ---------------------------------
 function addEffect(origin, name, num, other) {
 	if (origin == "misc") { name = non_items[num].effect; document.getElementById("dropdown_misc").selectedIndex = 0; }
+	if(name == null){
+	} else if(typeof name === "string"){
 	var id = name.split(' ').join('_');
 	if (other != "") { id += ("-"+other) }
 	if (document.getElementById(id) == null) { initializeEffect(origin,name,num,other) }
 	updateAllEffects()
+	}
 }
 
 // initializeEffect - Initializes an effect UI/data element
