@@ -17,7 +17,7 @@ public class UpdateUniqueItemsStats {
     // File naming: new file each run like equipment-YYYYMMDD-HHmmss.js
     private static final String OUTPUT_BASENAME = "equipment";
 
-    private static final boolean buildProd = false;
+    private static final boolean buildProd = true;
     private static final String PROD_OUTPUT_BASENAME = "items_equipment.js";
 
     public static void main(String[] args) {
@@ -68,8 +68,9 @@ public class UpdateUniqueItemsStats {
                 String enabled = safeGet(cols, idxEnabled).trim();
                 if (!"1".equals(enabled)) continue;
 
-                String baseType = safeGet(cols, idxType).trim();
-                String name = safeGet(cols, idxName).trim();
+                String baseType = itemmap.checkForRename(safeGet(cols, idxType).trim());
+                String name = itemmap.checkForRename(safeGet(cols, idxName).trim());
+
                 String reqLevel = safeGet(cols, idxReqLevel).trim();
 
                 if (baseType.isEmpty() || name.isEmpty()) continue;
@@ -77,7 +78,7 @@ public class UpdateUniqueItemsStats {
                 Map<String, Object> row = new LinkedHashMap<>();
                 row.put("name", name);
                 if (!baseType.equalsIgnoreCase("ring") && !baseType.equalsIgnoreCase("amulet"))
-                    row.put("base", baseType);
+                    row.put("base", removeNumbersAndCapitalizeFirst(baseType));
                 row.put("req_level", parseNumericOrString(reqLevel));
                 String onlyClass = itemmap.classForBaseOrNull(baseType);
                 if (onlyClass != null) {
@@ -149,11 +150,12 @@ public class UpdateUniqueItemsStats {
             final Path outFile;
             if (buildProd) {
                 outFile = outDir.resolve(PROD_OUTPUT_BASENAME);
+                Files.write(outFile, js.getBytes(StandardCharsets.UTF_8), StandardOpenOption.TRUNCATE_EXISTING);
             } else {
                 outFile = outDir.resolve(OUTPUT_BASENAME + "-" + timestamp + ".js");
-            }
-            Files.write(outFile, js.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE_NEW);
+                Files.write(outFile, js.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE_NEW);
 
+            }
             System.out.println("Wrote: " + outFile.toAbsolutePath());
             System.out.println("Total rows read: " + totalRows);
             System.out.println("Rows kept (enabled == 1): " + keptRows);
@@ -161,6 +163,42 @@ public class UpdateUniqueItemsStats {
         } catch (IOException e) {
             System.err.println("Error: " + e.getMessage());
         }
+    }
+
+    private static String removeNumbersAndCapitalizeFirst(String input) {
+        if (input == null) {
+            return null;
+        }
+        // Remove all digits
+        String cleaned = input.replaceAll("\\d+", "");
+        if (cleaned.isEmpty()) {
+            return cleaned;
+        }
+
+        // Capitalize the first letter of every word (separated by whitespace)
+        StringBuilder sb = new StringBuilder(cleaned.length());
+        boolean capitalizeNext = true;
+
+        for (int i = 0; i < cleaned.length(); ) {
+            int cp = cleaned.codePointAt(i);
+            int count = Character.charCount(cp);
+
+            if (capitalizeNext && Character.isLetter(cp)) {
+                String upper = new String(Character.toChars(cp)).toUpperCase(java.util.Locale.ROOT);
+                sb.append(upper);
+                capitalizeNext = false;
+            } else {
+                sb.appendCodePoint(cp);
+            }
+
+            if (Character.isWhitespace(cp)) {
+                capitalizeNext = true;
+            }
+
+            i += count;
+        }
+
+        return sb.toString();
     }
 
     private static String[] splitTSV(String line) {
@@ -207,7 +245,7 @@ public class UpdateUniqueItemsStats {
             ));
 
             //sb.append("  \"").append(escapeJsString(groupKey)).append("\": [\n");
-            sb.append(groupKey).append(": [\n{name:\"" + groupKey + "\"},\n");
+            sb.append(groupKey).append(": [\n{name:\"" + removeNumbersAndCapitalizeFirst(groupKey) + "\"},\n");
             for (int i = 0; i < rows.size(); i++) {
                 Map<String, Object> row = rows.get(i);
                 sb.append("    {");
