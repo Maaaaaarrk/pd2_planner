@@ -967,46 +967,6 @@ var equipment = {
 {rarity:"magic", name:"+3% Conduit Large Charm", size:"large", req_level:42, lDamage:3, pd2:1},
 {rarity:"magic", name:"+3% Infectious Large Charm", size:"large", req_level:42, pDamage:3, pd2:1},
 {rarity:"magic", name:"+3% Scintillating Large Charm", size:"large", req_level:42, mDamage:3, pd2:1},
-//{name:"Horadrim Sigil", size:"grand", req_level:80, all_attributes:3},
-	// Hodradrim Sigil is a legacy item (non-ladder only) that was available during Season 6 and 7. (July 13, 2018 - July 31, 2019)
-	// It was limited to 1 per character, but no longer has such limitations since being removed from the base game in Patch #17 (Tourmaline).
-	// Possible affixes:
-	//	Amazon
-	//		Lightning Bolt Fires 2 Additional Projectiles
-	//		+X to Phase Run Duration
-	//		+X% Magic Arrow Damage Converted to Magic			(now available on Moonfire)
-	//		Magic Arrow Fires 2 Additional Arrows				(now available on Moonfire)
-	//		Fire Arrow Fires 2 Additional Arrows				(now available on Dragonbreath)
-	//		Ice Arrow Fires 2 Additional Arrows					(now available on Ice Shards)
-	//		Cold Arrow Fires 2 Additional Projectiles			(now available on Hailstorm)
-	//		+40% to Freezing Arrow Radius						(now available on M'avina's Embrace)
-	//	Assassin
-	//		+X Fire Damage per Fists of Ember Charge
-	//		+X% increased Charged Bolt Sentry projectile speed
-	//	Barbarian
-	//		+3 seconds to Frenzy Duration
-	//		X% Frenzy Damage Converted to Magic
-	//		Slows Targets by X% During Whirlwind
-	//		Concentrate gains +X% Avoid projectiles
-	//	Druid
-	//		+5 Seconds to Armageddon Duration
-	//		-15% to Enemy Poison Resist affected by Rabies
-	//		Summoned Grizzly Bear Cannot be Cursed
-	//		Can Summone One Additional Dire Wolf
-	//	Necromancer
-	//		Raised Skeletons have X% chance of Open Wounds
-	//		+X% increased Skeleton Mage projectile speed
-	//		Corpse Explosion deals +5% of Maximum Corpse Life	(now available on Corpsemourn)
-	//		Bone Spear Fires 2 Additional Projectiles			(now available with 100+ energy, also on Bonehew)
-	//	Paladin
-	//		X% Reduced Dashing Strike Cooldown
-	//		+X% Increased Holy Fire Area Damage Rate
-	//		Holy Bolt Fires 2 Additional Projectiles			(now available with 100+ energy)
-	//	Sorceress
-	//		+X% to Glacial Spike radius
-	//		+X% to Fire Blast radius
-	//		Can Summon One Additional Hydra						(now available on Hexfire)
-	//
 {debug:1, name:"+1 (each) skill", req_level:100, pod:1, 
 	/* amazon		*/	skill_Jab:1, skill_Power_Strike:1, skill_Poison_Javelin:1, skill_Fend:1, skill_Lightning_Bolt:1, skill_Charged_Strike:1, skill_Plague_Javelin:1, skill_Molten_Strike:1, skill_Lightning_Strike:1, skill_Lightning_Fury:1, skill_Inner_Sight:1, skill_Lethal_Strike:1, skill_Phase_Run:1, skill_Dodge:1, skill_Avoid:1, skill_Penetrate:1, skill_Evade:1, skill_Decoy:1, skill_Valkyrie:1, skill_Pierce:1, skill_Cold_Arrow:1, skill_Magic_Arrow:1, skill_Multiple_Shot:1, skill_Fire_Arrow:1, skill_Ice_Arrow:1, skill_Guided_Arrow:1, skill_Exploding_Arrow:1, skill_Strafe:1, skill_Immolation_Arrow:1, skill_Freezing_Arrow:1,
 	/* assassin		*/	skill_Dual_Strike:1, skill_Fists_of_Ember:1, skill_Fists_of_Thunder:1, skill_Fists_of_Ice:1, skill_Static_Strike:1, skill_Dragon_Talon:1, skill_Emberstorm:1, skill_Dragon_Flight:1, skill_Blades_of_Ice:1, skill_Claw_Mastery:1, skill_Psychic_Hammer:1, skill_Burst_of_Speed:1, skill_Mind_Barrier:1, skill_Weapon_Block:1, skill_Cloak_of_Shadows:1, skill_Fade:1, skill_Shadow_Warrior:1, skill_Mind_Blast:1, skill_Venom:1, skill_Shadow_Master:1, skill_Fire_Blast:1, skill_Shock_Web:1, skill_Blade_Throw:1, skill_Charged_Bolt_Sentry:1, skill_Wake_of_Fire:1, skill_Blade_Fury:1, skill_Lightning_Sentry:1, skill_Wake_of_Inferno:1, skill_Death_Sentry:1, skill_Blade_Shield:1, skill_Dragon_Tail:1,
