@@ -83,7 +83,7 @@ public final class itemmap {
         p.put("dev-clout", "dev-clout"); // ignore
         p.put("dex", "dexterity");
         p.put("dex/lvl", "dexterity_per_level");
-        p.put("base_damage_min", "dmg");
+        p.put("dmg", "base_damage_min");
         p.put("dmg%", "e_damage");
         p.put("dmg%/eth", "dmg%/eth"); // TODO purgatory
         p.put("dmg%/lvl", "dmg%/lvl"); // todo
@@ -125,7 +125,7 @@ public final class itemmap {
         p.put("extra-spiritwolf", "extra-spiritwolf"); // TODO
         p.put("fire-max", "fDamage_max");
         p.put("fire-min", "fDamage_min");
-        p.put("skills_fire_all", "skills_fire_all");
+        p.put("fireskill", "skills_fire_all");
         p.put("freeze", "freezes_target");
         p.put("gethit-skill", "gethit-skill"); // TODO
         p.put("gold%", "gf");
@@ -166,39 +166,6 @@ public final class itemmap {
         p.put("mana-kill", "mana_per_kill");
         p.put("mana/lvl", "mana_per_level");
         p.put("manasteal", "mana_leech");
-        // map mods
-        p.put("map-glob-arealevel", "map-glob-arealevel");
-        p.put("map-glob-boss-dropcorruptedunique", "map-glob-boss-dropcorruptedunique");
-        p.put("map-glob-boss-dropfacet", "map-glob-boss-dropfacet");
-        p.put("map-glob-boss-droppuzzlebox", "map-glob-boss-droppuzzlebox");
-        p.put("map-glob-boss-dropskillers", "map-glob-boss-dropskillers");
-        p.put("map-glob-boss-dropubermats", "map-glob-boss-dropubermats");
-        p.put("map-glob-density", "map-glob-density");
-        p.put("map-glob-dropcorrupted", "map-glob-dropcorrupted");
-        p.put("map-glob-monsterrarity", "map-glob-monsterrarity");
-        p.put("map-mon-att-pierce", "map-mon-att-pierce");
-        p.put("map-mon-crush", "map-mon-crush");
-        p.put("map-mon-curseresist-hp%", "map-mon-curseresist-hp%");
-        p.put("map-mon-deadlystrike", "map-mon-deadlystrike");
-        p.put("map-mon-dropcharms", "map-mon-dropcharms");
-        p.put("map-mon-dropjewels", "map-mon-dropjewels");
-        p.put("map-mon-hp%", "map-mon-hp%");
-        p.put("map-mon-phys-as-extra-cold", "map-mon-phys-as-extra-cold");
-        p.put("map-mon-phys-as-extra-fire", "map-mon-phys-as-extra-fire");
-        p.put("map-mon-phys-as-extra-ltng", "map-mon-phys-as-extra-ltng");
-        p.put("map-mon-phys-as-extra-mag", "map-mon-phys-as-extra-mag");
-        p.put("map-mon-phys-as-extra-pois", "map-mon-phys-as-extra-pois");
-        p.put("map-mon-regen", "map-mon-regen");
-        p.put("map-mon-velocity%", "map-mon-velocity%");
-        p.put("map-play-ac%", "map-play-ac%");
-        p.put("map-play-addxp", "map-play-addxp");
-        p.put("map-play-balance1", "map-play-balance1");
-        p.put("map-play-block", "map-play-block");
-        p.put("map-play-mag-gold%", "map-play-mag-gold%");
-        p.put("map-play-regen", "map-play-regen");
-        p.put("map-play-res-all", "map-play-res-all");
-        p.put("map-play-speed-all", "map-play-speed-all");
-        // end map mods
         p.put("maxcurse", "maxcurse"); // todo
         p.put("maxlevel-clout", "maxlevel-clout"); // ignore
         p.put("mindmg/energy", "mindmg/energy"); // todo
@@ -267,6 +234,9 @@ public final class itemmap {
         p.put("thorns/lvl", "thorns_per_level");
         p.put("vit", "vitality");
         p.put("vit/lvl", "vitality_per_level");
+        p.put("dru", "skills_druid");
+        p.put("half-freeze", "half_freeze");
+        p.put("max-deadly", "max-deadly");// TODO
         PROP_MAP = Collections.unmodifiableMap(p);
 
 
@@ -795,8 +765,8 @@ public final class itemmap {
         ncc.put("Stalkers Cull", "Stalker's Cull");
         ncc.put("Wisp", "Wisp Projector");
         ncc.put("War Bonnet", "Biggin's Bonnet");
-
-        // ncc.put("", "");
+        ncc.put("Overlords Helm", "Overlord's Helm");
+        // ncc.put("", "");Overlords_Helm
 
         Map<String, String> lowercased = new LinkedHashMap<>(ncc.size());
         ArrayList<String> correctionNames = new ArrayList<>(ncc.size());

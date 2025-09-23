@@ -106,6 +106,10 @@ public class UpdateUniqueItemsStats {
 
                     // Skip unknown properties instead of inserting a null key
                     if (plannerPropKey == null || plannerPropKey.isBlank()) {
+                        if (propKey != null & !propKey.isEmpty()) {
+                            if (!propKey.startsWith("map-"))
+                                System.err.println("Unknown prop: " + propKey);
+                        }
                         continue;
                     }
                     if (plannerPropKey.contains("%"))
