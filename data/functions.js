@@ -1300,7 +1300,7 @@ function addSocketable(val) {
 	var empty = 1;
 	var i = 0;
 	for (let x = 1; x <= 10; x++) {
-		for (let y = 0; y < 4; y++) {
+		for (let y = 0; y < 6; y++) {
 			i = y*10 + x
 			empty = 1
 			if (space_found == 0 && 1 + (y+1) <= 5) {

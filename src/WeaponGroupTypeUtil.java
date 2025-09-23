@@ -16,6 +16,7 @@ public final class WeaponGroupTypeUtil {
             "War Javelin", "Great Pilum", "Harpoon", "Simbilan", "Spiculum",
             // Elite
             "Hyperion Javelin", "Stygian Pilum", "Winged Harpoon", "Ghost Glaive",
+            "Balrog Spear",
             // Amazon-only
             "Maiden Javelin", "Ceremonial Javelin", "Matriarchal Javelin"
     );
@@ -66,8 +67,9 @@ public final class WeaponGroupTypeUtil {
     private static final java.util.Set<String> SWORD = java.util.Set.of(
             // Normal 1H
             "Short Sword", "Scimitar", "Falchion", "Crystal Sword", "Broad Sword", "Long Sword", "War Sword",
+            "Shamshir",
             // Normal 2H
-            "Two-Handed Sword", "Claymore", "Giant Sword", "Bastard Sword", "Flamberge", "Great Sword",
+            "Two Handed Sword", "Claymore", "Giant Sword", "Bastard Sword", "Flamberge", "Great Sword",
             // Exceptional 1H
             "Gladius", "Cutlass", "Tulwar", "Dimensional Blade", "Battle Sword", "Rune Sword", "Ancient Sword",
             // Exceptional 2H
@@ -97,7 +99,8 @@ public final class WeaponGroupTypeUtil {
             // Elite
             "Spider Bow", "Blade Bow", "Shadow Bow", "Great Bow", "Diamond Bow", "Crusader Bow", "Hydra Bow", "Ward Bow",
             // Amazon-only
-            "Stag Bow", "Ashwood Bow", "Matriarchal Bow"
+            "Stag Bow", "Ashwood Bow", "Matriarchal Bow",
+            "Reflex Bow", "Ceremonial Bow", "Grand Matron Bow"
     );
 
     // Wands
@@ -120,7 +123,7 @@ public final class WeaponGroupTypeUtil {
             // Exceptional 1H
             "Cudgel", "Barbed Club", "Flanged Mace", "Jagged Star", "Knout", "Battle Hammer",
             // Exceptional 2H
-            "War Club", "Martel de Fer",
+            "War Club", "Martel De Fer",
             // Elite 1H
             "Truncheon", "Tyrant Club", "Reinforced Mace", "Devil Star", "Scourge", "Legendary Mallet",
             // Elite 2H
@@ -140,7 +143,7 @@ public final class WeaponGroupTypeUtil {
             // Elite 1H
             "Tomahawk", "Small Crescent", "Ettin Axe", "War Spike", "Berserker Axe",
             // Elite 2H
-            "Feral Axe", "Silver-Edged Axe", "Decapitator", "Champion Axe", "Glorious Axe"
+            "Feral Axe", "Silver Edged Axe", "Decapitator", "Champion Axe", "Glorious Axe"
     );
 
     // Daggers
@@ -203,6 +206,7 @@ public final class WeaponGroupTypeUtil {
         putAll(m, POLEARM, "polearm");
         putAll(m, THROWN, "thrown");
         putAll(m, CROSSBOW, "crossbow");
+        putAll(m, BOW, "bow");
 
         NAME_TO_GROUP = java.util.Collections.unmodifiableMap(m);
     }
