@@ -793,6 +793,7 @@ public final class itemmap {
         ncc.put("Jadetalon", "Jade Talon");
         ncc.put("Cutthroat1", "Bartuc's Cut Throat");
         ncc.put("Stalkers Cull", "Stalker's Cull");
+        ncc.put("Wisp", "Wisp Projector");
 
         // ncc.put("", "");
 

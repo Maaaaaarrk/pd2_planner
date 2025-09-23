@@ -438,7 +438,7 @@ ring1: [
     {name: "Nature's Peace", req_level: 69, pmh: 1, peace: 1, mAbsorb_flat: 11, lRes_max: 3, charged: 2, cRes_max: 3, fRes_max: 3, pRes_max: 3},
     {name: "Raven Frost", req_level: 45, cbf: 1, cDamage_max: 45, cAbsorb: 5, mana: 40, dexterity: 20, ar: 250},
     {name: "The Stone of Jordan", req_level: 29, mana: 40, max_mana: 20, lDamage_max: 120, all_skills: 1},
-    {name: "Wisp", req_level: 76, lAbsorb: 6, all_skills: 1, mf: 15, charged: 7},
+    {name: "Wisp Projector", req_level: 76, lAbsorb: 6, all_skills: 1, mf: 15, charged: 7},
   ],
 
  ring2: [],
