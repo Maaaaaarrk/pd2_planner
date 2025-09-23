@@ -113,11 +113,11 @@ public final class itemmap {
         p.put("es-efficiency", "es-efficiency"); // TODO
         p.put("ethereal", "ethereal");
         p.put("explosivearrow", "explosive_attack");
-        p.put("extra-cold", "extra-cold"); // TODO
-        p.put("extra-fire", "extra-fire"); // TODO
+        p.put("extra-cold", "cDamage");
+        p.put("extra-fire", "fDamage");
         p.put("extra-grizzly", "extraGrizzly");
-        p.put("extra-ltng", "extra-ltng"); // TOOD
-        p.put("extra-pois", "extra-pois"); // TODO
+        p.put("extra-ltng", "lDamage");
+        p.put("extra-pois", "pDamage");
         p.put("extra-revives", "extra-revives"); // TODO
         p.put("extra-shadow", "extra-shadow"); // TODO
         p.put("extra-skele-war", "extra-skele-war"); // TODO
