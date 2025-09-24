@@ -3049,7 +3049,7 @@ function getAffixLine(affix, loc, group, subgroup) {
 	var halt = false;
 	var both = 0;
 	var stat = stats[affix];
-	if (affix != "ctc" && affix != "cskill" && affix != "set_bonuses") {
+	if (affix != "ctc" && affix != "cskill" && affix != "set_bonuses" && stat!=null) {
 		if (stat.alt != null) {
 			if (typeof(source[stat.index[0]]) != 'undefined' && typeof(source[stat.index[1]]) != 'undefined') { if (source[stat.index[0]] > 0 && source[stat.index[1]] > 0) { both = 1; if (stat.index[1] == affix) { halt = true } } }
 			if (both == 0) { stat = null; stat = stats_alternate[affix]; }

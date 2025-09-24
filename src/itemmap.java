@@ -55,7 +55,7 @@ public final class itemmap {
         p.put("att/lvl", "ar_per_level");
         p.put("aura", "aura"); // TODO
         p.put("balance2", "balance2"); // TODO
-        p.put("bar", "bar");
+        p.put("bar", "skills_barbarian");
         p.put("block", "ibc");
         p.put("block-skill", "block_skillup");
         p.put("block2", "ibc");
@@ -106,7 +106,7 @@ public final class itemmap {
         p.put("dragonflight-reduction", "dragonflight-reduction");
         p.put("skills_druid", "dru");
         p.put("dur", "durability_extra");
-        p.put("eaglehorn-raven", "eaglehorn-raven"); // TODO
+        p.put("eaglehorn-raven", "extra_Raven_Damage");
         p.put("ease", "ease"); // TODO
         p.put("enr", "energy");
         p.put("equipped-skill", "equipped-skill"); // TODO
@@ -118,19 +118,19 @@ public final class itemmap {
         p.put("extra-grizzly", "extraGrizzly");
         p.put("extra-ltng", "lDamage");
         p.put("extra-pois", "pDamage");
-        p.put("extra-revives", "extra-revives"); // TODO
-        p.put("extra-shadow", "extra-shadow"); // TODO
-        p.put("extra-skele-war", "extra-skele-war"); // TODO
-        p.put("extra-spirits", "extra-spirits"); // TODO
-        p.put("extra-spiritwolf", "extra-spiritwolf"); // TODO
+        p.put("extra-revives", "extra_Revives");
+        p.put("extra-shadow", "extra_Shadow");
+        p.put("extra-skele-war", "extra_Skeleton_Warriors");
+        p.put("extra-spirits", "extra_Spirits");
+        p.put("extra-spiritwolf", "extra-extra_Spirit_Wolf");
         p.put("fire-max", "fDamage_max");
         p.put("fire-min", "fDamage_min");
         p.put("fireskill", "skills_fire_all");
         p.put("freeze", "freezes_target");
-        p.put("gethit-skill", "gethit-skill"); // TODO
+        p.put("gethit-skill", "gethit-skill"); // TODO important
         p.put("gold%", "gf");
         p.put("gold%/lvl", "gf_per_level");
-        p.put("grims-extra-skele-mage", "grims-extra-skele-mage"); // TODO
+        p.put("grims-extra-skele-mage", "extra_Skeleton_Mages");
         p.put("gust-reduction", "gust-reduction"); // TODO
         p.put("half-half_freeze", "half-freeze");
         p.put("heal-hit", "life_per_hit");
@@ -148,18 +148,18 @@ public final class itemmap {
         p.put("kick", "kick_min");
         p.put("kill-skill", "kill-skill"); // TODO
         p.put("knock", "knockback");
-        p.put("leapspeed", "leapspeed"); // todo
+        p.put("leapspeed", "leapspeed");
         p.put("levelup-skill", "levelup-skill"); // todo
         p.put("lifesteal", "life_leech");
         p.put("lifesteal-cap", "lifesteal-cap"); // todo
-        p.put("light", "light_radius"); // todo
+        p.put("light", "light_radius");
         p.put("light-thorns", "light-thorns"); // todo
         p.put("ltng-max", "lDamage_max");
         p.put("ltng-min", "lDamage_min");
         p.put("ltngskill", "skills_lightning_all");
         p.put("mag%", "mf");
         p.put("mag%/lvl", "mf_per_level");
-        p.put("magicarrow", "magicarrow"); // todo
+        p.put("magicarrow", "magic_attack");
         p.put("magskill", "skills_magic_all");
         p.put("mana", "mana");
         p.put("mana%", "max_mana");
@@ -175,13 +175,13 @@ public final class itemmap {
         p.put("nofreeze", "cbf");
         p.put("noheal", "pmh");
         p.put("openwounds", "openwounds"); //todo
-        p.put("oskill", "oskill"); // todo
+        p.put("oskill", "oskill");
         p.put("pal", "skills_paladin");
         p.put("pierce", "pierce_skillup");
         p.put("pierce-cold", "enemy_cRes");
         p.put("pierce-fire", "enemy_fRes");
         p.put("pierce-ltng", "enemy_lRes");
-        p.put("pierce-phys", "pierce-phys"); // TODO
+        p.put("pierce-phys", "enemy_phyRes");
         p.put("pierce-pois", "enemy_pRes");
         p.put("pois-len", "pois-len"); // TODO
         p.put("pois-max", "pois-max"); // TODO
@@ -212,9 +212,9 @@ public final class itemmap {
         p.put("res-pois-len", "poison_length_reduced");
         p.put("res-pois-max", "pRes_max");
         p.put("rip", "peace");
-        p.put("skill", "skill"); // todo
-        p.put("skill-rand", "skill-rand"); // todo
-        p.put("skilltab", "skilltab"); // todo
+        p.put("skill", "skill");
+        p.put("skill-rand", "skill-rand"); // todo important
+        p.put("skilltab", "skilltab"); // done in java
         p.put("slow", "slows_target");
         p.put("sock", "sockets");
         // p.put("socketed-text", "socketed-text");
@@ -236,7 +236,7 @@ public final class itemmap {
         p.put("vit/lvl", "vitality_per_level");
         p.put("dru", "skills_druid");
         p.put("half-freeze", "half_freeze");
-        p.put("max-deadly", "max-deadly");// TODO
+        p.put("max-deadly", "max_dstrike");
         PROP_MAP = Collections.unmodifiableMap(p);
 
 
