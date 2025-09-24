@@ -704,6 +704,8 @@ var ctcs = [
 
 var stats = {
 
+boss_item:{index:["boss_item"], format:["Drops exclusively from: ",""]},
+
 strength:{index:["strength"], format:["+"," to Strength"]},
 dexterity:{index:["dexterity"], format:["+"," to Dexterity"]},
 vitality:{index:["vitality"], format:["+"," to Vitality"]},

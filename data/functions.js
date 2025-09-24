@@ -2851,7 +2851,7 @@ function equipmentHover(group) {
 		if (equipped[group][affix] != unequipped[affix] && stats[affix] != unequipped[affix] && stats[affix] != 1 && affix != "velocity" && affix != "smite_min") {
 			var affix_info = getAffixLine(affix,"equipped",group,"");
 			if (affix_info[1] != 0) {
-				if (affix == "base_damage_min" || affix == "base_defense" || affix == "req_level" || affix == "req_strength" || affix == "req_dexterity" || affix == "durability" || affix == "baseSpeed" || affix == "range" || affix == "throw_min" || affix == "base_min_alternate" || affix == "block" || affix == "velocity") { main_affixes += affix_info[0]+"<br>" }
+				if (affix == "boss_item" || affix == "base_damage_min" || affix == "base_defense" || affix == "req_level" || affix == "req_strength" || affix == "req_dexterity" || affix == "durability" || affix == "baseSpeed" || affix == "range" || affix == "throw_min" || affix == "base_min_alternate" || affix == "block" || affix == "velocity") { main_affixes += affix_info[0]+"<br>" }
 				else { affixes += affix_info[0]+"<br>" }
 			}
 		}
@@ -3049,7 +3049,7 @@ function getAffixLine(affix, loc, group, subgroup) {
 	var halt = false;
 	var both = 0;
 	var stat = stats[affix];
-	if (affix != "ctc" && affix != "cskill" && affix != "set_bonuses" && stat!=null) {
+	if (affix != "boss_item" && affix != "ctc" && affix != "cskill" && affix != "set_bonuses" && stat!=null) {
 		if (stat.alt != null) {
 			if (typeof(source[stat.index[0]]) != 'undefined' && typeof(source[stat.index[1]]) != 'undefined') { if (source[stat.index[0]] > 0 && source[stat.index[1]] > 0) { both = 1; if (stat.index[1] == affix) { halt = true } } }
 			if (both == 0) { stat = null; stat = stats_alternate[affix]; }
@@ -3091,7 +3091,7 @@ function getAffixLine(affix, loc, group, subgroup) {
 				affix_line += line
 				if (i < source[affix].length-1) { affix_line += "<br>" }
 			}
-		}
+		} else if(affix == "boss_item") { affix_line = stat.format[0]+"<span style=\"color: gold;\">" +source[affix]+"</span>"}
 	}
 	var result = [affix_line,value_combined];
 	return result

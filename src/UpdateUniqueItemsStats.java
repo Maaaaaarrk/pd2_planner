@@ -95,6 +95,22 @@ public class UpdateUniqueItemsStats {
                     row.put("twoHanded", 1);
                 }
 
+                switch (name) {
+                    case "Overlord's Helm":
+                    case "Dark Abyss":
+                    case "Itherael's Path":
+                    case "Hadriel's Hand":
+                    case "Aidan's Scar":
+                        row.put("boss_item", "Uber Diablo");
+                        break;
+                    case "The Third Eye":
+                    case "Band of Skulls":
+                    case "Cage of the Unsullied":
+                        row.put("boss_item", "Rathma");
+                        break;
+                    default:
+                }
+
                 // Add prop1..prop11 with their max values, using the prop value as the key
                 for (int p = 1; p <= 11; p++) {
                     int pIdx = idxProp[p];
