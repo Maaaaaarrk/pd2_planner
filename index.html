@@ -516,11 +516,13 @@
 									     onContextMenu="inventoryRightClick(event,'boots')">
 								</div>
 								<div id="belt" class="equipped_item" onmouseover="equipmentHover('belt')"
+								     ondrop="handleSocket(event,'belt',0)" ondragover="allowSocket(event,'belt')"
 								     onmouseout="equipmentOut()" align="center">
 									<img id="belt_image" src="" onClick="inventoryLeftClick(event,'belt')"
 									     onContextMenu="inventoryRightClick(event,'belt')">
 								</div>
 								<div id="amulet" class="equipped_item" onmouseover="equipmentHover('amulet')"
+								     ondrop="handleSocket(event,'amulet',0)" ondragover="allowSocket(event,'amulet')"
 								     onmouseout="equipmentOut()" align="center">
 									<img id="amulet_image" src="" onContextMenu="equip('amulet', 'amulet')">
 								</div>

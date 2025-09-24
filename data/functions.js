@@ -629,7 +629,7 @@ function loadParams() {
 					if (baseDiff < 0) { changeBase(group, "downgrade"); equipmentOut(); }
 					if (baseDiff > 0) { changeBase(group, "upgrade"); equipmentOut(); }
 				}
-				for (group in socketed) { for (let i = 3; i < param_equipped[group].length; i++) { if (param_equipped[group][i] != "") { addSocketable(param_equipped[group][i]); inv[tempSetup].load = group; tempSetup = 0; } } }
+				for (group in socketed) { for (let i = 3; i < param_equipped[group].length; i++) { if (param_equipped[group][i] != "") { addSocketable(param_equipped[group][i],group); inv[tempSetup].load = group; tempSetup = 0; } } }
 				for (let s = 1; s < inv[0].in.length; s++) { if (inv[s].empty != 1) { inv[0].onpickup = inv[0].in[s]; handleSocket(null,inv[s].load,s); } }	// socketables get moved to equipment
 			}
 
@@ -1276,7 +1276,9 @@ function addCharm(val) {
 // addSocketable - Adds a jewel, rune, or gem to the inventory
 //	val: the name of the socketable item
 // ---------------------------------
-function addSocketable(val) {
+function addSocketable(val,group) {
+
+console.log("group "+group);
 	// TODO: Reduce duplicated code from addCharm()?
 	var prefix = "./images/items/socketables/";
 	var jewels = ["Jewel_blue.png","Jewel_green.png","Jewel_peach.png","Jewel_purple.png","Jewel_red.png","Jewel_white.png",];
@@ -1294,7 +1296,11 @@ function addSocketable(val) {
 	val = val + append
 
 	var socketable = 'socketable';
-	var itemHTML = '<img style="width: 28; height: 28; pointer-events: auto; z-index:5;" id="' + val + '" src="' + itemImage + '" draggable="true" ondragstart="dragSocketable(event)" width="28" height="28" oncontextmenu="trashSocketable(event,this.id,0)" onmouseover="itemHover(event, this.value)" onmouseout="itemOut()" onclick="socketableSelect(event)">';
+	var addstyle = '';
+	if(group == "amulet" || group == "belt") {
+	addstyle = 'position: relative; top: -28px; ';
+	}
+	var itemHTML = '<img style="'+addstyle+'width: 28; height: 28; pointer-events: auto; z-index:5;" id="' + val + '" src="' + itemImage + '" draggable="true" ondragstart="dragSocketable(event)" width="28" height="28" oncontextmenu="trashSocketable(event,this.id,0)" onmouseover="itemHover(event, this.value)" onmouseout="itemOut()" onclick="socketableSelect(event)">';
 	var insertion = "";
 	var space_found = 0;
 	var empty = 1;
@@ -2496,7 +2502,7 @@ function setCharacterInfo(className) {
 			equipMerc(group,fileInfo.mercEquipped[group].name)
 		}
 	}
-	for (group in fileInfo.socketed) { for (let i = 0; i < fileInfo.socketed[group].length; i++) { if (fileInfo.socketed[group][i] != "") { addSocketable(fileInfo.socketed[group][i]); inv[tempSetup].load = group; tempSetup = 0; } } }
+	for (group in fileInfo.socketed) { for (let i = 0; i < fileInfo.socketed[group].length; i++) { if (fileInfo.socketed[group][i] != "") { addSocketable(fileInfo.socketed[group][i],group); inv[tempSetup].load = group; tempSetup = 0; } } }
 	for (let s = 1; s < inv[0].in.length; s++) { if (inv[s].empty != 1) { inv[0].onpickup = inv[0].in[s]; handleSocket(null,inv[s].load,s); } }	// socketables get moved to equipment
 	for (effect in fileInfo.effects) { for (let i = 1; i < non_items.length; i++) {
 		if (effect == non_items[i].effect) { addEffect('misc',non_items[i].name,i,'') }
@@ -2648,7 +2654,7 @@ function socketableSelect(ev) {
 	var dup = 0;
 	if (ev.shiftKey) { dup = 1 }
 	if (ev.ctrlKey) { dup = 10 }
-	if (dup > 0) { for (let d = 0; d < dup; d++) { addSocketable(lastSocketable) } }
+	if (dup > 0) { for (let d = 0; d < dup; d++) { addSocketable(lastSocketable,"") } }
 }
 
 // itemHover - Shows item tooltip on mouse-over for Charm Inventory
@@ -2812,7 +2818,7 @@ function equipmentHover(group) {
 	var name = "";
 	var sock = "";
 	var base = "";
-	if (equipped[group].name != "none" && (group == "helm" || group == "armor" || (group == "weapon" && equipped[group].type != "javelin" && equipped[group].type != "thrown") || (group == "offhand" && equipped[group].type != "quiver"))) {
+	if (equipped[group].name != "none" && (group == "helm" || group == "armor" || group == "weapon" || (group == "offhand" && equipped[group].type != "quiver"))) {
 		var sockets = ~~corruptsEquipped[group].sockets + ~~equipped[group].sockets;
 		sockets = Math.min(sockets,equipped[group].max_sockets)
 		if (socketed[group].sockets > 0 || equipped[group].sockets > 0) {
@@ -2856,7 +2862,7 @@ function equipmentHover(group) {
 			}
 		}
 	}
-	if (equipped[group].name != "none" && (group == "helm" || group == "armor" || group == "weapon" || group == "offhand")) {
+	if (equipped[group].name != "none" && (group == "helm" || group == "armor" || group == "weapon" || group == "offhand" || group == "belt" || group == "amulet")) {
 		updateSocketTotals()
 		for (affix in socketed[group].totals) {
 			if (stats[affix] != unequipped[affix] && stats[affix] != 1 && affix != "req_level" && affix != "ctc") {
@@ -3279,7 +3285,7 @@ function drop(ev,cell) {
 	var name = val.split('_')[0];
 	for (let k = 0; k < socketables.length; k++) { if (socketables[k].name == name) { socketable = 1 } }
 	if (socketable == 1) {
-		var groups = ["helm", "armor", "weapon", "offhand"];
+		var groups = ["helm", "armor", "weapon", "offhand", "amulet", "belt"];
 		for (let g = 0; g < groups.length; g++) {
 			for (let i = 0; i < socketed[groups[g]].items.length; i++) {
 				if (val == socketed[groups[g]].items[i].id) {
@@ -3381,6 +3387,9 @@ function socket(event, group, source) {
 		event.preventDefault();
 		var data = event.dataTransfer.getData("text");
 		document.getElementById(group).appendChild(document.getElementById(data))
+		if(group == "amulet" || group == "belt") {
+            document.getElementById(data).style = "position: relative; top: -28px; width: 28px; height: 28px; z-index: 3;";
+        }
 	}
 	// equipment destination
 	var spaceFound = 0;
@@ -3389,7 +3398,7 @@ function socket(event, group, source) {
 	if (spaceFound == 1) {
 		var name = inv[0].onpickup.split('_')[0];
 		// Remove previous affixes, if being moved from another equipment item
-		var groups = ["helm", "armor", "weapon", "offhand"];
+		var groups = ["helm", "armor", "weapon", "offhand", "amulet","belt"];
 		for (let g = 0; g < groups.length; g++) {
 			for (let i = 0; i < socketed[groups[g]].items.length; i++) {
 				if (inv[0].onpickup == socketed[groups[g]].items[i].id) {
@@ -3489,7 +3498,7 @@ function trashSocketable(event, ident, override) {
 	}
 	var nameVal = val.split('_')[0];
 	// removed from equipment
-	var groups = ["helm", "armor", "weapon", "offhand"];
+	var groups = ["helm", "armor", "weapon", "offhand","amulet","belt"];
 	for (let g = 0; g < groups.length; g++) {
 		for (let i = 0; i < socketed[groups[g]].items.length; i++) {
 			if (val == socketed[groups[g]].items[i].id) {
@@ -4666,7 +4675,7 @@ function checkOffhand() {
 // updateSocketTotals - Updates the list of total stats gained from socketed jewels/runes/gems
 // ---------------------------------
 function updateSocketTotals() {
-	var groups = ["helm", "armor", "weapon", "offhand"];
+	var groups = ["helm", "armor", "weapon", "offhand","belt", "amulet"];
 	for (let g = 0; g < groups.length; g++) {
 		socketed[groups[g]].totals = {}
 		for (let i = 0; i < socketed[groups[g]].items.length; i++) {
