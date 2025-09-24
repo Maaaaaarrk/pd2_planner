@@ -13,6 +13,7 @@ public class UpdateUniqueItemsStats {
     private static final String dir = System.getProperty("user.dir") + "\\data\\";
     private static final String UNIQUE_ITEMS_PATH = dir + "UniqueItems.txt";
     private static final String OUTPUT_DIR = dir;
+    private static final String INPUT_DIR = System.getProperty("user.dir") + "\\src\\";
 
     // File naming: new file each run like equipment-YYYYMMDD-HHmmss.js
     private static final String OUTPUT_BASENAME = "equipment";
@@ -279,6 +280,18 @@ TABSK50	Assassin	Martial Arts
                         continue;// TODO remove
                     if (plannerPropKey.contains("/"))
                         continue;// TODO remove
+
+                    // Make negative on purpose
+                    if (plannerPropKey.equals("enemy_fRes") ||
+                            plannerPropKey.equals("enemy_cRes") ||
+                            plannerPropKey.equals("enemy_lRes") ||
+                            plannerPropKey.equals("enemy_pRes") ||
+                            plannerPropKey.equals("enemy_phyRes")) {
+                        if (val instanceof Integer && ((Integer) val) > 0) {
+                            val = ((Integer) val) * -1;
+                        }
+                    }
+
                     row.put(plannerPropKey, val);
                 }
 
@@ -442,7 +455,7 @@ TABSK50	Assassin	Martial Arts
             sb.append(",");
             sb.append("\n");
         }
-        sb.append(footer);
+        sb.append(loadFooterFromFile());
         sb.append("};\n");
         return sb.toString();
     }
@@ -1219,50 +1232,13 @@ TABSK50	Assassin	Martial Arts
         }
     }
 
-    private static final String footer = "\n ring2: [],\n\n    charms: [\n" +
-            "{name:\"Charms\"},\n" +
-            "{name:\"Annihilus\", size:\"small\", req_level:80, all_skills:1, all_attributes:20, all_res:20, experience:10},\n" +
-            "{name:\"Hellfire Torch\", size:\"large\", req_level:75, skills_class:2, vitality:60, energy:20, all_res:20, light_radius:8},\n" +
-            "{name:\"Gheed's Fortune\", size:\"grand\", req_level:62, gf:160, mf:40, discount:15, pod:1},\n" +
-            "{only:\"amazon\", rarity:\"magic\", name:\"+1 Harpoonist's Grand Charm\", size:\"grand\", req_level:42, skills_javelins:1},\n" +
-            "{only:\"amazon\", rarity:\"magic\", name:\"+1 Acrobat's Grand Charm\", size:\"grand\", req_level:42, skills_passives:1},\n" +
-            "{only:\"amazon\", rarity:\"magic\", name:\"+1 Fletcher's Grand Charm\", size:\"grand\", req_level:42, skills_bows:1},\n" +
-            "{only:\"assassin\", rarity:\"magic\", name:\"+1 Shogukusha's Grand Charm\", size:\"grand\", req_level:42, skills_martial:1},\n" +
-            "{only:\"assassin\", rarity:\"magic\", name:\"+1 Mentalist's Grand Charm\", size:\"grand\", req_level:42, skills_shadow:1},\n" +
-            "{only:\"assassin\", rarity:\"magic\", name:\"+1 Entrapping Grand Charm\", size:\"grand\", req_level:42, skills_traps:1},\n" +
-            "{only:\"barbarian\", rarity:\"magic\", name:\"+1 Sounding Grand Charm\", size:\"grand\", req_level:42, skills_warcries:1},\n" +
-            "{only:\"barbarian\", rarity:\"magic\", name:\"+1 Fanatic Grand Charm\", size:\"grand\", req_level:42, skills_masteries:1},\n" +
-            "{only:\"barbarian\", rarity:\"magic\", name:\"+1 Expert's Grand Charm\", size:\"grand\", req_level:42, skills_combat_barbarian:1},\n" +
-            "{only:\"druid\", rarity:\"magic\", name:\"+1 Nature's Grand Charm\", size:\"grand\", req_level:42, skills_elemental:1},\n" +
-            "{only:\"druid\", rarity:\"magic\", name:\"+1 Spiritual Grand Charm\", size:\"grand\", req_level:42, skills_shapeshifting:1},\n" +
-            "{only:\"druid\", rarity:\"magic\", name:\"+1 Trainer's Grand Charm\", size:\"grand\", req_level:42, skills_summoning_druid:1},\n" +
-            "{only:\"necromancer\", rarity:\"magic\", name:\"+1 Graverobber's Grand Charm\", size:\"grand\", req_level:42, skills_summoning_necromancer:1},\n" +
-            "{only:\"necromancer\", rarity:\"magic\", name:\"+1 Fungal Grand Charm\", size:\"grand\", req_level:42, skills_poisonBone:1},\n" +
-            "{only:\"necromancer\", rarity:\"magic\", name:\"+1 Hexing Grand Charm\", size:\"grand\", req_level:42, skills_curses:1},\n" +
-            "{only:\"paladin\", rarity:\"magic\", name:\"+1 Preserver's Grand Charm\", size:\"grand\", req_level:42, skills_defensive:1},\n" +
-            "{only:\"paladin\", rarity:\"magic\", name:\"+1 Captain's Grand Charm\", size:\"grand\", req_level:42, skills_offensive:1},\n" +
-            "{only:\"paladin\", rarity:\"magic\", name:\"+1 Lion Branded Grand Charm\", size:\"grand\", req_level:42, skills_combat_paladin:1},\n" +
-            "{only:\"sorceress\", rarity:\"magic\", name:\"+1 Chilling Grand Charm\", size:\"grand\", req_level:42, skills_cold:1},\n" +
-            "{only:\"sorceress\", rarity:\"magic\", name:\"+1 Sparking Grand Charm\", size:\"grand\", req_level:42, skills_lightning:1},\n" +
-            "{only:\"sorceress\", rarity:\"magic\", name:\"+1 Burning Grand Charm\", size:\"grand\", req_level:42, skills_fire:1},\n" +
-            "{rarity:\"magic\", name:\"Serpent's Small Charm of Vita\", size:\"small\", req_level:40, mana:17, life:20, pd2:1},\n" +
-            "{rarity:\"magic\", name:\"Shimmering Small Charm of Inertia\", size:\"small\", req_level:36, all_res:5, frw:3, pd2:1},\n" +
-            "{rarity:\"magic\", name:\"Shimmering Small Charm of Good Luck\", size:\"small\", req_level:33, all_res:5, mf:7, pd2:1},\n" +
-            "{rarity:\"magic\", name:\"Shimmering Small Charm of Vita\", size:\"small\", req_level:39, all_res:5, life:20, pd2:1},\n" +
-            "{rarity:\"magic\", name:\"Ruby Small Charm of Vita\", size:\"small\", req_level:39, fRes:11, life:20, pd2:1},\n" +
-            "{rarity:\"magic\", name:\"Sapphire Small Charm of Vita\", size:\"small\", req_level:39, cRes:11, life:20, pd2:1},\n" +
-            "{rarity:\"magic\", name:\"Amber Small Charm of Vita\", size:\"small\", req_level:39, lRes:11, life:20, pd2:1},\n" +
-            "{rarity:\"magic\", name:\"Emerald Small Charm of Vita\", size:\"small\", req_level:39, pRes:11, life:20, pd2:1},\n" +
-            "{rarity:\"magic\", name:\"Fine Small Charm of Balance\", size:\"small\", req_level:29, damage_max:3, ar:20, fhr:5, pd2:1},\n" +
-            "{rarity:\"magic\", name:\"Fine Small Charm of Inertia\", size:\"small\", req_level:36, damage_max:3, ar:20, frw:3, pd2:1},\n" +
-            "{rarity:\"magic\", name:\"Pestilent Small Charm of Anthrax\", size:\"small\", req_level:80, pDamage_all:451, pDamage_duration:12, pod:1},\n" +
-            "{rarity:\"magic\", name:\"Fine Small Charm of Vita\", size:\"small\", req_level:39, damage_max:3, ar:20, life:20, pd2:1},\n" +
-            "{rarity:\"magic\", name:\"Sharp Large Charm of Vita\", size:\"large\", req_level:66, damage_max:6, ar:48, life:35, pd2:1},\n" +
-            "{rarity:\"magic\", name:\"Sharp Grand Charm of Vita\", size:\"grand\", req_level:83, damage_max:10, ar:76, life:45, pd2:1},\n" +
-            "{rarity:\"magic\", name:\"+3% Inferno Large Charm\", size:\"large\", req_level:42, fDamage:3, pd2:1},\n" +
-            "{rarity:\"magic\", name:\"+3% Numbing Large Charm\", size:\"large\", req_level:42, cDamage:3, pd2:1},\n" +
-            "{rarity:\"magic\", name:\"+3% Conduit Large Charm\", size:\"large\", req_level:42, lDamage:3, pd2:1},\n" +
-            "{rarity:\"magic\", name:\"+3% Infectious Large Charm\", size:\"large\", req_level:42, pDamage:3, pd2:1},\n" +
-            "{rarity:\"magic\", name:\"+3% Scintillating Large Charm\", size:\"large\", req_level:42, mDamage:3, pd2:1}," +
-            "]";
+    // New: load footer content from external file under data/
+    private static String loadFooterFromFile() {
+        Path footerPath = Paths.get(INPUT_DIR, "CharmsData.txt");
+        try {
+            return Files.readString(footerPath, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to read footer file: " + footerPath.toAbsolutePath(), e);
+        }
+    }
 }

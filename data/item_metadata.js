@@ -868,12 +868,14 @@ heal_stam_per_level:{index:["heal_stam_per_level","heal_stam_per_level"], format
 discount:{index:["discount"], format:["Vendor Prices Reduced by ","%"]},
 
 leapspeed:{index:["leapspeed"], format:["+","% Leap and Leap Attack Movement Speed"]},
+maxcurse:{index:["maxcurse"], format:["You May Apply an Additional Curse (",")"]},
+
 
 enemy_fRes:{index:["enemy_fRes"], format:["","% to Enemy Fire Resistance"]},
 enemy_cRes:{index:["enemy_cRes"], format:["","% to Enemy Cold Resistance"]},
 enemy_lRes:{index:["enemy_lRes"], format:["","% to Enemy Lightning Resistance"]},
 enemy_pRes:{index:["enemy_pRes"], format:["","% to Enemy Poison Resistance"]},
-enemy_phyRes:{index:["enemy_phyRes"], format:["-","% to Enemy Physical Resistance"]},
+enemy_phyRes:{index:["enemy_phyRes"], format:["","% to Enemy Physical Resistance"]},
 enemy_defense:{index:["enemy_defense"], format:["Enemy Defense ","%"]},
 enemy_defense_flat:{index:["enemy_defense_flat"], format:["Enemy Defense ",""]},
 target_defense:{index:["target_defense"], format:["Target Defense ","%"]},
@@ -994,6 +996,12 @@ extra_Shadow:{index:["extra_Shadow"], format:["You May Summon "," Additional Sha
 
 
 extra_Raven_Damage:{index:["extra_Raven_Damage"], format:["Your Ravens deal an additional "," Cold Damage"]},
+
+gust_Cd_Reduction:{index:["gust_Cd_Reduction"], format:["Gust's Cooldown is Reduced by "," Seconds"]},
+joust_Cd_Reduction:{index:["joust_Cd_Reduction"], format:["Joust's Cooldown is Reduced by "," Seconds"]},
+extra_Melee_Splash:{index:["extra_Melee_Splash"], format:["Melee Splash Radius Increased by ","%"]},
+
+lifesteal_cap:{index:["lifesteal_cap"], format:["You Cannot Life Steal When Above ","% Maximum Life"]},
 
 flamme:{index:["flamme"], format:["","% of Life dealt per second as fire"]},
 ias_skill:{index:["ias_skill"], format:["+","% Increased Attack Speed"]},

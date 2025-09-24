@@ -28,7 +28,7 @@ public final class itemmap {
         LinkedHashMap<String, String> p = new LinkedHashMap<>();
         p.put("*enr", "energy");
         p.put("*vit", "vitality");
-        p.put("Deep-Wounds", "owounds_dps"); // TODO
+        p.put("Deep-Wounds", "owounds_dps");
         p.put("abs-cold", "cAbsorb_flat");
         p.put("abs-cold%", "cAbsorb");
         p.put("abs-fire", "fAbsorb_flat");
@@ -37,7 +37,7 @@ public final class itemmap {
         p.put("abs-ltng%", "lAbsorb");
         p.put("ac", "defense");
         p.put("ac%", "defense_bonus");
-        p.put("ac-hth", "ac-hth"); // TODO
+        p.put("ac-hth", "missile_defense");
         p.put("ac-miss", "missile_defense");
         p.put("ac/lvl", "defense_per_level");
         p.put("addxp", "experience");
@@ -54,19 +54,19 @@ public final class itemmap {
         p.put("att-undead", "ar_vs_undead");
         p.put("att/lvl", "ar_per_level");
         p.put("aura", "aura"); // TODO
-        p.put("balance2", "balance2"); // TODO
+        p.put("balance2", "fhr");
         p.put("bar", "skills_barbarian");
         p.put("block", "ibc");
         p.put("block-skill", "block_skillup");
         p.put("block2", "ibc");
         p.put("blood-warp-life-reduction", "blood-warp-life-reduction");
-        p.put("bloody", "bloody"); // TODO
+        p.put("bloody", "bloody"); // Ignored
         p.put("cast-skill", "cast-skill"); // TODO
         p.put("cast1", "fcr");
         p.put("cast2", "fcr");
         p.put("cast3", "fcr");
-        p.put("charged", "charged"); // TODO
-        p.put("cheap", "cheap"); // TODO
+        p.put("charged", "charged"); // TODO charges skills
+        p.put("cheap", "discount");
         p.put("cold-len", "cold-len"); // TODO
         p.put("cold-max", "cDamage_max");
         p.put("cold-min", "cDamage_min");
@@ -78,8 +78,8 @@ public final class itemmap {
         p.put("deadly", "dstrike");
         p.put("deadly/lvl", "dstrike_per_level");
         p.put("death-skill", "death-skill"); // todo
-        p.put("deep-wounds", "owounds_dps"); // todo
-        p.put("demon-heal", "demon-heal"); // todo pmh?
+        p.put("deep-wounds", "owounds_dps");
+        p.put("demon-heal", "life_per_demon_kill");
         p.put("dev-clout", "dev-clout"); // ignore
         p.put("dex", "dexterity");
         p.put("dex/lvl", "dexterity_per_level");
@@ -97,7 +97,7 @@ public final class itemmap {
         p.put("dmg-mag", "mDamage_min");
         p.put("dmg-max", "damage_max");
         p.put("dmg-min", "damage_min");
-        p.put("dmg-norm", "dmg-norm"); // TODO
+        p.put("dmg-norm", "dmg-norm"); // TODO + min - max
         p.put("dmg-pois", "dmg-pois"); // TODO pDamage_all
         p.put("dmg-to-mana", "damage_to_mana");
         p.put("dmg-und/lvl", "damage_vs_undead_per_level");
@@ -107,7 +107,7 @@ public final class itemmap {
         p.put("skills_druid", "dru");
         p.put("dur", "durability_extra");
         p.put("eaglehorn-raven", "extra_Raven_Damage");
-        p.put("ease", "ease"); // TODO
+        p.put("ease", "req");
         p.put("enr", "energy");
         p.put("equipped-skill", "equipped-skill"); // TODO
         p.put("es-efficiency", "es-efficiency"); // TODO
@@ -131,7 +131,7 @@ public final class itemmap {
         p.put("gold%", "gf");
         p.put("gold%/lvl", "gf_per_level");
         p.put("grims-extra-skele-mage", "extra_Skeleton_Mages");
-        p.put("gust-reduction", "gust-reduction"); // TODO
+        p.put("gust-reduction", "gust_Cd_Reduction");
         p.put("half-half_freeze", "half-freeze");
         p.put("heal-hit", "life_per_hit");
         p.put("heal-kill", "life_per_kill");
@@ -141,19 +141,19 @@ public final class itemmap {
         p.put("hp%", "max_life");
         p.put("hp/lvl", "life_per_level");
         p.put("ignore-ac", "itd");
-        p.put("inc-splash-radius", "inc-splash-radius"); //todo
+        p.put("inc-splash-radius", "extra_Melee_Splash");
         p.put("indestruct", "indestructible");
-        p.put("joust-reduction", "joust-reduction"); // TODO
-        p.put("joust-reduction-zeraes", "joust-reduction-zeraes"); //todo
+        p.put("joust-reduction", "joust_Cd_Reduction");
+        p.put("joust-reduction-zeraes", "joust_Cd_Reduction");
         p.put("kick", "kick_min");
         p.put("kill-skill", "kill-skill"); // TODO
         p.put("knock", "knockback");
         p.put("leapspeed", "leapspeed");
         p.put("levelup-skill", "levelup-skill"); // todo
         p.put("lifesteal", "life_leech");
-        p.put("lifesteal-cap", "lifesteal-cap"); // todo
+        p.put("lifesteal-cap", "lifesteal_cap");
         p.put("light", "light_radius");
-        p.put("light-thorns", "light-thorns"); // todo
+        p.put("light-thorns", "thorns_lightning");
         p.put("ltng-max", "lDamage_max");
         p.put("ltng-min", "lDamage_min");
         p.put("ltngskill", "skills_lightning_all");
@@ -166,7 +166,7 @@ public final class itemmap {
         p.put("mana-kill", "mana_per_kill");
         p.put("mana/lvl", "mana_per_level");
         p.put("manasteal", "mana_leech");
-        p.put("maxcurse", "maxcurse"); // todo
+        p.put("maxcurse", "maxcurse");
         p.put("maxlevel-clout", "maxlevel-clout"); // ignore
         p.put("mindmg/energy", "mindmg/energy"); // todo
         p.put("move2", "frw");
@@ -174,7 +174,7 @@ public final class itemmap {
         p.put("no-wolves", "no-wolves"); // todo
         p.put("nofreeze", "cbf");
         p.put("noheal", "pmh");
-        p.put("openwounds", "openwounds"); //todo
+        p.put("openwounds", "owounds");
         p.put("oskill", "oskill");
         p.put("pal", "skills_paladin");
         p.put("pierce", "pierce_skillup");
@@ -226,7 +226,7 @@ public final class itemmap {
         p.put("state", "state"); // todo
         p.put("str", "strength");
         p.put("str/lvl", "strength_per_level");
-        p.put("stupidity", "stupidity");// todo
+        p.put("stupidity", "blind_on_hit");
         p.put("swing1", "swing1");// todo
         p.put("swing2", "swing2");// todo
         p.put("swing3", "swing3");// todo
