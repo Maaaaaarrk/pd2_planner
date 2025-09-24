@@ -733,10 +733,25 @@ function corrupt(group, val) {
 	else {
 		for (outcome in corruptions[group]) {
 			if (corruptions[group][outcome].name == val && (group != "offhand" || (offhandType == corruptions[group][outcome].base || offhandType == "none"))) {
+                var unlimitSockets = 0;
+                if(corruptions[group][outcome]["name"].includes("Sockets")){
+                    unlimitSockets = 1;
+                } else
+                if(equipped[group].twoHanded ==1){
+                    unlimitSockets = 1;
+                } else
+                if(group !="offhand" && group !="weapon"){
+                    unlimitSockets = 1;
+                }
 				for (affix in corruptions[group][outcome]) {
-					corruptsEquipped[group][affix] = corruptions[group][outcome][affix]
-					if (affix != "name" && affix != "base") {
-						character[affix] += corruptions[group][outcome][affix]
+				    if (affix == "sockets" & unlimitSockets == 0) {
+					    character[affix] += 2
+					    corruptsEquipped[group][affix] = 2
+					} else {
+                        corruptsEquipped[group][affix] = corruptions[group][outcome][affix]
+                        if (affix != "name" && affix != "base") {
+                            character[affix] += corruptions[group][outcome][affix]
+                        }
 					}
 				}
 			}
@@ -1069,7 +1084,7 @@ function equip(group, val) {
 		}
 	}
 	// remove incompatible corruptions
-	if (equipped[group].ethereal > 0 || equipped[group].rarity == "rw" || equipped[group].rarity == "common" || (group == "offhand" && (equipped[group].type == "shield" || equipped[group].type == "quiver") && equipped[group].type != corruptsEquipped[group].base)) { corrupt(group, group) }
+	if (equipped[group].rarity == "rw" || equipped[group].rarity == "common" || (group == "offhand" && (equipped[group].type == "shield" || equipped[group].type == "quiver") && equipped[group].type != corruptsEquipped[group].base)) { corrupt(group, group) }
 	if (corruptsEquipped[group].name == "+ Sockets") { adjustCorruptionSockets(group) }
 	if (group == "offhand") {
 		// reload corruption options when the selected type changes
@@ -1080,7 +1095,15 @@ function equip(group, val) {
 		if (equipped[group].type == "shield") { offhandType = "shield" } else if (equipped[group].name == "none") { offhandType = "none" }
 	}
 	else if (group == "weapon") {
-		if (equipped.offhand.type != "quiver" && twoHanded == 1 && (itemType != "sword" || character.class_name != "Barbarian") && corruptsEquipped.offhand.name != "none") { reloadOffhandCorruptions("shield"); }
+		if (equipped.offhand.type != "quiver" && twoHanded == 1 && (itemType != "sword" || character.class_name != "Barbarian") && corruptsEquipped.offhand.name != "none") {
+		reloadOffhandCorruptions("shield");
+		} else if(twoHanded == 1 || corruptsEquipped[group].name.includes("Sockets")){
+		// ignore these
+		} else if(corruptsEquipped[group].name != null){
+		console.log("corruptsEquipped[group].name: " + corruptsEquipped[group].name);
+	        adjustCorruptionSocketsMax(group);
+		}
+
 	}
 	if (val == group || val == "none") { document.getElementById(("dropdown_"+group)).selectedIndex = 0; }
 	// set inventory image
@@ -1164,11 +1187,31 @@ function reloadOffhandCorruptions(kind) {
 function adjustCorruptionSockets(group) {
 	var max = 0;
 	if (equipped[group].max_sockets > 0 && corruptsEquipped[group].name != group) {
+	    var corrSockets = corruptsEquipped[group].sockets
 		max = ~~equipped[group].max_sockets;
-		if (equipped[group].ethereal > 0 || equipped[group].sockets > 0 || equipped[group].rarity == "rw" || equipped[group].rarity == "common" || equipped[group].type == "quiver") { max = 0 }
-		if (max != corruptsEquipped[group].sockets) {
-			character.sockets -= corruptsEquipped[group].sockets
-			corruptsEquipped[group].sockets = max
+		if (equipped[group].sockets > 0 || equipped[group].rarity == "rw" || equipped[group].rarity == "common" || equipped[group].type == "quiver") { max = 0 }
+		if (max != corrSockets) {
+			character.sockets -= corrSockets
+			corrSockets = max
+			character.sockets += max
+		}
+	}
+	if (max == 0 && equipped[group].name != "none" && corruptsEquipped[group].name == "+ Sockets") { corrupt(group, group) }
+	updateStats()
+}
+
+function adjustCorruptionSocketsMax(group) {
+	var max = 0;
+	if (equipped[group].max_sockets > 0 && corruptsEquipped[group].name != group) {
+	    var corrSockets = corruptsEquipped[group].sockets
+		max = ~~equipped[group].max_sockets;
+		if (equipped[group].sockets > 0 || equipped[group].rarity == "rw" || equipped[group].rarity == "common" || equipped[group].type == "quiver") { max = 0 }
+		if(max >2 ){
+		max = 2;
+		}
+		if (max != corrSockets) {
+			character.sockets -= corrSockets
+			corrSockets = max
 			character.sockets += max
 		}
 	}
@@ -1278,7 +1321,6 @@ function addCharm(val) {
 // ---------------------------------
 function addSocketable(val,group) {
 
-console.log("group "+group);
 	// TODO: Reduce duplicated code from addCharm()?
 	var prefix = "./images/items/socketables/";
 	var jewels = ["Jewel_blue.png","Jewel_green.png","Jewel_peach.png","Jewel_purple.png","Jewel_red.png","Jewel_white.png",];
