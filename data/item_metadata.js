@@ -936,7 +936,7 @@ equipped_skill:{index:["equipped_skill_level","equipped_skill"], format:["Level 
 cast_skill:{index:["cast_chance","cast_level","cast_skill"], format:["","% Chance to Cast Level "," "," on Casting"]},
 strike_skill:{index:["strike_chance","strike_level","strike_skill"], format:["","% Chance to Cast Level "," "," on Striking"]},
 hit_skill:{index:["hit_chance","hit_level","hit_skill"], format:["","% Chance to Cast Level "," "," on Hit"]},
-gethit_skill:{index:["gethit_chance","gethit_level","gethit_skill"], format:["","% Chance to Cast Level "," "," When Hit"]},
+gethit_skill:{index:["gethit_chance","gethit_level","gethit_skill"], format:["","% Chance to Cast Level "," "," When Struck"]},
 ondeath_skill:{index:["ondeath_chance","ondeath_level","ondeath_skill"], format:["","% Chance to Cast Level "," "," On Death"]},
 onkill_skill:{index:["onkill_chance","onkill_level","onkill_skill"], format:["","% Chance to Cast Level "," "," On Kill"]},
 onlevel_skill:{index:["onlevel_chance","onlevel_level","onlevel_skill"], format:["","% Chance to Cast Level "," "," On Level up"]},
@@ -1261,6 +1261,9 @@ skill_Life_Tap:{index:["skill_Life_Tap"], format:["+"," to Life Tap (Necromancer
 skill_Attract:{index:["skill_Attract"], format:["+"," to Attract (Necromancer only)"]},
 skill_Decrepify:{index:["skill_Decrepify"], format:["+"," to Decrepify (Necromancer only)"]},
 skill_Lower_Resist:{index:["skill_Lower_Resist"], format:["+"," to Lower Resist (Necromancer only)"]},
+skill_Blood_Warp:{index:["skill_Blood_Warp"], format:["+"," to Blood Warp (Necromancer only)"]},
+skill_Curse_Mastery:{index:["skill_Curse_Mastery"], format:["+"," to Curse Mastery (Necromancer only)"]},
+skill_Dark_Pact:{index:["skill_Dark_Pact"], format:["+"," to Dark Pact (Necromancer only)"]},
 
 skill_Prayer:{index:["skill_Prayer"], format:["+"," to Prayer (Paladin only)"]},
 skill_Resist_Fire:{index:["skill_Resist_Fire"], format:["+"," to Resist Fire (Paladin only)"]},
@@ -1606,6 +1609,7 @@ ctc_temp2:{index:[], format:["25% chance to cast level 5 Static Field when struc
 
 ar_vs_demons_per_level:1,	// TODO: implement (vanilla affix found on Grief that was removed in PoD)
 lDamage_max_per_level:{index:["lDamage_max_per_level","lDamage_max_per_level"], format:["+"," to Maximum Lightning Damage ("," per level)"], mult:["level",1]},
+abs_cold_lvl:{index:["abs_cold_lvl","abs_cold_lvl"], format:["+"," Absorbs Cold Damage ("," per level)"], mult:["level",1]},
 
 slow_ranged_attacks:{index:["slow_ranged_attacks"], format:["Ranged Attacks slowed to "," percent"]},
 dmg_per_eth:{index:["dmg_per_eth"], format:["Gains +","% Enhanced Damage per Equipped Ethereal Item"]},

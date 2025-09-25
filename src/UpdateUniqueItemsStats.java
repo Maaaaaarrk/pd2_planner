@@ -12,6 +12,7 @@ public class UpdateUniqueItemsStats {
     // Configuration: replace with your actual paths
     private static final String dir = System.getProperty("user.dir") + "\\data\\";
     private static final String UNIQUE_ITEMS_PATH = dir + "UniqueItems.txt";
+    private static final String SET_ITEMS_PATH = dir + "SetItems.txt";
     private static final String OUTPUT_DIR = dir;
     private static final String INPUT_DIR = System.getProperty("user.dir") + "\\src\\";
 
@@ -24,476 +25,15 @@ public class UpdateUniqueItemsStats {
     public static void main(String[] args) {
 
         try {
-            List<String> lines = Files.readAllLines(Paths.get(UNIQUE_ITEMS_PATH), StandardCharsets.UTF_8);
-            if (lines.isEmpty()) {
-                System.out.println("Input is empty: " + UNIQUE_ITEMS_PATH);
-                return;
-            }
 
-            String[] header = splitTSV(lines.get(0));
-            Map<String, Integer> h = headerIndex(header);
-
-            // Required columns
-            int idxName = h.getOrDefault("index", -1);
-            int idxType = h.getOrDefault("*type", -1);
-            int idxEnabled = h.getOrDefault("enabled", 2);
-            int idxReqLevel = h.getOrDefault("lvl req", 8); // fallback to 3rd column if header missing
-
-            if (idxName < 0 || idxType < 0) {
-                System.err.println("Missing required headers: index and/or *type");
-                return;
-            }
-
-            // Precompute prop/max indices for 1..11
-            int[] idxProp = new int[12];
-            int[] idxPar = new int[12];
-            int[] idxMin = new int[12];
-            int[] idxMax = new int[12];
-            Arrays.fill(idxProp, -1);
-            Arrays.fill(idxMax, -1);
-            for (int i = 1; i <= 11; i++) {
-                idxProp[i] = h.getOrDefault("prop" + i, -1);
-                idxPar[i] = h.getOrDefault("par" + i, -1);
-                idxMin[i] = h.getOrDefault("min" + i, -1);
-                idxMax[i] = h.getOrDefault("max" + i, -1);
-            }
 
             Map<String, List<Map<String, Object>>> grouped = new LinkedHashMap<>();
-            int totalRows = 0;
-            int keptRows = 0;
-
-            for (int i = 1; i < lines.size(); i++) {
-                String line = lines.get(i);
-                if (line == null || line.trim().isEmpty()) continue;
-
-                String[] cols = splitTSV(line);
-                totalRows++;
-
-                // Must have "enabled" == "1"
-                String enabled = safeGet(cols, idxEnabled).trim();
-                if (!"1".equals(enabled)) continue;
-
-                String baseType = itemmap.checkForRename(safeGet(cols, idxType).trim());
-                String name = itemmap.checkForRename(safeGet(cols, idxName).trim());
-
-                if (itemmap.skipCheck(name)) {
-                    continue;
-                }
-                String reqLevel = safeGet(cols, idxReqLevel).trim();
-
-                if (baseType.isEmpty() || name.isEmpty()) continue;
-
-                Map<String, Object> row = new LinkedHashMap<>();
-                row.put("name", name);
-                if (!baseType.equalsIgnoreCase("ring") && !baseType.equalsIgnoreCase("amulet"))
-                    row.put("base", removeNumbersAndCapitalizeFirst(baseType));
-                row.put("req_level", parseNumericOrString(reqLevel));
-                String onlyClass = itemmap.classForBaseOrNull(baseType);
-                if (onlyClass != null) {
-                    row.put("only", onlyClass);
-                }
-                if (TwoHandedWeaponUtil.isTwoHandedBase(baseType)) {
-                    row.put("twoHanded", 1);
-                }
-
-                switch (name) {
-                    case "Overlord's Helm":
-                    case "Dark Abyss":
-                    case "Itherael's Path":
-                    case "Hadriel's Hand":
-                    case "Aidan's Scar":
-                        row.put("boss_item", "Uber Diablo");
-                        break;
-                    case "The Third Eye":
-                    case "Band of Skulls":
-                    case "Cage of the Unsullied":
-                        row.put("boss_item", "Rathma");
-                        break;
-                    default:
-                }
-
-                // Add prop1..prop11 with their max values, using the prop value as the key
-                for (int p = 1; p <= 11; p++) {
-                    int pIdx = idxProp[p];
-                    int parIdx = idxPar[p];
-                    int minIdx = idxMin[p];
-                    int maxIdx = idxMax[p];
-                    if (pIdx < 0 || maxIdx < 0) continue;
-
-                    String propKey = safeGet(cols, pIdx).trim();
-                    String parameter = safeGet(cols, parIdx).trim();
-                    String minValStr = safeGet(cols, minIdx).trim();
-                    String maxValStr = safeGet(cols, maxIdx).trim();
-                    if (propKey.isEmpty() || maxValStr.isEmpty()) continue;
-
-                    Object val = parseNumericOrString(maxValStr);
-                    Object minval = parseNumericOrString(minValStr);
 
 
-                    String plannerPropKey = itemmap.PROP_MAP.get(propKey);
-
-                    //skilltab
-                    if (propKey.equals("skilltab")) {
-                        switch (parameter.trim()) {
-                            case "0":
-                                plannerPropKey = "skills_bows";
-                                break;
-                            case "1":
-                                plannerPropKey = "skills_passives";
-                                break;
-                            case "2":
-                                plannerPropKey = "skills_javelins";
-                                break;
-                            case "3":
-                                plannerPropKey = "skills_fire";
-                                break;
-                            case "4":
-                                plannerPropKey = "skills_lightning";
-                                break;
-                            case "5":
-                                plannerPropKey = "skills_cold";
-                                break;
-                            case "6":
-                                plannerPropKey = "skills_curses";
-                                break;
-                            case "7":
-                                plannerPropKey = "skills_poisonBone";
-                                break;
-                            case "8":
-                                plannerPropKey = "skills_summoning_necromancer";
-                                break;
-                            case "9":
-                                plannerPropKey = "skills_combat_paladin";
-                                break;
-                            case "10":
-                                plannerPropKey = "skills_offensive";
-                                break;
-                            case "11":
-                                plannerPropKey = "skills_defensive";
-                                break;
-                            case "12":
-                                plannerPropKey = "skills_combat_barbarian";
-                                break;
-                            case "13":
-                                plannerPropKey = "skills_masteries";
-                                break;
-                            case "14":
-                                plannerPropKey = "skills_warcries";
-                                break;
-                            case "15":
-                                plannerPropKey = "skills_summoning_druid";
-                                break;
-                            case "16":
-                                plannerPropKey = "skills_shapeshifting";
-                                break;
-                            case "17":
-                                plannerPropKey = "skills_elemental";
-                                break;
-                            case "18":
-                                plannerPropKey = "skills_traps";
-                                break;
-                            case "19":
-                                plannerPropKey = "skills_shadow";
-                                break;
-                            case "20":
-                                plannerPropKey = "skills_martial";
-                                break;
-                            default:
-                                System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
-                                        parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
-                                continue;
-                        }
-                    }
-
-                    //skill
-
-                    if (propKey.equals("skill") || propKey.equals("oskill")) {
-                        String skillname = getSkillName(parameter);
-                        if (skillname == null) {
-                            System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
-                                    parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
-                            continue;
-                        }
-                        plannerPropKey = propKey + "_" + (skillname.replace(" ", "_"));
-                    }
-
-                    //aura
-                    if (propKey.equals("aura")) {
-                        String skillname = getSkillName(parameter);
-                        if (skillname == null) {
-                            System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
-                                    parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
-                            continue;
-                        }
-                        plannerPropKey = "aura";
-                        row.put(plannerPropKey, skillname);
-                        plannerPropKey = "aura_lvl";
-                        row.put(plannerPropKey, val);
-                        continue;
-                    }
-
-                    // Equipped Skill ""
-
-                    if (propKey.equals("equipped-skill")) {
-                        plannerPropKey = "equipped_skill";
-                        row.put(plannerPropKey, parameter.replace("SelfAura", "").trim());
-                        plannerPropKey = "equipped_skill_level";
-                        row.put(plannerPropKey, val);
-                        continue;
-                    }
-
-
-                    if (propKey.equals("skill-rand")) {
-                        //250 for druid
-                        if (val.equals(250)) {
-                            plannerPropKey = "random_skill";
-                            row.put(plannerPropKey, "[Random Druid Skill] (Druid Only)");
-                            plannerPropKey = "random_skill_level";
-                            row.put(plannerPropKey, parseNumericOrString(parameter));
-                            continue;
-                        }
-                        System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
-                                parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
-                        continue;
-                    }
-
-                    /*
-                    cast-skill	Twister	15	28
-                    cast_skill:{index:["cast_chance","cast_level","cast_skill"], format:["","% Chance to Cast Level "," "," on Casting"]},
-                    strike_skill:{index:["strike_chance","strike_level","strike_skill"], format:["","% Chance to Cast Level "," "," on Striking"]},
-                    hit_skill:{index:["hit_chance","hit_level","hit_skill"], format:["","% Chance to Cast Level "," "," on Hit"]},
-                     */
-                    if (propKey.equals("hit-skill") || propKey.equals("block-skill") || propKey.equals("levelup-skill") || propKey.equals("kill-skill") || propKey.equals("cast-skill") || propKey.equals("gethit-skill") || propKey.equals("death-skill")) {
-                        final String type;
-                        if (propKey.equals("death-skill"))
-                            type = "ondeath";
-                        else if (propKey.equals("gethit-skill"))
-                            type = "gethit";
-                        else if (propKey.equals("cast-skill"))
-                            type = "cast";
-                        else if (propKey.equals("kill-skill"))
-                            type = "onkill";
-                        else if (propKey.equals("levelup-skill"))
-                            type = "onlevel";
-                        else if (propKey.equals("block-skill"))
-                            type = "onblock";
-                        else if (propKey.equals("hit-skill"))
-                            type = "strike";
-                        else {
-                            System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
-                                    parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
-                            continue;
-                        }
-                        String skillname = getSkillName(parameter);
-                        if (skillname == null) {
-                            System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
-                                    parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
-                            continue;
-                        }
-                        plannerPropKey = type + "_skill";
-                        row.put(plannerPropKey, skillname);
-                        plannerPropKey = type + "_chance";
-                        row.put(plannerPropKey, minval);
-                        plannerPropKey = type + "_level";
-                        row.put(plannerPropKey, val);
-                        continue;
-                    }
-
-                    // skill charged
-                    if (propKey.equals("charged")) {
-                        String type = "charges";
-                        String skillname = getSkillName(parameter);
-                        if (skillname == null) {
-                            System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
-                                    parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
-                            continue;
-                        }
-                        plannerPropKey = type + "_skill";
-                        row.put(plannerPropKey, skillname);
-                        plannerPropKey = type + "_charges";
-                        row.put(plannerPropKey, minval);
-                        plannerPropKey = type + "_level";
-                        row.put(plannerPropKey, val);
-                        continue;
-                    }
-
-                    // flat dmg
-                    if (propKey.equals("dmg-norm")) {
-                        plannerPropKey = "damage_min";
-                        row.put(plannerPropKey, val);
-                        plannerPropKey = "damage_max";
-                        row.put(plannerPropKey, val);
-                        continue;
-                    }
-
-                    //
-                    if (propKey.equals("dmg-mag")) {
-                        plannerPropKey = "mDamage_min";
-                        row.put(plannerPropKey, val);
-                        plannerPropKey = "mDamage_max";
-                        row.put(plannerPropKey, val);
-                        continue;
-                    }
-                    //dmg-elem
-                    if (propKey.equals("dmg-elem")) {
-                        plannerPropKey = "fDamage_min";
-                        row.put(plannerPropKey, minval);
-                        plannerPropKey = "fDamage_max";
-                        row.put(plannerPropKey, val);
-                        plannerPropKey = "cDamage_min";
-                        row.put(plannerPropKey, minval);
-                        plannerPropKey = "cDamage_max";
-                        row.put(plannerPropKey, val);
-                        plannerPropKey = "lDamage_min";
-                        row.put(plannerPropKey, minval);
-                        plannerPropKey = "lDamage_max";
-                        row.put(plannerPropKey, val);
-                        continue;
-                    }
-
-                    if (propKey.equals("res-all-max")) {
-                        plannerPropKey = "fRes_max";
-                        row.put(plannerPropKey, val);
-                        plannerPropKey = "lRes_max";
-                        row.put(plannerPropKey, val);
-                        plannerPropKey = "cRes_max";
-                        row.put(plannerPropKey, val);
-                        plannerPropKey = "pRes_max";
-                        row.put(plannerPropKey, val);
-                        continue;
-                    }
-
-                    /*
-                    Hit Causes Monster to Flee +
-                    16-> 12
-                    10->7
-                    100->100
-                    64->50
-                    14-> 10
-
-                    howl	10	5 -> 10% level 5
-                     */
-
-                    if (propKey.equals("howl")) {
-                        if (minval.equals(val)) {
-                            final double newRate;
-                            if (val.equals(100)) {
-                                newRate = 100;
-                            } else {
-                                newRate = Math.floor(((Integer) val) * 0.75);
-                            }
-                            row.put("flee_on_hit", newRate);
-                            continue;
-                        }
-                        String skillname = getSkillName(propKey);
-                        if (skillname == null) {
-                            System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
-                                    parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
-                            continue;
-                        }
-                        String type = "hit";
-                        plannerPropKey = type + "_skill";
-                        row.put(plannerPropKey, skillname);
-                        plannerPropKey = type + "_chance";
-                        row.put(plannerPropKey, minval);
-                        plannerPropKey = type + "_level";
-                        row.put(plannerPropKey, val);
-                        continue;
-                    }
-
-
-                    // 50 /5.1
-                    // 75 /3.3
-                    // dmg-pois
-
-                    if (propKey.equals("dmg-pois")) {
-                        final double factor;
-                        final int seconds;
-                        if (parseNumericOrString(parameter).equals(75)) {
-                            factor = 3.3;
-                            seconds = 3;
-                        } else if (parseNumericOrString(parameter).equals(50)) {
-                            factor = 5.1;
-                            seconds = 2;
-                        } else if (parseNumericOrString(parameter).equals(100)) {
-                            factor = 2.5;
-                            seconds = 4;
-                        } else if (parseNumericOrString(parameter).equals(25)) {
-                            factor = 10.24;
-                            seconds = 1;
-                        } else {
-                            System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
-                                    parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
-                            continue;
-                        }
-                        final double newPsn = Math.floor(((Integer) val) / factor);
-                        row.put("dmg_pois", newPsn);
-                        row.put("dmg_pois_time", seconds);
-                    }
-
-                    // Skip unknown properties instead of inserting a null key
-                    if (plannerPropKey == null || plannerPropKey.isBlank()) {
-                        if (propKey != null & !propKey.isEmpty()) {
-                            if (!propKey.startsWith("map-"))
-                                System.err.println("Unknown prop: " + propKey);
-                        }
-                        continue;
-                    }
-                    if (plannerPropKey.contains("%"))
-                        continue;// TODO remove
-                    if (plannerPropKey.contains("-"))
-                        continue;// TODO remove
-                    if (plannerPropKey.contains("/"))
-                        continue;// TODO remove
-
-                    // Make negative on purpose
-                    if (plannerPropKey.equals("enemy_fRes") ||
-                            plannerPropKey.equals("enemy_cRes") ||
-                            plannerPropKey.equals("enemy_lRes") ||
-                            plannerPropKey.equals("enemy_pRes") ||
-                            plannerPropKey.equals("enemy_phyRes")) {
-                        if (val instanceof Integer && ((Integer) val) > 0) {
-                            val = ((Integer) val) * -1;
-                        }
-                    }
-
-                    // add stat for uld
-                    if (plannerPropKey.equals("mindmg_energy")) {
-                        row.put("mindmg_per_energy", 1);
-                    }
-
-                    row.put(plannerPropKey, val);
-                }
-
-                String groupBaseType = itemmap.getGroupBaseType(baseType);
-                if (groupBaseType != null && !groupBaseType.isEmpty()) {
-                    if (itemmap.typeChecker(groupBaseType)) {
-                        String itemGroupType = WeaponGroupTypeUtil.groupOf(baseType);
-                        if (itemGroupType != null) {
-                            row.put("type", itemGroupType);
-                        } else if (groupBaseType.equals("Offhand")) {
-                            row.put("type", "shield");
-                        } else {
-                            //    System.err.println("itemGroupType = null for " + baseType);
-                        }
-                        if (!groupBaseType.equals("Amulet") && !groupBaseType.equals("Ring1"))
-                            row.put("img", name.replace(" ", "_"));
-                        String groupBaseTypeKeyname = groupBaseType.toLowerCase();
-                       /* if (!grouped.containsKey(groupBaseTypeKeyname)) {
-                            Map<String, Object> rowheader = new LinkedHashMap<>();
-                            rowheader.put("name", groupBaseType.replace("1", ""));
-                            grouped.computeIfAbsent(groupBaseTypeKeyname, k -> new ArrayList<>()).add(rowheader);
-                        }*/
-                        grouped.computeIfAbsent(groupBaseTypeKeyname, k -> new ArrayList<>()).add(row);
-                        keptRows++;
-                    } else {
-                        System.err.println("No type match on: " + baseType);
-                    }
-                } else {
-                    if (!(baseType.equals("charm") || baseType.equals("jewel") || baseType.startsWith("t5")))
-                        System.err.println("No match on: " + baseType);
-                }
-            }
+            if (extracted(grouped, ItemType.UNIQUE))
+                System.err.println("Error ItemType.UNIQUE");
+            if (extracted(grouped, ItemType.SET))
+                System.err.println("Error ItemType.SET");
 
             String js = buildEquipmentJs(grouped);
 
@@ -511,11 +51,685 @@ public class UpdateUniqueItemsStats {
 
             }
             System.out.println("Wrote: " + outFile.toAbsolutePath());
-            System.out.println("Total rows read: " + totalRows);
-            System.out.println("Rows kept (enabled == 1): " + keptRows);
             System.out.println("Groups: " + grouped.size());
         } catch (IOException e) {
             System.err.println("Error: " + e.getMessage());
+        }
+    }
+
+    private enum ItemType {
+        UNIQUE, SET
+    }
+
+    private static boolean extracted(Map<String, List<Map<String, Object>>> grouped, ItemType itemType) throws IOException {
+
+        final String path;
+        if (itemType == ItemType.UNIQUE)
+            path = UNIQUE_ITEMS_PATH;
+        else if (itemType == ItemType.SET)
+            path = SET_ITEMS_PATH;
+        else {
+            System.out.println("Invalid item type " + itemType);
+            return true;
+        }
+
+
+        List<String> lines = Files.readAllLines(Paths.get(path), StandardCharsets.UTF_8);
+        if (lines.isEmpty()) {
+            System.out.println("Input is empty: " + path);
+            return true;
+        }
+
+        String[] header = splitTSV(lines.get(0));
+        Map<String, Integer> h = headerIndex(header);
+
+        // Required columns
+        int idxName = h.getOrDefault("index", -1);
+        final int idxType;
+        if (itemType == ItemType.UNIQUE)
+            idxType = h.getOrDefault("*type", -1);
+        else idxType = h.getOrDefault("*item", -1); // SET
+
+        int idxSetGroup = h.getOrDefault("set", -1);// SET ONLY
+
+        int idxEnabled = h.getOrDefault("enabled", 2);
+        int idxReqLevel = h.getOrDefault("lvl req", 8); // fallback to 3rd column if header missing
+
+        if (idxName < 0 || idxType < 0) {
+            System.err.println("Missing required headers: index " + idxName + " and/or *type " + idxType);
+            return true;
+        }
+
+        // Precompute prop/max indices for 1..11
+        int[] idxProp = new int[12];
+        int[] idxPar = new int[12];
+        int[] idxMin = new int[12];
+        int[] idxMax = new int[12];
+        Arrays.fill(idxProp, -1);
+        Arrays.fill(idxMax, -1);
+        for (int i = 1; i <= 11; i++) {
+            idxProp[i] = h.getOrDefault("prop" + i, -1);
+            idxPar[i] = h.getOrDefault("par" + i, -1);
+            idxMin[i] = h.getOrDefault("min" + i, -1);
+            idxMax[i] = h.getOrDefault("max" + i, -1);
+        }
+
+        int[] idxaPropa = new int[6];
+        int[] idxaPara = new int[6];
+        int[] idxaMina = new int[6];
+        int[] idxaMaxa = new int[6];
+        int[] idxaPropb = new int[6];
+        int[] idxaParb = new int[6];
+        int[] idxaMinb = new int[6];
+        int[] idxaMaxb = new int[6];
+        for (int i = 1; i <= 5; i++) {
+            idxaPropa[i] = h.getOrDefault("aprop" + i + "a", -1);
+            idxaPara[i] = h.getOrDefault("apar" + i + "a", -1);
+            idxaMina[i] = h.getOrDefault("amin" + i + "a", -1);
+            idxaMaxa[i] = h.getOrDefault("amax" + i + "a", -1);
+            idxaPropb[i] = h.getOrDefault("aprop" + i + "b", -1);
+            idxaParb[i] = h.getOrDefault("apar" + i + "b", -1);
+            idxaMinb[i] = h.getOrDefault("amin" + i + "b", -1);
+            idxaMaxb[i] = h.getOrDefault("amax" + i + "b", -1);
+        }
+
+
+        int linecount = 0;
+        int savedRows = 0;
+        for (int i = 1; i < lines.size(); i++) {
+            linecount++;
+            String line = lines.get(i);
+            if (line == null || line.trim().isEmpty()) continue;
+
+            String[] cols = splitTSV(line);
+
+
+            // Must have "enabled" == "1"
+            // Unique only
+            if (itemType == ItemType.UNIQUE) {
+                String enabled = safeGet(cols, idxEnabled).trim();
+                if (!"1".equals(enabled)) {
+                    continue;
+                }
+            }
+
+            String baseType = itemmap.checkForRename(safeGet(cols, idxType).trim());
+            String name = itemmap.checkForRename(safeGet(cols, idxName).trim());
+            String setGroup = "";
+            if (idxSetGroup > -1) {
+                setGroup = safeGet(cols, idxSetGroup).trim();
+            }
+
+            if (itemmap.skipCheck(name)) {
+                continue;
+            }
+            String reqLevel = safeGet(cols, idxReqLevel).trim();
+
+            if (baseType.isEmpty() || name.isEmpty()) {
+                continue;
+            }
+
+            Map<String, Object> row = new LinkedHashMap<>();
+            row.put("name", name);
+            if (!baseType.equalsIgnoreCase("ring") && !baseType.equalsIgnoreCase("amulet"))
+                row.put("base", removeNumbersAndCapitalizeFirst(baseType));
+            row.put("req_level", parseNumericOrString(reqLevel));
+            String onlyClass = itemmap.classForBaseOrNull(baseType);
+            if (onlyClass != null) {
+                row.put("only", onlyClass);
+            }
+            if (TwoHandedWeaponUtil.isTwoHandedBase(baseType)) {
+                row.put("twoHanded", 1);
+            }
+
+            switch (name) {
+                case "Overlord's Helm":
+                case "Dark Abyss":
+                case "Itherael's Path":
+                case "Hadriel's Hand":
+                case "Aidan's Scar":
+                    row.put("boss_item", "Uber Diablo");
+                    break;
+                case "The Third Eye":
+                case "Band of Skulls":
+                case "Cage of the Unsullied":
+                    row.put("boss_item", "Rathma");
+                    break;
+            }
+
+            if (itemType == ItemType.SET) {
+                row.put("rarity", "set");
+
+                final String setpGroupCode;
+                switch (setGroup) {
+                    case "Immortal King":
+                        setpGroupCode = "set_IK";
+                        break;
+                    case "M'avina's Battle Hymn":
+                        setpGroupCode = "set_Mav";
+                        break;
+                    case "Griswold's Legacy":
+                        setpGroupCode = "set_Gris";
+                        break;
+                    case "Trang-Oul's Avatar":
+                        setpGroupCode = "set_TO";
+                        break;
+                    case "Tal Rasha's Wrappings":
+                        setpGroupCode = "set_TR";
+                        break;
+                    case "Natalya's Odium":
+                        setpGroupCode = "set_Nat";
+                        break;
+                    case "Aldur's Watchtower":
+                        setpGroupCode = "set_Ald";
+                        break;
+                    case "Bul-Kathos' Children":
+                        setpGroupCode = "set_BK";
+                        break;
+                    case "The Disciple":
+                        setpGroupCode = "set_Disciple";
+                        break;
+                    case "Angelical Raiment":
+                        setpGroupCode = "set_Angelic";
+                        break;
+                    case "Cathan's Traps":
+                        setpGroupCode = "set_Cathan";
+                        break;
+                    case "Cow King's Leathers":
+                        setpGroupCode = "set_Cow";
+                        break;
+                    case "Heaven's Brethren":
+                        setpGroupCode = "set_Brethren";
+                        break;
+                    case "Hwanin's Majesty":
+                        setpGroupCode = "set_Hwanin";
+                        break;
+                    case "Naj's Ancient Set":
+                        setpGroupCode = "set_Naj";
+                        break;
+                    case "Orphan's Call":
+                        setpGroupCode = "set_Orphan";
+                        break;
+                    case "McAuley's Folly":
+                        setpGroupCode = "set_Sander";
+                        break;
+                    case "Sazabi's Grand Tribute":
+                        setpGroupCode = "set_Sazabi";
+                        break;
+                    case "Arcanna's Tricks":
+                        setpGroupCode = "set_Arcanna";
+                        break;
+                    case "Arctic Gear":
+                        setpGroupCode = "set_Arctic";
+                        break;
+                    case "Berserker's Garb":
+                        setpGroupCode = "set_Berserker";
+                        break;
+                    case "Civerb's Vestments":
+                        setpGroupCode = "set_Civerb";
+                        break;
+                    case "Cleglaw's Brace":
+                        setpGroupCode = "set_Cleglaw";
+                        break;
+                    case "Death's Disguise":
+                        setpGroupCode = "set_Death";
+                        break;
+                    case "Hsarus' Defense":
+                        setpGroupCode = "set_Hsarus";
+                        break;
+                    case "Infernal Tools":
+                        setpGroupCode = "set_Infernal";
+                        break;
+                    case "Iratha's Finery":
+                        setpGroupCode = "set_Iratha";
+                        break;
+                    case "Isenhart's Armory":
+                        setpGroupCode = "set_Isenhart";
+                        break;
+                    case "Milabrega's Regalia":
+                        setpGroupCode = "set_Milabrega";
+                        break;
+                    case "Sigon's Complete Steel":
+                        setpGroupCode = "set_Sigon";
+                        break;
+                    case "Tancred's Battlegear":
+                        setpGroupCode = "set_Tancred";
+                        break;
+                    case "Vidala's Rig":
+                        setpGroupCode = "set_Vidala";
+                        break;
+                    default:
+                        System.err.println("setGroup not matched " + setGroup);
+                        continue;
+                }
+
+                //    System.err.println(line);
+                row.put(setpGroupCode, 1);
+                List<Object> setProperties = new ArrayList<>();
+                setProperties.add(setpGroupCode);
+/*
+   int[] idxaPropa = new int[6];
+        int[] idxaPara = new int[6];
+        int[] idxaMina = new int[6];
+        int[] idxaMaxa = new int[6];
+        int[] idxaPropb = new int[6];
+        int[] idxaParb = new int[6];
+        int[] idxaMinb = new int[6];
+        int[] idxaMaxb = new int[6];
+ */
+
+                for (int j = 1; j < idxaPropa.length; j++) {
+                    int[] idxProps = new int[2];
+                    idxProps[0] = idxaPropa[j];
+                    idxProps[1] = idxaPropb[j];
+                    int[] idxPars = new int[2];
+                    idxPars[0] = idxaPara[j];
+                    idxPars[1] = idxaParb[j];
+                    int[] idxMins = new int[2];
+                    idxMins[0] = idxaMina[j];
+                    idxMins[1] = idxaMinb[j];
+                    int[] idxMaxs = new int[2];
+                    idxMaxs[0] = idxaMaxa[j];
+                    idxMaxs[1] = idxaMaxb[j];
+                    Map<String, Object> setBonusLevel = new LinkedHashMap<>();
+                    extractedItemProps(idxProps, idxPars, idxMins, idxMaxs, cols, name, setBonusLevel);
+                    setProperties.add(setBonusLevel);
+                }
+
+                row.put("set_bonuses", setProperties);
+                // set_bonuses:
+            }
+
+
+            // Add prop1..prop11 with their max values, using the prop value as the key
+            extractedItemProps(idxProp, idxPar, idxMin, idxMax, cols, name, row);
+
+            String groupBaseType = itemmap.getGroupBaseType(baseType);
+            if (groupBaseType != null && !groupBaseType.isEmpty()) {
+                if (itemmap.typeChecker(groupBaseType)) {
+                    String itemGroupType = WeaponGroupTypeUtil.groupOf(baseType);
+                    if (itemGroupType != null) {
+                        row.put("type", itemGroupType);
+                    } else if (groupBaseType.equals("Offhand")) {
+                        row.put("type", "shield");
+                    } else {
+                        //    System.err.println("itemGroupType = null for " + baseType);
+                    }
+                    if (!groupBaseType.equals("Amulet") && !groupBaseType.equals("Ring1"))
+                        row.put("img", name.replace(" ", "_"));
+                    String groupBaseTypeKeyname = groupBaseType.toLowerCase();
+                   /* if (!grouped.containsKey(groupBaseTypeKeyname)) {
+                        Map<String, Object> rowheader = new LinkedHashMap<>();
+                        rowheader.put("name", groupBaseType.replace("1", ""));
+                        grouped.computeIfAbsent(groupBaseTypeKeyname, k -> new ArrayList<>()).add(rowheader);
+                    }*/
+                    grouped.computeIfAbsent(groupBaseTypeKeyname, k -> new ArrayList<>()).add(row);
+                    savedRows++;
+                } else {
+                    System.err.println("No type match on: " + baseType);
+                }
+            } else {
+                if (!(baseType.equals("charm") || baseType.equals("jewel") || baseType.startsWith("t5"))) {
+                    System.err.println("No groupBaseType match on: " + baseType);
+                    System.out.println(line);
+                }
+            }
+        }
+        System.out.println("Read: " + linecount + " Lines, added " + savedRows + " Items");
+        return false;
+    }
+
+    private static void extractedItemProps(int[] idxProp, int[] idxPar, int[] idxMin, int[] idxMax, String[] cols, String name, Map<String, Object> row) {
+        for (int p = 0; p < idxProp.length; p++) {
+            int pIdx = idxProp[p];
+            int parIdx = idxPar[p];
+            int minIdx = idxMin[p];
+            int maxIdx = idxMax[p];
+            if (pIdx < 0 || maxIdx < 0) continue;
+
+            String propKey = safeGet(cols, pIdx).trim();
+            String parameter = safeGet(cols, parIdx).trim();
+            String minValStr = safeGet(cols, minIdx).trim();
+            String maxValStr = safeGet(cols, maxIdx).trim();
+            if (propKey.isEmpty() || maxValStr.isEmpty()) continue;
+
+            Object val = parseNumericOrString(maxValStr);
+            Object minval = parseNumericOrString(minValStr);
+
+
+            String plannerPropKey = itemmap.PROP_MAP.get(propKey);
+
+            //skilltab
+            if (propKey.equals("skilltab")) {
+                switch (parameter.trim()) {
+                    case "0":
+                        plannerPropKey = "skills_bows";
+                        break;
+                    case "1":
+                        plannerPropKey = "skills_passives";
+                        break;
+                    case "2":
+                        plannerPropKey = "skills_javelins";
+                        break;
+                    case "3":
+                        plannerPropKey = "skills_fire";
+                        break;
+                    case "4":
+                        plannerPropKey = "skills_lightning";
+                        break;
+                    case "5":
+                        plannerPropKey = "skills_cold";
+                        break;
+                    case "6":
+                        plannerPropKey = "skills_curses";
+                        break;
+                    case "7":
+                        plannerPropKey = "skills_poisonBone";
+                        break;
+                    case "8":
+                        plannerPropKey = "skills_summoning_necromancer";
+                        break;
+                    case "9":
+                        plannerPropKey = "skills_combat_paladin";
+                        break;
+                    case "10":
+                        plannerPropKey = "skills_offensive";
+                        break;
+                    case "11":
+                        plannerPropKey = "skills_defensive";
+                        break;
+                    case "12":
+                        plannerPropKey = "skills_combat_barbarian";
+                        break;
+                    case "13":
+                        plannerPropKey = "skills_masteries";
+                        break;
+                    case "14":
+                        plannerPropKey = "skills_warcries";
+                        break;
+                    case "15":
+                        plannerPropKey = "skills_summoning_druid";
+                        break;
+                    case "16":
+                        plannerPropKey = "skills_shapeshifting";
+                        break;
+                    case "17":
+                        plannerPropKey = "skills_elemental";
+                        break;
+                    case "18":
+                        plannerPropKey = "skills_traps";
+                        break;
+                    case "19":
+                        plannerPropKey = "skills_shadow";
+                        break;
+                    case "20":
+                        plannerPropKey = "skills_martial";
+                        break;
+                    default:
+                        System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
+                                parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
+                        continue;
+                }
+            }
+
+            //skill
+
+            if (propKey.equals("skill") || propKey.equals("oskill")) {
+                String skillname = getSkillName(parameter);
+                if (skillname == null) {
+                    System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
+                            parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
+                    continue;
+                }
+                plannerPropKey = propKey + "_" + (skillname.replace(" ", "_"));
+            }
+
+            //aura
+            if (propKey.equals("aura")) {
+                String skillname = getSkillName(parameter);
+                if (skillname == null) {
+                    System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
+                            parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
+                    continue;
+                }
+                plannerPropKey = "aura";
+                row.put(plannerPropKey, skillname);
+                plannerPropKey = "aura_lvl";
+                row.put(plannerPropKey, val);
+                continue;
+            }
+
+            // Equipped Skill ""
+
+            if (propKey.equals("equipped-skill")) {
+                plannerPropKey = "equipped_skill";
+                row.put(plannerPropKey, parameter.replace("SelfAura", "").trim());
+                plannerPropKey = "equipped_skill_level";
+                row.put(plannerPropKey, val);
+                continue;
+            }
+
+
+            if (propKey.equals("skill-rand")) {
+                //250 for druid
+                if (val.equals(250)) {
+                    plannerPropKey = "random_skill";
+                    row.put(plannerPropKey, "[Random Druid Skill] (Druid Only)");
+                    plannerPropKey = "random_skill_level";
+                    row.put(plannerPropKey, parseNumericOrString(parameter));
+                    continue;
+                }
+                System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
+                        parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
+                continue;
+            }
+
+            /*
+            cast-skill	Twister	15	28
+            cast_skill:{index:["cast_chance","cast_level","cast_skill"], format:["","% Chance to Cast Level "," "," on Casting"]},
+            strike_skill:{index:["strike_chance","strike_level","strike_skill"], format:["","% Chance to Cast Level "," "," on Striking"]},
+            hit_skill:{index:["hit_chance","hit_level","hit_skill"], format:["","% Chance to Cast Level "," "," on Hit"]},
+             */
+            if (propKey.equals("hit-skill") || propKey.equals("block-skill") || propKey.equals("levelup-skill") || propKey.equals("kill-skill") || propKey.equals("cast-skill") || propKey.equals("gethit-skill") || propKey.equals("death-skill")) {
+                final String type;
+                if (propKey.equals("death-skill"))
+                    type = "ondeath";
+                else if (propKey.equals("gethit-skill"))
+                    type = "gethit";
+                else if (propKey.equals("cast-skill"))
+                    type = "cast";
+                else if (propKey.equals("kill-skill"))
+                    type = "onkill";
+                else if (propKey.equals("levelup-skill"))
+                    type = "onlevel";
+                else if (propKey.equals("block-skill"))
+                    type = "onblock";
+                else if (propKey.equals("hit-skill"))
+                    type = "strike";
+                else {
+                    System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
+                            parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
+                    continue;
+                }
+                String skillname = getSkillName(parameter);
+                if (skillname == null) {
+                    System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
+                            parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
+                    continue;
+                }
+                plannerPropKey = type + "_skill";
+                row.put(plannerPropKey, skillname);
+                plannerPropKey = type + "_chance";
+                row.put(plannerPropKey, minval);
+                plannerPropKey = type + "_level";
+                row.put(plannerPropKey, val);
+                continue;
+            }
+
+            // skill charged
+            if (propKey.equals("charged")) {
+                String type = "charges";
+                String skillname = getSkillName(parameter);
+                if (skillname == null) {
+                    System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
+                            parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
+                    continue;
+                }
+                plannerPropKey = type + "_skill";
+                row.put(plannerPropKey, skillname);
+                plannerPropKey = type + "_charges";
+                row.put(plannerPropKey, minval);
+                plannerPropKey = type + "_level";
+                row.put(plannerPropKey, val);
+                continue;
+            }
+
+            // flat dmg
+            if (propKey.equals("dmg-norm")) {
+                plannerPropKey = "damage_min";
+                row.put(plannerPropKey, val);
+                plannerPropKey = "damage_max";
+                row.put(plannerPropKey, val);
+                continue;
+            }
+
+            //
+            if (propKey.equals("dmg-mag")) {
+                plannerPropKey = "mDamage_min";
+                row.put(plannerPropKey, val);
+                plannerPropKey = "mDamage_max";
+                row.put(plannerPropKey, val);
+                continue;
+            }
+            //dmg-elem
+            if (propKey.equals("dmg-elem")) {
+                plannerPropKey = "fDamage_min";
+                row.put(plannerPropKey, minval);
+                plannerPropKey = "fDamage_max";
+                row.put(plannerPropKey, val);
+                plannerPropKey = "cDamage_min";
+                row.put(plannerPropKey, minval);
+                plannerPropKey = "cDamage_max";
+                row.put(plannerPropKey, val);
+                plannerPropKey = "lDamage_min";
+                row.put(plannerPropKey, minval);
+                plannerPropKey = "lDamage_max";
+                row.put(plannerPropKey, val);
+                continue;
+            }
+
+            if (propKey.equals("res-all-max")) {
+                plannerPropKey = "fRes_max";
+                row.put(plannerPropKey, val);
+                plannerPropKey = "lRes_max";
+                row.put(plannerPropKey, val);
+                plannerPropKey = "cRes_max";
+                row.put(plannerPropKey, val);
+                plannerPropKey = "pRes_max";
+                row.put(plannerPropKey, val);
+                continue;
+            }
+
+            /*
+            Hit Causes Monster to Flee +
+            16-> 12
+            10->7
+            100->100
+            64->50
+            14-> 10
+
+            howl	10	5 -> 10% level 5
+             */
+
+            if (propKey.equals("howl")) {
+                if (minval.equals(val)) {
+                    final double newRate;
+                    if (val.equals(100)) {
+                        newRate = 100;
+                    } else {
+                        newRate = Math.floor(((Integer) val) * 0.75);
+                    }
+                    row.put("flee_on_hit", newRate);
+                    continue;
+                }
+                String skillname = getSkillName(propKey);
+                if (skillname == null) {
+                    System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
+                            parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
+                    continue;
+                }
+                String type = "hit";
+                plannerPropKey = type + "_skill";
+                row.put(plannerPropKey, skillname);
+                plannerPropKey = type + "_chance";
+                row.put(plannerPropKey, minval);
+                plannerPropKey = type + "_level";
+                row.put(plannerPropKey, val);
+                continue;
+            }
+
+
+            // 50 /5.1
+            // 75 /3.3
+            // dmg-pois
+
+            if (propKey.equals("dmg-pois")) {
+                final double factor;
+                final int seconds;
+                if (parseNumericOrString(parameter).equals(75)) {
+                    factor = 3.3;
+                    seconds = 3;
+                } else if (parseNumericOrString(parameter).equals(50)) {
+                    factor = 5.1;
+                    seconds = 2;
+                } else if (parseNumericOrString(parameter).equals(100)) {
+                    factor = 2.5;
+                    seconds = 4;
+                } else if (parseNumericOrString(parameter).equals(25)) {
+                    factor = 10.24;
+                    seconds = 1;
+                } else {
+                    System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
+                            parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
+                    continue;
+                }
+                final double newPsn = Math.floor(((Integer) val) / factor);
+                row.put("dmg_pois", newPsn);
+                row.put("dmg_pois_time", seconds);
+            }
+
+            // Skip unknown properties instead of inserting a null key
+            if (plannerPropKey == null || plannerPropKey.isBlank()) {
+                if (propKey != null & !propKey.isEmpty()) {
+                    if (!propKey.startsWith("map-"))
+                        System.err.println("Unknown prop: " + propKey);
+                }
+                continue;
+            }
+            if (plannerPropKey.contains("%"))
+                continue;// TODO remove
+            if (plannerPropKey.contains("-"))
+                continue;// TODO remove
+            if (plannerPropKey.contains("/"))
+                continue;// TODO remove
+
+            // Make negative on purpose
+            if (plannerPropKey.equals("enemy_fRes") ||
+                    plannerPropKey.equals("enemy_cRes") ||
+                    plannerPropKey.equals("enemy_lRes") ||
+                    plannerPropKey.equals("enemy_pRes") ||
+                    plannerPropKey.equals("enemy_phyRes")) {
+                if (val instanceof Integer && ((Integer) val) > 0) {
+                    val = ((Integer) val) * -1;
+                }
+            }
+
+            // add stat for uld
+            if (plannerPropKey.equals("mindmg_energy")) {
+                row.put("mindmg_per_energy", 1);
+            }
+
+            row.put(plannerPropKey, val);
         }
     }
 
@@ -602,21 +816,7 @@ public class UpdateUniqueItemsStats {
             sb.append(groupKey).append(": [\n{name:\"" + removeNumbersAndCapitalizeFirst(groupKey) + "\"},\n");
             for (int i = 0; i < rows.size(); i++) {
                 Map<String, Object> row = rows.get(i);
-                sb.append("    {");
-                int ci = 0;
-                int csize = row.size();
-                for (Map.Entry<String, Object> ce : row.entrySet()) {
-                    // sb.append("\"").append(escapeJsString(ce.getKey())).append("\": ");
-                    sb.append(escapeJsString(ce.getKey())).append(": ");
-                    Object val = ce.getValue();
-                    if (val instanceof Number) {
-                        sb.append(val.toString());
-                    } else {
-                        sb.append("\"").append(escapeJsString(String.valueOf(val))).append("\"");
-                    }
-                    if (++ci < csize) sb.append(", ");
-                }
-                sb.append("}");
+                mapToJsObjectAppender(sb, row);
                 sb.append(",");
                 sb.append("\n");
             }
@@ -628,6 +828,44 @@ public class UpdateUniqueItemsStats {
         sb.append(loadFooterFromFile());
         sb.append("};\n");
         return sb.toString();
+    }
+
+    private static void mapToJsObjectAppender(StringBuilder sb, Map<String, Object> row) {
+        sb.append("    {");
+        int ci = 0;
+        int csize = row.size();
+        for (Map.Entry<String, Object> ce : row.entrySet()) {
+            // sb.append("\"").append(escapeJsString(ce.getKey())).append("\": ");
+            sb.append(escapeJsString(ce.getKey())).append(": ");
+            Object val = ce.getValue();
+            if (val instanceof Number) {
+                sb.append(val.toString());
+            } else if (val instanceof ArrayList<?>) {
+                ArrayList<Object> al = (ArrayList<Object>) val;
+                sb.append("[");
+                for (int j = 0; j < al.size(); j++) {
+                    if (j > 0) {
+                        sb.append(", ");
+                    }
+                    if (al.get(j) instanceof String) {
+                        sb.append("\"").append(al.get(j).toString()).append("\"");
+                    } else if (al.get(j) instanceof Map<?, ?>) {
+                        Map<String, Object> m = (Map<String, Object>) al.get(j);
+                        mapToJsObjectAppender(sb, m);
+                    } else {
+                        sb.append(al.get(j).toString());
+                    }
+                    if (j == 0) {
+                        sb.append(", {}");
+                    }
+                }
+                sb.append("]");
+            } else {
+                sb.append("\"").append(escapeJsString(String.valueOf(val))).append("\"");
+            }
+            if (++ci < csize) sb.append(", ");
+        }
+        sb.append("}");
     }
 
     private static String escapeJsString(String s) {

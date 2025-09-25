@@ -55,10 +55,14 @@ public final class itemmap {
         p.put("att/lvl", "ar_per_level");
         p.put("aura", "aura"); // handled in processor
         p.put("balance2", "fhr");
+        p.put("balance1", "fhr");
+        p.put("balance3", "fhr");
         p.put("bar", "skills_barbarian");
         p.put("block", "ibc");
         p.put("block-skill", "block-skill");
         p.put("block2", "ibc");
+        p.put("block3", "ibc");
+        p.put("block1", "ibc");
         p.put("blood-warp-life-reduction", "blood-warp-life-reduction");
         p.put("bloody", "bloody"); // Ignored
         p.put("cast-skill", "cast-skill"); // in processor
@@ -170,6 +174,9 @@ public final class itemmap {
         p.put("maxlevel-clout", "maxlevel-clout"); // ignore
         p.put("mindmg/energy", "mindmg_energy");
         p.put("move2", "frw");
+        p.put("move1", "frw");
+        p.put("move3", "frw");
+        p.put("Light", "light_radius");
         p.put("nec", "skills_necromancer");
         p.put("no-wolves", "no_wolves");
         p.put("nofreeze", "cbf");
@@ -237,6 +244,9 @@ public final class itemmap {
         p.put("dru", "skills_druid");
         p.put("half-freeze", "half_freeze");
         p.put("max-deadly", "max_dstrike");
+        p.put("splash", "melee_splash");
+        p.put("abs-cold/lvl", "abs_cold_lvl");
+
         PROP_MAP = Collections.unmodifiableMap(p);
 
 
@@ -657,6 +667,16 @@ public final class itemmap {
         t.put("Lacerator", "Weapon");
         t.put("ward", "Offhand");
         t.put("colossus girdle", "Belt");
+        t.put("greaves", "Boots");
+        t.put("Sabre", "Weapon");
+        t.put("Loricated Mail", "Armor");
+        t.put("Hellforge Plate", "Armor");
+        t.put("Reinforced Mace", "Weapon");
+        t.put("Cantor Trophy", "Offhand");
+        t.put("Circlet", "Helm");
+        t.put("Hunter's Guise", "Helm");
+        t.put("Avenger Guard", "Helm");
+
 
         LinkedHashMap<String, String> ncc = new LinkedHashMap<>();
         ncc.put("Jo Stalf", "Jo Staff");
@@ -766,6 +786,7 @@ public final class itemmap {
         ncc.put("Wisp", "Wisp Projector");
         ncc.put("War Bonnet", "Biggin's Bonnet");
         ncc.put("Overlords Helm", "Overlord's Helm");
+        ncc.put("Nightmares Feast", "Ursa's Nightmare");
         // ncc.put("", "");Overlords_Helm
 
         Map<String, String> lowercased = new LinkedHashMap<>(ncc.size());
