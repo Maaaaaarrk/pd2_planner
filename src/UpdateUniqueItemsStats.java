@@ -101,13 +101,13 @@ public class UpdateUniqueItemsStats {
         }
 
         // Precompute prop/max indices for 1..11
-        int[] idxProp = new int[12];
-        int[] idxPar = new int[12];
-        int[] idxMin = new int[12];
-        int[] idxMax = new int[12];
+        int[] idxProp = new int[13];
+        int[] idxPar = new int[13];
+        int[] idxMin = new int[13];
+        int[] idxMax = new int[13];
         Arrays.fill(idxProp, -1);
         Arrays.fill(idxMax, -1);
-        for (int i = 1; i <= 11; i++) {
+        for (int i = 1; i <= 12; i++) {
             idxProp[i] = h.getOrDefault("prop" + i, -1);
             idxPar[i] = h.getOrDefault("par" + i, -1);
             idxMin[i] = h.getOrDefault("min" + i, -1);
@@ -385,15 +385,19 @@ public class UpdateUniqueItemsStats {
             int parIdx = idxPar[p];
             int minIdx = idxMin[p];
             int maxIdx = idxMax[p];
-            if (pIdx < 0 || maxIdx < 0) continue;
+            if (pIdx < 0 || maxIdx < 0) {
+                continue;
+            }
 
             String propKey = safeGet(cols, pIdx).trim();
             String parameter = safeGet(cols, parIdx).trim();
             String minValStr = safeGet(cols, minIdx).trim();
             String maxValStr = safeGet(cols, maxIdx).trim();
-            if (propKey.isEmpty() || maxValStr.isEmpty()) continue;
+            if (propKey.isEmpty() || (maxValStr.isEmpty() && parameter.isEmpty())) {
+                continue;
+            }
 
-            Object val = parseNumericOrString(maxValStr);
+            Object val = (maxValStr.isEmpty() ? parseNumericOrString(parameter) : parseNumericOrString(maxValStr));
             Object minval = parseNumericOrString(minValStr);
 
 
@@ -668,11 +672,6 @@ public class UpdateUniqueItemsStats {
                 continue;
             }
 
-
-            // 50 /5.1
-            // 75 /3.3
-            // dmg-pois
-
             if (propKey.equals("dmg-pois")) {
                 final double factor;
                 final int seconds;
@@ -706,12 +705,12 @@ public class UpdateUniqueItemsStats {
                 }
                 continue;
             }
-            if (plannerPropKey.contains("%"))
-                continue;// TODO remove
-            if (plannerPropKey.contains("-"))
-                continue;// TODO remove
-            if (plannerPropKey.contains("/"))
-                continue;// TODO remove
+
+            if (plannerPropKey.contains("%") || plannerPropKey.contains("-")
+                    || plannerPropKey.contains("/")) {
+                // System.err.println("Violate rule plannerPropKey: " + plannerPropKey);
+                continue;
+            }
 
             // Make negative on purpose
             if (plannerPropKey.equals("enemy_fRes") ||

@@ -198,8 +198,8 @@ public final class itemmap {
         p.put("randclassskill2", "randclassskill2"); // spiritward
         p.put("rathma-clout", "rathma-clout"); // ignore
         p.put("reanimate", "reanimate");
-        p.put("red-dmg", "mAbsorb_flat");
-        p.put("red-dmg%", "mRes");
+        p.put("red-dmg", "damage_reduced");
+        p.put("red-dmg%", "pdr");
         p.put("red-mag", "mDamage_reduced");
         p.put("reduce-ac", "target_defense");
         p.put("regen", "life_replenish");
@@ -246,7 +246,12 @@ public final class itemmap {
         p.put("max-deadly", "max_dstrike");
         p.put("splash", "melee_splash");
         p.put("abs-cold/lvl", "abs_cold_lvl");
-
+        p.put("dmg-ltng/lvl", "lDamage_max_per_level");
+        p.put("res-fire/lvl", "fRes_per_level");
+        p.put("res-cold/lvl", "cRes_per_level");
+        p.put("res-ltng/lvl", "lRes_per_level");
+        p.put("dmg-cold/lvl", "cDamage_max_per_level");
+        p.put("regen-stam/lvl", "heal_stam_per_level");
         PROP_MAP = Collections.unmodifiableMap(p);
 
 
