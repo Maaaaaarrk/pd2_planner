@@ -792,7 +792,13 @@ public final class itemmap {
         ncc.put("War Bonnet", "Biggin's Bonnet");
         ncc.put("Overlords Helm", "Overlord's Helm");
         ncc.put("Nightmares Feast", "Ursa's Nightmare");
-        // ncc.put("", "");Overlords_Helm
+        ncc.put("Aldur's Gauntlet", "Aldur's Rhythm");
+        ncc.put("McAuley's Paragon", "Sander's Paragon");
+        ncc.put("McAuley's Riprap", "Sander's Riprap");
+        ncc.put("McAuley's Taboo", "Sander's Taboo");
+        ncc.put("McAuley's Superstition", "Sander's Superstition");
+
+        // ncc.put("", "");
 
         Map<String, String> lowercased = new LinkedHashMap<>(ncc.size());
         ArrayList<String> correctionNames = new ArrayList<>(ncc.size());
