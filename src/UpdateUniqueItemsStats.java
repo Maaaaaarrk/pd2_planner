@@ -127,56 +127,13 @@ public class UpdateUniqueItemsStats {
                     if (propKey.isEmpty() || maxValStr.isEmpty()) continue;
 
                     Object val = parseNumericOrString(maxValStr);
+                    Object minval = parseNumericOrString(minValStr);
 
 
                     String plannerPropKey = itemmap.PROP_MAP.get(propKey);
 
                     //skilltab
                     if (propKey.equals("skilltab")) {
-                        /*
-                        {only:"amazon", rarity:"magic", name:"+1 Harpoonist's Grand Charm", size:"grand", req_level:42, skills_javelins:1},
-{only:"amazon", rarity:"magic", name:"+1 Acrobat's Grand Charm", size:"grand", req_level:42, skills_passives:1},
-skills_bows
-{only:"assassin", rarity:"magic", name:"+1 Shogukusha's Grand Charm", size:"grand", req_level:42, skills_martial:1},
-{only:"assassin", rarity:"magic", name:"+1 Mentalist's Grand Charm", size:"grand", req_level:42, skills_shadow:1},
-{only:"assassin", rarity:"magic", name:"+1 Entrapping Grand Charm", size:"grand", req_level:42, skills_traps:1},
-{only:"barbarian", rarity:"magic", name:"+1 Sounding Grand Charm", size:"grand", req_level:42, skills_warcries:1},
-{only:"barbarian", rarity:"magic", name:"+1 Fanatic Grand Charm", size:"grand", req_level:42, skills_masteries:1},
-{only:"barbarian", rarity:"magic", name:"+1 Expert's Grand Charm", size:"grand", req_level:42, skills_combat_barbarian:1},
-{only:"druid", rarity:"magic", name:"+1 Nature's Grand Charm", size:"grand", req_level:42, skills_elemental:1},
-{only:"druid", rarity:"magic", name:"+1 Spiritual Grand Charm", size:"grand", req_level:42, skills_shapeshifting:1},
-{only:"druid", rarity:"magic", name:"+1 Trainer's Grand Charm", size:"grand", req_level:42, skills_summoning_druid:1},
-{only:"necromancer", rarity:"magic", name:"+1 Graverobber's Grand Charm", size:"grand", req_level:42, skills_summoning_necromancer:1},
-{only:"necromancer", rarity:"magic", name:"+1 Fungal Grand Charm", size:"grand", req_level:42, skills_poisonBone:1},
-{only:"necromancer", rarity:"magic", name:"+1 Hexing Grand Charm", size:"grand", req_level:42, skills_curses:1},
-{only:"paladin", rarity:"magic", name:"+1 Preserver's Grand Charm", size:"grand", req_level:42, skills_defensive:1},
-{only:"paladin", rarity:"magic", name:"+1 Captain's Grand Charm", size:"grand", req_level:42, skills_offensive:1},
-{only:"paladin", rarity:"magic", name:"+1 Lion Branded Grand Charm", size:"grand", req_level:42, skills_combat_paladin:1},
-{only:"sorceress", rarity:"magic", name:"+1 Chilling Grand Charm", size:"grand", req_level:42, skills_cold:1},
-{only:"sorceress", rarity:"magic", name:"+1 Sparking Grand Charm", size:"grand", req_level:42, skills_lightning:1},
-{only:"sorceress", rarity:"magic", name:"+1 Burning Grand Charm", size:"grand", req_level:42, skills_fire:1},
-TABSK0	Amazon	Bow and Crossbow Skills
-TABSK1	Amazon	Passive and Magic Skills
-TABSK2	Amazon	Javelin and Spear Skills
-TABSK8	Sorceress	Fire Spells
-TABSK9	Sorceress	Lightning Spells
-TABSK10	Sorceress	Cold Spells
-TABSK16	Necromancer	Curses
-TABSK17	Necromancer	Poison & Bone Spells
-TABSK18	Necromancer	Summoning Spells
-TABSK24	Paladin	Combat Skills
-TABSK25	Paladin	Offensive Auras
-TABSK26	Paladin	Defensive Auras
-TABSK32	Barbarian	Combat Skills
-TABSK33	Barbarian	Combat Masteries
-TABSK34	Barbarian	Warcries
-TABSK40	Druid	Summoning
-TABSK41	Druid	Shape Shifting
-TABSK42	Druid	Elemental
-TABSK48	Assassin	Traps
-TABSK49	Assassin	Shadow Disciplines
-TABSK50	Assassin	Martial Arts
-                         */
                         switch (parameter.trim()) {
                             case "0":
                                 plannerPropKey = "skills_bows";
@@ -260,11 +217,219 @@ TABSK50	Assassin	Martial Arts
                         plannerPropKey = propKey + "_" + (skillname.replace(" ", "_"));
                     }
 
-                    /*
-                        System.err.println("propKey: " + propKey + " parameter: " +
+                    //aura
+                    if (propKey.equals("aura")) {
+                        String skillname = getSkillName(parameter);
+                        if (skillname == null) {
+                            System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
+                                    parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
+                            continue;
+                        }
+                        plannerPropKey = "aura";
+                        row.put(plannerPropKey, skillname);
+                        plannerPropKey = "aura_lvl";
+                        row.put(plannerPropKey, val);
+                        continue;
+                    }
+
+                    // Equipped Skill ""
+
+                    if (propKey.equals("equipped-skill")) {
+                        plannerPropKey = "equipped_skill";
+                        row.put(plannerPropKey, parameter.replace("SelfAura", "").trim());
+                        plannerPropKey = "equipped_skill_level";
+                        row.put(plannerPropKey, val);
+                        continue;
+                    }
+
+
+                    if (propKey.equals("skill-rand")) {
+                        //250 for druid
+                        if (val.equals(250)) {
+                            plannerPropKey = "random_skill";
+                            row.put(plannerPropKey, "[Random Druid Skill] (Druid Only)");
+                            plannerPropKey = "random_skill_level";
+                            row.put(plannerPropKey, parseNumericOrString(parameter));
+                            continue;
+                        }
+                        System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
                                 parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
                         continue;
+                    }
+
+                    /*
+                    cast-skill	Twister	15	28
+                    cast_skill:{index:["cast_chance","cast_level","cast_skill"], format:["","% Chance to Cast Level "," "," on Casting"]},
+                    strike_skill:{index:["strike_chance","strike_level","strike_skill"], format:["","% Chance to Cast Level "," "," on Striking"]},
+                    hit_skill:{index:["hit_chance","hit_level","hit_skill"], format:["","% Chance to Cast Level "," "," on Hit"]},
                      */
+                    if (propKey.equals("hit-skill") || propKey.equals("block-skill") || propKey.equals("levelup-skill") || propKey.equals("kill-skill") || propKey.equals("cast-skill") || propKey.equals("gethit-skill") || propKey.equals("death-skill")) {
+                        final String type;
+                        if (propKey.equals("death-skill"))
+                            type = "ondeath";
+                        else if (propKey.equals("gethit-skill"))
+                            type = "gethit";
+                        else if (propKey.equals("cast-skill"))
+                            type = "cast";
+                        else if (propKey.equals("kill-skill"))
+                            type = "onkill";
+                        else if (propKey.equals("levelup-skill"))
+                            type = "onlevel";
+                        else if (propKey.equals("block-skill"))
+                            type = "onblock";
+                        else if (propKey.equals("hit-skill"))
+                            type = "strike";
+                        else {
+                            System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
+                                    parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
+                            continue;
+                        }
+                        String skillname = getSkillName(parameter);
+                        if (skillname == null) {
+                            System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
+                                    parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
+                            continue;
+                        }
+                        plannerPropKey = type + "_skill";
+                        row.put(plannerPropKey, skillname);
+                        plannerPropKey = type + "_chance";
+                        row.put(plannerPropKey, minval);
+                        plannerPropKey = type + "_level";
+                        row.put(plannerPropKey, val);
+                        continue;
+                    }
+
+                    // skill charged
+                    if (propKey.equals("charged")) {
+                        String type = "charges";
+                        String skillname = getSkillName(parameter);
+                        if (skillname == null) {
+                            System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
+                                    parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
+                            continue;
+                        }
+                        plannerPropKey = type + "_skill";
+                        row.put(plannerPropKey, skillname);
+                        plannerPropKey = type + "_charges";
+                        row.put(plannerPropKey, minval);
+                        plannerPropKey = type + "_level";
+                        row.put(plannerPropKey, val);
+                        continue;
+                    }
+
+                    // flat dmg
+                    if (propKey.equals("dmg-norm")) {
+                        plannerPropKey = "damage_min";
+                        row.put(plannerPropKey, val);
+                        plannerPropKey = "damage_max";
+                        row.put(plannerPropKey, val);
+                        continue;
+                    }
+
+                    //
+                    if (propKey.equals("dmg-mag")) {
+                        plannerPropKey = "mDamage_min";
+                        row.put(plannerPropKey, val);
+                        plannerPropKey = "mDamage_max";
+                        row.put(plannerPropKey, val);
+                        continue;
+                    }
+                    //dmg-elem
+                    if (propKey.equals("dmg-elem")) {
+                        plannerPropKey = "fDamage_min";
+                        row.put(plannerPropKey, minval);
+                        plannerPropKey = "fDamage_max";
+                        row.put(plannerPropKey, val);
+                        plannerPropKey = "cDamage_min";
+                        row.put(plannerPropKey, minval);
+                        plannerPropKey = "cDamage_max";
+                        row.put(plannerPropKey, val);
+                        plannerPropKey = "lDamage_min";
+                        row.put(plannerPropKey, minval);
+                        plannerPropKey = "lDamage_max";
+                        row.put(plannerPropKey, val);
+                        continue;
+                    }
+
+                    if (propKey.equals("res-all-max")) {
+                        plannerPropKey = "fRes_max";
+                        row.put(plannerPropKey, val);
+                        plannerPropKey = "lRes_max";
+                        row.put(plannerPropKey, val);
+                        plannerPropKey = "cRes_max";
+                        row.put(plannerPropKey, val);
+                        plannerPropKey = "pRes_max";
+                        row.put(plannerPropKey, val);
+                        continue;
+                    }
+
+                    /*
+                    Hit Causes Monster to Flee +
+                    16-> 12
+                    10->7
+                    100->100
+                    64->50
+                    14-> 10
+
+                    howl	10	5 -> 10% level 5
+                     */
+
+                    if (propKey.equals("howl")) {
+                        if (minval.equals(val)) {
+                            final double newRate;
+                            if (val.equals(100)) {
+                                newRate = 100;
+                            } else {
+                                newRate = Math.floor(((Integer) val) * 0.75);
+                            }
+                            row.put("flee_on_hit", newRate);
+                            continue;
+                        }
+                        String skillname = getSkillName(propKey);
+                        if (skillname == null) {
+                            System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
+                                    parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
+                            continue;
+                        }
+                        String type = "hit";
+                        plannerPropKey = type + "_skill";
+                        row.put(plannerPropKey, skillname);
+                        plannerPropKey = type + "_chance";
+                        row.put(plannerPropKey, minval);
+                        plannerPropKey = type + "_level";
+                        row.put(plannerPropKey, val);
+                        continue;
+                    }
+
+
+                    // 50 /5.1
+                    // 75 /3.3
+                    // dmg-pois
+
+                    if (propKey.equals("dmg-pois")) {
+                        final double factor;
+                        final int seconds;
+                        if (parseNumericOrString(parameter).equals(75)) {
+                            factor = 3.3;
+                            seconds = 3;
+                        } else if (parseNumericOrString(parameter).equals(50)) {
+                            factor = 5.1;
+                            seconds = 2;
+                        } else if (parseNumericOrString(parameter).equals(100)) {
+                            factor = 2.5;
+                            seconds = 4;
+                        } else if (parseNumericOrString(parameter).equals(25)) {
+                            factor = 10.24;
+                            seconds = 1;
+                        } else {
+                            System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
+                                    parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
+                            continue;
+                        }
+                        final double newPsn = Math.floor(((Integer) val) / factor);
+                        row.put("dmg_pois", newPsn);
+                        row.put("dmg_pois_time", seconds);
+                    }
 
                     // Skip unknown properties instead of inserting a null key
                     if (plannerPropKey == null || plannerPropKey.isBlank()) {
@@ -290,6 +455,11 @@ TABSK50	Assassin	Martial Arts
                         if (val instanceof Integer && ((Integer) val) > 0) {
                             val = ((Integer) val) * -1;
                         }
+                    }
+
+                    // add stat for uld
+                    if (plannerPropKey.equals("mindmg_energy")) {
+                        row.put("mindmg_per_energy", 1);
                     }
 
                     row.put(plannerPropKey, val);
@@ -643,6 +813,7 @@ TABSK50	Assassin	Martial Arts
                 return "Fire Wall";
             case "52":
             case "enchant fire":
+            case "enchant":
                 return "Enchant Fire";
             case "53":
             case "chain lightning":
@@ -1026,6 +1197,7 @@ TABSK50	Assassin	Martial Arts
             case "arctic blast":
                 return "Arctic Blast";
             case "231":
+            case "plague poppy":
             case "carrion vine":
                 return "Carrion Vine";
             case "232":
@@ -1035,6 +1207,7 @@ TABSK50	Assassin	Martial Arts
             case "maul":
                 return "Maul";
             case "234":
+            case "eruption":
             case "fissure":
                 return "Fissure";
             case "235":
@@ -1196,25 +1369,32 @@ TABSK50	Assassin	Martial Arts
                 return "Lesser Fade";
             case "400":
             case "bone nova":
+            case "fingermagebossnova":
                 return "Bone Nova";
             case "442":
+            case "ampdmg proc":
+            case "amplify damage proc":
             case "amplify damage (proc)":
-                return "Amplify Damage (Proc)";
+                return "Amplify Damage";
             case "443":
             case "weaken (proc)":
-                return "Weaken (Proc)";
+                return "Weaken";
             case "444":
+            case "iron maiden proc":
             case "iron maiden (proc)":
-                return "Iron Maiden (Proc)";
+                return "Iron Maiden";
             case "445":
+            case "life tap proc":
             case "life tap (proc)":
-                return "Life Tap (Proc)";
+                return "Life Tap";
             case "446":
+            case "decrepify proc":
             case "decrepify (proc)":
-                return "Decrepify (Proc)";
+                return "Decrepify";
             case "447":
+            case "lowres proc":
             case "lower resist (proc)":
-                return "Lower Resist (Proc)";
+                return "Lower Resist";
             case "554":
             case "energy shield (item supplied)":
                 return "Energy Shield (Item Supplied)";

@@ -53,31 +53,31 @@ public final class itemmap {
         p.put("att-und/lvl", "damage_vs_undead_per_level");
         p.put("att-undead", "ar_vs_undead");
         p.put("att/lvl", "ar_per_level");
-        p.put("aura", "aura"); // TODO
+        p.put("aura", "aura"); // handled in processor
         p.put("balance2", "fhr");
         p.put("bar", "skills_barbarian");
         p.put("block", "ibc");
-        p.put("block-skill", "block_skillup");
+        p.put("block-skill", "block-skill");
         p.put("block2", "ibc");
         p.put("blood-warp-life-reduction", "blood-warp-life-reduction");
         p.put("bloody", "bloody"); // Ignored
-        p.put("cast-skill", "cast-skill"); // TODO
+        p.put("cast-skill", "cast-skill"); // in processor
         p.put("cast1", "fcr");
         p.put("cast2", "fcr");
         p.put("cast3", "fcr");
-        p.put("charged", "charged"); // TODO charges skills
+        p.put("charged", "charged"); // in processor
         p.put("cheap", "discount");
-        p.put("cold-len", "cold-len"); // TODO
+        p.put("cold-len", "cold-len"); // ignored
         p.put("cold-max", "cDamage_max");
         p.put("cold-min", "cDamage_min");
         p.put("coldskill", "skills_cold_all");
         p.put("crush", "cblow");
-        p.put("curse-effectiveness", "curse-effectiveness"); // TODO
+        p.put("curse-effectiveness", "curse_effectiveness");
         p.put("curse-res", "curse_length_reduced");
         p.put("dclone-clout", "dclone-clout"); // ignore
         p.put("deadly", "dstrike");
         p.put("deadly/lvl", "dstrike_per_level");
-        p.put("death-skill", "death-skill"); // todo
+        p.put("death-skill", "death-skill"); // in processor
         p.put("deep-wounds", "owounds_dps");
         p.put("demon-heal", "life_per_demon_kill");
         p.put("dev-clout", "dev-clout"); // ignore
@@ -85,32 +85,32 @@ public final class itemmap {
         p.put("dex/lvl", "dexterity_per_level");
         p.put("dmg", "base_damage_min");
         p.put("dmg%", "e_damage");
-        p.put("dmg%/eth", "dmg%/eth"); // TODO purgatory
-        p.put("dmg%/lvl", "dmg%/lvl"); // todo
+        p.put("dmg%/eth", "dmg_per_eth");
+        p.put("dmg%/lvl", "e_max_damage_per_level");
         p.put("dmg-ac", "monster_defense_per_hit");
         p.put("dmg-cold", "cDamage_max");
         p.put("dmg-dem/lvl", "damage_vs_demons_per_level");
         p.put("dmg-demon", "damage_vs_demons");
-        p.put("dmg-elem", "dmg-elem"); // TODO
+        p.put("dmg-elem", "dmg-elem"); // handled in processor
         p.put("dmg-fire", "fDamage_max");
         p.put("dmg-ltng", "lDamage_max");
-        p.put("dmg-mag", "mDamage_min");
+        p.put("dmg-mag", "dmg-mag"); // handled in processor
         p.put("dmg-max", "damage_max");
         p.put("dmg-min", "damage_min");
-        p.put("dmg-norm", "dmg-norm"); // TODO + min - max
-        p.put("dmg-pois", "dmg-pois"); // TODO pDamage_all
+        p.put("dmg-norm", "dmg-norm"); // duplicates handled in processor
+        p.put("dmg-pois", "dmg-pois"); // in calc
         p.put("dmg-to-mana", "damage_to_mana");
         p.put("dmg-und/lvl", "damage_vs_undead_per_level");
         p.put("dmg-undead", "damage_vs_undead");
-        p.put("dmg/lvl", "dmg/lvl"); // TODO
+        p.put("dmg/lvl", "max_damage_per_level");
         p.put("dragonflight-reduction", "dragonflight-reduction");
         p.put("skills_druid", "dru");
         p.put("dur", "durability_extra");
         p.put("eaglehorn-raven", "extra_Raven_Damage");
         p.put("ease", "req");
         p.put("enr", "energy");
-        p.put("equipped-skill", "equipped-skill"); // TODO
-        p.put("es-efficiency", "es-efficiency"); // TODO
+        p.put("equipped-skill", "equipped-skill"); // handled in processor
+        p.put("es-efficiency", "es-efficiency"); // ignored helper for es on equip
         p.put("ethereal", "ethereal");
         p.put("explosivearrow", "explosive_attack");
         p.put("extra-cold", "cDamage");
@@ -127,7 +127,7 @@ public final class itemmap {
         p.put("fire-min", "fDamage_min");
         p.put("fireskill", "skills_fire_all");
         p.put("freeze", "freezes_target");
-        p.put("gethit-skill", "gethit-skill"); // TODO important
+        p.put("gethit-skill", "gethit-skill"); // in processor
         p.put("gold%", "gf");
         p.put("gold%/lvl", "gf_per_level");
         p.put("grims-extra-skele-mage", "extra_Skeleton_Mages");
@@ -135,8 +135,8 @@ public final class itemmap {
         p.put("half-half_freeze", "half-freeze");
         p.put("heal-hit", "life_per_hit");
         p.put("heal-kill", "life_per_kill");
-        p.put("hit-skill", "hit_kill");
-        p.put("howl", "howl"); // todo
+        p.put("hit-skill", "hit-skill");
+        p.put("howl", "howl"); // in processor
         p.put("hp", "life");
         p.put("hp%", "max_life");
         p.put("hp/lvl", "life_per_level");
@@ -146,10 +146,10 @@ public final class itemmap {
         p.put("joust-reduction", "joust_Cd_Reduction");
         p.put("joust-reduction-zeraes", "joust_Cd_Reduction");
         p.put("kick", "kick_min");
-        p.put("kill-skill", "kill-skill"); // TODO
+        p.put("kill-skill", "kill-skill"); // in processor
         p.put("knock", "knockback");
         p.put("leapspeed", "leapspeed");
-        p.put("levelup-skill", "levelup-skill"); // todo
+        p.put("levelup-skill", "levelup-skill"); // in processor
         p.put("lifesteal", "life_leech");
         p.put("lifesteal-cap", "lifesteal_cap");
         p.put("light", "light_radius");
@@ -168,10 +168,10 @@ public final class itemmap {
         p.put("manasteal", "mana_leech");
         p.put("maxcurse", "maxcurse");
         p.put("maxlevel-clout", "maxlevel-clout"); // ignore
-        p.put("mindmg/energy", "mindmg/energy"); // todo
+        p.put("mindmg/energy", "mindmg_energy");
         p.put("move2", "frw");
         p.put("nec", "skills_necromancer");
-        p.put("no-wolves", "no-wolves"); // todo
+        p.put("no-wolves", "no_wolves");
         p.put("nofreeze", "cbf");
         p.put("noheal", "pmh");
         p.put("openwounds", "owounds");
@@ -183,12 +183,12 @@ public final class itemmap {
         p.put("pierce-ltng", "enemy_lRes");
         p.put("pierce-phys", "enemy_phyRes");
         p.put("pierce-pois", "enemy_pRes");
-        p.put("pois-len", "pois-len"); // TODO
-        p.put("pois-max", "pois-max"); // TODO
-        p.put("pois-min", "pois-min"); // TODO
+        p.put("pois-len", "pDamage_duration");
+        p.put("pois-max", "pDamage_max");
+        p.put("pois-min", "pDamage_min");
         p.put("poisskill", "skills_poison_all");
-        p.put("randclassskill1", "randclassskill1"); // TODO
-        p.put("randclassskill2", "randclassskill2"); // TODO
+        p.put("randclassskill1", "randclassskill1"); // torch unused
+        p.put("randclassskill2", "randclassskill2"); // spiritward
         p.put("rathma-clout", "rathma-clout"); // ignore
         p.put("reanimate", "reanimate");
         p.put("red-dmg", "mAbsorb_flat");
@@ -201,7 +201,7 @@ public final class itemmap {
         p.put("rep-charge", "autoreplenish");
         p.put("rep-dur", "autorepair");
         p.put("res-all", "all_res");
-        p.put("res-all-max", "res-all-max"); // todo
+        p.put("res-all-max", "res-all-max"); // in processor
         p.put("res-cold", "cRes");
         p.put("res-cold-max", "cRes_max");
         p.put("res-fire", "fRes");
@@ -213,23 +213,23 @@ public final class itemmap {
         p.put("res-pois-max", "pRes_max");
         p.put("rip", "peace");
         p.put("skill", "skill");
-        p.put("skill-rand", "skill-rand"); // todo important
+        p.put("skill-rand", "skill-rand"); // in processor
         p.put("skilltab", "skilltab"); // done in java
         p.put("slow", "slows_target");
         p.put("sock", "sockets");
-        // p.put("socketed-text", "socketed-text");
+        p.put("socketed-text", "socketed-text"); // ignored
         p.put("sor", "skills_sorceress");
-        p.put("sorc-skill-rand-ctc", "sorc-skill-rand-ctc"); // todo
-        p.put("splash%/missinghp%", "splash%/missinghp%"); // todo
+        p.put("sorc-skill-rand-ctc", "sorc_skill_rand_ctc");
+        p.put("splash%/missinghp%", "splash_missinghp");
         p.put("stam", "stamina");
         p.put("stamdrain", "slower_stam_drain");
-        p.put("state", "state"); // todo
+        p.put("state", "state"); // ignored is achievement aura
         p.put("str", "strength");
         p.put("str/lvl", "strength_per_level");
         p.put("stupidity", "blind_on_hit");
-        p.put("swing1", "swing1");// todo
-        p.put("swing2", "swing2");// todo
-        p.put("swing3", "swing3");// todo
+        p.put("swing1", "ias");
+        p.put("swing2", "ias");
+        p.put("swing3", "ias");
         p.put("thorns", "thorns");
         p.put("thorns/lvl", "thorns_per_level");
         p.put("vit", "vitality");
