@@ -434,12 +434,12 @@
 						        onContextMenu="equipMerc('helm', 'helm')"></select>
 						<select class="dropdown" id="dropdown_merc_armor" onChange="equipMerc('armor', this.value)"
 						        onContextMenu="equipMerc('armor', 'armor')"></select>
-						<select class="dropdown" id="dropdown_merc_gloves"
-						        onContextMenu="equip('gloves', 'gloves')"></select>
-						<select class="dropdown" id="dropdown_merc_boots"
-						        onContextMenu="equip('boots', 'boots')"></select>
-						<select class="dropdown" id="dropdown_merc_belt"
-						        onContextMenu="equip('belt', 'belt')"></select>
+						<select class="dropdown" id="dropdown_merc_gloves" onChange="equipMerc('gloves', this.value)"
+						        onContextMenu="equipMerc('gloves', 'gloves')"></select>
+						<select class="dropdown" id="dropdown_merc_boots" onChange="equipMerc('boots', this.value)"
+						        onContextMenu="equipMerc('boots', 'boots')"></select>
+						<select class="dropdown" id="dropdown_merc_belt" onChange="equipMerc('belt', this.value)"
+						        onContextMenu="equipMerc('belt', 'belt')"></select>
 						<select class="dropdown" id="dropdown_merc_weapon" onChange="equipMerc('weapon', this.value)"
 						        onContextMenu="equipMerc('weapon', 'weapon')"></select>
 						<select class="dropdown" id="dropdown_merc_offhand" onChange="equipMerc('offhand', this.value)"
@@ -478,6 +478,28 @@
 					        onContextMenu="corrupt('weapon', 'none')"></select>
 					<select class="dropdown" id="corruptions_offhand" onChange="corrupt('offhand', this.value)"
 					        onContextMenu="corrupt('offhand', 'none')"></select>
+					<br/><br/><br/>
+					<div style="display:none;">
+						<select class="dropdown" id="corruptions_merc_helm" onChange="corrupt('merc_helm', this.value)"
+						        onContextMenu="corrupt('merc_helm', 'none')"></select>
+						<select class="dropdown" id="corruptions_merc_armor"
+						        onChange="corrupt('merc_armor', this.value)"
+						        onContextMenu="corrupt('merc_armor', 'none')"></select>
+						<select class="dropdown" id="corruptions_merc_gloves"
+						        onChange="corrupt('merc_gloves', this.value)"
+						        onContextMenu="corrupt('merc_gloves', 'none')"></select>
+						<select class="dropdown" id="corruptions_merc_boots"
+						        onChange="corrupt('merc_boots', this.value)"
+						        onContextMenu="corrupt('merc_boots', 'none')"></select>
+						<select class="dropdown" id="corruptions_merc_belt" onChange="corrupt('merc_belt', this.value)"
+						        onContextMenu="corrupt('merc_belt', 'none')"></select>
+						<select class="dropdown" id="corruptions_merc_weapon"
+						        onChange="corrupt('merc_weapon', this.value)"
+						        onContextMenu="corrupt('merc_weapon', 'none')"></select>
+						<select class="dropdown" id="corruptions_merc_offhand"
+						        onChange="corrupt('merc_offhand', this.value)"
+						        onContextMenu="corrupt('merc_offhand', 'none')"></select>
+					</div>
 				</div> <!-- /Corruption Options -->
 
 				<!--	inventory	-->
@@ -646,6 +668,84 @@
 
 						</map>
 					</div> <!-- /charm inventory -->
+				</div>
+
+				<div class="inventory">
+					<!--	merc inventory	-->
+					<div id="merc_gui_equipment" class="inv-equipment" oncontextmenu="return false">
+						<img usemap="#merc_equipmentmap" id="merc_equipment_grid"
+						     src="./images/merc_equipment_inventory.png">
+
+						<div style="position: relative;">
+							<map id="merc_equipmentmap" name="merc_equipmentmap">
+								<div style="position: relative;">
+									<div id="merc_helm_" class="equipped_helmet equipped_item flex-box"
+									     ondrop="handleSocket(event,'merc_helm',0)"
+									     ondragover="allowSocket(event,'merc_helm')"
+									     onmouseover="equipmentHoverMerc('helm')" onmouseout="equipmentOut()">
+										<img id="merc_helm_image" class="equipment_image"
+										     style="position:absolute; z-index:3;"
+										     src="" onClick="inventoryLeftClick(event,'helm')"
+										     onContextMenu="inventoryRightClick(event,'helm')">
+										<div style="position:absolute; z-index:4;" align="center" id="merc_helm">
+										</div>
+									</div>
+									<div id="merc_armor_" class="equipped_armor equipped_item flex-box"
+									     ondrop="handleSocket(event,'armor',0)"
+									     ondragover="allowSocket(event,'merc_armor')"
+									     onmouseover="equipmentHoverMerc('armor')" onmouseout="equipmentOut()">
+										<img id="merc_armor_image" class="equipment_image" src=""
+										     onClick="inventoryLeftClick(event,'merc_armor')"
+										     onContextMenu="inventoryRightClick(event,'merc_armor')">
+										<div class="equipment_absolute" align="center" id="merc_armor">
+										</div>
+									</div>
+									<div id="merc_gloves" class="equipped_item"
+									     onmouseover="equipmentHoverMerc('gloves')"
+									     onmouseout="equipmentOut()" align="center">
+										<img id="merc_gloves_image" src=""
+										     onClick="inventoryLeftClick(event,'merc_gloves')"
+										     onContextMenu="inventoryRightClick(event,'merc_gloves')">
+									</div>
+									<div id="merc_boots" class="equipped_item" onmouseover="equipmentHoverMerc('boots')"
+									     onmouseout="equipmentOut()" align="center">
+										<img id="merc_boots_image" src=""
+										     onClick="inventoryLeftClick(event,'merc_boots')"
+										     onContextMenu="inventoryRightClick(event,'merc_boots')">
+									</div>
+									<div id="merc_belt" class="equipped_item" onmouseover="equipmentHoverMerc('belt')"
+									     ondrop="handleSocket(event,'merc_belt',0)"
+									     ondragover="allowSocket(event,'merc_belt')"
+									     onmouseout="equipmentOut()" align="center">
+										<img id="merc_belt_image" src="" onClick="inventoryLeftClick(event,'merc_belt')"
+										     onContextMenu="inventoryRightClick(event,'merc_belt')">
+									</div>
+
+									<div id="merc_weapon_" class="equipped_weapon equipped_item flex-box"
+									     ondrop="handleSocket(event,'merc_weapon',0)"
+									     ondragover="allowSocket(event,'merc_weapon')"
+									     onmouseover="equipmentHoverMerc('weapon')" onmouseout="equipmentOut()">
+										<img id="merc_weapon_image" src=""
+										     onClick="inventoryLeftClick(event,'merc_weapon')"
+										     onContextMenu="inventoryRightClick(event,'merc_weapon')">
+										<div class="equipment_absolute" align="center" id="merc_weapon">
+										</div>
+									</div>
+									<div id="merc_offhand_" class="equipped_offhand equipped_item flex-box"
+									     ondrop="handleSocket(event,'merc_offhand',0)"
+									     ondragover="allowSocket(event,'merc_offhand')"
+									     onmouseover="equipmentHoverMerc('offhand')" onmouseout="equipmentOut()">
+										<img id="merc_offhand_image" style="position:absolute; z-index:3;" src=""
+										     onClick="inventoryLeftClick(event,'merc_offhand')"
+										     onContextMenu="inventoryRightClick(event,'merc_offhand')">
+										<div class="equipment_absolute" align="center" id="merc_offhand">
+										</div>
+									</div>
+								</div>
+							</map>
+						</div>
+					</div> <!-- /equipment inventory -->
+
 				</div> <!-- /inventory -->
 
 			</div> <!-- /gui -->
@@ -1072,8 +1172,10 @@ l-26 24 14 -25z"></path>
 				<br/>Planner is still in development<br/>
 					<br/>
 					Large TODO Line items:<br/>
-					Stat corrections, Static Rares & Magic Items<br/>
-					URL Merc, PD2 Merc, Weapon Swap config<br/>
+					Base Stat corrections, Staff FCR automod<br/>
+					Constant Rares & Magic & RW Items<br/>
+					Weapon Swap config<br/>
+					Merc Item Slams & Sockets<br/>
 					Skill stat update, Read only mode
                 </span>
 

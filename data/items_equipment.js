@@ -470,7 +470,7 @@ gloves: [
 boots: [
 {name:"Boots"},
     {name: "Aldur's Advance", base: "Battle Boots", req_level: 45, rarity: "set", set_Ald: 1, set_bonuses: ["set_Ald", {},     {dexterity: 15},     {dexterity: 15},     {dexterity: 15},     {},     {}], indestructible: 1, heal_stam: 32, life: 50, damage_to_mana: 10, frw: 40, stamina: 180, fRes: 50, img: "Aldur's_Advance"},
-    {name: "Cow King's Hoofs", base: "Heavy Boots", req_level: 13, rarity: "set", set_Cow: 1, set_bonuses: ["set_Cow", {},     {},     {},     {},     {},     {}], defense: 35, frw: 30, mf: 25, dexterity: 20, fDamage_max: 35, img: "Cow_King's_Hoofs"},
+    {name: "Cow King's Hooves", base: "Heavy Boots", req_level: 13, rarity: "set", set_Cow: 1, set_bonuses: ["set_Cow", {},     {},     {},     {},     {},     {}], defense: 35, frw: 30, mf: 25, dexterity: 20, fDamage_max: 35, img: "Cow_King's_Hooves"},
     {name: "Goblin Toe", base: "Light Plated Boots", req_level: 22, cblow: 25, damage_reduced: 5, mDamage_reduced: 5, defense: 15, frw: 20, defense_bonus: 60, e_damage: 30, img: "Goblin_Toe"},
     {name: "Gore Rider", base: "War Boots", req_level: 47, req: -25, dstrike: 20, frw: 30, cblow: 15, owounds: 10, defense_bonus: 200, durability_extra: 10, owounds_dps: 200, img: "Gore_Rider"},
     {name: "Gorefoot", base: "Heavy Boots", req_level: 12, bloody: 5, frw: 25, mana_leech: 4, leapspeed: 30, defense_bonus: 30, skill_Leap: 2, img: "Gorefoot"},

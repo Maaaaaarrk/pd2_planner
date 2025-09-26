@@ -797,7 +797,7 @@ public final class itemmap {
         ncc.put("McAuley's Riprap", "Sander's Riprap");
         ncc.put("McAuley's Taboo", "Sander's Taboo");
         ncc.put("McAuley's Superstition", "Sander's Superstition");
-
+        ncc.put("Cow King's Hoofs", "Cow King's Hooves");
         // ncc.put("", "");
 
         Map<String, String> lowercased = new LinkedHashMap<>(ncc.size());

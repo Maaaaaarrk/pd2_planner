@@ -838,6 +838,20 @@ function equipMerc(group, val) {
 		}
 		updateMercenary()
 	}
+
+		// set inventory image
+    	if (mercEquipped[group].name != "none") {
+    		var src = "";
+    		var base = "";
+    		if (typeof(mercEquipped[group].img) != 'undefined') { src = mercEquipped[group].img }
+    		if (typeof(mercEquipped[group].base) != 'undefined') { base = mercEquipped[group].base }
+    		document.getElementById("merc_"+group+"_image").src = getItemImage(group,base,src,mercEquipped[group].type);
+    	} else {
+    		var img = "./images/items/none.png"
+    		if (group == "helm" || group == "armor" || group == "boots" || group == "belt" || group == "weapon" || group == "offhand") { img = "./images/items/blank_"+group+".png" }
+    		document.getElementById("merc_"+group+"_image").src = img
+    		document.getElementById("tooltip_inventory").style.display = "none"
+    	}
 	if (auraName != "" && auraLevel != 0) {
 		addEffect("aura",auraName,auraLevel,"mercenary_"+group)
 	}
@@ -1100,7 +1114,7 @@ function equip(group, val) {
 		} else if(twoHanded == 1 || corruptsEquipped[group].name.includes("Sockets")){
 		// ignore these
 		} else if(corruptsEquipped[group].name != null){
-		console.log("corruptsEquipped[group].name: " + corruptsEquipped[group].name);
+	//	console.log("corruptsEquipped[group].name: " + corruptsEquipped[group].name);
 	        adjustCorruptionSocketsMax(group);
 		}
 
@@ -1112,7 +1126,7 @@ function equip(group, val) {
 		var base = "";
 		if (typeof(equipped[group].img) != 'undefined') { src = equipped[group].img }
 		if (typeof(equipped[group].base) != 'undefined') { base = equipped[group].base }
-		document.getElementById(group+"_image").src = getItemImage(group,base,src)
+		document.getElementById(group+"_image").src = getItemImage(group,base,src,equipped[group].type)
 	} else {
 		var img = "./images/items/none.png"
 		if (group == "helm" || group == "armor" || group == "boots" || group == "belt" || group == "weapon" || group == "offhand") { img = "./images/items/blank_"+group+".png" }
@@ -1415,14 +1429,33 @@ function loadItems(group, dropdown, className) {
 		var choices_offhand = "";
 		for (itemNew in equipment[group]) {
 			var item = equipment[group][itemNew];
-			if (typeof(item.only) == 'undefined' || item.only == className) {
+			// || item.only == className) {
 				var halt = 0;
-				if (className == "clear") { halt = 1 }
-				if (typeof(item.not) != 'undefined') { for (let l = 0; l < item.not.length; l++) { if (item.not[l] == className) { halt = 1 } } }
-				if (className == "Rogue Scout") { if (group == "offhand" || (group == "weapon" && item.type != "bow" && item.type != "crossbow" && item.name != "Weapon")) { halt = 1 } }
-				if (className == "Desert Guard") { if (group == "offhand" || (group == "weapon" && item.type != "polearm" && item.type != "spear" && item.name != "Weapon")) { halt = 1 } }
-				if (className == "Iron Wolf") { if ((group == "offhand" && item.type != "shield" && item.name != "Offhand") || (group == "weapon" && (item.type != "sword" || typeof(item.twoHanded) != 'undefined') && item.name != "Weapon")) { halt = 1 } }
-				if (className == "Barb (merc)") { if (group == "offhand" || (group == "weapon" && item.type != "sword" && item.name != "Weapon")) { halt = 1 } }
+				if(typeof(item.only) != 'undefined')
+				 if(item.only != className){
+				    halt = 1;
+				    if (className == "Barb (merc)" && item.only  == "barbarian"){
+				        halt = 0;
+				    }
+				    if (className == "Rogue Scout" && item.only  == "amazon" && (item.type == "bow" || item.type == "crossbow")){
+				        halt = 0;
+				    }
+				    if (className == "Iron Wolf" && item.only  == "sorceress"){
+				        halt = 0;
+				    }
+				    if (className == "Iron Wolf" && item.only  == "paladin"){
+				        halt = 0;
+				    }
+				 }
+				if (halt == 0) {
+                    if (className == "clear") { halt = 1 }
+                    if (typeof(item.not) != 'undefined') { for (let l = 0; l < item.not.length; l++) { if (item.not[l] == className) { halt = 1 } } }
+                    if (className == "Rogue Scout") { if (group == "offhand" || (group == "weapon" && item.type != "bow" && item.type != "crossbow" && item.name != "Weapon")) { halt = 1 } }
+                    if (className == "Desert Guard") { if (group == "offhand" || (group == "weapon" && item.type != "polearm" && item.type != "spear" && item.name != "Weapon")) { halt = 1 } }
+                    if (className == "Iron Wolf") { if ((group == "offhand" && item.type != "shield" && item.name != "Offhand") || (group == "weapon" && ((item.type != "sword" && item.type != "orb") || typeof(item.twoHanded) != 'undefined') && item.name != "Weapon")) { halt = 1 } }
+                    if (className == "Ascendant") { if (group == "offhand" || (group == "weapon" && item.type != "staff" && item.name != "Weapon")) { halt = 1 } }
+                    if (className == "Barb (merc)") { if (group == "offhand" || (group == "weapon" && item.type != "sword" && item.name != "Weapon")) { halt = 1 } }
+				}
 				if (halt == 0) {
 					var addon = "";
 					if (choices == "") {
@@ -1452,7 +1485,7 @@ function loadItems(group, dropdown, className) {
 					if (className == "assassin" && item.type == "claw") { choices_offhand += addon }
 					if (className == "barbarian" && item.name != "Weapon" && (typeof(item.twoHanded) == 'undefined' || item.twoHanded != 1 || item.type == "sword")) { choices_offhand += addon }
 				}
-			}
+
 		}
 		if (group == "weapon") { offhandSetup = choices_offhand }
 		if (className == "barbarian" && group == "offhand") { choices += offhandSetup }	// weapons inserted into offhand dropdown list
@@ -1540,16 +1573,39 @@ function setMercenary(merc) {
 	if (document.getElementById("dropdown_merc_belt").innerHTML != "") { equipMerc('belt', 'belt'); }
 	if (document.getElementById("dropdown_merc_weapon").innerHTML != "") { equipMerc('weapon', 'weapon'); }
 	if (document.getElementById("dropdown_merc_offhand").innerHTML != "") { equipMerc('offhand', 'offhand'); }
-	if (mercenary.base_aura != "") { removeEffect(mercenary.base_aura.split(' ').join('_')+"-mercenary"); mercenary.base_aura = ""; }
+	if (mercenary.base_aura !=null && mercenary.base_aura != "") { removeEffect(mercenary.base_aura.split(' ').join('_')+"-mercenary"); mercenary.base_aura = ""; }
 	var mercType = merc;
 	if (merc == "none" || merc == "­ ­ ­ ­ Mercenary") {
 		for (let i = 0; i < mercEquipmentGroups.length; i++) { loadItems(mercEquipmentGroups[i], mercEquipmentDropdowns[i], "clear") }
 		document.getElementById("dropdown_mercenary").selectedIndex = 0;
 	} else {
-		if (merc == mercenaries[1].name) { mercType = "Rogue Scout" }
-		if (merc == mercenaries[2].name || merc == mercenaries[3].name || merc == mercenaries[4].name) { mercType = "Desert Guard" }
-		if (merc == mercenaries[5].name || merc == mercenaries[6].name || merc == mercenaries[7].name) { mercType = "Iron Wolf" }
-		if (merc == mercenaries[8].name) { mercType = "Barb (merc)" }
+	/*
+	var mercenaries = [
+    {name:"Mercenary"},
+    {i:1, name:"Rogue Scout ­ ­ ­ ­ ­ (Meditation)", aura:"Meditation"},
+    {i:2, name:"Rogue Scout ­ ­ ­ ­ ­ (Vigor)", aura:"Vigor"},
+    {i:3, name:"Rogue Scout ­ ­ ­ ­ ­ (Slow Movement)", aura:"Slow Movement"},
+
+    {i:4, name:"Desert Guard ­ ­ ­ ­ (Blessed Aim)", aura:"Blessed Aim"},
+    {i:5, name:"Desert Guard ­ ­ ­ ­ (Defiance)", aura:"Defiance"},
+    {i:6, name:"Desert Guard ­ ­ ­ ­ (Thorns)", aura:"Thorns"},
+
+    {i:7, name:"Iron Wolf ­ ­ ­ ­ ­ ­ ­ ­ ­ ­ ­ (Prayer)", aura:"Prayer"},
+    {i:8, name:"Iron Wolf ­ ­ ­ ­ ­ ­ ­ ­ ­ ­ ­ (Cleansing)", aura:"Cleansing"},
+    {i:9, name:"Iron Wolf ­ ­ ­ ­ ­ ­ ­ ­ ­ ­ ­ (Static Field)", aura:"Static Field"},
+
+    {i:10, name:"Ascendant ­ ­ ­ ­ ­ ­ ­ ­ ­ (Amplify Damage)", aura:"Amplify Damage"},
+    {i:11, name:"Ascendant ­ ­ ­ ­ ­ ­ ­ ­ ­ (Sanctuary)", aura:"Sanctuary"},
+
+    {i:12, name:"Barbarian ­ ­ ­ ­ ­ ­ ­ ­ ­ ­ (Might)", aura:"Might"},
+    {i:13, name:"Barbarian ­ ­ ­ ­ ­ ­ ­ ­ ­ ­ (Battle Orders)", aura:"Battle Orders"},
+    ];
+	*/
+		if (merc == mercenaries[1].name || merc == mercenaries[2].name || merc == mercenaries[3].name ) { mercType = "Rogue Scout" }
+		if (merc == mercenaries[4].name || merc == mercenaries[5].name || merc == mercenaries[6].name) { mercType = "Desert Guard" }
+		if (merc == mercenaries[7].name || merc == mercenaries[8].name || merc == mercenaries[9].name) { mercType = "Iron Wolf" }
+		if (merc == mercenaries[10].name || merc == mercenaries[11].name) { mercType = "Ascendant" }
+		if (merc == mercenaries[12].name || merc == mercenaries[13].name) { mercType = "Barb (merc)" }
 		for (let i = 0; i < mercEquipmentGroups.length; i++) { loadItems(mercEquipmentGroups[i], mercEquipmentDropdowns[i], mercType) }
 		for (let m = 1; m < mercenaries.length; m++) {
 			if (merc == mercenaries[m].name) { document.getElementById("dropdown_mercenary").selectedIndex = m; if (mercenary.base_aura == "") {
@@ -2618,7 +2674,8 @@ function setCharacterInfo(className) {
 //	source: specified file name, if it has one (use "" if none)
 // return: filename of item's image
 // ---------------------------------
-function getItemImage(group, base_name, source) {
+function getItemImage(group, base_name, source, type) {
+// console.log("group "+group+" base_name "+base_name+" source "+source);
 	var prefix = "./images/items/"
 	var filename = source
 	var base = getBaseId(base_name);
@@ -2627,7 +2684,7 @@ function getItemImage(group, base_name, source) {
 		else {
 			prefix += (bases[base].group + "/")
 			if (bases[base].group == "weapon") {
-				var type = equipped[group].type;
+				//var type = equipped[group].type;
 				if (type == "hammer" || type == "club") { type = "mace" }
 				prefix += (type + "/")
 			}
@@ -2653,7 +2710,7 @@ function getItemImage(group, base_name, source) {
 		// quest weapons, unique quiver/jewelry
 		if (source != "") {
 			if (group == "weapon" || (group == "offhand" && offhandType == "weapon")) {
-				var type = equipped[group].type;
+				//var type = equipped[group].type;
 				if (type == "hammer" || type == "club") { type = "mace" }
 				prefix += ("weapon/" + type + "/special/")
 			} else {
@@ -2847,6 +2904,230 @@ function itemHover(ev, id) {
 // ---------------------------------
 function itemOut() {
 	document.getElementById("tooltip_inventory").style.display = "none"
+}
+
+//equipmentHoverMerc
+// mercEquipped
+function equipmentHoverMerc(group) {
+	var offset_x = 0;//350;
+	var offset_y = 433;
+	var groupId = "merc_"+group;
+	if (group == "helm" || group == "armor" || group == "weapon" || group == "offhand") { groupId +="_" }
+	var name = "";
+	var sock = "";
+	var base = "";
+//	console.log(group);
+	if (mercEquipped[group].name != "none" && (group == "helm" || group == "armor" || group == "weapon" || (group == "offhand" && mercEquipped[group].type != "quiver"))) {
+		var sockets = ~~corruptsEquipped[group].sockets + ~~mercEquipped[group].sockets;
+		sockets = Math.min(sockets,mercEquipped[group].max_sockets)
+		if (socketed[group].sockets > 0 || mercEquipped[group].sockets > 0) {
+			if (corruptsEquipped[group].name == "none") { sock = "<font color='"+colors.Gray+"'> ["+sockets+"]</font>" }
+			else { sock = "<font color='"+colors.Red+"'> ["+sockets+"]</font>" }
+		}
+	}
+	if (typeof(mercEquipped[group].base) != 'undefined' && mercEquipped[group].base != "") { base = mercEquipped[group].base }
+	else if (mercEquipped[group].name != "none" && (group == "ring1" || group == "ring2")) { base = "Ring" }
+	else if (mercEquipped[group].name != "none" && group == "amulet") { base = "Amulet" }
+	else if (mercEquipped[group].type == "quiver") { base = "Arrows" }
+	else if (mercEquipped[group].type == "jewel") { base = "Jewel" }
+	else if (mercEquipped[group].size == "small") { base = "Small Charm" }
+	else if (mercEquipped[group].size == "large") { base = "Large Charm" }
+	else if (mercEquipped[group].size == "grand") { base = "Grand Charm" }
+
+	if (mercEquipped[group].name != "none") { name = mercEquipped[group].name.split(" ­ ")[0].split(" (")[0]; }
+	if (base.split("_")[0] != "Special") { base = "<br>"+base }
+	if (mercEquipped[group].rarity == "common" || mercEquipped[group].rarity == "magic") { base = "" }
+	var corruption = "";
+	var affixes = "";
+	var main_affixes = "";
+	var socketed_affixes = "";
+	var set_affixes = "";
+	var set_group_affixes = "";
+	if (mercEquipped[group].name != "none" && corruptsEquipped[group].name != "none") {
+		for (affix in corruptsEquipped[group]) {
+			if ( stats[affix] != 1) {//stats[affix] != unmercEquipped[affix] &&
+				var halt = 0; if (affix == "sockets" && corruptsEquipped[group].name != "+ Sockets") { halt = 1; }
+				var affix_info = getAffixLine(affix,"corruptsEquipped",group,"");
+				if (affix_info[1] != 0 && halt == 0) { corruption += affix_info[0]+"<br>" }
+			}
+		}
+	}
+	for (affix in mercEquipped[group]) {
+	//mercEquipped[group][affix] != unmercEquipped[affix] && stats[affix] != unmercEquipped[affix] &&
+		if (stats[affix] != 1 && affix != "velocity" && affix != "smite_min") {
+			var affix_info = getAffixLine(affix,"mercEquipped",group,"");
+			if (affix_info[1] != 0) {
+				if (affix == "boss_item" || affix == "base_damage_min" || affix == "base_defense" || affix == "req_level" || affix == "req_strength" || affix == "req_dexterity" || affix == "durability" || affix == "baseSpeed" || affix == "range" || affix == "throw_min" || affix == "base_min_alternate" || affix == "block" || affix == "velocity") { main_affixes += affix_info[0]+"<br>" }
+				else { affixes += affix_info[0]+"<br>" }
+			}
+		}
+	}
+	if (mercEquipped[group].name != "none" && (group == "helm" || group == "armor" || group == "weapon" || group == "offhand" || group == "belt" || group == "amulet")) {
+		updateSocketTotals()
+		for (affix in socketed[group].totals) {
+			if (stats[affix] != 1 && affix != "req_level" && affix != "ctc") { //stats[affix] != unmercEquipped[affix] &&
+				var affix_info = getAffixLine(affix,"socketed",group,"");
+				if (affix_info[1] != 0) { socketed_affixes += affix_info[0]+"<br>" }
+			}
+		}
+		var ctc_possible = ["100% chance to cast level 29 Blaze when you level up","100% chance to cast level 43 Frost Nova when you level up","100% chance to cast level 41 Nova when you level up","100% chance to cast level 23 Venom when you level up"];
+		var ctc_included = [0,0,0,0];
+		for (let i = 0; i < socketed[group].items.length; i++) { for (affix in socketed[group].items[i]) { if (affix == "ctc") {
+			var source = socketed[group].items[i];
+			var affix_line = "";
+			for (let j = 0; j < source[affix].length; j++) {
+				var line = source[affix][j][0]+"% chance to cast level "+source[affix][j][1]+" "+source[affix][j][2]+" "+source[affix][j][3];
+				for (let k = 0; k < ctc_possible.length; k++) { if (line == ctc_possible[k]) {
+					if (ctc_included[k] == 0) { affix_line += line+"<br>" }
+					ctc_included[k] = 1
+				} }
+			}
+			socketed_affixes += affix_line
+		} } }
+	}
+	// TODO: Reduce duplicated code from set bonuses - rewrite getAffixLine?
+	if (typeof(mercEquipped[group].rarity) != 'undefined') { if (mercEquipped[group].rarity == "set") {
+		var bonuses = mercEquipped[group].set_bonuses;
+		var set = bonuses[0];
+		var group_bonuses = sets[set];
+		var amount = Math.round(character[set]);
+		var list_bonuses = {};
+		var list_group_bonuses = {};
+		for (let i = 1; i < bonuses.length; i++) {
+			if (amount >= i) {
+				for (affix in bonuses[i]) {
+					if (typeof(list_bonuses[affix]) == 'undefined') { list_bonuses[affix] = 0 }
+					list_bonuses[affix] += bonuses[i][affix]
+				}
+			}
+		}
+		for (let i = 1; i < group_bonuses.length; i++) {
+			if (amount >= i) {
+				for (affix in group_bonuses[i]) {
+					if (typeof(list_group_bonuses[affix]) == 'undefined') { list_group_bonuses[affix] = 0 }
+					list_group_bonuses[affix] += group_bonuses[i][affix]
+				}
+			}
+		}
+		for (affix in list_bonuses) { if ( stats[affix] != 1) {//stats[affix] != unmercEquipped[affix] &&
+			var source = list_bonuses;
+			var affix_line = "";
+			var value = source[affix];
+			var value_combined = ~~value;
+			var halt = false;
+			var both = 0;
+			var stat = stats[affix];
+			if (stat.alt != null) {
+				if (typeof(source[stat.index[0]]) != 'undefined' && typeof(source[stat.index[1]]) != 'undefined') { if (source[stat.index[0]] > 0 && source[stat.index[1]] > 0) { both = 1; if (stat.index[1] == affix) { halt = true } } }
+				if (both == 0) { stat = null; stat = stats_alternate[affix]; }
+			}
+			for (let i = 0; i < stat.index.length; i++) {
+				value = source[stat.index[i]]
+				if (value == 'undefined') { value = 0 }
+				if (isNaN(value) == false) { value_combined += value }
+				var rounding = true;
+				if (stat.mult != null) {
+					if (stat.mult[i] != 1) { value *= character[stat.mult[i]] }
+					else { rounding = false }
+				}
+				if (isNaN(value) == false && rounding == true) { value = round(value) }
+				var affix_text = stat.format[i];
+				if (value < 0 && affix_text[affix_text.length-1] == "+") { affix_text = affix_text.slice(0,affix_text.length-1) }
+				affix_line += affix_text
+				affix_line += value
+			}
+			var affix_text = stat.format[stat.index.length];
+			affix_line += affix_text
+			if (halt == true) { value_combined = 0 }
+			if (value_combined != 0) { set_affixes += affix_line+"<br>" }
+		} }
+		for (affix in list_group_bonuses) { if ( stats[affix] != 1) { //stats[affix] != unmercEquipped[affix] &&
+			var source = list_group_bonuses;
+			var affix_line = "";
+			var value = source[affix];
+			var value_combined = ~~value;
+			var halt = false;
+			var both = 0;
+			var stat = stats[affix];
+			if (stat.alt != null) {
+				if (typeof(source[stat.index[0]]) != 'undefined' && typeof(source[stat.index[1]]) != 'undefined') { if (source[stat.index[0]] > 0 && source[stat.index[1]] > 0) { both = 1; if (stat.index[1] == affix) { halt = true } } }
+				if (both == 0) { stat = null; stat = stats_alternate[affix]; }
+			}
+			for (let i = 0; i < stat.index.length; i++) {
+				value = source[stat.index[i]]
+				if (value == 'undefined') { value = 0 }
+				if (isNaN(value) == false) { value_combined += value }
+				var rounding = true;
+				if (stat.mult != null) {
+					if (stat.mult[i] != 1) { value *= character[stat.mult[i]] }
+					else { rounding = false }
+				}
+				if (isNaN(value) == false && rounding == true) { value = round(value) }
+				var affix_text = stat.format[i];
+				if (value < 0 && affix_text[affix_text.length-1] == "+") { affix_text = affix_text.slice(0,affix_text.length-1) }
+				affix_line += affix_text
+				affix_line += value
+			}
+			var affix_text = stat.format[stat.index.length];
+			affix_line += affix_text
+			if (halt == true) { value_combined = 0 }
+			if (value_combined != 0) { set_group_affixes += affix_line+"<br>" }
+		} }
+		if (set_group_affixes != "") { set_group_affixes = "<br>"+group_bonuses[0]+":<br>"+set_group_affixes }
+	} }
+	if (socketed_affixes != "") { socketed_affixes = "<br>"+socketed_affixes }
+	var runeword = "";
+	if (mercEquipped[group].rarity == "rw") {
+		var rw_name = mercEquipped[group].name.split(" ­ ")[0].split(" ").join("_").split("'").join("");
+		var runes = "";
+		var i = 0;
+		for (i = 0; i < runewords[rw_name].length; i++) { runes += runewords[rw_name][i]; }
+		runeword = "<br>"+"<font color='"+colors.Gold+"'>'"+runes+"'</font>"
+		name = "<font color='"+colors.Gold+"'>"+name+"</font>"
+		affixes += "Socketed ("+i+")<br>"
+	}
+	document.getElementById("item_name").innerHTML = name+sock+base+runeword
+	document.getElementById("item_info").innerHTML = main_affixes
+	document.getElementById("item_corruption").innerHTML = corruption
+	document.getElementById("item_affixes").innerHTML = affixes
+	document.getElementById("item_set_affixes").innerHTML = set_affixes
+	document.getElementById("item_socketed_affixes").innerHTML = socketed_affixes
+	document.getElementById("item_group_affixes").innerHTML = set_group_affixes
+
+	var textColor = "Gold";
+	if (mercEquipped[group].rarity == "set") { textColor = "Green" }
+	else if (mercEquipped[group].rarity == "magic") { textColor = "Blue" }
+	else if (mercEquipped[group].rarity == "rare") { textColor = "Yellow" }
+	else if (mercEquipped[group].rarity == "craft") { textColor = "Orange" }
+	else if ((mercEquipped[group].rarity == "common" || mercEquipped[group].rarity == "rw") && mercEquipped[group].ethereal == 1) { textColor = "Gray" }
+	else if (mercEquipped[group].rarity == "common" || mercEquipped[group].rarity == "rw") { textColor = "White" }
+	document.getElementById("item_name").style.color = colors[textColor]
+	if(document.getElementById("item_info").innerHTML === "") {
+	   document.getElementById("tooltip_inventory").style.display = "none"
+	} else {
+	   document.getElementById("tooltip_inventory").style.display = "block"
+	}
+
+	var wid = Math.floor(document.getElementById(groupId).getBoundingClientRect().width/2 - document.getElementById("tooltip_inventory").getBoundingClientRect().width/2);
+	if (name != "") {
+		if (groupId == "merc_helm_") { offset_x += 2*30+wid; offset_y += 60;
+		} else if (groupId == "merc_armor_") { offset_x += 4*30+wid; offset_y += 90;
+		} else if (groupId == "merc_gloves") { offset_x += 6*30+wid; offset_y += 60;
+		} else if (groupId == "merc_boots") { offset_x += 6*30+wid; offset_y += 120;
+		} else if (groupId == "merc_belt") { offset_x += 4*30+wid; offset_y += 120;
+		} else if (groupId == "merc_amulet") { offset_x += 2.5*30+wid; offset_y += 90;
+		} else if (groupId == "merc_ring1") { offset_x += 2*30+wid; offset_y += 120;
+		} else if (groupId == "merc_ring2") { offset_x += 3*30+wid; offset_y += 120;
+		} else if (groupId == "merc_weapon_") { offset_x += 0+wid; offset_y += 120;
+		} else if (groupId == "merc_offhand_") { offset_x += 8*30+wid; offset_y += 120;
+		}
+		if(offset_x-document.getElementById("tooltip_inventory").getBoundingClientRect().width/2 <0){
+        	offset_x=0;
+        }
+		document.getElementById("tooltip_inventory").style.top = offset_y+"px"
+		document.getElementById("tooltip_inventory").style.left = offset_x+"px"
+	}
+	if (name == "") { document.getElementById("tooltip_inventory").style.left = 950+"px" }
 }
 
 // equipmentHover - shows equipment info on mouse-over
@@ -3086,12 +3367,14 @@ function equipmentOut() {
 function getAffixLine(affix, loc, group, subgroup) {
 	var source;
 	if (loc == "equipped") { source = equipped[group]; }
-	else if (loc == "corruptsEquipped") { source = corruptsEquipped[group]; }
+    else if (loc == "mercEquipped") { source = mercEquipped[group]; }
+    else if (loc == "corruptsEquipped") { source = corruptsEquipped[group]; }
 	else if (loc == "charms") { source = equipped.charms[group]; }
 	else if (loc == "socketables") { source = socketables[group]; if (subgroup != "") { source = socketables[group][subgroup] } }
 	else if (loc == "socketed") { source = socketed[group].totals; }
 	else if (loc = "effects") { source = effects[group]; }
 	var affix_line = "";
+//	console.log("affix "+affix+" loc "+ loc+ " group "+group+" subgroup "+ subgroup);
 	var value = source[affix];
 	var value_combined = ~~value;
 	var halt = false;
@@ -4760,7 +5043,7 @@ function updateURL() {
 	params.delete('selected')
 	for (group in corruptsEquipped) { params.delete(group) }
 	params.delete('effect')
-	params.delete('mercenary')
+	//params.delete('mercenary')
 	params.delete('irongolem')
 
 	//if (game_version == 2) {	// these features are only available on the PoD version
@@ -4787,13 +5070,13 @@ function updateURL() {
 		params.append('effect', param_effect)
 	} }
 		
-	if (game_version == 2) {	// these features are only available on the PoD version
+	//if (game_version == 2) {	// these features are only available on the PoD version
 		var param_mercenary = mercenary.name;
 		if (mercenary.name == "­ ­ ­ ­ Mercenary") { param_mercenary = "none" }
 		for (group in mercEquipped) { param_mercenary += ','+mercEquipped[group].name }
 		params.set('mercenary', param_mercenary)
 		if (golemItem.name != "none") { params.set('irongolem', golemItem.name) }
-	}
+	//}
 	
 	params.delete('charm')
 	for (charm in equipped.charms) { if (typeof(equipped.charms[charm].name) != 'undefined' && equipped.charms[charm].name != 'none') { params.append('charm', equipped.charms[charm].name) }}

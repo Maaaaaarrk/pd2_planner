@@ -1,5 +1,6 @@
 
-fileInfo = {character:{class_name:""},skills:[],equipped:{charms:[]},corruptsEquipped:{},mercEquipped:{},socketed:{helm:[],armor:[],weapon:[],offhand:[]},effects:{},selectedSkill:["",""],mercenary:"",settings:{},ironGolem:""};
+fileInfo = {character:{class_name:""},skills:[],equipped:{charms:[]},corruptsEquipped:{},mercEquipped:{},
+socketed:{belt:[],amulet:[],helm:[],armor:[],weapon:[],offhand:[]},effects:{},selectedSkill:["",""],mercenary:"",settings:{},ironGolem:""};
 fileText = "";
 character = {};
 var skill_bonuses = {stamina_skillup:0, frw_skillup:0, defense_skillup:0, resistance_skillup:0, cstrike_skillup:0, ar_skillup:0, ar_skillup2:0, pierce_skillup:0, fRes_skillup:0, cRes_skillup:0, lRes_skillup:0, pRes_skillup:0, block_skillup:0, velocity_skillup:0, edged_damage:0, edged_ar:0, edged_cstrike:0, pole_damage:0, pole_ar:0, pole_cstrike:0, blunt_damage:0, blunt_ar:0, blunt_cstrike:0, thrown_damage:0, thrown_ar:0, thrown_pierce:0, claw_damage:0, claw_ar:0, claw_cstrike:0};
@@ -32,6 +33,11 @@ var socketed = {	// Gems/Runes/Jewels Socketed in Equipment
 	armor:{sockets:0, socketsFilled:0, totals:{}, items:[{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""}]},
 	weapon:{sockets:0, socketsFilled:0, totals:{}, items:[{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""}]},
 	offhand:{sockets:0, socketsFilled:0, totals:{}, items:[{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""}]},
+	merc_belt:{sockets:0, socketsFilled:0, totals:{}, items:[{id:"",name:""}]},
+	merc_helm:{sockets:0, socketsFilled:0, totals:{}, items:[{id:"",name:""},{id:"",name:""},{id:"",name:""}]},
+	merc_armor:{sockets:0, socketsFilled:0, totals:{}, items:[{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""}]},
+	merc_weapon:{sockets:0, socketsFilled:0, totals:{}, items:[{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""}]},
+	merc_offhand:{sockets:0, socketsFilled:0, totals:{}, items:[{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""}]},
 };
 
 var inv = [		// Charm Inventory
@@ -59,8 +65,11 @@ var colors = {
 };
 
 var equipped = { helm:{name:"none",tier:0}, armor:{name:"none",tier:0}, gloves:{name:"none",tier:0}, boots:{name:"none",tier:0}, belt:{name:"none",tier:0}, amulet:{name:"none",tier:0}, ring1:{name:"none",tier:0}, ring2:{name:"none",tier:0}, weapon:{name:"none",tier:0,twoHanded:0,type:""}, offhand:{name:"none",tier:0,type:""}, charms:{name:"none"} };
-var mercEquipped = { helm:{name:"none"}, armor:{name:"none"}, weapon:{name:"none"}, offhand:{name:"none"} };
-var corruptsEquipped = { helm:{name:"none"}, armor:{name:"none"}, gloves:{name:"none"}, boots:{name:"none"}, belt:{name:"none"}, amulet:{name:"none"}, ring1:{name:"none"}, ring2:{name:"none"}, weapon:{name:"none"}, offhand:{name:"none"} };
+var mercEquipped = { helm:{name:"none"}, armor:{name:"none"}, weapon:{name:"none"}, offhand:{name:"none"}, gloves:{name:"none"}, boots:{name:"none"}, belt:{name:"none"} };
+var corruptsEquipped = {helm:{name:"none"}, armor:{name:"none"}, gloves:{name:"none"}, boots:{name:"none"}, belt:{name:"none"},
+amulet:{name:"none"}, ring1:{name:"none"}, ring2:{name:"none"}, weapon:{name:"none"}, offhand:{name:"none"},
+merc_helm:{name:"none"}, merc_armor:{name:"none"}, merc_gloves:{name:"none"}, merc_boots:{name:"none"}, merc_belt:{name:"none"},
+merc_weapon:{name:"none"}, merc_offhand:{name:"none"}};
 var golemItem = {name:"none"};
 
 var oskills = ["oskill_Warp","oskill_Ball_Lightning","oskill_Inner_Sight","oskill_Lethal_Strike","oskill_Valkyrie","oskill_Magic_Arrow","oskill_Guided_Arrow","oskill_Multiple_Shot","oskill_Battle_Command","oskill_Battle_Orders","oskill_Battle_Cry","oskill_Bash","oskill_Edged_Weapon_Mastery","oskill_Lycanthropy","oskill_Werebear","oskill_Werewolf","oskill_Feral_Rage","oskill_Flame_Dash","oskill_Summon_Dire_Wolf","oskill_Desecrate","oskill_Zeal","oskill_Vengeance","oskill_Frigerate","oskill_Shiver_Armor","oskill_Cold_Mastery","oskill_Hydra","oskill_Fire_Ball","oskill_Fire_Wall","oskill_Meteor","oskill_Fire_Mastery","oskill_Whirlwind","oskill_Heart_of_Wolverine"];
@@ -95,14 +104,19 @@ var non_items = [
 
 var mercenaries = [
 {name:"Mercenary"},
-{i:1, name:"Rogue Scout ­ ­ ­ ­ ­ (Inner Sight)", aura:"Inner Sight"},
-{i:2, name:"Desert Guard ­ ­ ­ ­ (Blessed Aim)", aura:"Blessed Aim"},
-{i:3, name:"Desert Guard ­ ­ ­ ­ (Defiance)", aura:"Defiance"},
-{i:4, name:"Desert Guard ­ ­ ­ ­ (Prayer)", aura:"Prayer"},
-{i:5, name:"Iron Wolf ­ ­ ­ ­ ­ ­ ­ ­ ­ ­ ­ (Meditation)", aura:"Meditation"},
-{i:6, name:"Iron Wolf ­ ­ ­ ­ ­ ­ ­ ­ ­ ­ ­ (Cleansing)", aura:"Cleansing"},
-{i:7, name:"Iron Wolf ­ ­ ­ ­ ­ ­ ­ ­ ­ ­ ­ (Precision)", aura:"Precision"},
-{i:8, name:"Barbarian ­ ­ ­ ­ ­ ­ ­ ­ ­ ­ (Might)", aura:"Might"},
+{i:1, name:"Rogue Scout ­ ­ ­ ­ ­ (Meditation)", aura:"Meditation"},
+{i:2, name:"Rogue Scout ­ ­ ­ ­ ­ (Vigor)", aura:"Vigor"},
+{i:3, name:"Rogue Scout ­ ­ ­ ­ ­ (Slow Movement)", aura:"Inner Sight"},
+{i:4, name:"Desert Guard ­ ­ ­ ­ (Blessed Aim)", aura:"Blessed Aim"},
+{i:5, name:"Desert Guard ­ ­ ­ ­ (Defiance)", aura:"Defiance"},
+{i:6, name:"Desert Guard ­ ­ ­ ­ (Thorns)", aura:"Thorns"},
+{i:7, name:"Iron Wolf ­ ­ ­ ­ ­ ­ ­ ­ ­ ­ ­ (Prayer)", aura:"Prayer"},
+{i:8, name:"Iron Wolf ­ ­ ­ ­ ­ ­ ­ ­ ­ ­ ­ (Cleansing)", aura:"Cleansing"},
+{i:9, name:"Iron Wolf ­ ­ ­ ­ ­ ­ ­ ­ ­ ­ ­ (Static Field)"},
+{i:10, name:"Ascendant ­ ­ ­ ­ ­ ­ ­ ­ ­ (Amplify Damage)"},
+{i:11, name:"Ascendant ­ ­ ­ ­ ­ ­ ­ ­ ­ (Sanctuary)"},
+{i:12, name:"Barbarian ­ ­ ­ ­ ­ ­ ­ ­ ­ ­ (Might)", aura:"Might"},
+{i:13, name:"Barbarian ­ ­ ­ ­ ­ ­ ­ ­ ­ ­ (Battle Orders)", aura:"Battle Orders"},
 ];
 
 var auras_extra = [

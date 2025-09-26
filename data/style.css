@@ -521,6 +521,9 @@ input[type="file"] {
 #equipment_grid {
   float: right;
 }
+#merc_equipment_grid {
+  float: right;
+}
 .equipped_item {
   position: absolute;
   z-index: 2;
@@ -536,6 +539,23 @@ input[type="file"] {
   height: 88px;
   left: 122px;
   top: 1px;
+}
+#merc_gloves {
+  width: 59px;
+  left: 182px;
+  top: 1px;
+}
+#merc_boots {
+  width: 58px;
+  height: 58px;
+  left: 182px;
+  top: 61px;
+}
+#merc_belt {
+  width: 58px;
+  height: 29px;
+  left: 122px;
+  top: 90px;
 }
 #gloves {
   width: 59px;
