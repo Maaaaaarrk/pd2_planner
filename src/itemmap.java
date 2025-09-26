@@ -857,14 +857,14 @@ public final class itemmap {
 
     private static final Set<String> BARBARIAN_BASES = Set.of(
             // Barbarian helms
-            "jawbone cap", "fanged helm", "horned helm",
+            "jawbone cap", "fanged helm", "horned helm", "jawbone visor",
             "assault helmet", "avenger guard", "savage helmet", "lion helm",
             "slayer guard", "fury visor", "destroyer helm", "conqueror crown", "guardian crown"
     );
 
     private static final Set<String> DRUID_BASES = Set.of(
             // Druid pelts
-            "wolf head", "hawk helm", "antlers", "falcon mask", "spirit mask", "jawbone visor",
+            "wolf head", "hawk helm", "antlers", "falcon mask", "spirit mask",
             "alpha helm", "griffon headdress", "hunter's guise", "sacred feathers", "totemic mask",
             "blood spirit", "sun spirit", "earth spirit", "sky spirit", "dream spirit"
     );
