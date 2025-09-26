@@ -1433,7 +1433,7 @@ function loadItems(group, dropdown, className) {
 				var halt = 0;
 				if(typeof(item.only) != 'undefined'){
                      if(item.only != className){
-                     console.log ("item.only "+item.only+" "+className)
+                   //  console.log ("item.only "+item.only+" "+className)
                         halt = 1;
                         if (className == "Barb (merc)" && item.only  == "barbarian"){
                             halt = 0;
