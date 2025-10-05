@@ -508,7 +508,13 @@ input[type="file"] {
 #golem {
   display: none;
 }
-
+.disabled_dropdown {
+    pointer-events: none;
+}
+.disabled_dropdown_hide {
+    opacity: 0;
+    pointer-events: none;
+}
 /* Corruptions */
 
 #equipment_corruptions {

@@ -13,6 +13,7 @@ public class UpdateUniqueItemsStats {
     private static final String dir = System.getProperty("user.dir") + "\\data\\";
     private static final String UNIQUE_ITEMS_PATH = dir + "UniqueItems.txt";
     private static final String SET_ITEMS_PATH = dir + "SetItems.txt";
+    private static final String MISC_PATH = dir + "magicrarerw.tsv";
     private static final String OUTPUT_DIR = dir;
     private static final String INPUT_DIR = System.getProperty("user.dir") + "\\src\\";
 
@@ -34,6 +35,8 @@ public class UpdateUniqueItemsStats {
                 System.err.println("Error ItemType.UNIQUE");
             if (extracted(grouped, ItemType.SET))
                 System.err.println("Error ItemType.SET");
+            if (extracted(grouped, ItemType.MISC))
+                System.err.println("Error ItemType.MISC");
 
             String js = buildEquipmentJs(grouped);
 
@@ -58,7 +61,7 @@ public class UpdateUniqueItemsStats {
     }
 
     private enum ItemType {
-        UNIQUE, SET
+        UNIQUE, SET, MISC
     }
 
     private static boolean extracted(Map<String, List<Map<String, Object>>> grouped, ItemType itemType) throws IOException {
@@ -68,11 +71,12 @@ public class UpdateUniqueItemsStats {
             path = UNIQUE_ITEMS_PATH;
         else if (itemType == ItemType.SET)
             path = SET_ITEMS_PATH;
+        else if (itemType == ItemType.MISC)
+            path = MISC_PATH;
         else {
             System.out.println("Invalid item type " + itemType);
             return true;
         }
-
 
         List<String> lines = Files.readAllLines(Paths.get(path), StandardCharsets.UTF_8);
         if (lines.isEmpty()) {
@@ -86,11 +90,21 @@ public class UpdateUniqueItemsStats {
         // Required columns
         int idxName = h.getOrDefault("index", -1);
         final int idxType;
-        if (itemType == ItemType.UNIQUE)
-            idxType = h.getOrDefault("*type", -1);
-        else idxType = h.getOrDefault("*item", -1); // SET
+        switch (itemType) {
+            case UNIQUE:
+            case MISC:
+                idxType = h.getOrDefault("*type", -1);
+                break;
+            case SET:
+                idxType = h.getOrDefault("*item", -1);
+                break;
+            default:
+                return true;
+        }
+
 
         int idxSetGroup = h.getOrDefault("set", -1);// SET ONLY
+        int idxItemRarity = h.getOrDefault("rarity", -1);// misc ONLY
 
         int idxEnabled = h.getOrDefault("enabled", 2);
         int idxReqLevel = h.getOrDefault("lvl req", 8); // fallback to 3rd column if header missing
@@ -170,7 +184,6 @@ public class UpdateUniqueItemsStats {
             }
 
             Map<String, Object> row = new LinkedHashMap<>();
-            row.put("name", name);
             if (!baseType.equalsIgnoreCase("ring") && !baseType.equalsIgnoreCase("amulet"))
                 row.put("base", removeNumbersAndCapitalizeFirst(baseType));
             row.put("req_level", parseNumericOrString(reqLevel));
@@ -195,6 +208,18 @@ public class UpdateUniqueItemsStats {
                 case "Cage of the Unsullied":
                     row.put("boss_item", "Rathma");
                     break;
+            }
+
+            if (itemType == ItemType.MISC) {
+                String rarity = safeGet(cols, idxItemRarity).trim();
+                row.put("rarity", rarity.toLowerCase());
+                if (rarity.equals("rw")) {
+                    row.put("name", name.replace(" - ", " \u00AD \u00AD - \u00AD \u00AD "));
+                } else {
+                    row.put("name", name);
+                }
+            } else {
+                row.put("name", name);
             }
 
             if (itemType == ItemType.SET) {
@@ -355,8 +380,12 @@ public class UpdateUniqueItemsStats {
                     } else {
                         //    System.err.println("itemGroupType = null for " + baseType);
                     }
-                    if (!groupBaseType.equals("Amulet") && !groupBaseType.equals("Ring1"))
-                        row.put("img", name.replace(" ", "_"));
+                    if (!groupBaseType.equals("Amulet") && !groupBaseType.equals("Ring1")) {
+                        if (itemType == ItemType.SET || itemType == ItemType.UNIQUE) {
+                            // Set / Unique
+                            row.put("img", name.replace(" ", "_"));
+                        }
+                    }
                     String groupBaseTypeKeyname = groupBaseType.toLowerCase();
                    /* if (!grouped.containsKey(groupBaseTypeKeyname)) {
                         Map<String, Object> rowheader = new LinkedHashMap<>();
@@ -402,6 +431,27 @@ public class UpdateUniqueItemsStats {
 
 
             String plannerPropKey = itemmap.PROP_MAP.get(propKey);
+            if (itemmap.PROP_MAP.containsValue(propKey))
+                plannerPropKey = propKey;
+            else if (propKey.startsWith("skills_")) {
+                plannerPropKey = propKey;
+            } else if (propKey.equals("only")) {
+                if (val instanceof String) {
+                    if ((val).equals("")) {
+                        continue;
+                    }
+                    val = ((String) val).toLowerCase();
+                }
+                plannerPropKey = propKey;
+            }
+
+            // Runeword
+
+            if (propKey.toLowerCase().equals("runeword")) {
+
+                System.err.println("rw: " + parameter);
+                continue;
+            }
 
             //skilltab
             if (propKey.equals("skilltab")) {
@@ -699,6 +749,7 @@ public class UpdateUniqueItemsStats {
 
             // Skip unknown properties instead of inserting a null key
             if (plannerPropKey == null || plannerPropKey.isBlank()) {
+
                 if (propKey != null & !propKey.isEmpty()) {
                     if (!propKey.startsWith("map-"))
                         System.err.println("Unknown prop: " + propKey);
@@ -728,7 +779,15 @@ public class UpdateUniqueItemsStats {
                 row.put("mindmg_per_energy", 1);
             }
 
-            row.put(plannerPropKey, val);
+            if (row.containsKey(plannerPropKey)) {
+                Object oldVal = row.get(plannerPropKey);
+                if (oldVal instanceof Integer && val instanceof Integer) {
+                    row.put(plannerPropKey, (Integer) oldVal + (Integer) val);
+                }
+                row.put(plannerPropKey, val);
+            } else {
+                row.put(plannerPropKey, val);
+            }
         }
     }
 

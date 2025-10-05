@@ -97,10 +97,14 @@ var socketables = [
 {name:"Rainbow Facet (Poison)", type:"jewel", rarity:"unique", req_level:49, pDamage:5, enemy_pRes:-5, pDamage_all:37, pDamage_duration:2, img:"Jewel_green.gif", ctc:[[100,23,"Venom","when you level up"]]},	// ...or: 100% ctc level 51 Poison Nova when you die
 {name:"Ruby Jewel of Fervor", type:"jewel", rarity:"magic", req_level:50, e_damage:40, ias:15},
 {name:"Scintillating Jewel of Fervor", type:"jewel", rarity:"magic", req_level:29, all_res:15, ias:15},
-{name:"Vermillion Jewel of Carnage", type:"jewel", rarity:"magic", req_level:44, damage_max:30},
+{name:"vs Demon Jewel", type:"jewel", rarity:"rare", e_damage:40, damage_vs_demons:40, ar_vs_demons:50},
+{name:"vs Undead Jewel", type:"jewel", rarity:"rare", e_damage:40, damage_vs_undead:50, ar_vs_undead:50},
+{name:"Open Wounds Jewel", type:"jewel", rarity:"rare", e_damage:40, owounds:5, owounds_dps:125},
+{name:"LPK/MPK Jewel", type:"jewel", rarity:"rare", life_per_kill:3, mana_per_kill:3},
 //{name:"Brawler's Jewel", type:"jewel", rarity:"rare", req_level:34, all_res:10, fhr:7, e_damage:30, melee_splash:1},
 //{name:"Mage's Jewel", type:"jewel", rarity:"rare", req_level:33, all_res:10, fhr:7, mana_per_kill:3, damage_to_mana:12},
 /*	magic only affix values
+{name:"Vermillion Jewel of Carnage", type:"jewel", rarity:"magic", req_level:44, damage_max:30},
 {name:"Ruby Jewel", type:"jewel", rarity:"magic", req_level:50, e_damage:40},
 {name:"Jewel of Fervor", type:"jewel", rarity:"magic", req_level:29, ias:15},
 {name:"Argent Jewel", type:"jewel", rarity:"magic", req_level:33, ar:100},
@@ -110,8 +114,6 @@ var socketables = [
 {name:"Turquoise Jewel", type:"jewel", rarity:"magic", req_level:22, mana:20},
 {name:"Jewel of Hope", type:"jewel", rarity:"magic", req_level:34, life:20},
 	magic/rare affixes & values
-{name:"Diamond Jewel", type:"jewel", rarity:"rare", req_level:19, damage_vs_demons:40, ar_vs_demons:50},
-{name:"Pearl Jewel", type:"jewel", rarity:"rare", req_level:13, damage_vs_undead:50, ar_vs_undead:50},
 {name:"Jewel of Freedom", type:"jewel", rarity:"magic", req_level:1, req:-15},
 {name:"Aureolin Jewel", type:"jewel", rarity:"magic", req_level:17, mana_per_kill:3},
 {name:"Dun Jewel", type:"jewel", rarity:"magic", req_level:5, damage_to_mana:12},

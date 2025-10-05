@@ -3309,7 +3309,10 @@ function equipmentHover(group) {
 		var rw_name = equipped[group].name.split(" ­ ")[0].split(" ").join("_").split("'").join("");
 		var runes = "";
 		var i = 0;
-		for (i = 0; i < runewords[rw_name].length; i++) { runes += runewords[rw_name][i]; }
+		for (i = 0; i < runewords[rw_name].length; i++) {
+		if(i>0)
+		runes +=" ";
+		runes += runewords[rw_name][i]; }
 		runeword = "<br>"+"<font color='"+colors.Gold+"'>'"+runes+"'</font>"
 		name = "<font color='"+colors.Gold+"'>"+name+"</font>"
 		affixes += "Socketed ("+i+")<br>"

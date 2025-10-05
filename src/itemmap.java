@@ -430,6 +430,7 @@ public final class itemmap {
         t.put("Heavy Gloves", "Gloves");
         t.put("Heirophant Trophy", "Offhand");
         t.put("Hellspawn Skull", "Offhand");
+        t.put("Minion Skull", "Offhand");
         t.put("Helm", "Helm");
         t.put("Heraldic Shield", "Offhand");
         t.put("Highland Blade", "Weapon");
@@ -507,6 +508,7 @@ public final class itemmap {
         t.put("Rune Staff", "Weapon");
         t.put("Rune Sword", "Weapon");
         t.put("Runic Talons", "Weapon");
+        t.put("Greater Talons", "Weapon");
         t.put("Russet Armor", "Armor");
         t.put("Saber", "Weapon");
         t.put("Sallet", "Helm");
