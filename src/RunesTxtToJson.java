@@ -21,11 +21,85 @@ public class RunesTxtToJson {
 
     public static void main(String[] args) throws IOException {
 
-        //   System.out.println(getRunewordsParsed());
+        System.out.println(getRunewordsParsed());
+        // System.err.println(prettyPrintRuneStats());
+        // System.out.println(getRuneword("Beast", "Staff"));
+        //  writeRunewordsJsFile();
 
-        System.out.println(getRuneword("Beast", "Staff"));
-        writeRunewordsJsFile();
+    }
 
+
+    // Pretty printer for `runeStats`
+    public static String prettyPrintRuneStats() {
+        Map<String, Map<String, Object>> stats = runeStats();
+        StringBuilder sb = new StringBuilder(4096);
+
+        // Sort runes by name for stable output
+        List<String> runeNames = new ArrayList<>(stats.keySet());
+        runeNames.sort(String.CASE_INSENSITIVE_ORDER);
+
+        for (String runeName : runeNames) {
+            Map<String, Object> rune = stats.get(runeName);
+            sb.append(runeName).append("\n");
+
+            @SuppressWarnings("unchecked")
+            Map<String, Object> weap = (Map<String, Object>) rune.get("rwstatsWeap");
+            @SuppressWarnings("unchecked")
+            Map<String, Object> armor = (Map<String, Object>) rune.get("rwstatsArmor");
+            @SuppressWarnings("unchecked")
+            Map<String, Object> shield = (Map<String, Object>) rune.get("rwstatsShield");
+
+            // Weapon
+            sb.append("  Weapon:\n");
+            appendStatBlock(sb, weap);
+
+            // Armor/Helm
+            sb.append("  Armor/Helm:\n");
+            appendStatBlock(sb, armor);
+
+            // Shield
+            sb.append("  Shield:\n");
+            appendStatBlock(sb, shield);
+
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
+    // Helper to print one stats map in a consistent, readable way
+    private static void appendStatBlock(StringBuilder sb, Map<String, Object> stats) {
+        if (stats == null || stats.isEmpty()) {
+            sb.append("    (none)\n");
+            return;
+        }
+        // Stable key order
+        List<String> keys = new ArrayList<>(stats.keySet());
+        keys.sort(String.CASE_INSENSITIVE_ORDER);
+
+        for (String key : keys) {
+            Object val = stats.get(key);
+            sb.append("    - ").append(key).append(": ").append(stringifyValue(val)).append("\n");
+        }
+    }
+
+    // Formats nested values simply (maps/lists) without JSON noise
+    private static String stringifyValue(Object val) {
+        if (val == null) return "null";
+        if (val instanceof Map) {
+            // Print compact map a:b pairs
+            List<String> parts = new ArrayList<>();
+            for (Map.Entry<?, ?> e : ((Map<?, ?>) val).entrySet()) {
+                parts.add(e.getKey() + "=" + stringifyValue(e.getValue()));
+            }
+            parts.sort(String.CASE_INSENSITIVE_ORDER);
+            return "{" + String.join(", ", parts) + "}";
+        }
+        if (val instanceof Collection<?>) {
+            List<String> parts = new ArrayList<>();
+            for (Object o : (Collection<?>) val) parts.add(String.valueOf(o));
+            return "[" + String.join(", ", parts) + "]";
+        }
+        return String.valueOf(val);
     }
 
     public static Map<String, List<String>> buildRunewordsMapLikeItemMetadata() {
@@ -368,6 +442,7 @@ public class RunesTxtToJson {
     private static Map<String, String> runeIdToName = new LinkedHashMap<String, String>() {{
         put(null, null);
         put("", "");
+        put("r01", "El");
         put("r02", "Eld");
         put("r03", "Tir");
         put("r04", "Nef");
