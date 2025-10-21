@@ -58,8 +58,8 @@ Call to Arms - Archon Staff	Staff	Archon Staff	rw		Runeword	Call to Arms			skill
 Beast - Archon Staff	Staff	Archon Staff	rw		Runeword	Beast																							only			
 Doom - Archon Staff	Staff	Archon Staff	rw		Runeword	Doom			skill	Frost Nova		3	skill	Cold Mastery		3	skill	Teleport		3									only			
 Zenith - Archon Staff	Staff	Archon Staff	rw		Runeword	Zenith																							only			
-Obession - Archon Staff	Staff	Archon Staff	rw		Runeword	Obession			skill	Blizzard		3	skill	Cold Mastery		3	skill	Ice Bolt		3									only			
-Obession - Archon Staff	Staff	Archon Staff	rw		Runeword	Obession			skill	Hydra		3	skill	Fire Mastery		3	skill	Blaze		3									only			
+Obsession - Archon Staff	Staff	Archon Staff	rw		Runeword	Obsession			skill	Blizzard		3	skill	Cold Mastery		3	skill	Ice Bolt		3									only			
+Obsession - Archon Staff	Staff	Archon Staff	rw		Runeword	Obsession			skill	Hydra		3	skill	Fire Mastery		3	skill	Blaze		3									only			
 Asylum - Archon Staff	Staff	Archon Staff	rw		Runeword	Asylum																							only			
 Ferocity - Bone Visage	Helm	Bone Visage	rw		Runeword	Ferocity			ethereal		1	1																	only			
 Dream - Bone Visage	Helm	Bone Visage	rw		Runeword	Dream																							only			
@@ -127,4 +127,4 @@ Dominion - Tomb Wand	Wand	Tomb Wand	rw		Runeword	Dominion			skill	Fire Golem		3	
 Dominion - Tomb Wand	Wand	Tomb Wand	rw		Runeword	Dominion			skill	Clay Golem		3	skill	Golem Mastery		3	skill	Blood Warp		3									only			Necromancer
 White - Tomb Wand	Wand	Tomb Wand	rw		Runeword	White																							only			Necromancer
 Golemlord's Tomb Wand of the Archmage	Wand	Tomb Wand	magic		fcr		30	30	skills_summoning_necromancer		3	3	skill	Golem Mastery		3	skill	Clay Golem		3	skill	Fire Golem		3					only			Necromancer
-Golemlord's Tomb Wand of the Archmage		Minion Skull	magic		fcr		30	30	skills_summoning_necromancer		3	3	skill	Golem Mastery		3	skill	Clay Golem		3	skill	Fire Golem		3					only			Necromancer
+Golemlord's Tomb Wand of the Archmage	Offhand	Minion Skull	magic		fcr		30	30	skills_summoning_necromancer		3	3	skill	Golem Mastery		3	skill	Clay Golem		3	skill	Fire Golem		3					only			Necromancer

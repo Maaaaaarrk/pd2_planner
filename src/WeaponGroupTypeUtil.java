@@ -1,3 +1,5 @@
+import java.util.List;
+
 public final class WeaponGroupTypeUtil {
 
     private WeaponGroupTypeUtil() {
@@ -209,6 +211,28 @@ public final class WeaponGroupTypeUtil {
         putAll(m, BOW, "bow");
 
         NAME_TO_GROUP = java.util.Collections.unmodifiableMap(m);
+    }
+
+    private static List<String> GROUP_NAMES = List.of(
+            "javelin",
+            "spear",
+            "claw",
+            "orb",
+            "scepter",
+            "sword",
+            "staff",
+            "wand",
+            "mace",
+            "axe",
+            "dagger",
+            "polearm",
+            "thrown",
+            "crossbow",
+            "bow"
+    );
+
+    public static boolean isWeapon(String groupName) {
+        return GROUP_NAMES.contains(groupName);
     }
 
     private static void putAll(java.util.Map<String, String> m, java.util.Set<String> names, String group) {

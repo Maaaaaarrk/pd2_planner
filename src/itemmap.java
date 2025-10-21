@@ -252,6 +252,12 @@ public final class itemmap {
         p.put("res-ltng/lvl", "lRes_per_level");
         p.put("dmg-cold/lvl", "cDamage_max_per_level");
         p.put("regen-stam/lvl", "heal_stam_per_level");
+        p.put("abs-mag", "mAbsorb_flat");
+        p.put("extra-hydra", "extraHydra");
+        p.put("extra-golem", "extraGolem");
+        p.put("extra-valk", "extraValkyries");
+        p.put("extra-skele-archer", "extra_Skeleton_Archers");
+        p.put("infinityspeed", "frw");
         PROP_MAP = Collections.unmodifiableMap(p);
 
 

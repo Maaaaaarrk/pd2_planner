@@ -12,6 +12,8 @@ public class UpdateUniqueItemsStats {
     // Configuration: replace with your actual paths
     private static final String dir = System.getProperty("user.dir") + "\\data\\";
     private static final String UNIQUE_ITEMS_PATH = dir + "UniqueItems.txt";
+    public static final String RUNE_WORDS = dir + "Runes.txt";
+    public static final String GEM_RUNE = dir + "Gems.txt";
     private static final String SET_ITEMS_PATH = dir + "SetItems.txt";
     private static final String MISC_PATH = dir + "magicrarerw.tsv";
     private static final String OUTPUT_DIR = dir;
@@ -55,6 +57,8 @@ public class UpdateUniqueItemsStats {
             }
             System.out.println("Wrote: " + outFile.toAbsolutePath());
             System.out.println("Groups: " + grouped.size());
+
+            RunesTxtToJson.writeRunewordsJsFile();
         } catch (IOException e) {
             System.err.println("Error: " + e.getMessage());
         }
@@ -357,7 +361,7 @@ public class UpdateUniqueItemsStats {
                     idxMaxs[0] = idxaMaxa[j];
                     idxMaxs[1] = idxaMaxb[j];
                     Map<String, Object> setBonusLevel = new LinkedHashMap<>();
-                    extractedItemProps(idxProps, idxPars, idxMins, idxMaxs, cols, name, setBonusLevel);
+                    extractedItemProps(idxProps, idxPars, idxMins, idxMaxs, cols, name, setBonusLevel, null);
                     setProperties.add(setBonusLevel);
                 }
 
@@ -366,20 +370,23 @@ public class UpdateUniqueItemsStats {
             }
 
 
-            // Add prop1..prop11 with their max values, using the prop value as the key
-            extractedItemProps(idxProp, idxPar, idxMin, idxMax, cols, name, row);
-
             String groupBaseType = itemmap.getGroupBaseType(baseType);
             if (groupBaseType != null && !groupBaseType.isEmpty()) {
                 if (itemmap.typeChecker(groupBaseType)) {
                     String itemGroupType = WeaponGroupTypeUtil.groupOf(baseType);
+                    String itemTypeForRw = groupBaseType;
                     if (itemGroupType != null) {
                         row.put("type", itemGroupType);
+                        itemTypeForRw = itemGroupType;
                     } else if (groupBaseType.equals("Offhand")) {
                         row.put("type", "shield");
+                        itemTypeForRw = "shield";
                     } else {
                         //    System.err.println("itemGroupType = null for " + baseType);
                     }
+
+                    // Add prop1..prop11 with their max values, using the prop value as the key
+                    extractedItemProps(idxProp, idxPar, idxMin, idxMax, cols, name, row, itemTypeForRw);
                     if (!groupBaseType.equals("Amulet") && !groupBaseType.equals("Ring1")) {
                         if (itemType == ItemType.SET || itemType == ItemType.UNIQUE) {
                             // Set / Unique
@@ -408,7 +415,7 @@ public class UpdateUniqueItemsStats {
         return false;
     }
 
-    private static void extractedItemProps(int[] idxProp, int[] idxPar, int[] idxMin, int[] idxMax, String[] cols, String name, Map<String, Object> row) {
+    private static void extractedItemProps(int[] idxProp, int[] idxPar, int[] idxMin, int[] idxMax, String[] cols, String name, Map<String, Object> row, String itemGroupType) {
         for (int p = 0; p < idxProp.length; p++) {
             int pIdx = idxProp[p];
             int parIdx = idxPar[p];
@@ -422,161 +429,206 @@ public class UpdateUniqueItemsStats {
             String parameter = safeGet(cols, parIdx).trim();
             String minValStr = safeGet(cols, minIdx).trim();
             String maxValStr = safeGet(cols, maxIdx).trim();
-            if (propKey.isEmpty() || (maxValStr.isEmpty() && parameter.isEmpty())) {
-                continue;
-            }
+            Map<String, Object> resolvedStats = resolveStat(name, propKey, maxValStr, parameter, minValStr, itemGroupType);
+            row = combineRows(row, resolvedStats);
+        }
+    }
 
-            Object val = (maxValStr.isEmpty() ? parseNumericOrString(parameter) : parseNumericOrString(maxValStr));
-            Object minval = parseNumericOrString(minValStr);
-
-
-            String plannerPropKey = itemmap.PROP_MAP.get(propKey);
-            if (itemmap.PROP_MAP.containsValue(propKey))
-                plannerPropKey = propKey;
-            else if (propKey.startsWith("skills_")) {
-                plannerPropKey = propKey;
-            } else if (propKey.equals("only")) {
-                if (val instanceof String) {
-                    if ((val).equals("")) {
-                        continue;
-                    }
-                    val = ((String) val).toLowerCase();
+    // Merges two maps:
+    // - Upsert all keys from 'addition' into 'base'
+    // - If a key exists in both and both values are Integers, add them
+    // - Otherwise, overwrite with the value from 'addition'
+    public static Map<String, Object> combineRows(Map<String, Object> base, Map<String, Object> addition) {
+        if (addition == null || addition.isEmpty()) return base;
+        if (base == null) base = new LinkedHashMap<>();
+        for (Map.Entry<String, Object> e : addition.entrySet()) {
+            String key = e.getKey();
+            Object newVal = e.getValue();
+            if (base.containsKey(key)) {
+                Object oldVal = base.get(key);
+                if (oldVal instanceof Integer && newVal instanceof Integer) {
+                    base.put(key, (Integer) oldVal + (Integer) newVal);
+                } else {
+                    base.put(key, newVal);
                 }
-                plannerPropKey = propKey;
+            } else {
+                base.put(key, newVal);
             }
+        }
+        return base;
+    }
 
-            // Runeword
+    public static Map<String, Object> resolveStat(String name, String propKey, String maxValStr, String parameter, String minValStr, String itemGroupType) {
+        Map<String, Object> row = new LinkedHashMap<>();
+        if (propKey.isEmpty() || (maxValStr.isEmpty() && parameter.isEmpty())) {
+            return row;
+        }
 
-            if (propKey.toLowerCase().equals("runeword")) {
+        Object val = (maxValStr.isEmpty() ? parseNumericOrString(parameter) : parseNumericOrString(maxValStr));
+        Object minval = parseNumericOrString(minValStr);
 
-                System.err.println("rw: " + parameter);
-                continue;
-            }
 
-            //skilltab
-            if (propKey.equals("skilltab")) {
-                switch (parameter.trim()) {
-                    case "0":
-                        plannerPropKey = "skills_bows";
-                        break;
-                    case "1":
-                        plannerPropKey = "skills_passives";
-                        break;
-                    case "2":
-                        plannerPropKey = "skills_javelins";
-                        break;
-                    case "3":
-                        plannerPropKey = "skills_fire";
-                        break;
-                    case "4":
-                        plannerPropKey = "skills_lightning";
-                        break;
-                    case "5":
-                        plannerPropKey = "skills_cold";
-                        break;
-                    case "6":
-                        plannerPropKey = "skills_curses";
-                        break;
-                    case "7":
-                        plannerPropKey = "skills_poisonBone";
-                        break;
-                    case "8":
-                        plannerPropKey = "skills_summoning_necromancer";
-                        break;
-                    case "9":
-                        plannerPropKey = "skills_combat_paladin";
-                        break;
-                    case "10":
-                        plannerPropKey = "skills_offensive";
-                        break;
-                    case "11":
-                        plannerPropKey = "skills_defensive";
-                        break;
-                    case "12":
-                        plannerPropKey = "skills_combat_barbarian";
-                        break;
-                    case "13":
-                        plannerPropKey = "skills_masteries";
-                        break;
-                    case "14":
-                        plannerPropKey = "skills_warcries";
-                        break;
-                    case "15":
-                        plannerPropKey = "skills_summoning_druid";
-                        break;
-                    case "16":
-                        plannerPropKey = "skills_shapeshifting";
-                        break;
-                    case "17":
-                        plannerPropKey = "skills_elemental";
-                        break;
-                    case "18":
-                        plannerPropKey = "skills_traps";
-                        break;
-                    case "19":
-                        plannerPropKey = "skills_shadow";
-                        break;
-                    case "20":
-                        plannerPropKey = "skills_martial";
-                        break;
-                    default:
-                        System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
-                                parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
-                        continue;
+        String plannerPropKey = itemmap.PROP_MAP.get(propKey);
+        if (plannerPropKey == null) {
+            plannerPropKey = itemmap.PROP_MAP.get(propKey.toLowerCase());
+        }
+        if (itemmap.PROP_MAP.containsValue(propKey))
+            plannerPropKey = propKey;
+        else if (propKey.startsWith("skills_")) {
+            plannerPropKey = propKey;
+        } else if (propKey.equals("only")) {
+            if (val instanceof String) {
+                if ((val).equals("")) {
+                    return row;
                 }
+                val = ((String) val).toLowerCase();
             }
+            plannerPropKey = propKey;
+        }
 
-            //skill
+        // Runeword
 
-            if (propKey.equals("skill") || propKey.equals("oskill")) {
-                String skillname = getSkillName(parameter);
-                if (skillname == null) {
+        if (propKey.toLowerCase().equals("runeword")) {
+
+
+            Map<String, Object> rwData = RunesTxtToJson.getRuneword(parameter, itemGroupType);
+            if (rwData == null) {
+                System.err.println("Missing rw: " + parameter);
+                return row;
+            }
+            Object rwStats = rwData.get("rwstats");
+            if (rwStats instanceof Map) {
+                row.putAll((Map<String, Object>) rwStats);
+            } else {
+                System.err.println("Missing rwstats: " + parameter);
+            }
+            return row;
+        }
+
+        //skilltab
+        if (propKey.equals("skilltab")) {
+            switch (parameter.trim()) {
+                case "0":
+                    plannerPropKey = "skills_bows";
+                    break;
+                case "1":
+                    plannerPropKey = "skills_passives";
+                    break;
+                case "2":
+                    plannerPropKey = "skills_javelins";
+                    break;
+                case "3":
+                    plannerPropKey = "skills_fire";
+                    break;
+                case "4":
+                    plannerPropKey = "skills_lightning";
+                    break;
+                case "5":
+                    plannerPropKey = "skills_cold";
+                    break;
+                case "6":
+                    plannerPropKey = "skills_curses";
+                    break;
+                case "7":
+                    plannerPropKey = "skills_poisonBone";
+                    break;
+                case "8":
+                    plannerPropKey = "skills_summoning_necromancer";
+                    break;
+                case "9":
+                    plannerPropKey = "skills_combat_paladin";
+                    break;
+                case "10":
+                    plannerPropKey = "skills_offensive";
+                    break;
+                case "11":
+                    plannerPropKey = "skills_defensive";
+                    break;
+                case "12":
+                    plannerPropKey = "skills_combat_barbarian";
+                    break;
+                case "13":
+                    plannerPropKey = "skills_masteries";
+                    break;
+                case "14":
+                    plannerPropKey = "skills_warcries";
+                    break;
+                case "15":
+                    plannerPropKey = "skills_summoning_druid";
+                    break;
+                case "16":
+                    plannerPropKey = "skills_shapeshifting";
+                    break;
+                case "17":
+                    plannerPropKey = "skills_elemental";
+                    break;
+                case "18":
+                    plannerPropKey = "skills_traps";
+                    break;
+                case "19":
+                    plannerPropKey = "skills_shadow";
+                    break;
+                case "20":
+                    plannerPropKey = "skills_martial";
+                    break;
+                default:
                     System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
                             parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
-                    continue;
-                }
-                plannerPropKey = propKey + "_" + (skillname.replace(" ", "_"));
+                    return row;
             }
+        }
 
-            //aura
-            if (propKey.equals("aura")) {
-                String skillname = getSkillName(parameter);
-                if (skillname == null) {
-                    System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
-                            parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
-                    continue;
-                }
-                plannerPropKey = "aura";
-                row.put(plannerPropKey, skillname);
-                plannerPropKey = "aura_lvl";
-                row.put(plannerPropKey, val);
-                continue;
-            }
+        //skill
 
-            // Equipped Skill ""
-
-            if (propKey.equals("equipped-skill")) {
-                plannerPropKey = "equipped_skill";
-                row.put(plannerPropKey, parameter.replace("SelfAura", "").trim());
-                plannerPropKey = "equipped_skill_level";
-                row.put(plannerPropKey, val);
-                continue;
-            }
-
-
-            if (propKey.equals("skill-rand")) {
-                //250 for druid
-                if (val.equals(250)) {
-                    plannerPropKey = "random_skill";
-                    row.put(plannerPropKey, "[Random Druid Skill] (Druid Only)");
-                    plannerPropKey = "random_skill_level";
-                    row.put(plannerPropKey, parseNumericOrString(parameter));
-                    continue;
-                }
+        if (propKey.equals("skill") || propKey.equals("oskill")) {
+            String skillname = getSkillName(parameter);
+            if (skillname == null) {
                 System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
                         parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
-                continue;
+                return row;
             }
+            plannerPropKey = propKey + "_" + (skillname.replace(" ", "_"));
+        }
+
+        //aura
+        if (propKey.equals("aura")) {
+            String skillname = getSkillName(parameter);
+            if (skillname == null) {
+                System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
+                        parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
+                return row;
+            }
+            plannerPropKey = "aura";
+            row.put(plannerPropKey, skillname);
+            plannerPropKey = "aura_lvl";
+            row.put(plannerPropKey, val);
+            return row;
+        }
+
+        // Equipped Skill ""
+
+        if (propKey.equals("equipped-skill")) {
+            plannerPropKey = "equipped_skill";
+            row.put(plannerPropKey, parameter.replace("SelfAura", "").trim());
+            plannerPropKey = "equipped_skill_level";
+            row.put(plannerPropKey, val);
+            return row;
+        }
+
+
+        if (propKey.equals("skill-rand")) {
+            //250 for druid
+            if (val.equals(250)) {
+                plannerPropKey = "random_skill";
+                row.put(plannerPropKey, "[Random Druid Skill] (Druid Only)");
+                plannerPropKey = "random_skill_level";
+                row.put(plannerPropKey, parseNumericOrString(parameter));
+                return row;
+            }
+            System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
+                    parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
+            return row;
+        }
 
             /*
             cast-skill	Twister	15	28
@@ -584,105 +636,105 @@ public class UpdateUniqueItemsStats {
             strike_skill:{index:["strike_chance","strike_level","strike_skill"], format:["","% Chance to Cast Level "," "," on Striking"]},
             hit_skill:{index:["hit_chance","hit_level","hit_skill"], format:["","% Chance to Cast Level "," "," on Hit"]},
              */
-            if (propKey.equals("hit-skill") || propKey.equals("block-skill") || propKey.equals("levelup-skill") || propKey.equals("kill-skill") || propKey.equals("cast-skill") || propKey.equals("gethit-skill") || propKey.equals("death-skill")) {
-                final String type;
-                if (propKey.equals("death-skill"))
-                    type = "ondeath";
-                else if (propKey.equals("gethit-skill"))
-                    type = "gethit";
-                else if (propKey.equals("cast-skill"))
-                    type = "cast";
-                else if (propKey.equals("kill-skill"))
-                    type = "onkill";
-                else if (propKey.equals("levelup-skill"))
-                    type = "onlevel";
-                else if (propKey.equals("block-skill"))
-                    type = "onblock";
-                else if (propKey.equals("hit-skill"))
-                    type = "strike";
-                else {
-                    System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
-                            parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
-                    continue;
-                }
-                String skillname = getSkillName(parameter);
-                if (skillname == null) {
-                    System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
-                            parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
-                    continue;
-                }
-                plannerPropKey = type + "_skill";
-                row.put(plannerPropKey, skillname);
-                plannerPropKey = type + "_chance";
-                row.put(plannerPropKey, minval);
-                plannerPropKey = type + "_level";
-                row.put(plannerPropKey, val);
-                continue;
+        if (propKey.equals("hit-skill") || propKey.equals("block-skill") || propKey.equals("levelup-skill") || propKey.equals("kill-skill") || propKey.equals("cast-skill") || propKey.equals("gethit-skill") || propKey.equals("death-skill")) {
+            final String type;
+            if (propKey.equals("death-skill"))
+                type = "ondeath";
+            else if (propKey.equals("gethit-skill"))
+                type = "gethit";
+            else if (propKey.equals("cast-skill"))
+                type = "cast";
+            else if (propKey.equals("kill-skill"))
+                type = "onkill";
+            else if (propKey.equals("levelup-skill"))
+                type = "onlevel";
+            else if (propKey.equals("block-skill"))
+                type = "onblock";
+            else if (propKey.equals("hit-skill"))
+                type = "strike";
+            else {
+                System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
+                        parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
+                return row;
             }
+            String skillname = getSkillName(parameter);
+            if (skillname == null) {
+                System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
+                        parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
+                return row;
+            }
+            plannerPropKey = type + "_skill";
+            row.put(plannerPropKey, skillname);
+            plannerPropKey = type + "_chance";
+            row.put(plannerPropKey, minval);
+            plannerPropKey = type + "_level";
+            row.put(plannerPropKey, val);
+            return row;
+        }
 
-            // skill charged
-            if (propKey.equals("charged")) {
-                String type = "charges";
-                String skillname = getSkillName(parameter);
-                if (skillname == null) {
-                    System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
-                            parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
-                    continue;
-                }
-                plannerPropKey = type + "_skill";
-                row.put(plannerPropKey, skillname);
-                plannerPropKey = type + "_charges";
-                row.put(plannerPropKey, minval);
-                plannerPropKey = type + "_level";
-                row.put(plannerPropKey, val);
-                continue;
+        // skill charged
+        if (propKey.equals("charged")) {
+            String type = "charges";
+            String skillname = getSkillName(parameter);
+            if (skillname == null) {
+                System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
+                        parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
+                return row;
             }
+            plannerPropKey = type + "_skill";
+            row.put(plannerPropKey, skillname);
+            plannerPropKey = type + "_charges";
+            row.put(plannerPropKey, minval);
+            plannerPropKey = type + "_level";
+            row.put(plannerPropKey, val);
+            return row;
+        }
 
-            // flat dmg
-            if (propKey.equals("dmg-norm")) {
-                plannerPropKey = "damage_min";
-                row.put(plannerPropKey, val);
-                plannerPropKey = "damage_max";
-                row.put(plannerPropKey, val);
-                continue;
-            }
+        // flat dmg
+        if (propKey.equals("dmg-norm")) {
+            plannerPropKey = "damage_min";
+            row.put(plannerPropKey, val);
+            plannerPropKey = "damage_max";
+            row.put(plannerPropKey, val);
+            return row;
+        }
 
-            //
-            if (propKey.equals("dmg-mag")) {
-                plannerPropKey = "mDamage_min";
-                row.put(plannerPropKey, val);
-                plannerPropKey = "mDamage_max";
-                row.put(plannerPropKey, val);
-                continue;
-            }
-            //dmg-elem
-            if (propKey.equals("dmg-elem")) {
-                plannerPropKey = "fDamage_min";
-                row.put(plannerPropKey, minval);
-                plannerPropKey = "fDamage_max";
-                row.put(plannerPropKey, val);
-                plannerPropKey = "cDamage_min";
-                row.put(plannerPropKey, minval);
-                plannerPropKey = "cDamage_max";
-                row.put(plannerPropKey, val);
-                plannerPropKey = "lDamage_min";
-                row.put(plannerPropKey, minval);
-                plannerPropKey = "lDamage_max";
-                row.put(plannerPropKey, val);
-                continue;
-            }
+        //
+        if (propKey.equals("dmg-mag")) {
+            plannerPropKey = "mDamage_min";
+            row.put(plannerPropKey, val);
+            plannerPropKey = "mDamage_max";
+            row.put(plannerPropKey, val);
+            return row;
+        }
+        //dmg-elem
+        if (propKey.equals("dmg-elem")) {
+            plannerPropKey = "fDamage_min";
+            row.put(plannerPropKey, minval);
+            plannerPropKey = "fDamage_max";
+            row.put(plannerPropKey, val);
+            plannerPropKey = "cDamage_min";
+            row.put(plannerPropKey, minval);
+            plannerPropKey = "cDamage_max";
+            row.put(plannerPropKey, val);
+            plannerPropKey = "lDamage_min";
+            row.put(plannerPropKey, minval);
+            plannerPropKey = "lDamage_max";
+            row.put(plannerPropKey, val);
+            return row;
+        }
 
-            if (propKey.equals("res-all-max")) {
-                plannerPropKey = "fRes_max";
-                row.put(plannerPropKey, val);
-                plannerPropKey = "lRes_max";
-                row.put(plannerPropKey, val);
-                plannerPropKey = "cRes_max";
-                row.put(plannerPropKey, val);
-                plannerPropKey = "pRes_max";
-                row.put(plannerPropKey, val);
-                continue;
-            }
+        if (propKey.equals("res-all-max")) {
+            plannerPropKey = "fRes_max";
+            row.put(plannerPropKey, val);
+            plannerPropKey = "lRes_max";
+            row.put(plannerPropKey, val);
+            plannerPropKey = "cRes_max";
+            row.put(plannerPropKey, val);
+            plannerPropKey = "pRes_max";
+            row.put(plannerPropKey, val);
+            return row;
+        }
 
             /*
             Hit Causes Monster to Flee +
@@ -695,100 +747,118 @@ public class UpdateUniqueItemsStats {
             howl	10	5 -> 10% level 5
              */
 
-            if (propKey.equals("howl")) {
-                if (minval.equals(val)) {
-                    final double newRate;
-                    if (val.equals(100)) {
-                        newRate = 100;
-                    } else {
-                        newRate = Math.floor(((Integer) val) * 0.75);
-                    }
-                    row.put("flee_on_hit", newRate);
-                    continue;
-                }
-                String skillname = getSkillName(propKey);
-                if (skillname == null) {
-                    System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
-                            parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
-                    continue;
-                }
-                String type = "hit";
-                plannerPropKey = type + "_skill";
-                row.put(plannerPropKey, skillname);
-                plannerPropKey = type + "_chance";
-                row.put(plannerPropKey, minval);
-                plannerPropKey = type + "_level";
-                row.put(plannerPropKey, val);
-                continue;
-            }
-
-            if (propKey.equals("dmg-pois")) {
-                final double factor;
-                final int seconds;
-                if (parseNumericOrString(parameter).equals(75)) {
-                    factor = 3.3;
-                    seconds = 3;
-                } else if (parseNumericOrString(parameter).equals(50)) {
-                    factor = 5.1;
-                    seconds = 2;
-                } else if (parseNumericOrString(parameter).equals(100)) {
-                    factor = 2.5;
-                    seconds = 4;
-                } else if (parseNumericOrString(parameter).equals(25)) {
-                    factor = 10.24;
-                    seconds = 1;
+        if (propKey.equals("howl")) {
+            if (minval.equals(val)) {
+                final double newRate;
+                if (val.equals(100)) {
+                    newRate = 100;
                 } else {
-                    System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
-                            parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
-                    continue;
+                    newRate = Math.floor(((Integer) val) * 0.75);
                 }
-                final double newPsn = Math.floor(((Integer) val) / factor);
-                row.put("dmg_pois", newPsn);
-                row.put("dmg_pois_time", seconds);
+                row.put("flee_on_hit", newRate);
+                return row;
             }
-
-            // Skip unknown properties instead of inserting a null key
-            if (plannerPropKey == null || plannerPropKey.isBlank()) {
-
-                if (propKey != null & !propKey.isEmpty()) {
-                    if (!propKey.startsWith("map-"))
-                        System.err.println("Unknown prop: " + propKey);
-                }
-                continue;
+            String skillname = getSkillName(propKey);
+            if (skillname == null) {
+                System.err.println("name: " + name + " propKey: " + propKey + " parameter: " +
+                        parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
+                return row;
             }
+            String type = "hit";
+            plannerPropKey = type + "_skill";
+            row.put(plannerPropKey, skillname);
+            plannerPropKey = type + "_chance";
+            row.put(plannerPropKey, minval);
+            plannerPropKey = type + "_level";
+            row.put(plannerPropKey, val);
+            return row;
+        }
 
-            if (plannerPropKey.contains("%") || plannerPropKey.contains("-")
-                    || plannerPropKey.contains("/")) {
-                // System.err.println("Violate rule plannerPropKey: " + plannerPropKey);
-                continue;
-            }
-
-            // Make negative on purpose
-            if (plannerPropKey.equals("enemy_fRes") ||
-                    plannerPropKey.equals("enemy_cRes") ||
-                    plannerPropKey.equals("enemy_lRes") ||
-                    plannerPropKey.equals("enemy_pRes") ||
-                    plannerPropKey.equals("enemy_phyRes")) {
-                if (val instanceof Integer && ((Integer) val) > 0) {
-                    val = ((Integer) val) * -1;
-                }
-            }
-
-            // add stat for uld
-            if (plannerPropKey.equals("mindmg_energy")) {
-                row.put("mindmg_per_energy", 1);
-            }
-
-            if (row.containsKey(plannerPropKey)) {
-                Object oldVal = row.get(plannerPropKey);
-                if (oldVal instanceof Integer && val instanceof Integer) {
-                    row.put(plannerPropKey, (Integer) oldVal + (Integer) val);
-                }
-                row.put(plannerPropKey, val);
+        if (propKey.equals("dmg-pois")) {
+            final double factor;
+            final int seconds;
+            if (parseNumericOrString(parameter).equals(75)) {
+                factor = 3.3;
+                seconds = 3;
+            } else if (parseNumericOrString(parameter).equals(50)) {
+                factor = 5.1;
+                seconds = 2;
+            } else if (parseNumericOrString(parameter).equals(100)) {
+                factor = 2.5;
+                seconds = 4;
+            } else if (parseNumericOrString(parameter).equals(125)) {
+                factor = 2;
+                seconds = 5;
+            } else if (parseNumericOrString(parameter).equals(25)) {
+                factor = 10.24;
+                seconds = 1;
             } else {
-                row.put(plannerPropKey, val);
+                System.err.println("name: " + name + " add psn calc for propKey: " + propKey + " parameter: " +
+                        parameter + " minValStr: " + minValStr + " maxValStr: " + maxValStr);
+                return row;
+            }
+            final double newPsn = Math.floor(((Integer) val) / factor);
+            row.put("dmg_pois", newPsn);
+            row.put("dmg_pois_time", seconds);
+        }
+
+        if (propKey.equals("silence-fhr-ias")) {
+            row.put("fhr", val);
+            row.put("ias", val);
+            return row;
+        }
+        if (propKey.equals("plague-fcr-pierce")) {
+            row.put("fcr", val);
+            row.put("enemy_pRes", ((Integer) val) * -1);
+            return row;
+        }
+        if (propKey.equals("str-and-vit")) {
+            row.put("strength", val);
+            row.put("vitality", val);
+            return row;
+        }
+        // Skip unknown properties instead of inserting a null key
+        if (plannerPropKey == null || plannerPropKey.isBlank()) {
+
+            if (propKey != null & !propKey.isEmpty()) {
+                if (!propKey.startsWith("map-"))
+                    System.err.println("Unknown prop: " + propKey);
+            }
+            return row;
+        }
+
+        if (plannerPropKey.contains("%") || plannerPropKey.contains("-")
+                || plannerPropKey.contains("/")) {
+            // System.err.println("Violate rule plannerPropKey: " + plannerPropKey);
+            return row;
+        }
+
+        // Make negative on purpose
+        if (plannerPropKey.equals("enemy_fRes") ||
+                plannerPropKey.equals("enemy_cRes") ||
+                plannerPropKey.equals("enemy_lRes") ||
+                plannerPropKey.equals("enemy_pRes") ||
+                plannerPropKey.equals("enemy_phyRes")) {
+            if (val instanceof Integer && ((Integer) val) > 0) {
+                val = ((Integer) val) * -1;
             }
         }
+
+        // add stat for uld
+        if (plannerPropKey.equals("mindmg_energy")) {
+            row.put("mindmg_per_energy", 1);
+        }
+
+        if (row.containsKey(plannerPropKey)) {
+            Object oldVal = row.get(plannerPropKey);
+            if (oldVal instanceof Integer && val instanceof Integer) {
+                row.put(plannerPropKey, (Integer) oldVal + (Integer) val);
+            }
+            row.put(plannerPropKey, val);
+        } else {
+            row.put(plannerPropKey, val);
+        }
+        return row;
     }
 
     private static String removeNumbersAndCapitalizeFirst(String input) {
@@ -1035,6 +1105,7 @@ public class UpdateUniqueItemsStats {
                 return "Immolation Arrow";
             case "28":
             case "decoy":
+            case "dopplezon":
                 return "Decoy";
             case "29":
             case "evade":
@@ -1485,6 +1556,7 @@ public class UpdateUniqueItemsStats {
                 return "Summon Spirit Wolf";
             case "228":
             case "werebear":
+            case "wearbear":
                 return "Werebear";
             case "229":
             case "molten boulder":
