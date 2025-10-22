@@ -632,7 +632,6 @@ belt: [
 amulet: [
 {name:"Amulet"},
     {req_level: 10, rarity: "magic", name: "Accursed Amulet of the Apprentice", fcr: 10, skills_curses: 3, only: "necromancer"},
-    {req_level: 0, name: "Amulet of the Viper", mana: 10, pRes: 25, life: 10},
     {req_level: 12, name: "Angelic Wings", rarity: "set", set_Angelic: 1, set_bonuses: ["set_Angelic", {},     {life: 75},     {all_skills: 1},     {},     {},     {}], light_radius: 3, damage_to_mana: 20},
     {req_level: 15, name: "Arcanna's Sign", rarity: "set", set_Arcanna: 1, set_bonuses: ["set_Arcanna", {},     {mf: 50},     {fRes: 30},     {},     {},     {}], mana: 35, mana_regen: 20},
     {req_level: 10, rarity: "magic", name: "Archer's Amulet of the Apprentice", fcr: 10, skills_bows: 3, only: "amazon"},

@@ -926,7 +926,19 @@
 
 				<br/>
 				<br/>
-				<h2>
+
+				<h3>
+					<br/>
+					<a target="_blank"
+					   href="https://maaaaaarrk.github.io/Hiim-PD2-Resources/"
+					   class="alert-link"
+					   style="display:inline-block; background-image: url('images/blankbutton.png'); background-size: auto; background-position: center; background-repeat: no-repeat; height:36px;width:304px; cursor:pointer; line-height:36px; text-align:center; color:white; font-size: 1.1em;">
+						Hiim PD2 Resources</a>
+					<br/>
+					<a id="readonlybutton"
+					   style="display:inline-block; background-image: url('images/blankbutton.png'); background-size: auto; background-position: center; background-repeat: no-repeat; height:36px;width:304px; cursor:pointer; line-height:36px; text-align:center; color:white; font-size: 1.1em;"
+					   onclick="setReadonlyBuild()">Make Build Read-only</a>
+					<br/>
 					<svg xmlns="http://www.w3.org/2000/svg"
 					     width="175.000000pt" height="175.000000pt" viewBox="0 0 300.000000 286.000000"
 					     preserveAspectRatio="xMidYMid meet">
@@ -976,14 +988,11 @@ l-22 -19 6 -473 5 -472 -24 -87 c-13 -48 -28 -91 -33 -96 -5 -5 -18 26 -31 75
 52 6 864 -5 888 -7 14 -3 17 25 20 51 5 158 1 164 -5z"/>
 						</g>
 					</svg>
-					<br/>
-					<a target="_blank"
-					   href="https://maaaaaarrk.github.io/Hiim-PD2-Resources/"
-					   class="alert-link" style="color:white;">
-						Hiim PD2 Resources 🔗</a>
-				</h2>
+
+				</h3>
 
 				<span style="color:white; font-size: 1.17em;">
+					<span style="display:none;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="35.000000pt" height="35.000000pt"
                          viewBox="0 0 136.000000 136.000000" preserveAspectRatio="xMidYMid meet">
                         <g transform="translate(0.000000,136.000000) scale(0.100000,-0.100000)" fill="#fff"
@@ -1169,7 +1178,10 @@ l-26 24 14 -25z"></path>
 -6 20 -14 20 -8 0 -13 -8 -12 -17z"></path>
                         </g>
                     </svg>
-                    --Save build note here--
+					</span>
+
+					<br/>
+					<br/>
 				<br/>Planner is still in development<br/>
 					<br/>
 					Large TODO Line items:<br/>
@@ -1178,7 +1190,6 @@ l-26 24 14 -25z"></path>
 					Merc Item Slams<br/>
 					Merc Item Sockets<br/>
 					Skill stat update<br/>
-					Read only mode<br/>
                 </span>
 
 			</div>
@@ -1237,5 +1248,48 @@ l-26 24 14 -25z"></path>
 		loadParams()
 		skillHover(skills[0])
 		skillOut()
+		if (params.has('readonly') == true) {
+			disableAllSelects()
+		}
 	}
+
+function disableAllSelects() {
+// Disable all drop downs
+  document.querySelectorAll('select').forEach(function(sel) {
+    sel.disabled = true;
+  });
+// hide button
+    var el = document.getElementById('readonlybutton');
+    if (el) el.style.display = 'none';
+// Disable left (click) and right (context menu) globally; keep hover working
+// Block clicks globally but allow normal hyperlink navigation
+window.addEventListener('click', function (e) {
+  // Allow if the click is on an <a> (or inside one) with an href
+  const link = e.target.closest('a[href]');
+  if (link) return; // let it proceed
+
+  e.stopPropagation();
+  e.preventDefault();
+}, true);
+window.addEventListener('auxclick', function(e){ e.stopPropagation(); e.preventDefault(); }, true);
+window.addEventListener('contextmenu', function(e){ e.stopPropagation(); e.preventDefault(); }, true);
+// Block drag interactions globally (start/over/enter/leave/drop/end)
+['dragstart','drag','dragover','dragenter','dragleave','drop','dragend'].forEach(type => {
+  window.addEventListener(type, function (e) {
+    e.stopPropagation();
+    e.preventDefault();
+  }, true);
+});
+
+
+}
+	// Adds &readonly=0 to the current URL (preserving existing params) and reloads the page
+function setReadonlyBuild() {
+  const url = new URL(window.location.href);
+  url.searchParams.set('readonly', '1');
+  // Force reload with the updated URL
+  window.location.href = url.toString();
+}
+
+
 </script>

@@ -212,6 +212,8 @@ public class UpdateUniqueItemsStats {
                 case "Cage of the Unsullied":
                     row.put("boss_item", "Rathma");
                     break;
+                case "Amulet of the Viper":
+                    continue;
             }
 
             if (itemType == ItemType.MISC) {
