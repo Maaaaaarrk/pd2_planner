@@ -128,5 +128,34 @@ Dominion - Tomb Wand	Wand	Tomb Wand	rw		Runeword	Dominion			skill	Clay Golem		3	
 White - Tomb Wand	Wand	Tomb Wand	rw		Runeword	White																							only			Necromancer
 Golemlord's Tomb Wand of the Archmage	Wand	Tomb Wand	magic		fcr		30	30	skills_summoning_necromancer		3	3	skill	Golem Mastery		3	skill	Clay Golem		3	skill	Fire Golem		3					only			Necromancer
 Golemlord's Minion Skull of the Archmage	Offhand	Minion Skull	magic		fcr		30	30	skills_summoning_necromancer		3	3	skill	Golem Mastery		3	skill	Clay Golem		3	skill	Fire Golem		3					only			Necromancer
+Glacial Diadem	Circlet	Diadem	magic		skills_cold		3	3																					only			Sorceress
+Powered Diadem	Circlet	Diadem	magic		skills_lightning		3	3																					only			Sorceress
+Volcanic Diadem	Circlet	Diadem	magic		skills_fire		3	3																					only			Sorceress
+Golemlord's Diadem	Circlet	Diadem	magic		skills_summoning_necromancer		3	3																					only			Necromancer
+Venomous Diadem	Circlet	Diadem	magic		skills_poisonBone		3	3																					only			Necromancer
+Accursed Diadem	Circlet	Diadem	magic		skills_curses		3	3																					only			Necromancer
+Rose Branded Diadem	Circlet	Diadem	magic		skills_combat_paladin		3	3																					only			Paladin
+Cunning Diadem	Circlet	Diadem	magic		skills_traps		3	3																					only			Assassin
+Athlete's Diadem	Circlet	Diadem	magic		skills_passives		3	3																					only			Amazon
+Shadow Diadem	Circlet	Diadem	magic		skills_shadow		3	3																					only			Assassin
+Athlete's Amulet	Jewelry	Amulet	magic		skills_passives		3	3																					only			Amazon
+Lancer's Amulet	Jewelry	Amulet	magic		skills_javelins		3	3																					only			Amazon
+Archer's Amulet	Jewelry	Amulet	magic		skills_bows		3	3																					only			Amazon
+Volcanic Amulet	Jewelry	Amulet	magic		skills_fire		3	3																					only			Sorceress
+Powered Amulet	Jewelry	Amulet	magic		skills_lightning		3	3																					only			Sorceress
+Glacial Amulet	Jewelry	Amulet	magic		skills_cold		3	3																					only			Sorceress
+Accursed Amulet	Jewelry	Amulet	magic		skills_curses		3	3																					only			Necromancer
+Golemlord's Amulet	Jewelry	Amulet	magic		skills_summoning_necromancer		3	3																					only			Necromancer
+Venomous Amulet	Jewelry	Amulet	magic		skills_poisonBone		3	3																					only			Necromancer
+Rose Branded Amulet	Jewelry	Amulet	magic		skills_combat_paladin		3	3																					only			Paladin
+Marshal's Amulet	Jewelry	Amulet	magic		skills_offensive		3	3																					only			Paladin
+Guardian's Amulet	Jewelry	Amulet	magic		skills_defensive		3	3																					only			Paladin
+Echoing Amulet	Jewelry	Amulet	magic		skills_warcries		3	3																					only			Barbarian
+Keeper's Amulet	Jewelry	Amulet	magic		skills_summoning_druid		3	3																					only			Druid
+Communal Amulet	Jewelry	Amulet	magic		skills_shapeshifting		3	3																					only			Druid
+Gaea's Amulet	Jewelry	Amulet	magic		skills_elemental		3	3																					only			Druid
+Cunning Amulet	Jewelry	Amulet	magic		skills_traps		3	3																					only			Assassin
+Shadow Amulet	Jewelry	Amulet	magic		skills_shadow		3	3																					only			Assassin
+Kenshi's Amulet	Jewelry	Amulet	magic		skills_martial		3	3																					only			Assassin
 Athlete's Quiver	Quiver	Arrows	magic		skills_passives		3	3																					only			
 Archer's Quiver	Quiver	Arrows	magic		skills_bows		3	3																					only			
