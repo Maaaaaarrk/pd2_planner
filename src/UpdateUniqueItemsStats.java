@@ -188,8 +188,13 @@ public class UpdateUniqueItemsStats {
             }
 
             Map<String, Object> row = new LinkedHashMap<>();
-            if (!baseType.equalsIgnoreCase("ring") && !baseType.equalsIgnoreCase("amulet"))
-                row.put("base", removeNumbersAndCapitalizeFirst(baseType));
+            if (!baseType.equalsIgnoreCase("ring") && !baseType.equalsIgnoreCase("amulet")) {
+                String baseClean = removeNumbersAndCapitalizeFirst(baseType);
+                row.put("base", baseClean);
+                if (WeaponGroupTypeUtil.ITEM_BASE_TO_SUBTYPE.containsKey(baseClean)) {
+                    row.put("subtype", WeaponGroupTypeUtil.ITEM_BASE_TO_SUBTYPE.get(baseClean));
+                }
+            }
             row.put("req_level", parseNumericOrString(reqLevel));
             String onlyClass = itemmap.classForBaseOrNull(baseType);
             if (onlyClass != null) {
@@ -381,7 +386,11 @@ public class UpdateUniqueItemsStats {
                         row.put("type", itemGroupType);
                         itemTypeForRw = itemGroupType;
                     } else if (groupBaseType.equals("Offhand")) {
-                        row.put("type", "shield");
+                        if (baseType.equals("Arrows") || baseType.equals("Bolts")) {
+                            row.put("type", "quiver");
+                        } else {
+                            row.put("type", "shield");
+                        }
                         itemTypeForRw = "shield";
                     } else {
                         //    System.err.println("itemGroupType = null for " + baseType);

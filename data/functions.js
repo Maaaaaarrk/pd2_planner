@@ -1455,11 +1455,11 @@ function loadItems(group, dropdown, className) {
 				if (halt == 0) {
                     if (className == "clear") { halt = 1 }
                     if (typeof(item.not) != 'undefined') { for (let l = 0; l < item.not.length; l++) { if (item.not[l] == className) { halt = 1 } } }
-                    if (className == "Rogue Scout") { if (group == "offhand" || (group == "weapon" && item.type != "bow" && item.type != "crossbow" && item.name != "Weapon")) { halt = 1 } }
+                    if (className == "Rogue Scout") { if ((group == "offhand" && item.type != "quiver" && item.name != "Offhand") || (group == "weapon" && item.type != "bow" && item.type != "crossbow" && item.name != "Weapon")) { halt = 1 } }
                     if (className == "Desert Guard") { if (group == "offhand" || (group == "weapon" && item.type != "polearm" && item.type != "spear" && item.name != "Weapon")) { halt = 1 } }
-                    if (className == "Iron Wolf") { if ((group == "offhand" && item.type != "shield" && item.name != "Offhand") || (group == "weapon" && ((item.type != "sword" && item.type != "orb") || typeof(item.twoHanded) != 'undefined') && item.name != "Weapon")) { halt = 1 } }
+                    if (className == "Iron Wolf") { if ((group == "offhand" && item.type != "shield" && item.name != "Offhand") || (group == "weapon" && ((item.type != "sword" && item.type != "orb" && item.type != "scepter" && item.subtype != "mace") || typeof(item.twoHanded) != 'undefined') && item.name != "Weapon")) { halt = 1 } }
                     if (className == "Ascendant") { if (group == "offhand" || (group == "weapon" && item.type != "staff" && item.name != "Weapon")) { halt = 1 } }
-                    if (className == "Barb (merc)") { if (group == "offhand" || (group == "weapon" && item.type != "sword" && item.name != "Weapon")) { halt = 1 } }
+                    if (className == "Barb (merc)") { if (group == "offhand" || (group == "weapon" && item.type != "sword" && item.type != "axe" && item.name != "Weapon" && item.subtype != "hammer" && item.subtype != "mace")) { halt = 1 } }
 				}
 				if (halt == 0) {
 					var addon = "";
@@ -1630,7 +1630,7 @@ function setMercenary(merc) {
 	if (document.getElementById("dropdown_merc_weapon").innerHTML == "") { document.getElementById("dropdown_merc_weapon").style.display = "none" } else { document.getElementById("dropdown_merc_weapon").style.display = "block" }
 	if (document.getElementById("dropdown_merc_offhand").innerHTML == "") { document.getElementById("dropdown_merc_offhand").style.display = "none" } else { document.getElementById("dropdown_merc_offhand").style.display = "block" }
 	if (merc == "none" || merc == "­ ­ ­ ­ Mercenary") { document.getElementById("mercenary_spacing").style.display = "none" } else { document.getElementById("mercenary_spacing").style.display = "block" }
-	if (mercType == "Iron Wolf") { document.getElementById("mercenary_spacing2").style.display = "block" } else { document.getElementById("mercenary_spacing2").style.display = "none" }
+	if (mercType == "Iron Wolf" || mercType == "Rogue Scout") { document.getElementById("mercenary_spacing2").style.display = "block" } else { document.getElementById("mercenary_spacing2").style.display = "none" }
 	if (merc == "none" || merc == "­ ­ ­ ­ Mercenary") { document.getElementById("merc_space").style.display = "block" } else { document.getElementById("merc_space").style.display = "none" }
 	if (loaded == 1) { updateURL() }
 }
@@ -2923,10 +2923,10 @@ function equipmentHoverMerc(group) {
 	var base = "";
 //	console.log(group);
 	if (mercEquipped[group].name != "none" && (group == "helm" || group == "armor" || group == "weapon" || (group == "offhand" && mercEquipped[group].type != "quiver"))) {
-		var sockets = ~~corruptsEquipped[group].sockets + ~~mercEquipped[group].sockets;
+		var sockets = ~~mercEquipped[group].sockets;//~~corruptsEquipped[groupId].sockets + ~~mercEquipped[group].sockets;
 		sockets = Math.min(sockets,mercEquipped[group].max_sockets)
-		if (socketed[group].sockets > 0 || mercEquipped[group].sockets > 0) {
-			if (corruptsEquipped[group].name == "none") { sock = "<font color='"+colors.Gray+"'> ["+sockets+"]</font>" }
+		if (mercEquipped[group].sockets > 0) {
+			if (typeof(corruptsEquipped[groupId]) == 'undefined' || corruptsEquipped[groupId].name == "none") { sock = "<font color='"+colors.Gray+"'> ["+sockets+"]</font>" }
 			else { sock = "<font color='"+colors.Red+"'> ["+sockets+"]</font>" }
 		}
 	}
@@ -2948,14 +2948,16 @@ function equipmentHoverMerc(group) {
 	var socketed_affixes = "";
 	var set_affixes = "";
 	var set_group_affixes = "";
-	if (mercEquipped[group].name != "none" && corruptsEquipped[group].name != "none") {
-		for (affix in corruptsEquipped[group]) {
+	if(false){ //  TODO corruptions
+	if (mercEquipped[group].name != "none" && corruptsEquipped[groupId].name != "none") {
+		for (affix in corruptsEquipped[groupId]) {
 			if ( stats[affix] != 1) {//stats[affix] != unmercEquipped[affix] &&
-				var halt = 0; if (affix == "sockets" && corruptsEquipped[group].name != "+ Sockets") { halt = 1; }
-				var affix_info = getAffixLine(affix,"corruptsEquipped",group,"");
+				var halt = 0; if (affix == "sockets" && corruptsEquipped[groupId].name != "+ Sockets") { halt = 1; }
+				var affix_info = getAffixLine(affix,"corruptsEquipped",groupId,"");
 				if (affix_info[1] != 0 && halt == 0) { corruption += affix_info[0]+"<br>" }
 			}
 		}
+	}
 	}
 	for (affix in mercEquipped[group]) {
 	//mercEquipped[group][affix] != unmercEquipped[affix] && stats[affix] != unmercEquipped[affix] &&

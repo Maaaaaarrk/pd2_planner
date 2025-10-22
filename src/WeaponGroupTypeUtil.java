@@ -1,4 +1,6 @@
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public final class WeaponGroupTypeUtil {
 
@@ -275,4 +277,47 @@ public final class WeaponGroupTypeUtil {
         v.put("mace", java.util.Collections.unmodifiableSet(MACE));
         return java.util.Collections.unmodifiableMap(v);
     }
+
+    // Key: base key name with spaces (e.g., "Club", "Spiked Club"), Value: subtype (e.g., "club")
+    static final Map<String, String> ITEM_BASE_TO_SUBTYPE = new LinkedHashMap<String, String>() {{
+        // mace group with subtype
+        put("Club", "club");
+        put("Spiked Club", "club");
+        put("Mace", "mace");
+        put("Morning Star", "mace");
+        put("Flail", "mace");
+        put("War Hammer", "hammer");
+        put("Maul", "hammer");
+        put("Great Maul", "hammer");
+        put("Cudgel", "club");
+        put("Barbed Club", "club");
+        put("Flanged Mace", "mace");
+        put("Jagged Star", "mace");
+        put("Knout", "mace");
+        put("Battle Hammer", "hammer");
+        put("War Club", "hammer");
+        put("Martel De Fer", "hammer");
+        put("Truncheon", "club");
+        put("Tyrant Club", "club");
+        put("Reinforced Mace", "mace");
+        put("Devil Star", "mace");
+        put("Scourge", "mace");
+        put("Legendary Mallet", "hammer");
+        put("Ogre Maul", "hammer");
+        put("Thunder Maul", "hammer");
+
+        // thrown group with subtype
+        put("Throwing Knife", "dagger");
+        put("Throwing Axe", "axe");
+        put("Balanced Knife", "dagger");
+        put("Balanced Axe", "axe");
+        put("Battle Dart", "dagger");
+        put("Francisca", "axe");
+        put("War Dart", "dagger");
+        put("Hurlbat", "axe");
+        put("Flying Knife", "dagger");
+        put("Flying Axe", "axe");
+        put("Winged Knife", "dagger");
+        put("Winged Axe", "axe");
+    }};
 }

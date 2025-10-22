@@ -128,3 +128,5 @@ Dominion - Tomb Wand	Wand	Tomb Wand	rw		Runeword	Dominion			skill	Clay Golem		3	
 White - Tomb Wand	Wand	Tomb Wand	rw		Runeword	White																							only			Necromancer
 Golemlord's Tomb Wand of the Archmage	Wand	Tomb Wand	magic		fcr		30	30	skills_summoning_necromancer		3	3	skill	Golem Mastery		3	skill	Clay Golem		3	skill	Fire Golem		3					only			Necromancer
 Golemlord's Minion Skull of the Archmage	Offhand	Minion Skull	magic		fcr		30	30	skills_summoning_necromancer		3	3	skill	Golem Mastery		3	skill	Clay Golem		3	skill	Fire Golem		3					only			Necromancer
+Athlete's Quiver	Quiver	Arrows	magic		skills_passives		3	3																					only			
+Archer's Quiver	Quiver	Arrows	magic		skills_bows		3	3																					only			
