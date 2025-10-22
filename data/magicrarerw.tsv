@@ -16,13 +16,13 @@ Rose Branded Diadem of the Magus	Circlet	Diadem	magic		fcr		20	20	skills_combat_
 Cunning Diadem of the Magus	Circlet	Diadem	magic		fcr		20	20	skills_traps		3	3																	only			Assassin
 Athlete's Diadem of the Magus	Circlet	Diadem	magic		fcr		20	20	skills_passives		3	3																	only			Amazon
 Shadow Diadem of the Magus	Circlet	Diadem	magic		fcr		20	20	skills_shadow		3	3																	only			Assassin
-Blood Craft - Amulet 	Jewelry	Amulet	craft		all_res		20	20	life_per_kill		6	6	frw		10	10	poison_length_reduced		75	75	fcr		10	10	skills_assassin		2	2	only			Assassin
-Blood Craft - Amulet 	Jewelry	Amulet	craft		all_res		20	20	life_per_kill		6	6	frw		10	10	poison_length_reduced		75	75	fcr		10	10	skills_amazon		2	2	only			Amazon
-Blood Craft - Amulet 	Jewelry	Amulet	craft		all_res		20	20	life_per_kill		6	6	frw		10	10	poison_length_reduced		75	75	fcr		10	10	skills_sorceress		2	2	only			Sorceress
-Blood Craft - Amulet 	Jewelry	Amulet	craft		all_res		20	20	life_per_kill		6	6	frw		10	10	poison_length_reduced		75	75	fcr		10	10	skills_paladin		2	2	only			Paladin
-Blood Craft - Amulet 	Jewelry	Amulet	craft		all_res		20	20	life_per_kill		6	6	frw		10	10	poison_length_reduced		75	75	fcr		10	10	skills_barbarian		2	2	only			Barbarian
-Blood Craft - Amulet 	Jewelry	Amulet	craft		all_res		20	20	life_per_kill		6	6	frw		10	10	poison_length_reduced		75	75	fcr		10	10	skills_necromancer		2	2	only			Necromancer
-Blood Craft - Amulet 	Jewelry	Amulet	craft		all_res		20	20	life_per_kill		6	6	frw		10	10	poison_length_reduced		75	75	fcr		10	10	skills_druid		2	2	only			Druid
+Blood Craft - Assassin	Jewelry	Amulet	craft		all_res		20	20	life_per_kill		6	6	frw		10	10	poison_length_reduced		75	75	fcr		10	10	skills_assassin		2	2	only			Assassin
+Blood Craft - Amazon	Jewelry	Amulet	craft		all_res		20	20	life_per_kill		6	6	frw		10	10	poison_length_reduced		75	75	fcr		10	10	skills_amazon		2	2	only			Amazon
+Blood Craft - Sorceress	Jewelry	Amulet	craft		all_res		20	20	life_per_kill		6	6	frw		10	10	poison_length_reduced		75	75	fcr		10	10	skills_sorceress		2	2	only			Sorceress
+Blood Craft - Paladin	Jewelry	Amulet	craft		all_res		20	20	life_per_kill		6	6	frw		10	10	poison_length_reduced		75	75	fcr		10	10	skills_paladin		2	2	only			Paladin
+Blood Craft - Barbarian	Jewelry	Amulet	craft		all_res		20	20	life_per_kill		6	6	frw		10	10	poison_length_reduced		75	75	fcr		10	10	skills_barbarian		2	2	only			Barbarian
+Blood Craft - Necromancer	Jewelry	Amulet	craft		all_res		20	20	life_per_kill		6	6	frw		10	10	poison_length_reduced		75	75	fcr		10	10	skills_necromancer		2	2	only			Necromancer
+Blood Craft - Druid	Jewelry	Amulet	craft		all_res		20	20	life_per_kill		6	6	frw		10	10	poison_length_reduced		75	75	fcr		10	10	skills_druid		2	2	only			Druid
 Athlete's Amulet of the Apprentice	Jewelry	Amulet	magic		fcr		10	10	skills_passives		3	3																	only			Amazon
 Lancer's Amulet of the Apprentice	Jewelry	Amulet	magic		fcr		10	10	skills_javelins		3	3																	only			Amazon
 Archer's Amulet of the Apprentice	Jewelry	Amulet	magic		fcr		10	10	skills_bows		3	3																	only			Amazon
@@ -127,4 +127,4 @@ Dominion - Tomb Wand	Wand	Tomb Wand	rw		Runeword	Dominion			skill	Fire Golem		3	
 Dominion - Tomb Wand	Wand	Tomb Wand	rw		Runeword	Dominion			skill	Clay Golem		3	skill	Golem Mastery		3	skill	Blood Warp		3									only			Necromancer
 White - Tomb Wand	Wand	Tomb Wand	rw		Runeword	White																							only			Necromancer
 Golemlord's Tomb Wand of the Archmage	Wand	Tomb Wand	magic		fcr		30	30	skills_summoning_necromancer		3	3	skill	Golem Mastery		3	skill	Clay Golem		3	skill	Fire Golem		3					only			Necromancer
-Golemlord's Tomb Wand of the Archmage	Offhand	Minion Skull	magic		fcr		30	30	skills_summoning_necromancer		3	3	skill	Golem Mastery		3	skill	Clay Golem		3	skill	Fire Golem		3					only			Necromancer
+Golemlord's Minion Skull of the Archmage	Offhand	Minion Skull	magic		fcr		30	30	skills_summoning_necromancer		3	3	skill	Golem Mastery		3	skill	Clay Golem		3	skill	Fire Golem		3					only			Necromancer
