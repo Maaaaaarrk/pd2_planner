@@ -82,11 +82,11 @@ public class ClassJSUpdater {
 
     // Example usage:
     public static void main(String[] args) throws Exception {
-        Path path = Path.of(amazon);
-        String varKey = "122"; // e.g., Power Strike => var d122
-        String label = "attack rating bonus";
-        String numbers = "20,32,44,56,68,80,92,104,116,128"; // your replacement list
-        updateNumberList(path, varKey, label, numbers);
-        System.out.println("Update completed.");
+        //  Path path = Path.of(amazon);
+        // String varKey = "122"; // e.g., Power Strike => var d122
+        //   String label = "attack rating bonus";
+        //  String numbers = "20,32,44,56,68,80,92,104,116,128"; // your replacement list
+        // updateNumberList(path, varKey, label, numbers);
+        System.err.println("This is a UTIL class.");
     }
 }
