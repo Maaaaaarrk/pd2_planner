@@ -58,6 +58,7 @@ var runewords = {
 	Myth:["Hel","Amn","Nef"],
 	Nadir:["Nef","Tir"],
 	Neophyte:["Thul","Tir"],
+	Neophyte2:["Thul","Tir"],
 	Oath:["Shael","Pul","Mal","Lum"],
 	Obedience:["Hel","Ko","Thul","Eth","Fal"],
 	Obsession:["Zod","Ist","Lem","Lum","Io","Nef"],

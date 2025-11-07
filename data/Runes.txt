@@ -178,7 +178,7 @@ Runeword171	Dominion	1		wand									ChamOhm	r32	r27					skill	Golem Mastery	2	3
 Zenith	Zenith	1		miss	spea	pole	staf	2hsw					JahZodOrtThulRal	r31	r33	r09	r10	r08		dmg%		225	300	aura	Salvation	10	12	swing2		40	40	move2		20	20	allskills		2	2	dmg-elem	100	360	420					0
 Rampage	Rampage	1		staf	spea	pole							ShaelElIthEth	r13	r01	r06	r05			dmg%		120	145	swing2		45	45	res-fire		25	25	balance2		20	20													
 Neophyte	Neophyte	1		scep	club	sorc	h2h	h2h2					ThulTir	r10	r03					half-freeze		1	1	red-dmg		2	4	cast2		30	30	res-pois-len		25	25													
-Neophyte2	Neophyte	1		staf									ThulTir	r10	r03					half-freeze		1	1	red-dmg		4	6	cast2		40	40	res-pois-len		25	25													
+Neophyte2	Neophyte2	1		staf									ThulTir	r10	r03					half-freeze		1	1	red-dmg		4	6	cast2		40	40	res-pois-len		25	25
 Wind Staff	Wind	1		staf						mele	thro		SurEl	r29	r01					dmg%		320	380	swing2		40	40	move2		20	30	reduce-ac		50	50	cast-skill	245	18	35	cast-skill	240	18	35	cast-skill	Cyclone Armor	5	9	0
 Phoenix Staff	Phoenix	1		staf									VexVexLoJah	r26	r26	r28	r31			dmg%		400	450	ac-miss		350	400	cast-skill	Firestorm	20	40	levelup-skill	Blaze	100	40	pierce-fire		28	28	aura	Redemption	10	12	abs-fire		15	21	0
 Shattered Wall	Shattered Wall	1		pala									ZodJahRalCham	r33	r31	r08	r32			ac%		160	200	aura	Holy Freeze	16	16	block2		60	60	mana-kill		5	5	dmg-cold	50	200	250	hp		50	100					0
