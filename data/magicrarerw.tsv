@@ -164,17 +164,17 @@ Splendor - Bone Shield	Shield	Bone Shield	rw		Runeword	Splendor																	
 Rhyme - Bone Shield	Offhand	Bone Shield	rw		Runeword	Rhyme																							only			
 Rhyme - Gargoyle Head	Offhand	Gargoyle Head	rw		Runeword	Rhyme																							only			Necromancer
 Splendor - Gargoyle Head	Offhand	Gargoyle Head	rw		Runeword	Splendor																							only			Necromancer
-Teeth Rhyme - Gargoyle Head	Offhand	Gargoyle Head	rw		Runeword	Rhyme			skill	Teeth		3																	only			Necromancer
-Teeth Splendor - Gargoyle Head	Offhand	Gargoyle Head	rw		Runeword	Splendor			skill	Teeth		3																	only			Necromancer
-Bone Spear Rhyme - Gargoyle Head	Offhand	Gargoyle Head	rw		Runeword	Rhyme			skill	Bone Spear		3																	only			Necromancer
-Bone Spear Splendor - Gargoyle Head	Offhand	Gargoyle Head	rw		Runeword	Splendor			skill	Bone Spear		3																	only			Necromancer
-Corpse Explosion Rhyme - Gargoyle Head	Offhand	Gargoyle Head	rw		Runeword	Rhyme			skill	Corpse Explosion		3																	only			Necromancer
-Corpse Explosion Splendor - Gargoyle Head	Offhand	Gargoyle Head	rw		Runeword	Splendor			skill	Corpse Explosion		3																	only			Necromancer
-Poison Strike Rhyme - Gargoyle Head	Offhand	Gargoyle Head	rw		Runeword	Rhyme			skill	Poison Strike		3																	only			Necromancer
-Poison Strike Splendor - Gargoyle Head	Offhand	Gargoyle Head	rw		Runeword	Splendor			skill	Poison Strike		3																	only			Necromancer
-Teeth White - Tomb Wand	Wand	Tomb Wand	rw		Runeword	White			skill	Teeth		3																	only			Necromancer
-Bone Spear White - Tomb Wand	Wand	Tomb Wand	rw		Runeword	White			skill	Bone Spear		3																	only			Necromancer
-Corpse Explosion White - Tomb Wand	Wand	Tomb Wand	rw		Runeword	White			skill	Corpse Explosion		3																	only			Necromancer
+Rhyme - Gargoyle Head - Teeth 	Offhand	Gargoyle Head	rw		Runeword	Rhyme			skill	Teeth		3																	only			Necromancer
+Splendor - Gargoyle Head - Teeth 	Offhand	Gargoyle Head	rw		Runeword	Splendor			skill	Teeth		3																	only			Necromancer
+Rhyme - Gargoyle Head - Bone Spear	Offhand	Gargoyle Head	rw		Runeword	Rhyme			skill	Bone Spear		3																	only			Necromancer
+Splendor - Gargoyle Head - Bone Spear	Offhand	Gargoyle Head	rw		Runeword	Splendor			skill	Bone Spear		3																	only			Necromancer
+Rhyme - Gargoyle Head - Corpse Explosion 	Offhand	Gargoyle Head	rw		Runeword	Rhyme			skill	Corpse Explosion		3																	only			Necromancer
+Splendor - Gargoyle Head - Corpse Explosion 	Offhand	Gargoyle Head	rw		Runeword	Splendor			skill	Corpse Explosion		3																	only			Necromancer
+Rhyme - Gargoyle Head - Poison Strike 	Offhand	Gargoyle Head	rw		Runeword	Rhyme			skill	Poison Strike		3																	only			Necromancer
+Splendor - Gargoyle Head - Poison Strike	Offhand	Gargoyle Head	rw		Runeword	Splendor			skill	Poison Strike		3																	only			Necromancer
+White - Tomb Wand - Teeth 	Wand	Tomb Wand	rw		Runeword	White			skill	Teeth		3																	only			Necromancer
+White - Tomb Wand - Bone Spear 	Wand	Tomb Wand	rw		Runeword	White			skill	Bone Spear		3																	only			Necromancer
+White - Tomb Wand - Corpse Explosion	Wand	Tomb Wand	rw		Runeword	White			skill	Corpse Explosion		3																	only			Necromancer
 Poison Strike - Dagger	Dagger	Dagger	magic		ias		20		skill	Poison Strike		3																	only			
 Athlete's Gloves of the Apprentice	Gloves	Dagger	magic		fcr		20		skills_passives		3	3																	only			Amazon
 Athlete's Gloves of Quickness	Gloves	Gloves	magic		ias		20		skills_passives		3	3																	only			Amazon
@@ -187,10 +187,12 @@ Passion - Demon Crossbow	Crossbow	Demon Crossbow	rw		Runeword	Passion											
 Fire Cunning Greater Talons of Quickness	Claw	Greater Talons	magic		ias		20		skills_traps		3	3	skill	Wake of Fire		3	skill	Wake of Inferno		3									only			Assassin
 Lightning Cunning Greater Talons of Quickness	Claw	Greater Talons	magic		ias		20		skills_traps		3	3	skill	Lightning Sentry		3	skill	Chain Lightning Sentry		3									only			Assassin
 Neophyte - Scepter	Scepter	War Scepter	rw		Runeword	Neophyte																							only			
-Raven Neophyte - Club	Club	Club	rw		Runeword	Neophyte			skill	Raven		3																	only			Druid
-Grizzly Neophyte - Club	Club	Club	rw		Runeword	Neophyte			skill	Summon Grizzly		3																	only			Druid
-Raven Lore - Pelt	Helm	Spirit Mask	rw		Runeword	Lore			skill	Raven		3																	only			Druid
-Grizzly Lore - Pelt	Helm	Spirit Mask	rw		Runeword	Lore			skill	Summon Grizzly		3																	only			Druid
+Neophyte - Club - Raven	Club	Club	rw		Runeword	Neophyte			skill	Raven		3																	only			Druid
+Neophyte - Club - Grizzly 	Club	Club	rw		Runeword	Neophyte			skill	Summon Grizzly		3																	only			Druid
+Lore - Pelt - Raven	Helm	Spirit Mask	rw		Runeword	Lore			skill	Raven		3																	only			Druid
+Lore - Pelt - Grizzly	Helm	Spirit Mask	rw		Runeword	Lore			skill	Summon Grizzly		3																	only			Druid
 Stealth - Armor	Body Armor	Light Plate	rw		Runeword	Stealth																							only			
-Spirit - Paladin Shield	Shield	Rondache	rw		Runeword	Spirit			all_res		30																		only			
+Spirit - Rondache	Shield	Rondache	rw		Runeword	Spirit			all_res		30																		only			
 Golemlord's Minion Skull	Offhand	Minion Skull	magic						skills_summoning_necromancer		3	3																	only			Necromancer
+Spirit - Crystal Sword	Sword	Crystal Sword	rw		Runeword	Spirit																										
+Ancient's Pledge - Bone Shield	Shield	Bone Shield	rw		Runeword	Ancient's Pledge																										

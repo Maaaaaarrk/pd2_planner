@@ -907,7 +907,7 @@ splash_missinghp:{index:["splash_missinghp"], format:["","% Increased Splash Rad
 bonus_corpse_explosion:{index:["bonus_corpse_explosion"], format:["Corpse Explosion deals +","% of Maximum Corpse life"]},
 phys_Lightning_Surge:{index:["phys_Lightning_Surge"], format:["Lightning Surge Deals ","% Extra Damage As Physical"]},
 extraValkyrie:{index:[], format:["Can Summon One Additional Valkyrie"]},
-extraValkyries:{index:["extraValkyries"], format:["Can Summon "," Additional Golem"]},
+extraValkyries:{index:["extraValkyries"], format:["Can Summon "," Additional Valkyrie"]},
 extraGrizzly:{index:[], format:["Can Summon One Additional Grizzly Bear"]},
 extraFireGolem:{index:[], format:["Can Summon One Additional Golem"]},
 extraGolem:{index:["extraGolem"], format:["Can Summon "," Additional Golem"]},
