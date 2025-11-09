@@ -847,10 +847,17 @@ function equipMerc(group, val) {
     		if (typeof(mercEquipped[group].img) != 'undefined') { src = mercEquipped[group].img }
     		if (typeof(mercEquipped[group].base) != 'undefined') { base = mercEquipped[group].base }
     		document.getElementById("merc_"+group+"_image").src = getItemImage(group,base,src,mercEquipped[group].type);
+    				// Set opacity to 50% if ethereal
+                		if (mercEquipped[group].ethereal == 1) {
+                			document.getElementById("merc_"+group+"_image").style.opacity = "0.5";
+                		} else {
+                			document.getElementById("merc_"+group+"_image").style.opacity = "1";
+                		}
     	} else {
     		var img = "./images/items/none.png"
     		if (group == "helm" || group == "armor" || group == "boots" || group == "belt" || group == "weapon" || group == "offhand") { img = "./images/items/blank_"+group+".png" }
     		document.getElementById("merc_"+group+"_image").src = img
+    		document.getElementById("merc_"+group+"_image").style.opacity = "1";
     		document.getElementById("tooltip_inventory").style.display = "none"
     	}
 	if (auraName != "" && auraLevel != 0) {
@@ -1128,10 +1135,17 @@ function equip(group, val) {
 		if (typeof(equipped[group].img) != 'undefined') { src = equipped[group].img }
 		if (typeof(equipped[group].base) != 'undefined') { base = equipped[group].base }
 		document.getElementById(group+"_image").src = getItemImage(group,base,src,equipped[group].type)
+				// Set opacity to 50% if ethereal
+        		if (equipped[group].ethereal == 1) {
+        			document.getElementById(group+"_image").style.opacity = "0.5";
+        		} else {
+        			document.getElementById(group+"_image").style.opacity = "1";
+        		}
 	} else {
 		var img = "./images/items/none.png"
 		if (group == "helm" || group == "armor" || group == "boots" || group == "belt" || group == "weapon" || group == "offhand") { img = "./images/items/blank_"+group+".png" }
 		document.getElementById(group+"_image").src = img
+		document.getElementById(group+"_image").style.opacity = "1";
 		document.getElementById("tooltip_inventory").style.display = "none"
 	}
 
