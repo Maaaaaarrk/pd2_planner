@@ -811,6 +811,27 @@ public final class itemmap {
         ncc.put("McAuley's Taboo", "Sander's Taboo");
         ncc.put("McAuley's Superstition", "Sander's Superstition");
         ncc.put("Cow King's Hoofs", "Cow King's Hooves");
+        ncc.put("Fathom", "Death's Fathom");
+        ncc.put("Bloodraven's Charge", "Blood Raven's Charge");
+        ncc.put("Shadowkiller", "Shadow Killer");
+        ncc.put("Vampiregaze", "Vampire Gaze");
+        ncc.put("Steelshade", "Steel Shade");
+        ncc.put("Giantskull", "Giant Skull");
+        ncc.put("Valkiry Wing", "Valkyrie Wing");
+        ncc.put("Peasent Crown", "Peasant Crown");
+        ncc.put("Umes Lament", "Ume's Lament");
+        ncc.put("Griswolds's Redemption", "Griswold's Redemption");
+        ncc.put("Haemosu's Adament", "Haemosu's Adamant");
+        ncc.put("Spiritual Custodian", "Dark Adherent");
+        ncc.put("Tal Rasha's Howling Wind", "Tal Rasha's Guardianship");
+        ncc.put("Venomsward", "Venom Ward");
+        ncc.put("Heaven's Taebaek", "Taebaek's_Glory");
+        ncc.put("Wihtstan's Guard", "Whitstan's Guard");
+        ncc.put("Hwanin's Seal", "Hwanin's Blessing");
+        ncc.put("Tal Rasha's Fire-Spun Cloth", "Tal Rasha's Fine-Spun Cloth");
+        ncc.put("Saber", "Sabre");
+
+
         // ncc.put("", "");
 
         Map<String, String> lowercased = new LinkedHashMap<>(ncc.size());

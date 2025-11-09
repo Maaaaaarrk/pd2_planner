@@ -71,7 +71,7 @@ public final class WeaponGroupTypeUtil {
     private static final java.util.Set<String> SWORD = java.util.Set.of(
             // Normal 1H
             "Short Sword", "Scimitar", "Falchion", "Crystal Sword", "Broad Sword", "Long Sword", "War Sword",
-            "Shamshir",
+            "Shamshir", "Sabre",
             // Normal 2H
             "Two Handed Sword", "Claymore", "Giant Sword", "Bastard Sword", "Flamberge", "Great Sword",
             // Exceptional 1H

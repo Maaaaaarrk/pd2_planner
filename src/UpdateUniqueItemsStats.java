@@ -10,14 +10,17 @@ import java.util.*;
 
 public class UpdateUniqueItemsStats {
     // Configuration: replace with your actual paths
-    private static final String dir = System.getProperty("user.dir") + "\\data\\";
+    private static final String rootdir = System.getProperty("user.dir");
+    private static final String dir = rootdir + "\\data\\";
     private static final String UNIQUE_ITEMS_PATH = dir + "UniqueItems.txt";
     public static final String RUNE_WORDS = dir + "Runes.txt";
     public static final String GEM_RUNE = dir + "Gems.txt";
     private static final String SET_ITEMS_PATH = dir + "SetItems.txt";
     private static final String MISC_PATH = dir + "magicrarerw.tsv";
     private static final String OUTPUT_DIR = dir;
-    private static final String INPUT_DIR = System.getProperty("user.dir") + "\\src\\";
+    private static final String INPUT_DIR = rootdir + "\\src\\";
+    private static final String IMAGE_DIR = rootdir + "\\images\\";
+    private static final String ITEM_IMAGE_DIR = IMAGE_DIR + "\\items\\";
 
     // File naming: new file each run like equipment-YYYYMMDD-HHmmss.js
     private static final String OUTPUT_BASENAME = "equipment";
@@ -955,7 +958,7 @@ public class UpdateUniqueItemsStats {
             sb.append(groupKey).append(": [\n{name:\"" + removeNumbersAndCapitalizeFirst(groupKey) + "\"},\n");
             for (int i = 0; i < rows.size(); i++) {
                 Map<String, Object> row = rows.get(i);
-                mapToJsObjectAppender(sb, row);
+                mapToJsObjectAppender(sb, row, removeNumbersAndCapitalizeFirst(groupKey));
                 sb.append(",");
                 sb.append("\n");
             }
@@ -969,10 +972,27 @@ public class UpdateUniqueItemsStats {
         return sb.toString();
     }
 
-    private static void mapToJsObjectAppender(StringBuilder sb, Map<String, Object> row) {
+    private static void mapToJsObjectAppender(StringBuilder sb, Map<String, Object> row, String groupKey) {
         sb.append("    {");
         int ci = 0;
         int csize = row.size();
+
+
+        if (row.containsKey("img")) {
+            String subGroupKey = "";
+            if (row.containsKey("type") && groupKey.toLowerCase().equals("weapon")) {
+                subGroupKey = String.valueOf(row.get("type"));
+            }
+            imageCheck(groupKey, subGroupKey, true, String.valueOf(row.get("img")), row.get("name"));
+        } else if (row.containsKey("base") && false) {
+            // these dont need to be reviewed, there is a complex eltie-> normal base reduction
+            String subGroupKey = "";
+            if (row.containsKey("type") && groupKey.toLowerCase().equals("weapon")) {
+                subGroupKey = String.valueOf(row.get("type"));
+            }
+            imageCheck(groupKey, subGroupKey, false, String.valueOf(row.get("base")), row.get("name"));
+        }
+
         for (Map.Entry<String, Object> ce : row.entrySet()) {
             // sb.append("\"").append(escapeJsString(ce.getKey())).append("\": ");
             sb.append(escapeJsString(ce.getKey())).append(": ");
@@ -990,7 +1010,7 @@ public class UpdateUniqueItemsStats {
                         sb.append("\"").append(al.get(j).toString()).append("\"");
                     } else if (al.get(j) instanceof Map<?, ?>) {
                         Map<String, Object> m = (Map<String, Object>) al.get(j);
-                        mapToJsObjectAppender(sb, m);
+                        mapToJsObjectAppender(sb, m, groupKey);
                     } else {
                         sb.append(al.get(j).toString());
                     }
@@ -1005,6 +1025,22 @@ public class UpdateUniqueItemsStats {
             if (++ci < csize) sb.append(", ");
         }
         sb.append("}");
+    }
+
+    private static void imageCheck(String groupKey, String subGroup, boolean isSpecial, String s, Object name) {
+        s = s.replace(" ", "_");
+        String fileName = s + ".png";
+        String isSpecialStr = isSpecial ? "special\\" : "";
+        if (subGroup != null && !subGroup.isEmpty()) {
+            subGroup = subGroup + "\\";
+        } else {
+            subGroup = "";
+        }
+        Path imagePath = Paths.get(ITEM_IMAGE_DIR, groupKey.toLowerCase(), "\\", subGroup.toLowerCase(), isSpecialStr, fileName);
+
+        if (!Files.exists(imagePath)) {
+            System.err.println(name + ": " + imagePath.toAbsolutePath());
+        }
     }
 
     private static String escapeJsString(String s) {
