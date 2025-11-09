@@ -279,7 +279,7 @@ function toggleQuests(quests) {
 }
 
 function resetQuests() {
-    //if (character.skillpoints < 12 || character.statpoints < 15){
+    if ((character.skillpoints < 12 || character.statpoints < 15)&&character.quests_completed!=1){
             character.quests_completed =1
             var toggle = character.quests_completed
             character.skillpoints += (12*toggle)
@@ -291,7 +291,7 @@ function resetQuests() {
             character.pRes += (30*toggle)
             updatePrimaryStats()
             updateOther()
-   // }
+    }
 }
 
 // toggleRunning - Toggles whether the character is running or walking/standing
@@ -403,9 +403,10 @@ function changeDifficulty(diff) {
 	character.difficulty = diff
 	var penalties = ["fRes_penalty", "cRes_penalty", "lRes_penalty", "pRes_penalty", "mRes_penalty"]
 	for (let p = 0; p < penalties.length; p++) {
-		if (diff == 1) { character[penalties[p]] = 0 }
-		else if (diff == 2) { character[penalties[p]] = 40 }
-		else if (diff == 3) { character[penalties[p]] = 100 }
+	//	if (diff == 1) { character[penalties[p]] = 0 }
+	//	else if (diff == 2) { character[penalties[p]] = 40 }
+		//else if (diff == 3) { character[penalties[p]] = 100 }
+        character[penalties[p]] = 100
 	}
 	//document.getElementById("difficulty"+diff).checked = true
 	updateStats()
@@ -577,11 +578,11 @@ function loadParams() {
 		if (param_quests == 1) {
 			document.getElementById("quests").checked = true
 			character.quests_completed = param_quests
-			character.life += 60
-			character.fRes += 30
-			character.cRes += 30
-			character.lRes += 30
-			character.pRes += 30
+			//character.life += 60
+			//character.fRes += 30
+		//	character.cRes += 30
+		//	character.lRes += 30
+		//	character.pRes += 30
 		}
 		if (param_url == 1) {
 			document.getElementById("parameters").checked = true
@@ -4464,9 +4465,9 @@ function updatePrimaryStats() {
 		} }
 		*/
 		// TODO: implement basic IAS breakpoints for dual-wielding
-		if (offhandType != "weapon") {
-			document.getElementById("ias").innerHTML += " ("+frames_per_attack+" fpa)"
-		}
+		//if (offhandType != "weapon") {
+		//	document.getElementById("ias").innerHTML += " ("+frames_per_attack+" fpa)"
+		//}
 	}
 	if (c.flamme > 0) { document.getElementById("flamme").innerHTML = "Righteous Fire deals "+Math.floor((c.flamme/100*lifeTotal)*(1+c.fDamage/100))+" damage per second<br>" } else { document.getElementById("flamme").innerHTML = "" }
 }
@@ -4543,9 +4544,9 @@ function updateSecondaryStats() {
 	document.getElementById("fcr").innerHTML = fcrTotal; if (fcrTotal > 0) { document.getElementById("fcr").innerHTML += "%" }
 	document.getElementById("fhr").innerHTML = c.fhr; if (c.fhr > 0) { document.getElementById("fhr").innerHTML += "%" }
 	document.getElementById("fbr").innerHTML = c.fbr; if (c.fbr > 0) { document.getElementById("fbr").innerHTML += "%" }
-	if (fcrTotal > 0 || equipped.weapon.name != "none" || equipped.offhand.name != "none") { document.getElementById("fcr").innerHTML += " ("+fcr_f+"f)" }
-	if (c.fhr > 0 || equipped.weapon.name != "none" || equipped.offhand.name != "none") { document.getElementById("fhr").innerHTML += " ("+fhr_f+"f)" }
-	if (c.fbr > 0 || c.block > 0 || c.block_skillup > 0) { document.getElementById("fbr").innerHTML += " ("+fbr_f+"f)" }
+	//if (fcrTotal > 0 || equipped.weapon.name != "none" || equipped.offhand.name != "none") { document.getElementById("fcr").innerHTML += " ("+fcr_f+"f)" }
+	//if (c.fhr > 0 || equipped.weapon.name != "none" || equipped.offhand.name != "none") { document.getElementById("fhr").innerHTML += " ("+fhr_f+"f)" }
+	//if (c.fbr > 0 || c.block > 0 || c.block_skillup > 0) { document.getElementById("fbr").innerHTML += " ("+fbr_f+"f)" }
 
 	// actual movespeed
 	var movespeed = 9;
