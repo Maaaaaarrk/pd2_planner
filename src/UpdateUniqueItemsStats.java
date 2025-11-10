@@ -814,6 +814,7 @@ public class UpdateUniqueItemsStats {
             final double newPsn = Math.floor(((Integer) val) / factor);
             row.put("dmg_pois", newPsn);
             row.put("dmg_pois_time", seconds);
+            return row;
         }
 
         if (propKey.equals("silence-fhr-ias")) {
@@ -861,6 +862,15 @@ public class UpdateUniqueItemsStats {
         // add stat for uld
         if (plannerPropKey.equals("mindmg_energy")) {
             row.put("mindmg_per_energy", 1);
+        }
+
+        if (itemmap.PER_LEVEL_STATS.contains(plannerPropKey)) {
+            row.put(plannerPropKey, (Double.parseDouble(val.toString()) * 0.125));
+            return row;
+        } else if (plannerPropKey.endsWith("_per_level")) {
+            System.err.println("name: " + name + " possible per level prop key propKey: " + propKey);
+            row.put(plannerPropKey, (Double.parseDouble(val.toString()) * 0.125));
+            return row;
         }
 
         if (row.containsKey(plannerPropKey)) {

@@ -23,6 +23,7 @@ public final class itemmap {
     public static final Map<String, String> NAME_CORRECTION_MAP;
     public static final ArrayList<String> CORRECTED_NAMES;
     public static final ArrayList<String> SKIP_NAME_PART;
+    public static final ArrayList<String> PER_LEVEL_STATS;
 
     static {
         LinkedHashMap<String, String> p = new LinkedHashMap<>();
@@ -259,6 +260,31 @@ public final class itemmap {
         p.put("extra-skele-archer", "extra_Skeleton_Archers");
         p.put("infinityspeed", "frw");
         PROP_MAP = Collections.unmodifiableMap(p);
+
+
+        PER_LEVEL_STATS = new ArrayList<>();
+        PER_LEVEL_STATS.add("defense_per_level");
+        PER_LEVEL_STATS.add("ar_vs_demons_per_level");
+        PER_LEVEL_STATS.add("damage_vs_undead_per_level");
+        PER_LEVEL_STATS.add("ar_per_level");
+        PER_LEVEL_STATS.add("dstrike_per_level");
+        PER_LEVEL_STATS.add("dexterity_per_level");
+        PER_LEVEL_STATS.add("e_max_damage_per_level");
+        PER_LEVEL_STATS.add("damage_vs_demons_per_level");
+        PER_LEVEL_STATS.add("max_damage_per_level");
+        PER_LEVEL_STATS.add("gf_per_level");
+        PER_LEVEL_STATS.add("life_per_level");
+        PER_LEVEL_STATS.add("mf_per_level");
+        PER_LEVEL_STATS.add("mana_per_level");
+        PER_LEVEL_STATS.add("strength_per_level");
+        PER_LEVEL_STATS.add("thorns_per_level");
+        PER_LEVEL_STATS.add("vitality_per_level");
+        PER_LEVEL_STATS.add("lDamage_max_per_level");
+        PER_LEVEL_STATS.add("fRes_per_level");
+        PER_LEVEL_STATS.add("cRes_per_level");
+        PER_LEVEL_STATS.add("lRes_per_level");
+        PER_LEVEL_STATS.add("cDamage_max_per_level");
+        PER_LEVEL_STATS.add("heal_stam_per_level");
 
 
         ArrayList<String> types = new ArrayList<>();
