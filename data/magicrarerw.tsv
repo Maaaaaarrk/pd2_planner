@@ -46,8 +46,8 @@ Imp Shank	Boots	Mesh Boots	rare		frw		30	30	cRes		40	40	fRes		40	40	lRes		40	40	
 Lancer's Maiden Javelin of Quickness	Javelin	Maiden Javelin	magic		ias		40	40	skills_javelins		6	6																	only			
 Kenshi's Greater Talons of Quickness	Claw	Greater Talons	magic		ias		40	40	skills_martial		3	3	skill	Fists of Fire		3	skill	Claws of Thunder		3	skill	Blades of Ice		3					only			
 Kenshi's Greater Talons of Quickness	Claw	Greater Talons	magic		ias		40	40	skills_martial		3	3	skill	Cobra Strike		3	skill	Tiger Strike		3	skill	Phoenix Strike		3					only			
-Infinity - Archon Staff	Staff	Archon Staff	rw		Runeword	Infinity			skill	Lightning Mastery		3	skill	Chain Lightning		3	skill	Nova		3									only			
-Infinity - Archon Staff	Staff	Archon Staff	rw		Runeword	Infinity			skill	Lightning Mastery		3	skill	Charged Bolt		3	skill	Teleport		3									only			
+Infinity - Archon Staff - cl+nova	Staff	Archon Staff	rw		Runeword	Infinity			skill	Lightning Mastery		3	skill	Chain Lightning		3	skill	Nova		3									only			
+Infinity - Archon Staff - cb	Staff	Archon Staff	rw		Runeword	Infinity			skill	Lightning Mastery		3	skill	Charged Bolt		3	skill	Teleport		3									only			
 Infinity - Archon Staff	Staff	Archon Staff	rw		Runeword	Infinity																							only			
 Last Wish - Archon Staff	Staff	Archon Staff	rw		Runeword	Last Wish			ethereal		1	1																	only			
 Purity - Archon Staff	Staff	Archon Staff	rw		Runeword	Purity																							only			
@@ -58,8 +58,8 @@ Call to Arms - Archon Staff	Staff	Archon Staff	rw		Runeword	Call to Arms			skill
 Beast - Archon Staff	Staff	Archon Staff	rw		Runeword	Beast																							only			
 Doom - Archon Staff	Staff	Archon Staff	rw		Runeword	Doom			skill	Frost Nova		3	skill	Cold Mastery		3	skill	Teleport		3									only			
 Zenith - Archon Staff	Staff	Archon Staff	rw		Runeword	Zenith																							only			
-Obsession - Archon Staff	Staff	Archon Staff	rw		Runeword	Obsession			skill	Blizzard		3	skill	Cold Mastery		3	skill	Ice Bolt		3									only			
-Obsession - Archon Staff	Staff	Archon Staff	rw		Runeword	Obsession			skill	Hydra		3	skill	Fire Mastery		3	skill	Blaze		3									only			
+Obsession - Archon Staff - cold	Staff	Archon Staff	rw		Runeword	Obsession			skill	Blizzard		3	skill	Cold Mastery		3	skill	Ice Bolt		3									only			
+Obsession - Archon Staff - fire	Staff	Archon Staff	rw		Runeword	Obsession			skill	Hydra		3	skill	Fire Mastery		3	skill	Blaze		3									only			
 Asylum - Archon Staff	Staff	Archon Staff	rw		Runeword	Asylum																							only			
 Ferocity - Bone Visage	Helm	Bone Visage	rw		Runeword	Ferocity			ethereal		1	1																	only			
 Dream - Bone Visage	Helm	Bone Visage	rw		Runeword	Dream																							only			
@@ -123,8 +123,8 @@ Harmony - Demon Crossbow	Crossbow	Demon Crossbow	rw		Runeword	Harmony											
 Loyalty - Demon Crossbow	Crossbow	Demon Crossbow	rw		Runeword	Loyalty																							only			
 Chaos - War Fist	Claw	War Fist	rw		Runeword	Chaos			ethereal		1	1	skill	Claw and Dagger Mastery		3	skill	Weapon Block		3		Burst of Speed		3					only			
 Plague - Greater Talons	Claw	Greater Talons	rw		Runeword	Plague			skill	Claw and Dagger Mastery		3	skill	Burst of Speed		3	skill	Blade Sentinel		3									only			
-Dominion - Tomb Wand	Wand	Tomb Wand	rw		Runeword	Dominion			skill	Fire Golem		3		Golem Mastery		3	skill	Blood Warp		3									only			Necromancer
-Dominion - Tomb Wand	Wand	Tomb Wand	rw		Runeword	Dominion			skill	Clay Golem		3	skill	Golem Mastery		3	skill	Blood Warp		3									only			Necromancer
+Dominion - Tomb Wand - fire	Wand	Tomb Wand	rw		Runeword	Dominion			skill	Fire Golem		3		Golem Mastery		3	skill	Blood Warp		3									only			Necromancer
+Dominion - Tomb Wand - clay	Wand	Tomb Wand	rw		Runeword	Dominion			skill	Clay Golem		3	skill	Golem Mastery		3	skill	Blood Warp		3									only			Necromancer
 White - Tomb Wand	Wand	Tomb Wand	rw		Runeword	White																							only			Necromancer
 Golemlord's Tomb Wand of the Archmage	Wand	Tomb Wand	magic		fcr		30	30	skills_summoning_necromancer		3	3	skill	Golem Mastery		3	skill	Clay Golem		3	skill	Fire Golem		3					only			Necromancer
 Golemlord's Minion Skull of the Archmage	Offhand	Minion Skull	magic		fcr		30	30	skills_summoning_necromancer		3	3	skill	Golem Mastery		3	skill	Clay Golem		3	skill	Fire Golem		3					only			Necromancer
