@@ -749,9 +749,13 @@ function corrupt(group, val) {
 					    character[affix] += 2
 					    corruptsEquipped[group][affix] = 2
 					} else if(affix == "sockets" && (group == "weapon" || group == "offhand") && unlimitSockets == 1 && (typeof equipped[group].twoHanded == 'undefined' || equipped[group].twoHanded != 1)) {
-
+if(typeof equipped[group].type !== 'undefined' && equipped[group].type === "shield"){
+					    character[affix] += 3
+					    corruptsEquipped[group][affix] = 3
+} else {
 					    character[affix] += 4
 					    corruptsEquipped[group][affix] = 4
+					    }
 					} else {
                         corruptsEquipped[group][affix] = corruptions[group][outcome][affix]
                         if (affix != "name" && affix != "base") {
