@@ -748,6 +748,10 @@ function corrupt(group, val) {
 				    if (affix == "sockets" & unlimitSockets == 0) {
 					    character[affix] += 2
 					    corruptsEquipped[group][affix] = 2
+					} else if((group == "weapon" || group == "offhand") && unlimitSockets == 1 && (typeof equipped[group].twoHanded == 'undefined' || equipped[group].twoHanded != 1)) {
+
+					    character[affix] += 4
+					    corruptsEquipped[group][affix] = 4
 					} else {
                         corruptsEquipped[group][affix] = corruptions[group][outcome][affix]
                         if (affix != "name" && affix != "base") {
@@ -757,7 +761,8 @@ function corrupt(group, val) {
 				}
 			}
 		}
-		if (val == "+ Sockets") { adjustCorruptionSockets(group) }
+		if (val == "+ Sockets") {
+					adjustCorruptionSockets(group) }
 	}
 	updateSocketTotals()
 	update()
@@ -1218,7 +1223,10 @@ function adjustCorruptionSockets(group) {
 	if (equipped[group].max_sockets > 0 && corruptsEquipped[group].name != group) {
 	    var corrSockets = corruptsEquipped[group].sockets
 		max = ~~equipped[group].max_sockets;
-		if (equipped[group].sockets > 0 || equipped[group].rarity == "rw" || equipped[group].rarity == "common" || equipped[group].type == "quiver") { max = 0 }
+		if (group == "weapon" && (typeof equipped[group].twoHanded == 'undefined' || equipped[group].twoHanded != 1) && max > 4) {
+        	max = 4;
+        }
+		if (equipped[group].sockets > 0 || equipped[group].rarity == "rw" || equipped[group].rarity == "common") { max = 0 }
 		if (max != corrSockets) {
 			character.sockets -= corrSockets
 			corrSockets = max
@@ -1234,7 +1242,10 @@ function adjustCorruptionSocketsMax(group) {
 	if (equipped[group].max_sockets > 0 && corruptsEquipped[group].name != group) {
 	    var corrSockets = corruptsEquipped[group].sockets
 		max = ~~equipped[group].max_sockets;
-		if (equipped[group].sockets > 0 || equipped[group].rarity == "rw" || equipped[group].rarity == "common" || equipped[group].type == "quiver") { max = 0 }
+		if (group == "weapon" && (typeof equipped[group].twoHanded == 'undefined' || equipped[group].twoHanded != 1) && max > 4) {
+        	max = 4;
+        }
+		if (equipped[group].sockets > 0 || equipped[group].rarity == "rw" || equipped[group].rarity == "common") { max = 0 }
 		if(max >2 ){
 		max = 2;
 		}
