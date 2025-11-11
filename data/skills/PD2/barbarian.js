@@ -48,7 +48,8 @@ var character_pd2_barbarian = {class_name:"Barbarian", strength:30, dexterity:20
 		var lvl = skill.level + skill.extra_levels;
 		var result = {};
 
-		// unsupported
+		if (skill.name == "Iron Skin") { result.pdr = skill.data.values[0][lvl]; }
+		if (skill.name == "Natural Resistance") { result.resistance_skillup = skill.data.values[0][lvl]; }
 
 	return result
 	},

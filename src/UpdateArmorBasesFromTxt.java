@@ -19,6 +19,7 @@ public class UpdateArmorBasesFromTxt {
         put("mindam", Arrays.asList("smite_min", "kick_min"));
         put("maxdam", Arrays.asList("smite_max", "kick_max"));
         put("reqstr", Arrays.asList("req_strength"));
+        put("gemsockets", Arrays.asList("max_sockets"));
     }};
 
     public static void main(String[] args) throws IOException {
@@ -74,6 +75,7 @@ public class UpdateArmorBasesFromTxt {
                 putIntIfPositive(vals, "mindam", row.get("mindam"));
                 putIntIfPositive(vals, "maxdam", row.get("maxdam"));
                 putIntIfPositive(vals, "reqstr", row.get("reqstr"));
+                putIntIfPositive(vals, "gemsockets", row.get("gemsockets"));
 
                 // Store under multiple keys to improve matching: raw, normalized spaces->underscores, underscores->spaces
                 byName.put(rawName, vals);
@@ -338,6 +340,11 @@ public class UpdateArmorBasesFromTxt {
             return block;
         }
 
+        // Override: force Boneweave to have 6 max sockets
+        if ("Boneweave".equalsIgnoreCase(baseName)) {
+            row.put("gemsockets", 6);
+        }
+        
         // Find existing target keys in block
         Map<String, Integer> keyLineIdx = new HashMap<>();
         for (int i = 0; i < block.size(); i++) {

@@ -19,6 +19,7 @@ public class UpdateWeaponBasesFromTxt {
         put("mindam", Arrays.asList("base_damage_min"));
         put("maxdam", Arrays.asList("base_damage_max"));
         put("reqstr", Arrays.asList("req_strength"));
+        put("gemsockets", Arrays.asList("max_sockets"));
     }};
 
     public static void main(String[] args) throws IOException {
@@ -74,6 +75,7 @@ public class UpdateWeaponBasesFromTxt {
                 putIntIfPositive(vals, "mindam", row.get("mindam"));
                 putIntIfPositive(vals, "maxdam", row.get("maxdam"));
                 putIntIfPositive(vals, "reqstr", row.get("reqstr"));
+                putIntIfPositive(vals, "gemsockets", row.get("gemsockets"));
 
                 // Store under multiple keys to improve matching: raw, normalized spaces->underscores, underscores->spaces
                 byName.put(rawName, vals);

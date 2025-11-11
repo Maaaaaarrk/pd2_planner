@@ -455,6 +455,54 @@ public class UpdateUniqueItemsStats {
     public static Map<String, Object> combineRows(Map<String, Object> base, Map<String, Object> addition) {
         if (addition == null || addition.isEmpty()) return base;
         if (base == null) base = new LinkedHashMap<>();
+        for (String key : chanceSkills) {
+            if (addition.containsKey(key)) {
+                if (base.containsKey(key)) {
+                    addition = recursiveIncrement(base, addition, key, 1);
+                    break;
+                }
+                break;
+            }
+        }
+        return upsertCombineRows(base, addition);
+    }
+
+    private static Map<String, Object> recursiveIncrement(Map<String, Object> base, Map<String, Object> addition, String key, int i) {
+        if (i > 100) {
+            System.err.println("Too many iterations on " + key);
+            return addition;
+        }
+        if (base.containsKey(key + "_" + i)) {
+            return recursiveIncrement(base, addition, key, i + 1);
+        }
+        String keyAddition = "_" + i;
+        Map<String, Object> additionCopy = new LinkedHashMap<>();
+        for (Map.Entry<String, Object> e : addition.entrySet()) {
+            additionCopy.put(e.getKey() + keyAddition, e.getValue());
+        }
+        return additionCopy;
+    }
+
+    static List<String> chanceSkills = new ArrayList<>();
+
+    static {
+        chanceSkills.add("aura");
+        chanceSkills.add("cast_skill");
+        chanceSkills.add("hit_skill");
+        chanceSkills.add("gethit_skill");
+        chanceSkills.add("ondeath_skill");
+        chanceSkills.add("onkill_skill");
+        chanceSkills.add("onlevel_skill");
+        chanceSkills.add("onblock_skill");
+        chanceSkills.add("charges_skill");
+        chanceSkills.add("strike_skill");
+        chanceSkills.add("equipped_skill");
+    }
+
+
+    private static Map<String, Object> upsertCombineRows(Map<String, Object> base, Map<String, Object> addition) {
+        if (addition == null || addition.isEmpty()) return base;
+        if (base == null) base = new LinkedHashMap<>();
         for (Map.Entry<String, Object> e : addition.entrySet()) {
             String key = e.getKey();
             Object newVal = e.getValue();

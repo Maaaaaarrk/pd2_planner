@@ -1298,15 +1298,25 @@ function addCharm(val) {
 
 	var allow = 1;
 	for (let c = 1; c <= inv[0].in.length; c++) {
-		if (inv[0].in[c] == val) {
-			if (val == "Annihilus" || val == "Hellfire Torch" || val == "Gheed's Fortune") { allow = 0 } }
+	var tval = val;
+	    if ( val == "Annihilus +2") { tval = "Annihilus"; }
+		if (inv[0].in[c] == tval) {
+			if (val == "Annihilus"|| val == "Annihilus +2" || val == "Hellfire Torch" || val == "Gheed's Fortune") { allow = 0 } }
+	    if ( val == "Annihilus" && allow == 1) {
+	        tval = "Annihilus +2";
+
+            if (inv[0].in[c] == tval) {
+                if (val == "Annihilus"|| val == "Annihilus +2" || val == "Hellfire Torch" || val == "Gheed's Fortune") { allow = 0 }
+            }
+        }
 	}
 	if (allow == 1) {
-		if (val != "Annihilus" && val != "Hellfire Torch" && val != "Gheed's Fortune") {
+		if (val != "Annihilus" && val != "Annihilus +2" && val != "Hellfire Torch" && val != "Gheed's Fortune") {
 			var append = "" + Math.floor((Math.random() * 999999) + 1);	// generate "unique" ID for charm
 			val = val + "_" + append
 		}
 		if (nameVal == "Annihilus") { charmImage = charm_img.prefix+"charm1u.png"; }
+		if (nameVal == "Annihilus +2") { charmImage = charm_img.prefix+"charm1u-2.png"; }
 		if (nameVal == "Hellfire Torch") { charmImage = charm_img.prefix+"charm2u.png"; }
 		if (nameVal == "Gheed's Fortune") { charmImage = charm_img.prefix+"charm3u.png"; }
 		if (nameVal == "Horadric Sigil") { charmImage = charm_img.prefix+"charm3s.png"; }
@@ -2235,11 +2245,11 @@ function getAuraData(aura, lvl, source) {
 	}
 	// Defensive Auras
 	if (aura == "Prayer") { result.life_regen = 1; result.life_replenish = auras[a].data.values[0][lvl]; result.radius = 24; }
-	else if (aura == "Resist Fire") { result.fRes = auras[a].data.values[1][lvl]; result.fRes_max = auras[a].data.values[2][lvl]; result.radius = 28; }
+	else if (aura == "Resist Fire") { result.fRes = auras[a].data.values[1][lvl];  result.radius = 28; result.fDamage = auras[a].data.values[2][lvl]; } //result.fRes_max = auras[a].data.values[2][lvl];
 	else if (aura == "Defiance") { result.defense_bonus = auras[a].data.values[0][lvl]; result.radius = 24; }
-	else if (aura == "Resist Cold") { result.cRes = auras[a].data.values[1][lvl]; result.cRes_max = auras[a].data.values[2][lvl]; result.radius = 28; }
+	else if (aura == "Resist Cold") { result.cRes = auras[a].data.values[1][lvl]; result.radius = 28; result.cDamage = auras[a].data.values[2][lvl]; } //result.cRes_max = auras[a].data.values[2][lvl];
 	else if (aura == "Cleansing") { result.poison_length_reduced = auras[a].data.values[2][lvl]; result.curse_length_reduced = auras[a].data.values[2][lvl]; result.radius = 24; }
-	else if (aura == "Resist Lightning") { result.lRes = auras[a].data.values[1][lvl]; result.lRes_max = auras[a].data.values[2][lvl]; result.radius = 28; }
+	else if (aura == "Resist Lightning") { result.lRes = auras[a].data.values[1][lvl]; result.radius = 28;result.lDamage = auras[a].data.values[2][lvl]; } //result.lRes_max = auras[a].data.values[0][lvl];
 	else if (aura == "Vigor") { result.velocity = auras[a].data.values[0][lvl]; result.max_stamina = auras[a].data.values[1][lvl]; result.heal_stam = auras[a].data.values[2][lvl]; result.radius = 21.3; }
 	else if (aura == "Meditation") { result.mana_regen = auras[a].data.values[1][lvl]; result.radius = 24; }
 	else if (aura == "Redemption") { result.redeem_chance = auras[a].data.values[0][lvl]; result.redeem_amount = auras[a].data.values[1][lvl]; result.radius = 16; }
@@ -2774,7 +2784,7 @@ function itemSelect(ev) {
 	if (ev.shiftKey) { dup = 1 }
 	if (ev.ctrlKey) { dup = 10 }
 	if (dup > 0) {
-		if (name != "Annihilus" && name != "Hellfire Torch" && name != "Gheed's Fortune") {
+		if (name != "Annihilus" && name != "Annihilus +2" && name != "Hellfire Torch" && name != "Gheed's Fortune") {
 			for (let d = 0; d < dup; d++) {
 				addCharm(lastCharm)
 			}
@@ -2813,7 +2823,7 @@ function itemHover(ev, id) {
             // name = charm.name; // uncomment if you want to set name from equipped
             color = "Indigo";
 
-            if (name === "Annihilus" || name === "Hellfire Torch" || name === "Gheed's Fortune" || name === "Horadric Sigil") {
+            if (name === "Annihilus" || name === "Annihilus +2" || name === "Hellfire Torch" || name === "Gheed's Fortune" || name === "Horadric Sigil") {
                 color = "Gold";
             }
 

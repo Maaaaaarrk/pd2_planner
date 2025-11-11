@@ -151,8 +151,7 @@ var socketables = [
 {name:"Ber Rune", type:"rune", rarity:"craft", req_level:63, weapon:{cblow:20}, armor:{pdr:5}},
 {name:"Jah Rune", type:"rune", rarity:"craft", req_level:65, weapon:{itd:1}, armor:{max_life:5}, shield:{life:75}},
 {name:"Cham Rune", type:"rune", rarity:"craft", req_level:67, weapon:{freezes_target:3}, armor:{cbf:1}},
-{name:"Zod Rune", type:"rune", rarity:"craft", req_level:69, weapon:{indestructible:1}, armor:{indestructible:1}},	// same
-/*
+{name:"Zod Rune", type:"rune", rarity:"craft", req_level:69, weapon:{indestructible:1}, armor:{indestructible:1}},
 {name:"Perfect Sapphire", type:"gem", rarity:"common", req_level:18, weapon:{cDamage_min:10,cDamage_max:14}, armor:{mana:38}, shield:{cRes:40}},
 {name:"Perfect Emerald", type:"gem", rarity:"common", req_level:18, weapon:{pDamage_all:100,pDamage_duration:7}, armor:{dexterity:10}, shield:{pRes:40}},
 {name:"Perfect Topaz", type:"gem", rarity:"common", req_level:18, weapon:{lDamage_min:1,lDamage_max:40}, armor:{mf:24}, shield:{lRes:40}},
@@ -160,6 +159,7 @@ var socketables = [
 {name:"Perfect Amethyst", type:"gem", rarity:"common", req_level:18, weapon:{ar:150}, armor:{strength:10}, shield:{defense:30}},
 {name:"Perfect Diamond", type:"gem", rarity:"common", req_level:18, weapon:{damage_min:8,damage_max:9}, armor:{ar:100}, shield:{all_res:19}},
 {name:"Perfect Skull", type:"gem", rarity:"common", req_level:18, weapon:{life_leech:4,mana_leech:3}, armor:{life_replenish:5,mana_regen:19}, shield:{damage_reduced:17}},
+/*
 {name:"Flawless Sapphire", type:"gem", rarity:"common", req_level:15, weapon:{cDamage_min:6,cDamage_max:10}, armor:{mana:31}, shield:{cRes:28}},
 {name:"Flawless Emerald", type:"gem", rarity:"common", req_level:15, weapon:{pDamage_all:60,pDamage_duration:6}, armor:{dexterity:8}, shield:{pRes:28}},
 {name:"Flawless Topaz", type:"gem", rarity:"common", req_level:15, weapon:{lDamage_min:1,lDamage_max:30}, armor:{mf:20}, shield:{lRes:28}},
