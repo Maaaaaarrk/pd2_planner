@@ -4467,7 +4467,14 @@ function updatePrimaryStats() {
 	var ias = c.ias + Math.floor(dexTotal/8)*c.ias_per_8_dexterity;
 	if (offhandType == "weapon" && typeof(equipped.offhand.ias) != 'undefined') { ias -= equipped.offhand.ias }
 	var ias_total = ias + c.ias_skill;
-	document.getElementById("ias").innerHTML = ias; if (ias > 0) { document.getElementById("ias").innerHTML += "%" }
+	document.getElementById("ias").innerHTML = ias;
+	if (ias > 0) {
+	    document.getElementById("ias_label").style.display = "block";
+	document.getElementById("ias").innerHTML += "%";
+	} else {
+             document.getElementById("ias_label").style.display = "none"
+	}
+
 	if (equipped.weapon.type != "" && equipped.weapon.special != 1) {
 		var weaponType = equipped.weapon.type;
 		var eIAS = Math.floor(120*ias/(120+ias));
@@ -4581,9 +4588,27 @@ function updateSecondaryStats() {
 		for (let i = 1; i < character_all.druid.fbr_bp_werewolf.length; i++) { if (c.fbr >= character_all.druid.fbr_bp_werewolf[i]) { fbr_f -= 1 } }
 	} } }
 
-	document.getElementById("fcr").innerHTML = fcrTotal; if (fcrTotal > 0) { document.getElementById("fcr").innerHTML += "%" }
-	document.getElementById("fhr").innerHTML = c.fhr; if (c.fhr > 0) { document.getElementById("fhr").innerHTML += "%" }
-	document.getElementById("fbr").innerHTML = c.fbr; if (c.fbr > 0) { document.getElementById("fbr").innerHTML += "%" }
+	document.getElementById("fcr").innerHTML = fcrTotal;
+	if (fcrTotal > 0) {
+	 document.getElementById("fcr_label").style.display = "block";
+	    document.getElementById("fcr").innerHTML += "%";
+	} else {
+        document.getElementById("fcr_label").style.display = "none"
+	}
+	document.getElementById("fhr").innerHTML = c.fhr;
+	if (c.fhr > 0) {
+	 document.getElementById("fhr_label").style.display = "block";
+	document.getElementById("fhr").innerHTML += "%";
+	} else {
+             document.getElementById("fhr_label").style.display = "none"
+    }
+	document.getElementById("fbr").innerHTML = c.fbr;
+	if (c.fbr > 0) {
+	 document.getElementById("fbr_label").style.display = "block";
+	document.getElementById("fbr").innerHTML += "%";
+	} else {
+        document.getElementById("fbr_label").style.display = "none"
+    }
 	//if (fcrTotal > 0 || equipped.weapon.name != "none" || equipped.offhand.name != "none") { document.getElementById("fcr").innerHTML += " ("+fcr_f+"f)" }
 	//if (c.fhr > 0 || equipped.weapon.name != "none" || equipped.offhand.name != "none") { document.getElementById("fhr").innerHTML += " ("+fhr_f+"f)" }
 	//if (c.fbr > 0 || c.block > 0 || c.block_skillup > 0) { document.getElementById("fbr").innerHTML += " ("+fbr_f+"f)" }
@@ -4605,10 +4630,38 @@ function updateSecondaryStats() {
 	if (MPH == "0m , 0r") { MPH = 0 }
 	document.getElementById("mana_per_hit").innerHTML = MPH
 
-	document.getElementById("fdamage").innerHTML = c.fDamage; if (c.fDamage > 0) { document.getElementById("fdamage").innerHTML += "%" }
-	document.getElementById("cdamage").innerHTML = c.cDamage; if (c.cDamage > 0) { document.getElementById("cdamage").innerHTML += "%" }
-	document.getElementById("ldamage").innerHTML = c.lDamage; if (c.lDamage > 0) { document.getElementById("ldamage").innerHTML += "%" }
-	document.getElementById("pdamage").innerHTML = c.pDamage; if (c.pDamage > 0) { document.getElementById("pdamage").innerHTML += "%" }
+	document.getElementById("fdamage").innerHTML = c.fDamage;
+	if (c.fDamage > 0) {
+        document.getElementById("fdamage_label").style.display = "block";
+        document.getElementById("fdamage").innerHTML += "%";
+	} else {
+        document.getElementById("fdamage_label").style.display = "none"
+
+	}
+	document.getElementById("cdamage").innerHTML = c.cDamage;
+	if (c.cDamage > 0) {
+        document.getElementById("cdamage_label").style.display = "block";
+        document.getElementById("cdamage").innerHTML += "%";
+	} else {
+        document.getElementById("cdamage_label").style.display = "none"
+
+	}
+	document.getElementById("ldamage").innerHTML = c.lDamage;
+	if (c.lDamage > 0) {
+        document.getElementById("ldamage_label").style.display = "block";
+        document.getElementById("ldamage").innerHTML += "%";
+	} else {
+        document.getElementById("ldamage_label").style.display = "none"
+
+	}
+	document.getElementById("pdamage").innerHTML = c.pDamage;
+	if (c.pDamage > 0) {
+        document.getElementById("pdamage_label").style.display = "block";
+        document.getElementById("pdamage").innerHTML += "%";
+	} else {
+        document.getElementById("pdamage_label").style.display = "none"
+
+	}
 
 	document.getElementById("fpierce").innerHTML = c.fPierce; if (c.fPierce > 0) { document.getElementById("fpierce").innerHTML += "%" }
 	document.getElementById("cpierce").innerHTML = c.cPierce; if (c.cPierce > 0) { document.getElementById("cpierce").innerHTML += "%" }
@@ -4622,23 +4675,53 @@ function updateSecondaryStats() {
 
 	{
 	var pierce_total = c.fPierce + c.enemy_fRes;
-	document.getElementById("f_pierce").innerHTML = pierce_total; if (pierce_total > 0) { document.getElementById("f_pierce").innerHTML += "%" }
+	document.getElementById("f_pierce").innerHTML = pierce_total;
+        if (pierce_total > 0) {
+        document.getElementById("f_pierce_label").style.display = "block";
+        document.getElementById("f_pierce").innerHTML += "%";
+        } else {
+        document.getElementById("f_pierce_label").style.display = "none"
+        }
 	}
 	{
 	var pierce_total = c.cPierce + c.enemy_cRes;
-	document.getElementById("c_pierce").innerHTML = pierce_total; if (pierce_total > 0) { document.getElementById("c_pierce").innerHTML += "%" }
+	document.getElementById("c_pierce").innerHTML = pierce_total;
+	  if (pierce_total > 0) {
+             document.getElementById("c_pierce_label").style.display = "block";
+             document.getElementById("c_pierce").innerHTML += "%";
+             } else {
+             document.getElementById("c_pierce_label").style.display = "none"
+             }
 	}
 	{
 	var pierce_total = c.lPierce + c.enemy_lRes;
-	document.getElementById("l_pierce").innerHTML = pierce_total; if (pierce_total > 0) { document.getElementById("l_pierce").innerHTML += "%" }
+	document.getElementById("l_pierce").innerHTML = pierce_total;
+	  if (pierce_total > 0) {
+             document.getElementById("l_pierce_label").style.display = "block";
+             document.getElementById("l_pierce").innerHTML += "%";
+             } else {
+             document.getElementById("l_pierce_label").style.display = "none"
+             }
 	}
 	{
 	var pierce_total = c.pPierce + c.enemy_pRes;
-	document.getElementById("p_pierce").innerHTML = pierce_total; if (pierce_total > 0) { document.getElementById("p_pierce").innerHTML += "%" }
+	document.getElementById("p_pierce").innerHTML = pierce_total;
+	  if (pierce_total > 0) {
+             document.getElementById("p_pierce_label").style.display = "block";
+             document.getElementById("p_pierce").innerHTML += "%";
+             } else {
+             document.getElementById("p_pierce_label").style.display = "none"
+             }
 	}
 	{
 	var pierce_total = c.enemy_phyRes;
-	document.getElementById("phy_pierce").innerHTML = pierce_total; if (pierce_total > 0) { document.getElementById("phy_pierce").innerHTML += "%" }
+	document.getElementById("phy_pierce").innerHTML = pierce_total;
+	  if (pierce_total > 0) {
+             document.getElementById("phy_pierce_label").style.display = "block";
+             document.getElementById("phy_pierce").innerHTML += "%";
+             } else {
+             document.getElementById("phy_pierce_label").style.display = "none"
+             }
 	}
 
 	//		<font size="2">Fire Pierce: </font><font size="2" id="f_pierce"></font><br>
