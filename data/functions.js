@@ -4401,8 +4401,9 @@ function updatePrimaryStats() {
 	}
 
 	var block_shield = c.block;
-	if (c.class_name == "Amazon" || c.class_name == "Assassin" || c.class_name == "Barbarian") { block_shield -= 5 }
-	if (c.class_name == "Druid" || (c.class_name == "Necromancer" && equipped.offhand.only != "necromancer") || c.class_name == "Sorceress") { block_shield -= 10 }
+	if (c.class_name == "Paladin") { block_shield += 30 }
+	if (c.class_name == "Amazon" || c.class_name == "Assassin" || c.class_name == "Barbarian") { block_shield += 25 }
+	if (c.class_name == "Druid" || (c.class_name == "Necromancer" && equipped.offhand.only != "necromancer") || c.class_name == "Sorceress") { block_shield += 20 }
 	var block = (Math.max(0,block_shield) + c.ibc)*(dexTotal-15)/(c.level*2)
 	if (c.block_skillup > 0) { block = Math.min((c.block_skillup*(dexTotal-15)/(c.level*2)),c.block_skillup) }
 	if (c.running > 0) { block = Math.min(25,block/3) }

@@ -61,8 +61,8 @@ public final class itemmap {
         p.put("bar", "skills_barbarian");
         p.put("block", "ibc");
         p.put("block-skill", "block-skill");
-        p.put("block2", "ibc");
-        p.put("block3", "ibc");
+        p.put("block2", "fbr");
+        p.put("block3", "fbr");
         p.put("block1", "ibc");
         p.put("blood-warp-life-reduction", "blood-warp-life-reduction");
         p.put("bloody", "bloody"); // Ignored
@@ -851,7 +851,7 @@ public final class itemmap {
         ncc.put("Spiritual Custodian", "Dark Adherent");
         ncc.put("Tal Rasha's Howling Wind", "Tal Rasha's Guardianship");
         ncc.put("Venomsward", "Venom Ward");
-        ncc.put("Heaven's Taebaek", "Taebaek's_Glory");
+        ncc.put("Heaven's Taebaek", "Taebaek's Glory");
         ncc.put("Wihtstan's Guard", "Whitstan's Guard");
         ncc.put("Hwanin's Seal", "Hwanin's Blessing");
         ncc.put("Tal Rasha's Fire-Spun Cloth", "Tal Rasha's Fine-Spun Cloth");
