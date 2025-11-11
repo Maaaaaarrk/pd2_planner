@@ -145,6 +145,10 @@
   appearance: none;
 }
 .dropdown-corruption select {
+  background-image: url('../images/wss.png');
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
   width: 20px;
 }
 .dropdown-set, .dropdown-unique, .dropdown-magic, .dropdown-rare, .dropdown-craft, .dropdown-common, .dropdown-rw, .dropdown-debug, .dropdown:hover, .dropdown:focus {
