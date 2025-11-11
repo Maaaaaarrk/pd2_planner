@@ -2254,7 +2254,7 @@ function getAuraData(aura, lvl, source) {
 	else if (aura == "Holy Shock") { result.lDamage_min = auras[a].data.values[0][lvl]; result.lDamage_max = auras[a].data.values[1][lvl]; result.radius = 18.6; }
 	else if (aura == "Sanctuary") { result.damage_vs_undead = auras[a].data.values[0][lvl]; result.radius = 12.6; }
 	else if (aura == "Fanaticism") { result.radius = 12; if (source == "mercenary" || source == "golem") { result.damage_bonus = auras[a].data.values[0][lvl] } else { result.damage_bonus = auras[a].data.values[1][lvl]; result.ias_skill = auras[a].data.values[2][lvl]; result.ar_bonus = auras[a].data.values[3][lvl]; }}
-	else if (aura == "Conviction") { result.enemy_defense = auras[a].data.values[0][lvl]; result.enemy_fRes = auras[a].data.values[1][lvl]; result.enemy_cRes = auras[a].data.values[1][lvl]; result.enemy_lRes = auras[a].data.values[1][lvl]; result.enemy_pRes = auras[a].data.values[1][lvl]; result.radius = 24; }
+//	else if (aura == "Conviction") { result.enemy_defense = auras[a].data.values[0][lvl]; result.enemy_fRes = auras[a].data.values[1][lvl]; result.enemy_cRes = auras[a].data.values[1][lvl]; result.enemy_lRes = auras[a].data.values[1][lvl]; result.enemy_pRes = auras[a].data.values[1][lvl]; result.radius = 24; }
 	// Others
 	else if (aura == "Thorns") { result.thorns_reflect = auras[a].values[0][lvl]; result.radius = 16; }	// TOCHECK: radius is a guess - get confirmation
 	else if (aura == "Inner Sight") { result.enemy_defense_flat = auras[a].values[0][lvl]; result.radius = auras[a].values[1][lvl]; }
@@ -4599,10 +4599,43 @@ function updateSecondaryStats() {
 	document.getElementById("cdamage").innerHTML = c.cDamage; if (c.cDamage > 0) { document.getElementById("cdamage").innerHTML += "%" }
 	document.getElementById("ldamage").innerHTML = c.lDamage; if (c.lDamage > 0) { document.getElementById("ldamage").innerHTML += "%" }
 	document.getElementById("pdamage").innerHTML = c.pDamage; if (c.pDamage > 0) { document.getElementById("pdamage").innerHTML += "%" }
+
 	document.getElementById("fpierce").innerHTML = c.fPierce; if (c.fPierce > 0) { document.getElementById("fpierce").innerHTML += "%" }
 	document.getElementById("cpierce").innerHTML = c.cPierce; if (c.cPierce > 0) { document.getElementById("cpierce").innerHTML += "%" }
 	document.getElementById("lpierce").innerHTML = c.lPierce; if (c.lPierce > 0) { document.getElementById("lpierce").innerHTML += "%" }
 	document.getElementById("ppierce").innerHTML = c.pPierce; if (c.pPierce > 0) { document.getElementById("ppierce").innerHTML += "%" }
+
+	document.getElementById("enemy_fres").innerHTML = c.enemy_fRes; if (c.enemy_fRes < 0) { document.getElementById("enemy_fres").innerHTML += "%" }
+	document.getElementById("enemy_cres").innerHTML = c.enemy_cRes; if (c.enemy_cRes < 0) { document.getElementById("enemy_cres").innerHTML += "%" }
+	document.getElementById("enemy_lres").innerHTML = c.enemy_lRes; if (c.enemy_lRes < 0) { document.getElementById("enemy_lres").innerHTML += "%" }
+	document.getElementById("enemy_pres").innerHTML = c.enemy_pRes; if (c.enemy_pRes < 0) { document.getElementById("enemy_pres").innerHTML += "%" }
+
+	{
+	var pierce_total = c.fPierce + c.enemy_fRes;
+	document.getElementById("f_pierce").innerHTML = pierce_total; if (pierce_total > 0) { document.getElementById("f_pierce").innerHTML += "%" }
+	}
+	{
+	var pierce_total = c.cPierce + c.enemy_cRes;
+	document.getElementById("c_pierce").innerHTML = pierce_total; if (pierce_total > 0) { document.getElementById("c_pierce").innerHTML += "%" }
+	}
+	{
+	var pierce_total = c.lPierce + c.enemy_lRes;
+	document.getElementById("l_pierce").innerHTML = pierce_total; if (pierce_total > 0) { document.getElementById("l_pierce").innerHTML += "%" }
+	}
+	{
+	var pierce_total = c.pPierce + c.enemy_pRes;
+	document.getElementById("p_pierce").innerHTML = pierce_total; if (pierce_total > 0) { document.getElementById("p_pierce").innerHTML += "%" }
+	}
+	{
+	var pierce_total = c.enemy_phyRes;
+	document.getElementById("phy_pierce").innerHTML = pierce_total; if (pierce_total > 0) { document.getElementById("phy_pierce").innerHTML += "%" }
+	}
+
+	//		<font size="2">Fire Pierce: </font><font size="2" id="f_pierce"></font><br>
+    	//				<font size="2">Cold Pierce: </font><font size="2" id="c_pierce"></font><br>
+    	//				<font size="2">Lightning Pierce: </font><font size="2" id="l_pierce"></font><br>
+    	//				<font size="2">Poison Pierce: </font><font size="2" id="p_pierce"></font><br>
+    	//				<font size="2">Physical Pierce: </font><font size="2" id="phy_pierce"></font><br>
 
 	document.getElementById("pierce").innerHTML = c.pierce + c.pierce_skillup; if (c.pierce > 0 || c.pierce_skillup > 0) { document.getElementById("pierce").innerHTML += "%" }
 	document.getElementById("cblow").innerHTML = c.cblow; if (c.cblow > 0) { document.getElementById("cblow").innerHTML += "%" }

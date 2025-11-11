@@ -855,7 +855,7 @@ public class UpdateUniqueItemsStats {
                 plannerPropKey.equals("enemy_pRes") ||
                 plannerPropKey.equals("enemy_phyRes")) {
             if (val instanceof Integer && ((Integer) val) > 0) {
-                val = ((Integer) val) * -1;
+                //  val = ((Integer) val) * -1;
             }
         }
 

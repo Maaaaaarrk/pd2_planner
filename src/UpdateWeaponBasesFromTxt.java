@@ -7,17 +7,17 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-public class UpdateArmorBasesFromTxt {
+public class UpdateWeaponBasesFromTxt {
     private static final String rootdir = System.getProperty("user.dir");
     private static final String dir = rootdir + "\\data\\";
-    private static final Path ARMOR_TXT = Paths.get(dir, "Armor.txt");
+    private static final Path ARMOR_TXT = Paths.get(dir, "Weapons.txt");
     private static final Path ITEM_METADATA_JS = Paths.get(dir, "item_metadata.js");
     private static final Map<String, List<String>> MAP = new LinkedHashMap<String, List<String>>() {{
         put("minac", Arrays.asList("def_low"));
         put("maxac", Arrays.asList("def_high", "base_defense"));
         put("block", Arrays.asList("block"));
-        put("mindam", Arrays.asList("smite_min", "kick_min"));
-        put("maxdam", Arrays.asList("smite_max", "kick_max"));
+        put("mindam", Arrays.asList("base_damage_min"));
+        put("maxdam", Arrays.asList("base_damage_max"));
         put("reqstr", Arrays.asList("req_strength"));
     }};
 
@@ -177,7 +177,7 @@ public class UpdateArmorBasesFromTxt {
         return out;
     }
 
-    public static String concatWithCommaExceptAfterFirst(java.util.List<String> parts) {
+    public static String concatWithCommaExceptAfterFirst(List<String> parts) {
         if (parts == null || parts.isEmpty()) return "";
         StringBuilder sb = new StringBuilder();
         boolean isFirst = true;
