@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,6 +23,35 @@ public class ClassJSUpdater {
                                         String varCodeKey,
                                         String label,
                                         String newNumbersCsv) throws IOException {
+        try {
+            updateNumberListException(amazonJsPath, varCodeKey, label, newNumbersCsv);
+        } catch (IllegalArgumentException e) {
+            System.err.println("Failed to update " + amazonJsPath.getFileName() + ": " + e.getMessage());
+        }
+    }
+
+    public static void updateNumberList(Path amazonJsPath,
+                                        String varCodeKey,
+                                        List<String> label,
+                                        String newNumbersCsv) throws IOException {
+        IllegalArgumentException e = null;
+        for (String l : label) {
+            try {
+                updateNumberListException(amazonJsPath, varCodeKey, l, newNumbersCsv);
+                return;
+            } catch (IllegalArgumentException ee) {
+                e = ee;
+            }
+        }
+        if (e != null)
+            System.err.println(e.getMessage());
+    }
+
+
+    private static void updateNumberListException(Path amazonJsPath,
+                                                  String varCodeKey,
+                                                  String label,
+                                                  String newNumbersCsv) throws IOException {
         if (varCodeKey.startsWith("d"))
             varCodeKey = varCodeKey.substring(1);
         if (newNumbersCsv.startsWith(","))
@@ -47,8 +77,7 @@ public class ClassJSUpdater {
         Pattern pArr = Pattern.compile(arrayPattern);
         Matcher mArr = pArr.matcher(innerArrays);
         if (!mArr.find()) {
-            System.err.println(amazonJsPath.getFileName().toString() + " Label \"" + label + "\" not found under d" + varCodeKey + ".");
-            return;
+            throw new IllegalArgumentException(amazonJsPath.getFileName().toString() + " Label \"" + label + "\" not found under d" + varCodeKey + ".");
         }
 
         String oldNumbers = mArr.group(1);
@@ -68,7 +97,7 @@ public class ClassJSUpdater {
                 .toString();
 
         Files.writeString(amazonJsPath, updatedContent, StandardCharsets.UTF_8);
-        System.out.println("Updated " + amazonJsPath.getFileName() + ".");
+        //System.out.println("Updated " + amazonJsPath.getFileName() + ".");
     }
 
     public static final String dir = System.getProperty("user.dir") + "\\data\\skills\\PD2\\";

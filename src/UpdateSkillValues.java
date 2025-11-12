@@ -90,7 +90,7 @@ public class UpdateSkillValues {
                     sb.append("],");
                 }
                 if (damageType != null) {
-                    // Calc min damage
+                    // Calc max damage
                     String dmgEnd = "Max";
                     sb.append("\n\t\t[\"").append(damageType).append(" Damage (").append(dmgEnd.toLowerCase()).append(")\"");
                     sb.append(
@@ -152,8 +152,41 @@ public class UpdateSkillValues {
                 // "attack rating bonus"
                 String arBonus = getDataListFromRow(row, "ToHit", "LevToHit");
                 if (arBonus != null && !arBonus.isEmpty()) {
-                    ClassJSUpdater.updateNumberList(path, dcode, "attack rating bonus", arBonus);
+                    ClassJSUpdater.updateNumberList(path, dcode, java.util.Arrays.asList("Attack Rating Bonus", "Attack %", "Attack +%", "Attack Rating +%", "Attack Bonus +%", "Attack Rating"), arBonus);
                 }
+
+
+                {
+                    // Calc min damage
+                    String dmgEnd = "Min";
+                    String damage = buildBucketedLevelsCSV(
+                            tryParseInt(row.get(dmgEnd + "Dam"), 0),
+                            tryParseInt(row.get(dmgEnd + "LevDam1"), 0),
+                            tryParseInt(row.get(dmgEnd + "LevDam2"), 0),
+                            tryParseInt(row.get(dmgEnd + "LevDam3"), 0),
+                            tryParseInt(row.get(dmgEnd + "LevDam4"), 0),
+                            tryParseInt(row.get(dmgEnd + "LevDam5"), 0));
+                    if (damage != null && !damage.isEmpty()) {
+                        // ClassJSUpdater.updateNumberList(path, dcode, "Damage (" + dmgEnd + ")", damage);
+                        ClassJSUpdater.updateNumberList(path, dcode, "Damage (" + dmgEnd.toLowerCase() + ")", damage);
+                    }
+                }
+                {
+                    // Calc max damage
+                    String dmgEnd = "Max";
+                    String damage = buildBucketedLevelsCSV(
+                            tryParseInt(row.get(dmgEnd + "Dam"), 0),
+                            tryParseInt(row.get(dmgEnd + "LevDam1"), 0),
+                            tryParseInt(row.get(dmgEnd + "LevDam2"), 0),
+                            tryParseInt(row.get(dmgEnd + "LevDam3"), 0),
+                            tryParseInt(row.get(dmgEnd + "LevDam4"), 0),
+                            tryParseInt(row.get(dmgEnd + "LevDam5"), 0));
+                    if (damage != null && !damage.isEmpty()) {
+                        //    ClassJSUpdater.updateNumberList(path, dcode, "Damage (" + dmgEnd + ")", damage);
+                        ClassJSUpdater.updateNumberList(path, dcode, "Damage (" + dmgEnd.toLowerCase() + ")", damage);
+                    }
+                }
+
 
                 String damageType = row.get("EType");
                 if (damageType != null) {
@@ -174,11 +207,16 @@ public class UpdateSkillValues {
                             tryParseInt(row.get("E" + dmgEnd + "Lev3"), 0),
                             tryParseInt(row.get("E" + dmgEnd + "Lev4"), 0),
                             tryParseInt(row.get("E" + dmgEnd + "Lev5"), 0));
-                    if (damage != null && !damage.isEmpty())
+                    if (damageType.equals("Lighting")) {
+                        damageType = "Lightning";
+                    }
+                    if (damage != null && !damage.isEmpty()) {
                         ClassJSUpdater.updateNumberList(path, dcode, damageType + " Damage (" + dmgEnd.toLowerCase() + ")", damage);
+                        //     ClassJSUpdater.updateNumberList(path, dcode, damageType + " Damage (" + dmgEnd + ")", damage);
+                    }
                 }
                 if (damageType != null) {
-                    // Calc min damage
+                    // Calc mam damage
                     String dmgEnd = "Max";
                     String damage = buildBucketedLevelsCSV(
                             tryParseInt(row.get("E" + dmgEnd), 0),
@@ -187,8 +225,13 @@ public class UpdateSkillValues {
                             tryParseInt(row.get("E" + dmgEnd + "Lev3"), 0),
                             tryParseInt(row.get("E" + dmgEnd + "Lev4"), 0),
                             tryParseInt(row.get("E" + dmgEnd + "Lev5"), 0));
-                    if (damage != null && !damage.isEmpty())
+                    if (damageType.equals("Lighting")) {
+                        damageType = "Lightning";
+                    }
+                    if (damage != null && !damage.isEmpty()) {
                         ClassJSUpdater.updateNumberList(path, dcode, damageType + " Damage (" + dmgEnd.toLowerCase() + ")", damage);
+                        //   ClassJSUpdater.updateNumberList(path, dcode, damageType + " Damage (" + dmgEnd + ")", damage);
+                    }
                 }
 
                 {
