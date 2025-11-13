@@ -408,12 +408,7 @@ public class UpdateUniqueItemsStats {
                         }
                     }
                     String groupBaseTypeKeyname = groupBaseType.toLowerCase();
-                   /* if (!grouped.containsKey(groupBaseTypeKeyname)) {
-                        Map<String, Object> rowheader = new LinkedHashMap<>();
-                        rowheader.put("name", groupBaseType.replace("1", ""));
-                        grouped.computeIfAbsent(groupBaseTypeKeyname, k -> new ArrayList<>()).add(rowheader);
-                    }*/
-                    grouped.computeIfAbsent(groupBaseTypeKeyname, k -> new ArrayList<>()).add(row);
+                    addToGroupSafe(grouped, groupBaseTypeKeyname, row);
                     savedRows++;
                 } else {
                     System.err.println("No type match on: " + baseType);
@@ -427,6 +422,27 @@ public class UpdateUniqueItemsStats {
         }
         System.out.println("Read: " + linecount + " Lines, added " + savedRows + " Items");
         return false;
+    }
+
+    static Map<String, List<String>> groupedCheck = new HashMap<>();
+
+    private static void addToGroupSafe(Map<String, List<Map<String, Object>>> grouped, String groupBaseTypeKeyname, Map<String, Object> row) {
+        String itemName = (String) row.get("name");
+        if (groupedCheck.containsKey(groupBaseTypeKeyname)) {
+            int i = 1;
+            String newKey = itemName + (i > 1 ? "_" + i : "");
+            while (groupedCheck.get(groupBaseTypeKeyname).contains(newKey)) {
+                i++;
+                newKey = itemName + (i > 1 ? "_" + i : "");
+                System.err.println("Duplicate key: " + newKey);
+            }
+            itemName = newKey;
+            row.put("name", itemName);
+        } else {
+            groupedCheck.put(groupBaseTypeKeyname, new ArrayList<>());
+        }
+        groupedCheck.get(groupBaseTypeKeyname).add(itemName);
+        grouped.computeIfAbsent(groupBaseTypeKeyname, k -> new ArrayList<>()).add(row);
     }
 
     private static void extractedItemProps(int[] idxProp, int[] idxPar, int[] idxMin, int[] idxMax, String[] cols, String name, Map<String, Object> row, String itemGroupType) {
@@ -872,7 +888,7 @@ public class UpdateUniqueItemsStats {
         }
         if (propKey.equals("plague-fcr-pierce")) {
             row.put("fcr", val);
-            row.put("enemy_pRes", ((Integer) val) * -1);
+            row.put("enemy_pRes", Math.abs((Integer) val));
             return row;
         }
         if (propKey.equals("str-and-vit")) {
@@ -903,7 +919,7 @@ public class UpdateUniqueItemsStats {
                 plannerPropKey.equals("enemy_pRes") ||
                 plannerPropKey.equals("enemy_phyRes")) {
             if (val instanceof Integer && ((Integer) val) > 0) {
-                //  val = ((Integer) val) * -1;
+                val = Math.abs((Integer) val);
             }
         }
 

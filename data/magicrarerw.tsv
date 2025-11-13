@@ -46,21 +46,21 @@ Imp Shank	Boots	Mesh Boots	rare		frw		30	30	cRes		40	40	fRes		40	40	lRes		40	40	
 Lancer's Maiden Javelin of Quickness	Javelin	Maiden Javelin	magic		ias		40	40	skills_javelins		6	6																	only			
 Kenshi's Greater Talons of Quickness	Claw	Greater Talons	magic		ias		40	40	skills_martial		3	3	skill	Fists of Fire		3	skill	Claws of Thunder		3	skill	Blades of Ice		3					only			
 Kenshi's Greater Talons of Quickness	Claw	Greater Talons	magic		ias		40	40	skills_martial		3	3	skill	Cobra Strike		3	skill	Tiger Strike		3	skill	Phoenix Strike		3					only			
-Infinity - Archon Staff - cl+nova	Staff	Archon Staff	rw		Runeword	Infinity			skill	Lightning Mastery		3	skill	Chain Lightning		3	skill	Nova		3									only			
-Infinity - Archon Staff - cb	Staff	Archon Staff	rw		Runeword	Infinity			skill	Lightning Mastery		3	skill	Charged Bolt		3	skill	Teleport		3									only			
-Infinity - Archon Staff	Staff	Archon Staff	rw		Runeword	Infinity																							only			
-Last Wish - Archon Staff	Staff	Archon Staff	rw		Runeword	Last Wish			ethereal		1	1																	only			
-Purity - Archon Staff	Staff	Archon Staff	rw		Runeword	Purity																							only			
-Plague - Archon Staff	Staff	Archon Staff	rw		Runeword	Plague																							only			
-Insight - Archon Staff	Staff	Archon Staff	rw		Runeword	Insight																							only			
-Memory - Archon Staff	Staff	Archon Staff	rw		Runeword	Memory			skill	Thunder Storm		3	skill	Energy Shield		3	skill	Shiver Armor		3									only			
-Call to Arms - Archon Staff	Staff	Archon Staff	rw		Runeword	Call to Arms			skill	Thunder Storm		3	skill	Energy Shield		3	skill	Shiver Armor		3									only			
-Beast - Archon Staff	Staff	Archon Staff	rw		Runeword	Beast																							only			
-Doom - Archon Staff	Staff	Archon Staff	rw		Runeword	Doom			skill	Frost Nova		3	skill	Cold Mastery		3	skill	Teleport		3									only			
-Zenith - Archon Staff	Staff	Archon Staff	rw		Runeword	Zenith																							only			
-Obsession - Archon Staff - cold	Staff	Archon Staff	rw		Runeword	Obsession			skill	Blizzard		3	skill	Cold Mastery		3	skill	Ice Bolt		3									only			
-Obsession - Archon Staff - fire	Staff	Archon Staff	rw		Runeword	Obsession			skill	Hydra		3	skill	Fire Mastery		3	skill	Blaze		3									only			
-Asylum - Archon Staff	Staff	Archon Staff	rw		Runeword	Asylum																							only			
+Infinity - Archon Staff - cl+nova	Staff	Archon Staff	rw		Runeword	Infinity			skill	Lightning Mastery		3	skill	Chain Lightning		3	skill	Nova		3	fcr			50					only			
+Infinity - Archon Staff - cb	Staff	Archon Staff	rw		Runeword	Infinity			skill	Lightning Mastery		3	skill	Charged Bolt		3	skill	Teleport		3	fcr			50					only			
+Infinity - Archon Staff	Staff	Archon Staff	rw		Runeword	Infinity			fcr			50																	only			
+Last Wish - Archon Staff	Staff	Archon Staff	rw		Runeword	Last Wish			ethereal		1	1	fcr			50													only			
+Purity - Archon Staff	Staff	Archon Staff	rw		Runeword	Purity			fcr			50																	only			
+Plague - Archon Staff	Staff	Archon Staff	rw		Runeword	Plague			fcr			50																	only			
+Insight - Archon Staff	Staff	Archon Staff	rw		Runeword	Insight			fcr			50																	only			
+Memory - Archon Staff	Staff	Archon Staff	rw		Runeword	Memory			skill	Thunder Storm		3	skill	Energy Shield		3	skill	Shiver Armor		3	fcr			50					only			
+Call to Arms - Archon Staff	Staff	Archon Staff	rw		Runeword	Call to Arms			skill	Thunder Storm		3	skill	Energy Shield		3	skill	Shiver Armor		3	fcr			50					only			
+Beast - Archon Staff	Staff	Archon Staff	rw		Runeword	Beast			fcr			50																	only			
+Doom - Archon Staff	Staff	Archon Staff	rw		Runeword	Doom			skill	Frost Nova		3	skill	Cold Mastery		3	skill	Teleport		3	fcr			50					only			
+Zenith - Archon Staff	Staff	Archon Staff	rw		Runeword	Zenith			fcr			50																	only			
+Obsession - Archon Staff - cold	Staff	Archon Staff	rw		Runeword	Obsession			skill	Blizzard		3	skill	Cold Mastery		3	skill	Ice Bolt		3	fcr			50					only			
+Obsession - Archon Staff - fire	Staff	Archon Staff	rw		Runeword	Obsession			skill	Hydra		3	skill	Fire Mastery		3	skill	Blaze		3	fcr			50					only			
+Asylum - Archon Staff	Staff	Archon Staff	rw		Runeword	Asylum			fcr			50																	only			
 Ferocity - Bone Visage	Helm	Bone Visage	rw		Runeword	Ferocity			ethereal		1	1																	only			
 Dream - Bone Visage	Helm	Bone Visage	rw		Runeword	Dream																							only			
 Flickering Flame - Bone Visage	Helm	Bone Visage	rw		Runeword	Flickering Flame																							only			
