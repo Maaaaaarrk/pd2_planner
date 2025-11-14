@@ -4957,7 +4957,8 @@ function calculateSkillAmounts() {
 		var skill_id = "skill_" + getId(skills[s].name);
 		skills[s].force_levels = character[skill_id]
 		var oskill_id = "o"+skill_id;
-		if (typeof(character[oskill_id]) != 'undefined') { skills[s].force_levels += Math.min(3,character[oskill_id]) }
+		if (typeof(character[oskill_id]) != 'undefined') {
+		 skills[s].force_levels += Math.min(3,character[oskill_id]) }
 		character.setSkillAmounts(s)	// adds to skills[s].extra_levels: points from class, tree, fire/cold/lightning/poison/magic
 		skills[s].extra_levels += skills[s].force_levels
 		display += skills[s].extra_levels
