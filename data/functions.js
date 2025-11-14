@@ -4547,7 +4547,12 @@ function updateSecondaryStats() {
 	var fcrTotal = c.fcr + Math.floor(c.level*c.fcr_per_level);
 
 	var fcr_f = c.fcr_frames;
-	for (let i = 1; i < c.fcr_bp.length; i++) { if (fcrTotal >= c.fcr_bp[i]) { fcr_f -= 1 } }
+	var fcr_t = "";
+	for (let i = 1; i < c.fcr_bp.length; i++) {
+	if(i>1)  { fcr_t+= ", "; }
+	fcr_t+= c.fcr_bp[i];
+	if (fcrTotal >= c.fcr_bp[i]) { fcr_f -= 1 }
+	}
 
 	var fhr_f = c.fhr_frames;
 	for (let i = 1; i < c.fhr_bp.length; i++) { if (c.fhr >= c.fhr_bp[i]) { fhr_f -= 1 } }
@@ -4572,16 +4577,26 @@ function updateSecondaryStats() {
 	} } } }
 
 	if (effects["Werebear"] != null) { if (typeof(effects["Werebear"].info.enabled) != 'undefined') { if (effects["Werebear"].info.enabled == 1) {
+	fcr_t = "";
 		fcr_f = character_all.druid.fcr_frames_werebear
-		for (let i = 1; i < character_all.druid.fcr_bp_werebear.length; i++) { if (fcrTotal >= character_all.druid.fcr_bp_werebear[i]) { fcr_f -= 1 } }
+		for (let i = 1; i < character_all.druid.fcr_bp_werebear.length; i++) {
+		if(i>1)  { fcr_t+= ", "; }
+        	fcr_t+= character_all.druid.fcr_bp_werebear[i];
+		 if (fcrTotal >= character_all.druid.fcr_bp_werebear[i]) { fcr_f -= 1 }
+		 }
 		fhr_f = character_all.druid.fhr_frames_werebear
 		for (let i = 1; i < character_all.druid.fhr_bp_werebear.length; i++) { if (c.fhr >= character_all.druid.fhr_bp_werebear[i]) { fhr_f -= 1 } }
 		fbr_f = character_all.druid.fbr_frames_werebear
 		for (let i = 1; i < character_all.druid.fbr_bp_werebear.length; i++) { if (c.fbr >= character_all.druid.fbr_bp_werebear[i]) { fbr_f -= 1 } }
 	} } }
 	if (effects["Werewolf"] != null) { if (typeof(effects["Werewolf"].info.enabled) != 'undefined') { if (effects["Werewolf"].info.enabled == 1) {
+	fcr_t = "";
 		fcr_f = character_all.druid.fcr_frames_werewolf
-		for (let i = 1; i < character_all.druid.fcr_bp_werewolf.length; i++) { if (fcrTotal >= character_all.druid.fcr_bp_werewolf[i]) { fcr_f -= 1 } }
+		for (let i = 1; i < character_all.druid.fcr_bp_werewolf.length; i++) {
+			if(i>1)  { fcr_t+= ", "; }
+                	fcr_t+= character_all.druid.fcr_bp_werewolf[i];
+		 if (fcrTotal >= character_all.druid.fcr_bp_werewolf[i]) { fcr_f -= 1 }
+		 }
 		fhr_f = character_all.druid.fhr_frames_werewolf
 		for (let i = 1; i < character_all.druid.fhr_bp_werewolf.length; i++) { if (c.fhr >= character_all.druid.fhr_bp_werewolf[i]) { fhr_f -= 1 } }
 		fbr_f = character_all.druid.fbr_frames_werewolf
@@ -4609,9 +4624,10 @@ function updateSecondaryStats() {
 	} else {
         document.getElementById("fbr_label").style.display = "none"
     }
-	//if (fcrTotal > 0 || equipped.weapon.name != "none" || equipped.offhand.name != "none") { document.getElementById("fcr").innerHTML += " ("+fcr_f+"f)" }
-	//if (c.fhr > 0 || equipped.weapon.name != "none" || equipped.offhand.name != "none") { document.getElementById("fhr").innerHTML += " ("+fhr_f+"f)" }
-	//if (c.fbr > 0 || c.block > 0 || c.block_skillup > 0) { document.getElementById("fbr").innerHTML += " ("+fbr_f+"f)" }
+	if (fcrTotal > 0 || equipped.weapon.name != "none" || equipped.offhand.name != "none") {
+	document.getElementById("fcr").innerHTML += " ("+fcr_f+"f)<br/>["+ fcr_t+"]" }
+	if (c.fhr > 0 || equipped.weapon.name != "none" || equipped.offhand.name != "none") { document.getElementById("fhr").innerHTML += " ("+fhr_f+"f)" }
+	if (c.fbr > 0 || c.block > 0 || c.block_skillup > 0) { document.getElementById("fbr").innerHTML += " ("+fbr_f+"f)" }
 
 	// actual movespeed
 	var movespeed = 9;
