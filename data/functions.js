@@ -726,50 +726,58 @@ function loadParams() {
 //	val: name of corruption
 // ---------------------------------
 function corrupt(group, val) {
-	for (old_affix in corruptsEquipped[group]) {
-		character[old_affix] -= corruptsEquipped[group][old_affix]
-		corruptsEquipped[group][old_affix] = unequipped[old_affix]
-	}
-	if (val == "­ ­ ­ ­ Corruption" || val == "none" || val == group || equipped[group].rarity == "rw" || equipped[group].rarity == "common" || (group == "offhand" && equipped[group].type != "quiver" && equipped.weapon.twoHanded == 1 && (equipped.weapon.type != "sword" || character.class_name != "Barbarian"))) { document.getElementById("corruptions_"+group).selectedIndex = 0 }
-	else {
-		for (outcome in corruptions[group]) {
-			if (corruptions[group][outcome].name == val && (group != "offhand" || (offhandType == corruptions[group][outcome].base || offhandType == "none"))) {
+    for (old_affix in corruptsEquipped[group]) {
+        character[old_affix] -= corruptsEquipped[group][old_affix]
+        corruptsEquipped[group][old_affix] = unequipped[old_affix]
+    }
+    if (val == "­ ­ ­ ­ Corruption" || val == "none" || val == group || equipped[group].rarity == "rw" || equipped[group].rarity == "common" || (group == "offhand" && equipped[group].type != "quiver" && equipped.weapon.twoHanded == 1 && (equipped.weapon.type != "sword" || character.class_name != "Barbarian"))) {
+        document.getElementById("corruptions_" + group).selectedIndex = 0
+    } else {
+        for (outcome in corruptions[group]) {
+            if (corruptions[group][outcome].name == val && (group != "offhand" || (offhandType == corruptions[group][outcome].base || offhandType == "none"))) {
                 var unlimitSockets = 0;
-                if(corruptions[group][outcome]["name"].includes("Sockets")){
+                if (corruptions[group][outcome]["name"].includes("Sockets")) {
                     unlimitSockets = 1;
                 } else
-                if(equipped[group].twoHanded ==1){
+                if (equipped[group].twoHanded == 1) {
                     unlimitSockets = 1;
                 } else
-                if(group !="offhand" && group !="weapon"){
+                if (group != "offhand" && group != "weapon") {
                     unlimitSockets = 1;
                 }
-				for (affix in corruptions[group][outcome]) {
-				    if (affix == "sockets" & unlimitSockets == 0) {
-					    character[affix] += 2
-					    corruptsEquipped[group][affix] = 2
-					} else if(affix == "sockets" && (group == "weapon" || group == "offhand") && unlimitSockets == 1 && (typeof equipped[group].twoHanded == 'undefined' || equipped[group].twoHanded != 1)) {
-if(typeof equipped[group].type !== 'undefined' && equipped[group].type === "shield"){
-					    character[affix] += 3
-					    corruptsEquipped[group][affix] = 3
-} else {
-					    character[affix] += 4
-					    corruptsEquipped[group][affix] = 4
-					    }
-					} else {
+                for (affix in corruptions[group][outcome]) {
+                    if (affix == "sockets" & unlimitSockets == 0) {
+                        character[affix] += 2
+                        corruptsEquipped[group][affix] = 2
+                    } else if (affix == "sockets" && (group == "weapon" || group == "offhand") && unlimitSockets == 1 && (typeof equipped[group].twoHanded == 'undefined' || equipped[group].twoHanded != 1)) {
+                        if (typeof equipped[group].type !== 'undefined' && equipped[group].type === "shield") {
+                            character[affix] += 3
+                            corruptsEquipped[group][affix] = 3
+                        } else {
+                            // Treat offhand quivers with their own socket cap (2)
+                            if (group == "offhand" && typeof equipped[group].type !== 'undefined' && equipped[group].type === "quiver") {
+                                character[affix] += 2
+                                corruptsEquipped[group][affix] = 2
+                            } else {
+                                character[affix] += 4
+                                corruptsEquipped[group][affix] = 4
+                            }
+                        }
+                    } else {
                         corruptsEquipped[group][affix] = corruptions[group][outcome][affix]
                         if (affix != "name" && affix != "base") {
                             character[affix] += corruptions[group][outcome][affix]
                         }
-					}
-				}
-			}
-		}
-		if (val == "+ Sockets") {
-					adjustCorruptionSockets(group) }
-	}
-	updateSocketTotals()
-	update()
+                    }
+                }
+            }
+        }
+        if (val == "+ Sockets") {
+            adjustCorruptionSockets(group)
+        }
+    }
+    updateSocketTotals()
+    update()
 }
 
 // equipMerc - Equips or unequips a mercenary item
@@ -2962,7 +2970,7 @@ function equipmentHoverMerc(group) {
 	var sock = "";
 	var base = "";
 //	console.log(group);
-	if (mercEquipped[group].name != "none" && (group == "helm" || group == "armor" || group == "weapon" || (group == "offhand" && mercEquipped[group].type != "quiver"))) {
+	if (mercEquipped[group].name != "none" && (group == "helm" || group == "armor" || group == "weapon" || (group == "offhand"))) {
 		var sockets = ~~mercEquipped[group].sockets;//~~corruptsEquipped[groupId].sockets + ~~mercEquipped[group].sockets;
 		sockets = Math.min(sockets,mercEquipped[group].max_sockets)
 		if (mercEquipped[group].sockets > 0) {
@@ -3188,7 +3196,7 @@ function equipmentHover(group) {
 	var name = "";
 	var sock = "";
 	var base = "";
-	if (equipped[group].name != "none" && (group == "helm" || group == "armor" || group == "weapon" || (group == "offhand" && equipped[group].type != "quiver"))) {
+	if (equipped[group].name != "none" && (group == "helm" || group == "armor" || group == "weapon" || group == "offhand")) {
 		var sockets = ~~corruptsEquipped[group].sockets + ~~equipped[group].sockets;
 		sockets = Math.min(sockets,equipped[group].max_sockets)
 		if (socketed[group].sockets > 0 || equipped[group].sockets > 0) {
