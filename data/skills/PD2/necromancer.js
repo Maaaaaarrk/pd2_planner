@@ -78,7 +78,7 @@ var character_pd2_necromancer = {class_name:"Necromancer", strength:15, dexterit
 		if (skill.name == "Curse Mastery" && elem == 0) {					result = 1 + Math.floor(skill.level/10) + character.maxcurse }
 		if (skill.name == "Dark Pact" && elem == 0) {						result = 4 + 0.6*Math.floor(skills[32].level/3) }
 		if (skill.name == "Dark Pact" && elem > 0 && elem < 3) {			result *= ((1 + 0.16*skills[32].level + 0.16*skills[24].level + 0.12*(skills[20].level+skills[21].level+skills[23].level+skills[25].level+skills[26].level+skills[27].level+skills[28].level+skills[29].level+skills[30].level)) * (1+character.mDamage/100)) }
-		if (skill.name == "Amplify Damage" && elem == 0) {					result = Math.max(-60,result - Math.floor(skills[32].level/2)) }
+		if (skill.name == "Amplify Damage" && elem == 0) {					result = result - Math.floor(skills[32].level/2) } //Math.max(-60,result - Math.floor(skills[32].level/2)) }
 		if (skill.name == "Amplify Damage" && elem == 1) {					result = 6 + this.curse_radius(skill, true)}
 		if (skill.name == "Iron Maiden" && elem == 0) {						result += 6*skills[32].level }
 		if (skill.name == "Iron Maiden" && elem == 2) {						result = 8 + this.curse_radius(skill, true)}
@@ -88,7 +88,7 @@ var character_pd2_necromancer = {class_name:"Necromancer", strength:15, dexterit
 		if (skill.name == "Weaken" && elem == 2) {							result = 8 + this.curse_radius(skill, true)}
 		if (skill.name == "Decrepify" && elem == 1) {						result = Math.max(-65,result - skills[32].level) }
 		if (skill.name == "Decrepify" && elem == 2) {						result = 8 + this.curse_radius(skill, true)}
-		if (skill.name == "Lower Resist" && elem == 0) {					result = Math.max(-65,result - Math.floor(skills[32].level/2)) }
+		if (skill.name == "Lower Resist" && elem == 0) {					result = result - Math.floor(skills[32].level/2) } // Math.max(-65,result - Math.floor(skills[32].level/2)) }
 		if (skill.name == "Lower Resist" && elem == 1) {					result = 6 + this.curse_radius(skill, true)}
 		if (skill.name == "Dim Vision" && elem == 0) {						result += -10*skills[32].level }
 		if (skill.name == "Dim Vision" && elem == 1) {						result = 4 + this.curse_radius(skill, false) }

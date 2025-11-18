@@ -50,7 +50,7 @@ var character_pd2_amazon = {class_name:"Amazon", strength:20, dexterity:25, vita
 		if (skill.name == "Exploding Arrow" && elem > 1 && elem < 4) { 		result *= ((1 + 0.18*skills[21].level + 0.18*skills[28].level) * (1+character.fDamage/100)) }
 		if (skill.name == "Immolation Arrow" && elem > 2 && elem < 5) { 	result *= ((1 + 0.16*skills[21].level) * (1+character.fDamage/100)) }
 		if (skill.name == "Immolation Arrow" && elem > 0 && elem < 3) { 	result *= ((1 + 0.08*skills[23].level + 0.08*skills[26].level) * (1+character.fDamage/100)) }
-		if (skill.name == "Strafe" && elem == 2) { 							result *= (1 + 0.12*skills[15].level) }
+		if (skill.name == "Strafe" && elem == 2) { 							result *= (1 + 0.10*skills[15].level) }
 
 	return result
 	},
