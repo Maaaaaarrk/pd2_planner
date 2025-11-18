@@ -109,7 +109,7 @@ public final class itemmap {
         p.put("dmg-undead", "damage_vs_undead");
         p.put("dmg/lvl", "max_damage_per_level");
         p.put("dragonflight-reduction", "dragonflight-reduction");
-        p.put("skills_druid", "dru");
+        p.put("dru", "skills_druid");
         p.put("dur", "durability_extra");
         p.put("eaglehorn-raven", "extra_Raven_Damage");
         p.put("ease", "req");
@@ -242,7 +242,6 @@ public final class itemmap {
         p.put("thorns/lvl", "thorns_per_level");
         p.put("vit", "vitality");
         p.put("vit/lvl", "vitality_per_level");
-        p.put("dru", "skills_druid");
         p.put("half-freeze", "half_freeze");
         p.put("max-deadly", "max_dstrike");
         p.put("splash", "melee_splash");
@@ -259,6 +258,8 @@ public final class itemmap {
         p.put("extra-valk", "extraValkyries");
         p.put("extra-skele-archer", "extra_Skeleton_Archers");
         p.put("infinityspeed", "frw");
+        p.put("crush-efficiency", "crush_efficiency");
+        p.put("extra-cold-arrows", "extra_cold_arrows");
         PROP_MAP = Collections.unmodifiableMap(p);
 
 

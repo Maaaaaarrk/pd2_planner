@@ -998,6 +998,7 @@ extra_Skeleton_Mages:{index:["extra_Skeleton_Mages"], format:["You May Summon ",
 extra_Skeleton_Archers:{index:["extra_Skeleton_Archers"], format:["You May Summon "," Additional Skeleton Archers"]},
 extra_Revives:{index:["extra_Revives"], format:["You May Now Summon "," Additional Revives"]},
 extra_Shadow:{index:["extra_Shadow"], format:["You May Summon "," Additional Shadow"]},
+extra_cold_arrows:{index:["extra_cold_arrows"], format:["Cold Arrow fires "," Additional Arrows"]},
 
 
 extra_Raven_Damage:{index:["extra_Raven_Damage"], format:["Your Ravens deal an additional "," Cold Damage"]},

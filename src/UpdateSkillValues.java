@@ -3,10 +3,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class UpdateSkillValues {
     private static final String dir = System.getProperty("user.dir") + "\\data\\";
@@ -58,83 +55,19 @@ public class UpdateSkillValues {
 
     }
 
-    private static String toSkilljs(List<Map<String, String>> rows) {
 
-        for (Map<String, String> row : rows) {
-            String skillName = row.get("skill");
-            if (amazon_skill_map.containsKey(skillName)) {
-                StringBuilder sb = new StringBuilder();
-                sb.append("\n/* ").append(skillName).append(" */ var ").append(amazon_skill_map.get(skillName)).append(" = {values:[");
-                addSkillData(row, sb, "ToHit", "LevToHit", "attack rating bonus");
-                String damageType = row.get("EType");
-                if (damageType != null) {
-                    if (etype_map.containsKey(damageType)) {
-                        damageType = etype_map.get(damageType);
-                    } else {
-                        System.err.println("Unknown damage type: " + damageType);
-                        continue;
-                    }
-                }
-                if (damageType != null) {
-                    // Calc min damage
-                    String dmgEnd = "Min";
-                    sb.append("\n\t\t[\"").append(damageType).append(" Damage (").append(dmgEnd.toLowerCase()).append(")\"");
-                    sb.append(
-                            buildBucketedLevelsCSV(
-                                    tryParseInt(row.get("E" + dmgEnd), 0),
-                                    tryParseInt(row.get("E" + dmgEnd + "Lev1"), 0),
-                                    tryParseInt(row.get("E" + dmgEnd + "Lev2"), 0),
-                                    tryParseInt(row.get("E" + dmgEnd + "Lev3"), 0),
-                                    tryParseInt(row.get("E" + dmgEnd + "Lev4"), 0),
-                                    tryParseInt(row.get("E" + dmgEnd + "Lev5"), 0)));
-                    sb.append("],");
-                }
-                if (damageType != null) {
-                    // Calc max damage
-                    String dmgEnd = "Max";
-                    sb.append("\n\t\t[\"").append(damageType).append(" Damage (").append(dmgEnd.toLowerCase()).append(")\"");
-                    sb.append(
-                            buildBucketedLevelsCSV(
-                                    tryParseInt(row.get("E" + dmgEnd), 0),
-                                    tryParseInt(row.get("E" + dmgEnd + "Lev1"), 0),
-                                    tryParseInt(row.get("E" + dmgEnd + "Lev2"), 0),
-                                    tryParseInt(row.get("E" + dmgEnd + "Lev3"), 0),
-                                    tryParseInt(row.get("E" + dmgEnd + "Lev4"), 0),
-                                    tryParseInt(row.get("E" + dmgEnd + "Lev5"), 0)));
-                    sb.append("],");
-                }
+    static Map<String, Double> hitShift = new HashMap<>();
 
-                {
-                    // Calc mana
-                    int mana = tryParseInt(row.get("mana"), 0);
-                    int lvlmana = tryParseInt(row.get("lvlmana"), 0);
-                    int manashift = tryParseInt(row.get("manashift"), 0);
-                    int minmana = tryParseInt(row.get("minmana"), 0);
-                    if (manashift < 0) manashift = 0;
-                    if (manashift > 30) manashift = 30;
-                    // Multiplier should be (2^manashift) / 256.0 to match the chart
-                    double effectiveshift = (1L << manashift) / 256.0;
-                    if (Math.max((mana + lvlmana * skillLevelMax) * effectiveshift, minmana) > 0 ||
-                            Math.max(mana * effectiveshift, minmana) > 0) {
-                        sb.append("\n\t\t[\"Mana Cost\"");
-                        for (int i = 0; i < skillLevelMax; i++) {
-                            double manacost = (mana + lvlmana * i) * effectiveshift;
-                            manacost = Math.max(manacost, minmana);
-                            sb.append(",").append(formatNumber(manacost));
-                        }
-                        sb.append("],");
-                    }
-                }
-                sb.append("\n]};");
-                amazon_skill_map.replace(skillName, sb.toString());
-            }
-        }
-        // Puts in Order for git compares vs old
-        StringBuilder sb = new StringBuilder();
-        for (Map.Entry<String, String> entry : amazon_skill_map.entrySet()) {
-            sb.append(entry.getValue());
-        }
-        return sb.toString();
+    static {
+        hitShift.put("8", 1.0);
+        hitShift.put("7", 0.5);
+        hitShift.put("6", 0.25);
+        hitShift.put("5", 0.125);
+        hitShift.put("4", 0.0625);
+        hitShift.put("3", 0.03125);
+        hitShift.put("2", 0.015625);
+        hitShift.put("1", 0.0078125);
+        hitShift.put("0", 0.00390625);
     }
 
     private static void updatePossibles(List<Map<String, String>> rows, Map<String, String> skillMap, Path path) throws IOException {
@@ -155,11 +88,20 @@ public class UpdateSkillValues {
                     ClassJSUpdater.updateNumberList(path, dcode, java.util.Arrays.asList("Attack Rating Bonus", "Attack %", "Attack +%", "Attack Rating +%", "Attack Bonus +%", "Attack Rating"), arBonus);
                 }
 
+                double damageHitShift = 1;
+                if (row.containsKey("HitShift")) {
+                    if (hitShift.containsKey(row.get("HitShift").toString())) {
+                        damageHitShift = hitShift.get(row.get("HitShift").toString());
+                    } else {
+                        System.err.println("Unknown HitShift: " + row.get("HitShift"));
+                    }
+                }
+
 
                 {
                     // Calc min damage
                     String dmgEnd = "Min";
-                    String damage = buildBucketedLevelsCSV(
+                    String damage = buildBucketedLevelsCSV(damageHitShift,
                             tryParseInt(row.get(dmgEnd + "Dam"), 0),
                             tryParseInt(row.get(dmgEnd + "LevDam1"), 0),
                             tryParseInt(row.get(dmgEnd + "LevDam2"), 0),
@@ -174,7 +116,7 @@ public class UpdateSkillValues {
                 {
                     // Calc max damage
                     String dmgEnd = "Max";
-                    String damage = buildBucketedLevelsCSV(
+                    String damage = buildBucketedLevelsCSV(damageHitShift,
                             tryParseInt(row.get(dmgEnd + "Dam"), 0),
                             tryParseInt(row.get(dmgEnd + "LevDam1"), 0),
                             tryParseInt(row.get(dmgEnd + "LevDam2"), 0),
@@ -200,7 +142,7 @@ public class UpdateSkillValues {
                 if (damageType != null) {
                     // Calc min damage
                     String dmgEnd = "Min";
-                    String damage = buildBucketedLevelsCSV(
+                    String damage = buildBucketedLevelsCSV(damageHitShift,
                             tryParseInt(row.get("E" + dmgEnd), 0),
                             tryParseInt(row.get("E" + dmgEnd + "Lev1"), 0),
                             tryParseInt(row.get("E" + dmgEnd + "Lev2"), 0),
@@ -218,7 +160,7 @@ public class UpdateSkillValues {
                 if (damageType != null) {
                     // Calc mam damage
                     String dmgEnd = "Max";
-                    String damage = buildBucketedLevelsCSV(
+                    String damage = buildBucketedLevelsCSV(damageHitShift,
                             tryParseInt(row.get("E" + dmgEnd), 0),
                             tryParseInt(row.get("E" + dmgEnd + "Lev1"), 0),
                             tryParseInt(row.get("E" + dmgEnd + "Lev2"), 0),
@@ -314,13 +256,13 @@ public class UpdateSkillValues {
      * @param levDam5     increment for levels 29-70
      * @return comma-delimited string of 70 values
      */
-    public static String buildBucketedLevelsCSV(
-            int level1Start,
-            int levDam1,
-            int levDam2,
-            int levDam3,
-            int levDam4,
-            int levDam5
+    public static String buildBucketedLevelsCSV(double damageHitShift,
+                                                int level1Start,
+                                                int levDam1,
+                                                int levDam2,
+                                                int levDam3,
+                                                int levDam4,
+                                                int levDam5
     ) {
         if (level1Start == 0 && levDam1 == 0 && levDam2 == 0 && levDam3 == 0 && levDam4 == 0 && levDam5 == 0)
             return null;
@@ -345,7 +287,7 @@ public class UpdateSkillValues {
                 inc = levDam5;
             }
             current += inc;
-            out.append(',').append(current);
+            out.append(',').append((int) (current * damageHitShift));
         }
         return out.toString();
     }

@@ -232,6 +232,7 @@ var corruptions = {	// pdr
 		{name:"+ Pierce", pierce:15},
 		{name:"+ All Resistances", all_res:8},
 		{name:"+ Mana per kill", mana_per_kill:4},
+		{name:"+ FBR", fbr:20},
 	],
 	boots: [
 		{name:"Boots"},
@@ -244,6 +245,7 @@ var corruptions = {	// pdr
 		{name:"+ Max Poison Resist", pRes_max:3, pRes:10},
 		{name:"+ Life per kill", life_per_kill:3},
 		{name:"+ Mana per kill", mana_per_kill:3},
+		{name:"+ FBR", fbr:10},
 	],
 	belt: [
 		{name:"Belt"},
