@@ -198,16 +198,14 @@ Spirit - Crystal Sword	Sword	Crystal Sword	rw		Runeword	Spirit
 Ancient's Pledge - Bone Shield	Shield	Bone Shield	rw		Runeword	Ancient's Pledge																										
 Heart of the Oak - Flail	Mace	Flail	rw		Runeword	Heart of the Oak																										
 Kenshi's Gloves of Giant	Gloves	Gloves	magic		str		15		skills_martial		3	3																	only			Assassin
-Unbending Will - Colossus Blade	Sword	Colossus Blade			Runeword	Unbending Will			ethereal		1																					
-Delirium - Diadem	Circlet	Diadem			Runeword	Delirium																										
-Stone - Archon Plate	Body Armor	Archon Plate			Runeword	Stone			ethereal		1																					
-Stone - Sacred Armor	Body Armor	Sacred Armor			Runeword	Stone			ethereal		1
-Smoke - Archon Plate	Body Armor	Archon Plate			Runeword	Smoke																										
-Treachery - Archon Plate	Body Armor	Archon Plate			Runeword	Treachery																										
-Bone - Archon Plate	Body Armor	Archon Plate			Runeword	Bone																							only			Necromancer
-Enlightenment - Archon Plate	Body Armor	Archon Plate			Runeword	Enlightenment																							only			Sorceress
-Myth - Archon Plate	Body Armor	Archon Plate			Runeword	Myth																							only			Barbarian
-Peace - Archon Plate	Body Armor	Archon Plate			Runeword	Peace																							only			Amazon
-Principle - Archon Plate	Body Armor	Archon Plate			Runeword	Principle																							only			Paladin
-Rain - Archon Plate	Body Armor	Archon Plate			Runeword	Rain																							only			Druid
-Plague - Cudgel	Club	Cudgel			Runeword	Plague			skill	Oak Sage		3	skill	Heart of Wolverine		3													only			Druid
+Unbending Will - Colossus Blade	Sword	Colossus Blade	rw		Runeword	Unbending Will			ethereal		1																					
+Delirium - Diadem	Circlet	Diadem	rw		Runeword	Delirium																										
+Stone - Archon Plate	Body Armor	Archon Plate	rw		Runeword	Stone			ethereal		1																					
+Stone - Sacred Armor	Body Armor	Sacred Armor	rw		Runeword	Stone			ethereal		1																					
+Smoke - Archon Plate	Body Armor	Archon Plate	rw		Runeword	Smoke																										
+Treachery - Archon Plate	Body Armor	Archon Plate	rw		Runeword	Treachery																										
+Bone - Archon Plate	Body Armor	Archon Plate	rw		Runeword	Bone																							only			Necromancer
+Enlightenment - Archon Plate	Body Armor	Archon Plate	rw		Runeword	Enlightenment																							only			Sorceress
+Myth - Archon Plate	Body Armor	Archon Plate	rw		Runeword	Myth																							only			Barbarian
+Rain - Archon Plate	Body Armor	Archon Plate	rw		Runeword	Rain																							only			Druid
+Plague - Cudgel	Club	Cudgel	rw		Runeword	Plague			skill	Oak Sage		3	skill	Heart of Wolverine		3													only			Druid
