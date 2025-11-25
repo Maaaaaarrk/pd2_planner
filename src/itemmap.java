@@ -127,7 +127,7 @@ public final class itemmap {
         p.put("extra-shadow", "extra_Shadow");
         p.put("extra-skele-war", "extra_Skeleton_Warriors");
         p.put("extra-spirits", "extra_Spirits");
-        p.put("extra-spiritwolf", "extra-extra_Spirit_Wolf");
+        p.put("extra-spiritwolf", "extra_Spirit_Wolf");
         p.put("fire-max", "fDamage_max");
         p.put("fire-min", "fDamage_min");
         p.put("fireskill", "skills_fire_all");
