@@ -390,6 +390,12 @@ public class UpdateUniqueItemsStats {
                         itemTypeForRw = itemGroupType;
                     } else if (groupBaseType.equals("Offhand")) {
                         if (baseType.contains("Arrows") || baseType.contains("Bolts")) {
+                            if (baseType.contains("Arrows")) {
+                                baseType = "Arrows";
+                            }
+                            if (baseType.contains("Arrows")) {
+                                baseType = "Arrows";
+                            }
                             row.put("type", "quiver");
                         } else {
                             row.put("type", "shield");

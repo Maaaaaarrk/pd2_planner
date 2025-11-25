@@ -212,4 +212,7 @@ Plague - Cudgel	Club	Cudgel	rw		Runeword	Plague			skill	Oak Sage		3	skill	Heart 
 Beast - Berserker Axe	Axe	Berserker Axe	rw		Runeword	Beast			ethereal		1	1																				
 Beast - Ogre Maul	Maul	Ogre Maul	rw		Runeword	Beast			ethereal		1	1																				
 Beast - Caduceus	Scepter	Caduceus	rw		Runeword	Beast			ethereal		1	1																				
-Echo Quiver - Sharp Arrows	Quiver	Sharp Arrows	rw		Runeword	Echo Quiver
+Echo Quiver - Sharp Arrows	Quiver	Sharp Arrows	rw		Runeword	Echo Quiver																										
+Brilliant Craft Ring	Jewelry	Ring	craft		all_res			5	half_freeze		1	1																				
+Brilliant Craft Ring + FCR	Jewelry	Ring	craft		all_res			5	half_freeze		1	1	fcr		10	10																
+Dual Leech Ring	Jewelry	Ring	rare		life_leech		8	8	mana_leech		5	5																				

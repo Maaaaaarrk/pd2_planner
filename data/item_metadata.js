@@ -533,6 +533,7 @@ var bases = {	// Note: damage_vs_undead:50 is included for blunt weapons, but ot
 	Special_3:{group:"weapon", type:"axe", base_damage_min:33, base_damage_max:58, req_level:55, req_strength:125, req_dexterity:67, durability:28, baseSpeed:0, range:0, max_sockets:2, downgrade:"Special_2", tier:3,},				// Tomahawk
 	// other? (unneeded with current implementation)
 	Arrows:{group:"offhand", type:"quiver", max_sockets: 2,},
+	Sharp_Arrows:{group:"offhand", type:"quiver", max_sockets: 2,},
 	Bolts:{group:"offhand", type:"quiver", max_sockets: 2,},
 	//Amulet:{group:"amulet", type:"amulet",},
 	//Ring:{group:"ring", type:"ring",},
