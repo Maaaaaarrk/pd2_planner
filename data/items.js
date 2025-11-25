@@ -101,6 +101,9 @@ var socketables = [
 {name:"vs Undead Jewel", type:"jewel", rarity:"rare", e_damage:40, damage_vs_undead:50, ar_vs_undead:50},
 {name:"Open Wounds Jewel", type:"jewel", rarity:"rare", e_damage:40, owounds:5, owounds_dps:125},
 {name:"LPK/MPK Jewel", type:"jewel", rarity:"rare", life_per_kill:3, mana_per_kill:3},
+{name:"Ruby Jewel of Freedom", type:"jewel", rarity:"magic", req_level:50, e_damage:40, req:-15},
+{name:"Ruby Jewel", type:"jewel", rarity:"magic", req_level:50, e_damage:40},
+{name:"Scintillating Jewel of Freedom", type:"jewel", rarity:"magic", req_level:26, all_res:15, req:-15},
 //{name:"Brawler's Jewel", type:"jewel", rarity:"rare", req_level:34, all_res:10, fhr:7, e_damage:30, melee_splash:1},
 //{name:"Mage's Jewel", type:"jewel", rarity:"rare", req_level:33, all_res:10, fhr:7, mana_per_kill:3, damage_to_mana:12},
 /*	magic only affix values
