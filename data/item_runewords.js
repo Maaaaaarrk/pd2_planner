@@ -1,5 +1,7 @@
 var runewords = {
+	Ancients_Foresight:["Ral","Thul"],
 	Ancients_Pledge:["Ral","Ort","Tal"],
+	Ancients_Scripture:["Tal","Ort"],
 	Asylum:["Gul","Cham","Hel","Jah","Dol","Um"],
 	Beast:["Ber","Tir","Um","Mal","Lum"],
 	Black:["Thul","Io","Nef"],
@@ -19,6 +21,8 @@ var runewords = {
 	Dragon:["Sur","Lo","Sol"],
 	Dream:["Io","Jah","Pul"],
 	Duress:["Shael","Um","Thul"],
+	Echo_Quiver:["Sol","Dol"],
+	Echo_Weapon:["Sol","Dol"],
 	Edge:["Tir","Tal","Amn"],
 	Enigma:["Jah","Ith","Ber"],
 	Enlightenment:["Pul","Ral","Sol"],
