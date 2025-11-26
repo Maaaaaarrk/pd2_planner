@@ -175,17 +175,17 @@ Splendor - Gargoyle Head - Poison Strike	Offhand	Gargoyle Head	rw		Runeword	Sple
 White - Tomb Wand - Teeth 	Wand	Tomb Wand	rw		Runeword	White			skill	Teeth		3																	only			Necromancer
 White - Tomb Wand - Bone Spear 	Wand	Tomb Wand	rw		Runeword	White			skill	Bone Spear		3																	only			Necromancer
 White - Tomb Wand - Corpse Explosion	Wand	Tomb Wand	rw		Runeword	White			skill	Corpse Explosion		3																	only			Necromancer
-Poison Strike - Dagger	Dagger	Dagger	magic		ias		20		skill	Poison Strike		3																	only			
-Athlete's Gloves of the Apprentice	Gloves	Dagger	magic		fcr		20		skills_passives		3	3																	only			Amazon
-Athlete's Gloves of Quickness	Gloves	Gloves	magic		ias		20		skills_passives		3	3																	only			Amazon
-Lancer's Gloves of Quickness	Gloves	Gloves	magic		ias		20		skills_javelins		3	3																	only			Amazon
-Archer's of Quickness	Gloves	Gloves	magic		ias		20		skills_bows		3	3																	only			Amazon
-Kenshi's Gloves of Quickness	Gloves	Gloves	magic		ias		20		skills_martial		3	3																	only			Assassin
+Poison Strike - Dagger	Dagger	Dagger	magic		ias		20	20	skill	Poison Strike		3																	only			
+Athlete's Gloves of the Apprentice	Gloves	Dagger	magic		fcr		20	20	skills_passives		3	3																	only			Amazon
+Athlete's Gloves of Quickness	Gloves	Gloves	magic		ias		20	20	skills_passives		3	3																	only			Amazon
+Lancer's Gloves of Quickness	Gloves	Gloves	magic		ias		20	20	skills_javelins		3	3																	only			Amazon
+Archer's of Quickness	Gloves	Gloves	magic		ias		20	20	skills_bows		3	3																	only			Amazon
+Kenshi's Gloves of Quickness	Gloves	Gloves	magic		ias		20	20	skills_martial		3	3																	only			Assassin
 Oath - Crystal Sword	Sword	Crystal Sword	rw		Runeword	Oath																							only			
 Passion - Crystal Sword	Sword	Crystal Sword	rw		Runeword	Passion																							only			
 Passion - Demon Crossbow	Crossbow	Demon Crossbow	rw		Runeword	Passion																							only			
-Fire Cunning Greater Talons of Quickness	Claw	Greater Talons	magic		ias		20		skills_traps		3	3	skill	Wake of Fire		3	skill	Wake of Inferno		3									only			Assassin
-Lightning Cunning Greater Talons of Quickness	Claw	Greater Talons	magic		ias		20		skills_traps		3	3	skill	Lightning Sentry		3	skill	Chain Lightning Sentry		3									only			Assassin
+Fire Cunning Greater Talons of Quickness	Claw	Greater Talons	magic		ias		20	20	skills_traps		3	3	skill	Wake of Fire		3	skill	Wake of Inferno		3									only			Assassin
+Lightning Cunning Greater Talons of Quickness	Claw	Greater Talons	magic		ias		20	20	skills_traps		3	3	skill	Lightning Sentry		3	skill	Chain Lightning Sentry		3									only			Assassin
 Neophyte - Scepter	Scepter	War Scepter	rw		Runeword	Neophyte																							only			
 Neophyte - Club - Raven	Club	Club	rw		Runeword	Neophyte			skill	Raven		3																	only			Druid
 Neophyte - Club - Grizzly 	Club	Club	rw		Runeword	Neophyte			skill	Summon Grizzly		3																	only			Druid
@@ -197,7 +197,7 @@ Golemlord's Minion Skull	Offhand	Minion Skull	magic						skills_summoning_necrom
 Spirit - Crystal Sword	Sword	Crystal Sword	rw		Runeword	Spirit																										
 Ancient's Pledge - Bone Shield	Shield	Bone Shield	rw		Runeword	Ancient's Pledge																										
 Heart of the Oak - Flail	Mace	Flail	rw		Runeword	Heart of the Oak																										
-Kenshi's Gloves of Giant	Gloves	Gloves	magic		str		15		skills_martial		3	3																	only			Assassin
+Kenshi's Gloves of Giant	Gloves	Gloves	magic		str		15	15	skills_martial		3	3																	only			Assassin
 Unbending Will - Colossus Blade	Sword	Colossus Blade	rw		Runeword	Unbending Will			ethereal		1	1																				
 Delirium - Diadem	Circlet	Diadem	rw		Runeword	Delirium																										
 Stone - Archon Plate	Body Armor	Archon Plate	rw		Runeword	Stone			ethereal		1	1																				

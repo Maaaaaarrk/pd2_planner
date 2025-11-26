@@ -103,7 +103,11 @@ var socketables = [
 {name:"LPK/MPK Jewel", type:"jewel", rarity:"rare", life_per_kill:3, mana_per_kill:3},
 {name:"Ruby Jewel of Freedom", type:"jewel", rarity:"magic", req_level:50, e_damage:40, req:-15},
 {name:"Ruby Jewel", type:"jewel", rarity:"magic", req_level:50, e_damage:40},
+{name:"Ruby Jewel of Carnage", type:"jewel", rarity:"magic", req_level:50, e_damage:40, damage_max:15},
 {name:"Scintillating Jewel of Freedom", type:"jewel", rarity:"magic", req_level:26, all_res:15, req:-15},
+{name:"Scintillating Jewel of Truth", type:"jewel", rarity:"magic", req_level:26, all_res:15, fhr:7},
+{name:"req FHR Jewel", type:"jewel", rarity:"rare", req:-15, fhr:7},
+{name:"LPK/MPK req FHR Jewel", type:"jewel", rarity:"rare", life_per_kill:3, mana_per_kill:3, req:-15, fhr:7},
 //{name:"Brawler's Jewel", type:"jewel", rarity:"rare", req_level:34, all_res:10, fhr:7, e_damage:30, melee_splash:1},
 //{name:"Mage's Jewel", type:"jewel", rarity:"rare", req_level:33, all_res:10, fhr:7, mana_per_kill:3, damage_to_mana:12},
 /*	magic only affix values
@@ -259,6 +263,7 @@ var corruptions = {	// pdr
 		{name:"+ ICB", ibc:10},
 		{name:"+ Pierce", pierce:15},
 		{name:"+ Max Resist", fRes_max:2, cRes_max:2, lRes_max:2, pRes_max:2},
+		{name:"+ FHR", fhr:10},
 	],
 	amulet: [
 		{name:"Amulet"},
