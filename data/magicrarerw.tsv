@@ -176,7 +176,7 @@ White - Tomb Wand - Teeth 	Wand	Tomb Wand	rw		Runeword	White			skill	Teeth		3			
 White - Tomb Wand - Bone Spear 	Wand	Tomb Wand	rw		Runeword	White			skill	Bone Spear		3																	only			Necromancer
 White - Tomb Wand - Corpse Explosion	Wand	Tomb Wand	rw		Runeword	White			skill	Corpse Explosion		3																	only			Necromancer
 Poison Strike - Dagger	Dagger	Dagger	magic		ias		20	20	skill	Poison Strike		3																	only			
-Athlete's Gloves of the Apprentice	Gloves	Dagger	magic		fcr		20	20	skills_passives		3	3																	only			Amazon
+Athlete's Gloves of the Apprentice	Gloves	Gloves	magic		fcr		20	20	skills_passives		3	3																	only			Amazon
 Athlete's Gloves of Quickness	Gloves	Gloves	magic		ias		20	20	skills_passives		3	3																	only			Amazon
 Lancer's Gloves of Quickness	Gloves	Gloves	magic		ias		20	20	skills_javelins		3	3																	only			Amazon
 Archer's of Quickness	Gloves	Gloves	magic		ias		20	20	skills_bows		3	3																	only			Amazon
@@ -217,8 +217,19 @@ Brilliant Craft Ring	Jewelry	Ring	craft		all_res			5	half_freeze		1	1
 Brilliant Craft Ring + FCR	Jewelry	Ring	craft		all_res			5	half_freeze		1	1	fcr		10	10																
 Dual Leech Ring	Jewelry	Ring	rare		life_leech		8	8	mana_leech		5	5																				
 Doom - Berserker Axe	Axe	Berserker Axe	rw		Runeword	Doom			ethereal		1	1																				
-Phoenix - Aegis	Shield	Aegis	rw		Runeword	Phoenix																							only			
+Phoenix - Aegis	Shield	Aegis	rw		Runeword	Phoenix																										
 Ancient's Foresight - Sharp Arrows	Quiver	Sharp Arrows	rw		Runeword	Ancient's Foresight																										
 Ancient's Scripture - Sharp Arrows	Quiver	Sharp Arrows	rw		Runeword	Ancient's Scripture																										
 Ancient's Foresight - War Bolts	Quiver	War Bolts	rw		Runeword	Ancient's Foresight																										
 Ancient's Scripture - War Bolts	Quiver	War Bolts	rw		Runeword	Ancient's Scripture																										
+Athlete's Gloves	Gloves	Gloves	magic		skills_passives		3	3																					only			Amazon
+Wealth - Breast Plate	Body Armor	Breast Plate	rw		Runeword	Wealth																										
+Caster Craft Belt	Belt	Sash	craft		fcr		10	10	mana		20	20	mana_regen		10	10																
+Caster Craft Gloves	Gloves	Gloves	craft		fcr		10	10	mana		20	20	mana_per_kill		3	3																
+2/20 Passive Bolts	Quiver	War Bolts	rare		ias		20	20	skills_passives		3	3																	only			Amazon
+2/20 Passive Arrows	Quiver	Sharp Arrows	rare		ias		20	20	skills_passives		3	3																	only			Amazon
+2/20 Bow Bolts	Quiver	War Bolts	rare		ias		20	20	skills_bows		3	3																	only			Amazon
+2/20 Bow Arrows	Quiver	Sharp Arrows	rare		ias		20	20	skills_bows		3	3																	only			Amazon
+Kenshi's Greater Talons MA	Claw	Greater Talons	magic		ias		40	40	skills_martial		3	3																	only			Assassin
+Kenshi's Greater Talons Trap	Claw	Greater Talons	magic		ias		40	40	skills_traps		3	3																	only			Assassin
+Lionheart - Breast Plate	Body Armor	Breast Plate	rw		Runeword	Lionheart																										
