@@ -440,7 +440,7 @@ public class UpdateUniqueItemsStats {
             while (groupedCheck.get(groupBaseTypeKeyname).contains(newKey)) {
                 i++;
                 newKey = itemName + (i > 1 ? "_" + i : "");
-                System.err.println("Duplicate key: " + newKey);
+                // intended  System.err.println("Duplicate key: " + newKey);
             }
             itemName = newKey;
             row.put("name", itemName);
@@ -1063,7 +1063,9 @@ public class UpdateUniqueItemsStats {
             if (row.containsKey("type") && groupKey.toLowerCase().equals("weapon")) {
                 subGroupKey = String.valueOf(row.get("type"));
             }
-            imageCheck(groupKey, subGroupKey, true, String.valueOf(row.get("img")), row.get("name"));
+            if (!imageCheck(groupKey, subGroupKey, true, String.valueOf(row.get("img")), row.get("name"))) {
+                row.remove("img");
+            }
         } else if (row.containsKey("base") && false) {
             // these dont need to be reviewed, there is a complex eltie-> normal base reduction
             String subGroupKey = "";
@@ -1107,7 +1109,7 @@ public class UpdateUniqueItemsStats {
         sb.append("}");
     }
 
-    private static void imageCheck(String groupKey, String subGroup, boolean isSpecial, String s, Object name) {
+    private static boolean imageCheck(String groupKey, String subGroup, boolean isSpecial, String s, Object name) {
         s = s.replace(" ", "_");
         String fileName = s + ".png";
         String isSpecialStr = isSpecial ? "special\\" : "";
@@ -1120,7 +1122,9 @@ public class UpdateUniqueItemsStats {
 
         if (!Files.exists(imagePath)) {
             System.err.println(name + ": " + imagePath.toAbsolutePath());
+            return false;
         }
+        return true;
     }
 
     private static String escapeJsString(String s) {
