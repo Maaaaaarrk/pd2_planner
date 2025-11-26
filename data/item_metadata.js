@@ -1219,7 +1219,9 @@ skill_Spirit_of_Barbs:{index:["skill_Spirit_of_Barbs"], format:["+"," to Spirit 
 skill_Summon_Grizzly:{index:["skill_Summon_Grizzly"], format:["+"," to Summon Grizzly (Druid only)"]},
 
 skill_Summon_Mastery:{index:["skill_Summon_Mastery"], format:["+"," to Summon Mastery (Necromancer only)"]},
+skill_Skeleton_Mastery:{index:["skill_Skeleton_Mastery"], format:["+"," to Skeleton Mastery (Necromancer only)"]},
 skill_Raise_Skeleton_Warrior:{index:["skill_Raise_Skeleton_Warrior"], format:["+"," to Raise Skeleton Warrior (Necromancer only)"]},
+skill_Raise_Skeleton_Archer:{index:["skill_Raise_Skeleton_Archer"], format:["+"," to Raise Skeleton Archer (Necromancer only)"]},
 skill_Bone_Offering:{index:["skill_Bone_Offering"], format:["+"," to Bone Offering (Necromancer only)"]},
 skill_Clay_Golem:{index:["skill_Clay_Golem"], format:["+"," to Clay Golem (Necromancer only)"]},
 skill_Flesh_Offering:{index:["skill_Flesh_Offering"], format:["+"," to Flesh Offering (Necromancer only)"]},
@@ -1449,7 +1451,9 @@ oskill_Spirit_of_Barbs:{index:["oskill_Spirit_of_Barbs"], format:["+"," to Spiri
 oskill_Summon_Grizzly:{index:["oskill_Summon_Grizzly"], format:["+"," to Summon Grizzly"]},
 
 oskill_Summon_Mastery:{index:["oskill_Summon_Mastery"], format:["+"," to Summon Mastery"]},
+oskill_Skeleton_Mastery:{index:["oskill_Skeleton_Mastery"], format:["+"," to Skeleton Mastery"]},
 oskill_Raise_Skeleton_Warrior:{index:["oskill_Raise_Skeleton_Warrior"], format:["+"," to Raise Skeleton Warrior"]},
+oskill_Raise_Skeleton_Archer:{index:["oskill_Raise_Skeleton_Archer"], format:["+"," to Raise Skeleton Archer"]},
 oskill_Bone_Offering:{index:["oskill_Bone_Offering"], format:["+"," to Bone Offering"]},
 oskill_Clay_Golem:{index:["oskill_Clay_Golem"], format:["+"," to Clay Golem"]},
 oskill_Flesh_Offering:{index:["oskill_Flesh_Offering"], format:["+"," to Flesh Offering"]},
