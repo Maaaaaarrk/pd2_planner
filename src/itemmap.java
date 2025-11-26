@@ -724,6 +724,7 @@ public final class itemmap {
         t.put("Blade Bow", "Weapon");
         t.put("Spirit Mask", "Helm");
         t.put("Sharp Arrows", "Offhand");
+        t.put("War Bolts", "Offhand");
 
 
         LinkedHashMap<String, String> ncc = new LinkedHashMap<>();

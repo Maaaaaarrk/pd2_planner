@@ -3157,7 +3157,7 @@ function equipmentHoverMerc(group) {
 	else if ((mercEquipped[group].rarity == "common" || mercEquipped[group].rarity == "rw") && mercEquipped[group].ethereal == 1) { textColor = "Gray" }
 	else if (mercEquipped[group].rarity == "common" || mercEquipped[group].rarity == "rw") { textColor = "White" }
 	document.getElementById("item_name").style.color = colors[textColor]
-	if(document.getElementById("item_info").innerHTML === "") {
+	if(name === "") {
 	   document.getElementById("tooltip_inventory").style.display = "none"
 	} else {
 	   document.getElementById("tooltip_inventory").style.display = "block"
@@ -3383,7 +3383,7 @@ function equipmentHover(group) {
 	else if ((equipped[group].rarity == "common" || equipped[group].rarity == "rw") && equipped[group].ethereal == 1) { textColor = "Gray" }
 	else if (equipped[group].rarity == "common" || equipped[group].rarity == "rw") { textColor = "White" }
 	document.getElementById("item_name").style.color = colors[textColor]
-	if(document.getElementById("item_info").innerHTML === "") {
+	if(name === "") {
 	   document.getElementById("tooltip_inventory").style.display = "none"
 	} else {
 	   document.getElementById("tooltip_inventory").style.display = "block"
