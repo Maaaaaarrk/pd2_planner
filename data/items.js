@@ -300,6 +300,8 @@ var corruptions = {	// pdr
 		{name:"+ Life per kill", life_per_kill:3},
 		{name:"+ Mana per kill", mana_per_kill:3},
 		{name:"+ Attack Rating", ar:150},
+		{name:"+ Mana Leech", mana_leech:4},
+		{name:"+ Life Leech", life_leech:4},
 	],
 	ring2: [],	// copied from ring1
 	weapon: [
