@@ -425,6 +425,10 @@
 						        onContextMenu="equip('weapon', 'weapon')"></select>
 						<select class="dropdown" id="dropdown_offhand" onChange="equip('offhand', this.value)"
 						        onContextMenu="equip('offhand', 'offhand')"></select>
+						<select class="dropdown" id="dropdown_swap_weapon" onChange="equipSwap('weapon', this.value)"
+						        onContextMenu="equipSwap('weapon','weapon')"></select>
+						<select class="dropdown" id="dropdown_swap_offhand" onChange="equipSwap('offhand', this.value)"
+						        onContextMenu="equipSwap('offhand','offhand')"></select>
 						<br><br>
 					</div>
 					<select class="dropdown" id="dropdown_charms" onChange="addCharm(this.value)"></select>
@@ -449,11 +453,6 @@
 						<select class="dropdown" id="dropdown_merc_offhand" onChange="equipMerc('offhand', this.value)"
 						        onContextMenu="equipMerc('offhand', 'offhand')"></select>
 						<div id="merc_space"></div>
-						<!-- weapon swap dropdowns -->
-						<select class="dropdown" id="dropdown_swap_weapon" onChange="equipSwap('weapon', this.value)"
-						        onContextMenu="equipSwap('weapon','weapon')"></select>
-						<select class="dropdown" id="dropdown_swap_offhand" onChange="equipSwap('offhand', this.value)"
-						        onContextMenu="equipSwap('offhand','offhand')"></select>
 						<div id="golem"><br><select class="dropdown" id="dropdown_golem"
 						                            onChange="setIronGolem(this.value)"
 						                            onContextMenu="setIronGolem('none')"></select><br></div>
@@ -487,6 +486,10 @@
 					        onContextMenu="corrupt('weapon', 'none')"></select>
 					<select class="dropdown" id="corruptions_offhand" onChange="corrupt('offhand', this.value)"
 					        onContextMenu="corrupt('offhand', 'none')"></select>
+				<select class="dropdown" id="corruptions_swap_weapon" onChange="corrupt('swap_weapon', this.value)"
+				        onContextMenu="corrupt('swap_weapon', 'none')"></select>
+				<select class="dropdown" id="corruptions_swap_offhand" onChange="corrupt('swap_offhand', this.value)"
+				        onContextMenu="corrupt('swap_offhand', 'none')"></select>
 					<!-- spacers matching: <br> end of equip_a, charms, socketables, <br><br> in equip_b, mercenary -->
 					<br>
 					<div style="height:29px;"></div>
@@ -506,9 +509,10 @@
 					        onContextMenu="corrupt('merc_belt', 'none')"></select>
 					<select class="dropdown" id="corruptions_merc_weapon" onChange="corrupt('merc_weapon', this.value)"
 					        onContextMenu="corrupt('merc_weapon', 'none')"></select>
-					<select class="dropdown" id="corruptions_merc_offhand" onChange="corrupt('merc_offhand', this.value)"
+					<select class="dropdown" id="corruptions_merc_offhand"
+					        onChange="corrupt('merc_offhand', this.value)"
 					        onContextMenu="corrupt('merc_offhand', 'none')"></select>
-					</div> <!-- /Corruption Options -->
+				</div> <!-- /Corruption Options -->
 
 				<!--	inventory	-->
 				<div class="inventory">
@@ -679,15 +683,19 @@
 
 					<!-- weapon swap inventory -->
 					<div id="gui_swap" style="margin-top: 8px; text-align: center;" oncontextmenu="return false">
-						<div style="color:#aaaaaa; font-size:0.85em; padding:2px 0 4px 0;">&#x2194; Weapon Swap</div>
+						<div style="color:#aaaaaa; font-size:0.85em; padding:2px 0 4px 0;">Pre-buff &#x2194; Weapon
+							Swap
+						</div>
 						<div id="gui_swap_container">
 							<div id="swap_weapon_" class="swap_weapon equipped_item flex-box"
+							     ondrop="handleSocket(event,'swap_weapon',0)" ondragover="allowSocket(event,'swap_weapon')"
 							     onmouseover="equipSwapHover('weapon')" onmouseout="equipmentOut()">
 								<img id="swap_weapon_image" src=""
 								     onContextMenu="equipSwap('weapon','weapon')">
 								<div class="equipment_absolute" align="center" id="swap_weapon"></div>
 							</div>
 							<div id="swap_offhand_" class="swap_offhand equipped_item flex-box"
+							     ondrop="handleSocket(event,'swap_offhand',0)" ondragover="allowSocket(event,'swap_offhand')"
 							     onmouseover="equipSwapHover('offhand')" onmouseout="equipmentOut()">
 								<img id="swap_offhand_image" style="position:absolute; z-index:3;" src=""
 								     onContextMenu="equipSwap('offhand','offhand')">
@@ -1221,13 +1229,6 @@ l-26 24 14 -25z"></path>
                         </g>
                     </svg>
 					</span>
-
-					<br/>
-					<br/>
-					Planned future features:<br/>
-					Weapon Swap config<br/>
-					Merc Item Slams<br/>
-					Merc Item Sockets<br/>
                 </span>
 
 				</div>

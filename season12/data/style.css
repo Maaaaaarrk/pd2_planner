@@ -281,6 +281,8 @@ input[type="file"] {
 .navbar {
   overflow: hidden;
     background-image: url(../images/thin_bg.gif);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
  /* font-family: Montserrat, sans-serif;*/
   min-width: 869px;
   max-width: 869px;
