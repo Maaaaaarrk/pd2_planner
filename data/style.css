@@ -4,6 +4,12 @@
   font-weight: normal;
   font-style: normal;
 }
+@font-face {
+  font-family: "exocet-medium";
+  src: url("../data/fonts/exocet-medium.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
 
 .portal-logo {
   float:left;
@@ -102,7 +108,7 @@
   background-color: #161616;
 }
 .background {
-  font-family: "exocet", sans-serif;
+  font-family: "exocet-medium", "exocet", sans-serif;
     background-image: url(../images/bg2.jpg);
     margin:0
 }
