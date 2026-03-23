@@ -1557,6 +1557,8 @@ function loadEquipment(className) {
 	for (let i = 0; i < equipmentGroups.length; i++) { loadItems(equipmentGroups[i], equipmentDropdowns[i], className) }
 	loadItems("weapon", "dropdown_swap_weapon", className)
 	loadItems("offhand", "dropdown_swap_offhand", className)
+	document.getElementById("dropdown_swap_weapon").options[0].text = "­ ­ ­ ­ Swap Weapon"
+	document.getElementById("dropdown_swap_offhand").options[0].text = "­ ­ ­ ­ Swap Offhand"
 	loadMisc()
 	loadMerc()
 	loadCorruptions()
