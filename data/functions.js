@@ -615,9 +615,11 @@ function loadParams() {
 			// setup equipment
 			if (param_equipped != 0) {
 				for (group in corruptsEquipped) { if (param_equipped[group][0] != "none") {	// equipment
+					var isSwapGroup = group.startsWith("swap_");
 					var options = document.getElementById("dropdown_"+group).options;
 					for (let i = 0; i < options.length; i++) { if (options[i].innerHTML == param_equipped[group][0]) {  document.getElementById("dropdown_"+group).selectedIndex = i } }
-					equip(group,param_equipped[group][0])
+					if (isSwapGroup) { equipSwap(group.slice(5), param_equipped[group][0]) }
+					else { equip(group,param_equipped[group][0]) }
 				} }
 				for (group in corruptsEquipped) { if (param_equipped[group][2] != "none") {	// corruptions
 					var options = document.getElementById("corruptions_"+group).options;
@@ -625,11 +627,13 @@ function loadParams() {
 					corrupt(group,param_equipped[group][2])
 				} }
 				for (group in corruptsEquipped) {	// upgrades & downgrades
+					if (group.startsWith("swap_")) { continue; }
 					var baseDiff = ~~param_equipped[group][1] - ~~equipped[group].tier;
 					if (baseDiff < 0) { changeBase(group, "downgrade"); equipmentOut() }
 					if (baseDiff > 0) { changeBase(group, "upgrade"); equipmentOut() }
 				}
 				for (group in corruptsEquipped) {	// upgrades & downgrades (duplicated)
+					if (group.startsWith("swap_")) { continue; }
 					var baseDiff = ~~param_equipped[group][1] - ~~equipped[group].tier;
 					if (baseDiff < 0) { changeBase(group, "downgrade"); equipmentOut(); }
 					if (baseDiff > 0) { changeBase(group, "upgrade"); equipmentOut(); }
@@ -5465,7 +5469,9 @@ function updateURL() {
 	//if (game_version == 2) {	// these features are only available on the PoD version
 		params.set('selected', selectedSkill[0]+','+selectedSkill[1])
 		for (group in corruptsEquipped) {
-			var param_equipped = equipped[group].name+','+equipped[group].tier+','+corruptsEquipped[group].name
+			var isSwapGroup = group.startsWith("swap_");
+			var equippedItem = isSwapGroup ? swapEquipped[group.slice(5)] : equipped[group];
+			var param_equipped = equippedItem.name+','+(equippedItem.tier||0)+','+corruptsEquipped[group].name
 			for (group_sock in socketed) { if (group == group_sock) {
 				for (let i = 0; i < socketed[group].items.length; i++) {
 					param_equipped += ','+socketed[group].items[i].name
