@@ -486,10 +486,11 @@
 					        onContextMenu="corrupt('weapon', 'none')"></select>
 					<select class="dropdown" id="corruptions_offhand" onChange="corrupt('offhand', this.value)"
 					        onContextMenu="corrupt('offhand', 'none')"></select>
-				<select class="dropdown" id="corruptions_swap_weapon" onChange="corrupt('swap_weapon', this.value)"
-				        onContextMenu="corrupt('swap_weapon', 'none')"></select>
-				<select class="dropdown" id="corruptions_swap_offhand" onChange="corrupt('swap_offhand', this.value)"
-				        onContextMenu="corrupt('swap_offhand', 'none')"></select>
+					<select class="dropdown" id="corruptions_swap_weapon" onChange="corrupt('swap_weapon', this.value)"
+					        onContextMenu="corrupt('swap_weapon', 'none')"></select>
+					<select class="dropdown" id="corruptions_swap_offhand"
+					        onChange="corrupt('swap_offhand', this.value)"
+					        onContextMenu="corrupt('swap_offhand', 'none')"></select>
 					<!-- spacers matching: <br> end of equip_a, charms, socketables, <br><br> in equip_b, mercenary -->
 					<br>
 					<div style="height:29px;"></div>
@@ -497,17 +498,23 @@
 					<br><br>
 					<div style="height:29px;"></div>
 					<!-- merc item corruptions -->
-					<select class="dropdown" id="corruptions_merc_helm" style="display:none;" onChange="corrupt('merc_helm', this.value)"
+					<select class="dropdown" id="corruptions_merc_helm" style="display:none;"
+					        onChange="corrupt('merc_helm', this.value)"
 					        onContextMenu="corrupt('merc_helm', 'none')"></select>
-					<select class="dropdown" id="corruptions_merc_armor" style="display:none;" onChange="corrupt('merc_armor', this.value)"
+					<select class="dropdown" id="corruptions_merc_armor" style="display:none;"
+					        onChange="corrupt('merc_armor', this.value)"
 					        onContextMenu="corrupt('merc_armor', 'none')"></select>
-					<select class="dropdown" id="corruptions_merc_gloves" style="display:none;" onChange="corrupt('merc_gloves', this.value)"
+					<select class="dropdown" id="corruptions_merc_gloves" style="display:none;"
+					        onChange="corrupt('merc_gloves', this.value)"
 					        onContextMenu="corrupt('merc_gloves', 'none')"></select>
-					<select class="dropdown" id="corruptions_merc_boots" style="display:none;" onChange="corrupt('merc_boots', this.value)"
+					<select class="dropdown" id="corruptions_merc_boots" style="display:none;"
+					        onChange="corrupt('merc_boots', this.value)"
 					        onContextMenu="corrupt('merc_boots', 'none')"></select>
-					<select class="dropdown" id="corruptions_merc_belt" style="display:none;" onChange="corrupt('merc_belt', this.value)"
+					<select class="dropdown" id="corruptions_merc_belt" style="display:none;"
+					        onChange="corrupt('merc_belt', this.value)"
 					        onContextMenu="corrupt('merc_belt', 'none')"></select>
-					<select class="dropdown" id="corruptions_merc_weapon" style="display:none;" onChange="corrupt('merc_weapon', this.value)"
+					<select class="dropdown" id="corruptions_merc_weapon" style="display:none;"
+					        onChange="corrupt('merc_weapon', this.value)"
 					        onContextMenu="corrupt('merc_weapon', 'none')"></select>
 					<select class="dropdown" id="corruptions_merc_offhand" style="display:none;"
 					        onChange="corrupt('merc_offhand', this.value)"
@@ -687,15 +694,18 @@
 							Swap
 						</div>
 						<div id="gui_swap_container">
+							<img id="swap_inventory_grid" src="./images/weaponswap_inventory.png">
 							<div id="swap_weapon_" class="swap_weapon equipped_item flex-box"
-							     ondrop="handleSocket(event,'swap_weapon',0)" ondragover="allowSocket(event,'swap_weapon')"
+							     ondrop="handleSocket(event,'swap_weapon',0)"
+							     ondragover="allowSocket(event,'swap_weapon')"
 							     onmouseover="equipSwapHover('weapon')" onmouseout="equipmentOut()">
 								<img id="swap_weapon_image" src=""
 								     onContextMenu="equipSwap('weapon','weapon')">
 								<div class="equipment_absolute" align="center" id="swap_weapon"></div>
 							</div>
 							<div id="swap_offhand_" class="swap_offhand equipped_item flex-box"
-							     ondrop="handleSocket(event,'swap_offhand',0)" ondragover="allowSocket(event,'swap_offhand')"
+							     ondrop="handleSocket(event,'swap_offhand',0)"
+							     ondragover="allowSocket(event,'swap_offhand')"
 							     onmouseover="equipSwapHover('offhand')" onmouseout="equipmentOut()">
 								<img id="swap_offhand_image" style="position:absolute; z-index:3;" src=""
 								     onContextMenu="equipSwap('offhand','offhand')">
@@ -964,7 +974,7 @@
 				<br/>
 				<br/>
 
-				<div class="stat-text-wrapper stat-3" id="stats_column_11">
+				<div class="stat-text-wrapper stat-3" id="stats_column_11" style="width:304px">
 					<font size="2" id="block_label" style="visibility:hidden;">Block Chance: <font size="2"
 					                                                                               id="block"></font><br></font>
 					<font size="2">Fire Resist: </font><font size="2" id="fres"></font><br>
