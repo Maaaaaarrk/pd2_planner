@@ -1,0 +1,235 @@
+index	group	*type	rarity	blank	prop1	par1	min1	max1	prop2	par2	min2	max2	prop3	par3	min3	max3	prop4	par4	min4	max4	prop5	par5	min5	max5	prop6	par6	min6	max6	prop7	pat7	min7	max7
+2/20 Circlet Necromancer	Circlet	Diadem	rare		fcr		20	20	skills_necromancer		2	2																	only			Necromancer
+2/20 Circlet Sorceress	Circlet	Diadem	rare		fcr		20	20	skills_sorceress		2	2																	only			Sorceress
+2/20 Circlet Druid	Circlet	Diadem	rare		fcr		20	20	skills_druid		2	2																	only			Druid
+2/20 Circlet Assassin	Circlet	Diadem	rare		fcr		20	20	skills_assassin		2	2																	only			Assassin
+2/20 Circlet Paladin	Circlet	Diadem	rare		fcr		20	20	skills_paladin		2	2																	only			Paladin
+2/20 Circlet Barbarian	Circlet	Diadem	rare		fcr		20	20	skills_barbarian		2	2																	only			Barbarian
+2/20 Circlet Amazon	Circlet	Diadem	rare		fcr		20	20	skills_amazon		2	2																	only			Amazon
+Glacial Diadem of the Magus	Circlet	Diadem	magic		fcr		20	20	skills_cold		3	3																	only			Sorceress
+Powered Diadem of the Magus	Circlet	Diadem	magic		fcr		20	20	skills_lightning		3	3																	only			Sorceress
+Volcanic Diadem of the Magus	Circlet	Diadem	magic		fcr		20	20	skills_fire		3	3																	only			Sorceress
+Golemlord's Diadem of the Magus	Circlet	Diadem	magic		fcr		20	20	skills_summoning_necromancer		3	3																	only			Necromancer
+Venomous Diadem of the Magus	Circlet	Diadem	magic		fcr		20	20	skills_poisonBone		3	3																	only			Necromancer
+Accursed Diadem of the Magus	Circlet	Diadem	magic		fcr		20	20	skills_curses		3	3																	only			Necromancer
+Rose Branded Diadem of the Magus	Circlet	Diadem	magic		fcr		20	20	skills_combat_paladin		3	3																	only			Paladin
+Cunning Diadem of the Magus	Circlet	Diadem	magic		fcr		20	20	skills_traps		3	3																	only			Assassin
+Athlete's Diadem of the Magus	Circlet	Diadem	magic		fcr		20	20	skills_passives		3	3																	only			Amazon
+Shadow Diadem of the Magus	Circlet	Diadem	magic		fcr		20	20	skills_shadow		3	3																	only			Assassin
+Blood Craft - Assassin	Jewelry	Amulet	craft		all_res		20	20	life_per_kill		6	6	frw		10	10	poison_length_reduced		75	75	fcr		10	10	skills_assassin		2	2	only			Assassin
+Blood Craft - Amazon	Jewelry	Amulet	craft		all_res		20	20	life_per_kill		6	6	frw		10	10	poison_length_reduced		75	75	fcr		10	10	skills_amazon		2	2	only			Amazon
+Blood Craft - Sorceress	Jewelry	Amulet	craft		all_res		20	20	life_per_kill		6	6	frw		10	10	poison_length_reduced		75	75	fcr		10	10	skills_sorceress		2	2	only			Sorceress
+Blood Craft - Paladin	Jewelry	Amulet	craft		all_res		20	20	life_per_kill		6	6	frw		10	10	poison_length_reduced		75	75	fcr		10	10	skills_paladin		2	2	only			Paladin
+Blood Craft - Barbarian	Jewelry	Amulet	craft		all_res		20	20	life_per_kill		6	6	frw		10	10	poison_length_reduced		75	75	fcr		10	10	skills_barbarian		2	2	only			Barbarian
+Blood Craft - Necromancer	Jewelry	Amulet	craft		all_res		20	20	life_per_kill		6	6	frw		10	10	poison_length_reduced		75	75	fcr		10	10	skills_necromancer		2	2	only			Necromancer
+Blood Craft - Druid	Jewelry	Amulet	craft		all_res		20	20	life_per_kill		6	6	frw		10	10	poison_length_reduced		75	75	fcr		10	10	skills_druid		2	2	only			Druid
+Athlete's Amulet of the Apprentice	Jewelry	Amulet	magic		fcr		10	10	skills_passives		3	3																	only			Amazon
+Lancer's Amulet of the Apprentice	Jewelry	Amulet	magic		fcr		10	10	skills_javelins		3	3																	only			Amazon
+Archer's Amulet of the Apprentice	Jewelry	Amulet	magic		fcr		10	10	skills_bows		3	3																	only			Amazon
+Volcanic Amulet of the Apprentice	Jewelry	Amulet	magic		fcr		10	10	skills_fire		3	3																	only			Sorceress
+Powered Amulet of the Apprentice	Jewelry	Amulet	magic		fcr		10	10	skills_lightning		3	3																	only			Sorceress
+Glacial Amulet of the Apprentice	Jewelry	Amulet	magic		fcr		10	10	skills_cold		3	3																	only			Sorceress
+Accursed Amulet of the Apprentice	Jewelry	Amulet	magic		fcr		10	10	skills_curses		3	3																	only			Necromancer
+Golemlord's Amulet of the Apprentice	Jewelry	Amulet	magic		fcr		10	10	skills_summoning_necromancer		3	3																	only			Necromancer
+Venomous Amulet of the Apprentice	Jewelry	Amulet	magic		fcr		10	10	skills_poisonBone		3	3																	only			Necromancer
+Rose Branded Amulet of the Apprentice	Jewelry	Amulet	magic		fcr		10	10	skills_combat_paladin		3	3																	only			Paladin
+Marshal's Amulet of the Apprentice	Jewelry	Amulet	magic		fcr		10	10	skills_offensive		3	3																	only			Paladin
+Guardian's Amulet of the Apprentice	Jewelry	Amulet	magic		fcr		10	10	skills_defensive		3	3																	only			Paladin
+Echoing Amulet of the Apprentice	Jewelry	Amulet	magic		fcr		10	10	skills_warcries		3	3																	only			Barbarian
+Keeper's Amulet of the Apprentice	Jewelry	Amulet	magic		fcr		10	10	skills_summoning_druid		3	3																	only			Druid
+Communal Amulet of the Apprentice	Jewelry	Amulet	magic		fcr		10	10	skills_shapeshifting		3	3																	only			Druid
+Gaea's Amulet of the Apprentice	Jewelry	Amulet	magic		fcr		10	10	skills_elemental		3	3																	only			Druid
+Cunning Amulet of the Apprentice	Jewelry	Amulet	magic		fcr		10	10	skills_traps		3	3																	only			Assassin
+Shadow Amulet of the Apprentice	Jewelry	Amulet	magic		fcr		10	10	skills_shadow		3	3																	only			Assassin
+Kenshi's Amulet of the Apprentice	Jewelry	Amulet	magic		fcr		10	10	skills_martial		3	3																	only			Assassin
+Imp Shank	Boots	Mesh Boots	rare		frw		30	30	cRes		40	40	fRes		40	40	lRes		40	40	poison_length_reduced		25	25	half_freeze		1	1	only			
+Lancer's Maiden Javelin of Quickness	Javelin	Maiden Javelin	magic		ias		40	40	skills_javelins		6	6																	only			
+Kenshi's Greater Talons of Quickness	Claw	Greater Talons	magic		ias		40	40	skills_martial		3	3	skill	Fists of Fire		3	skill	Claws of Thunder		3	skill	Blades of Ice		3					only			
+Kenshi's Greater Talons of Quickness	Claw	Greater Talons	magic		ias		40	40	skills_martial		3	3	skill	Cobra Strike		3	skill	Tiger Strike		3	skill	Phoenix Strike		3					only			
+Infinity - Archon Staff - cl+nova	Staff	Archon Staff	rw		Runeword	Infinity			skill	Lightning Mastery		3	skill	Chain Lightning		3	skill	Nova		3	fcr			85					only			
+Infinity - Archon Staff - cb	Staff	Archon Staff	rw		Runeword	Infinity			skill	Lightning Mastery		3	skill	Charged Bolt		3	skill	Teleport		3	fcr			85					only			
+Infinity - Archon Staff	Staff	Archon Staff	rw		Runeword	Infinity			fcr			85																	only			
+Last Wish - Archon Staff	Staff	Archon Staff	rw		Runeword	Last Wish			ethereal		1	1	fcr			50													only			
+Purity - Archon Staff	Staff	Archon Staff	rw		Runeword	Purity			fcr			50																	only			
+Plague - Archon Staff	Staff	Archon Staff	rw		Runeword	Plague			fcr			50																	only			
+Insight - Archon Staff	Staff	Archon Staff	rw		Runeword	Insight			fcr			50																	only			
+Memory - Archon Staff	Staff	Archon Staff	rw		Runeword	Memory			skill	Thunder Storm		3	skill	Energy Shield		3	skill	Shiver Armor		3	fcr			50					only			
+Call to Arms - Archon Staff	Staff	Archon Staff	rw		Runeword	Call to Arms			skill	Thunder Storm		3	skill	Energy Shield		3	skill	Shiver Armor		3	fcr			50					only			
+Beast - Archon Staff	Staff	Archon Staff	rw		Runeword	Beast			fcr			50	ethereal		1	1													only			
+Doom - Archon Staff	Staff	Archon Staff	rw		Runeword	Doom			skill	Frost Nova		3	skill	Cold Mastery		3	skill	Teleport		3	fcr			50					only			
+Zenith - Archon Staff	Staff	Archon Staff	rw		Runeword	Zenith			fcr			50	ethereal		1	1													only			
+Obsession - Archon Staff - cold	Staff	Archon Staff	rw		Runeword	Obsession			skill	Blizzard		3	skill	Cold Mastery		3	skill	Ice Bolt		3	fcr			50					only			
+Obsession - Archon Staff - fire	Staff	Archon Staff	rw		Runeword	Obsession			skill	Hydra		3	skill	Fire Mastery		3	skill	Blaze		3	fcr			50					only			
+Asylum - Archon Staff	Staff	Archon Staff	rw		Runeword	Asylum			fcr			50																	only			
+Ferocity - Bone Visage	Helm	Bone Visage	rw		Runeword	Ferocity			ethereal		1	1																	only			
+Dream - Bone Visage	Helm	Bone Visage	rw		Runeword	Dream																							only			
+Flickering Flame - Bone Visage	Helm	Bone Visage	rw		Runeword	Flickering Flame																							only			
+Wisdom - Bone Visage	Helm	Bone Visage	rw		Runeword	Wisdom																							only			
+Innocence - Archon Plate	Body Armor	Archon Plate	rw		Runeword	Innocence			ethereal		1	1																	only			
+Enigma - Archon Plate	Body Armor	Archon Plate	rw		Runeword	Enigma																							only			
+Chains of Honor - Archon Plate	Body Armor	Archon Plate	rw		Runeword	Chains of Honor																							only			
+Dragon - Archon Plate	Body Armor	Archon Plate	rw		Runeword	Dragon																							only			
+Bramble - Archon Plate	Body Armor	Archon Plate	rw		Runeword	Bramble																							only			
+Fortitude - Archon Plate	Body Armor	Archon Plate	rw		Runeword	Fortitude																							only			
+Principle - Archon Plate	Body Armor	Archon Plate	rw		Runeword	Principle																							only			
+Prudence - Archon Plate	Body Armor	Archon Plate	rw		Runeword	Prudence																							only			
+Hustle - Archon Plate	Body Armor	Archon Plate	rw		Runeword	Hustle																							only			
+Peace - Archon Plate	Body Armor	Archon Plate	rw		Runeword	Peace																							only			
+Shattered Wall - Vortex Shield	Paladin Shield	Vortex Shield	rw		Runeword	Shattered Wall			ethereal		1	1	all_res		30	30													only			
+Phoenix - Vortex Shield	Paladin Shield	Vortex Shield	rw		Runeword	Phoenix							all_res		30	30													only			
+Dream - Vortex Shield	Paladin Shield	Vortex Shield	rw		Runeword	Dream							all_res		30	30													only			
+Dragon - Vortex Shield	Paladin Shield	Vortex Shield	rw		Runeword	Dragon							all_res		30	30													only			
+Exile - Vortex Shield	Paladin Shield	Vortex Shield	rw		Runeword	Exile			ethereal		1	1	all_res		30	30													only			
+Spirit - Monarch	Shield	Monarch	rw		Runeword	Spirit																							only			
+Phoenix - Monarch	Shield	Monarch	rw		Runeword	Phoenix																							only			
+Dream - Monarch	Shield	Monarch	rw		Runeword	Dream																							only			
+Dragon - Monarch	Shield	Monarch	rw		Runeword	Dragon																							only			
+Exile - Monarch	Shield	Monarch	rw		Runeword	Exile			ethereal		1	1																	only			
+Epiphany - Monarch	Shield	Monarch	rw		Runeword	Epiphany																							only			
+Last Wish - Phase Blade	Sword	Phase Blade	rw		Runeword	Last Wish																							only			
+Doom - Phase Blade	Sword	Phase Blade	rw		Runeword	Doom																							only			
+Grief - Phase Blade	Sword	Phase Blade	rw		Runeword	Grief																							only			
+Famine - Phase Blade	Sword	Phase Blade	rw		Runeword	Famine																							only			
+Plague - Phase Blade	Sword	Phase Blade	rw		Runeword	Plague																							only			
+Hand of Justice - Phase Blade	Sword	Phase Blade	rw		Runeword	Hand of Justice																							only			
+Breath of the Dying - Phase Blade	Sword	Phase Blade	rw		Runeword	Breath of the Dying			ethereal		1	1																	only			
+Breath of the Dying - Colossus Blade	Sword	Colossus Blade	rw		Runeword	Breath of the Dying			ethereal		1	1																	only			
+Asylum - Colossus Blade	Sword	Colossus Blade	rw		Runeword	Asylum																							only			
+Last Wish - Colossus Blade	Sword	Colossus Blade	rw		Runeword	Last Wish																							only			
+Doom - Colossus Blade	Sword	Colossus Blade	rw		Runeword	Doom																							only			
+Destruction - Colossus Blade	Sword	Colossus Blade	rw		Runeword	Destruction																							only			
+Eternity - Colossus Blade	Sword	Colossus Blade	rw		Runeword	Eternity			ethereal		1	1																	only			
+Rift - Colossus Blade	Sword	Colossus Blade	rw		Runeword	Rift																							only			
+Zenith - Colossus Sword	Sword	Colossus Sword	rw		Runeword	Zenith			ethereal		1	1																	only			
+Death - Colossus Sword	Sword	Colossus Sword	rw		Runeword	Death			ethereal		1	1																	only			
+Call to Arms - Colossus Sword	Sword	Colossus Sword	rw		Runeword	Call to Arms																							only			
+Oath - Colossus Sword	Sword	Colossus Sword	rw		Runeword	Oath			ethereal		1	1																	only			
+Venom - Cinquedeas	Dagger	Cinquedeas	rw		Runeword	Venom																							only			
+Plague - Cinquedeas	Dagger	Cinquedeas	rw		Runeword	Plague																							only			
+Purity - War Pike	Spear	War Pike	rw		Runeword	Purity			ethereal		1	1																	only			
+Insight - War Pike	Spear	War Pike	rw		Runeword	Insight			ethereal		1	1																	only			
+Infinity - War Pike	Spear	War Pike	rw		Runeword	Infinity			ethereal		1	1																	only			
+Pride - War Pike	Spear	War Pike	rw		Runeword	Pride			ethereal		1	1																	only			
+Doom - War Pike	Spear	War Pike	rw		Runeword	Doom			ethereal		1	1																	only			
+Zenith - War Pike	Spear	War Pike	rw		Runeword	Zenith			ethereal		1	1																	only			
+Asylum - War Pike	Spear	War Pike	rw		Runeword	Asylum			ethereal		1	1																	only			
+Asylum - Colossus Crossbow	Crossbow	Colossus Crossbow	rw		Runeword	Asylum																							only			
+Zenith - Colossus Crossbow	Crossbow	Colossus Crossbow	rw		Runeword	Zenith																							only			
+Mist - Colossus Crossbow	Crossbow	Colossus Crossbow	rw		Runeword	Mist																							only			
+Faith - Demon Crossbow	Crossbow	Demon Crossbow	rw		Runeword	Faith																							only			
+Ice - Demon Crossbow	Crossbow	Demon Crossbow	rw		Runeword	Ice																							only			
+Wrath - Demon Crossbow	Crossbow	Demon Crossbow	rw		Runeword	Wrath																							only			
+Harmony - Demon Crossbow	Crossbow	Demon Crossbow	rw		Runeword	Harmony																							only			
+Loyalty - Demon Crossbow	Crossbow	Demon Crossbow	rw		Runeword	Loyalty																							only			
+Chaos - War Fist	Claw	War Fist	rw		Runeword	Chaos			ethereal		1	1	skill	Claw and Dagger Mastery		3	skill	Weapon Block		3		Burst of Speed		3					only			
+Plague - Greater Talons	Claw	Greater Talons	rw		Runeword	Plague			skill	Claw and Dagger Mastery		3	skill	Burst of Speed		3	skill	Blade Sentinel		3									only			
+Dominion - Tomb Wand - fire	Wand	Tomb Wand	rw		Runeword	Dominion			skill	Fire Golem		3		Golem Mastery		3	skill	Blood Warp		3									only			Necromancer
+Dominion - Tomb Wand - clay	Wand	Tomb Wand	rw		Runeword	Dominion			skill	Clay Golem		3	skill	Golem Mastery		3	skill	Blood Warp		3									only			Necromancer
+White - Tomb Wand	Wand	Tomb Wand	rw		Runeword	White																							only			Necromancer
+Golemlord's Tomb Wand of the Archmage	Wand	Tomb Wand	magic		fcr		30	30	skills_summoning_necromancer		3	3	skill	Golem Mastery		3	skill	Clay Golem		3	skill	Fire Golem		3					only			Necromancer
+Golemlord's Minion Skull of the Archmage	Offhand	Minion Skull	magic		fcr		30	30	skills_summoning_necromancer		3	3	skill	Golem Mastery		3	skill	Clay Golem		3	skill	Fire Golem		3					only			Necromancer
+Glacial Diadem	Circlet	Diadem	magic		skills_cold		3	3																					only			Sorceress
+Powered Diadem	Circlet	Diadem	magic		skills_lightning		3	3																					only			Sorceress
+Volcanic Diadem	Circlet	Diadem	magic		skills_fire		3	3																					only			Sorceress
+Golemlord's Diadem	Circlet	Diadem	magic		skills_summoning_necromancer		3	3																					only			Necromancer
+Venomous Diadem	Circlet	Diadem	magic		skills_poisonBone		3	3																					only			Necromancer
+Accursed Diadem	Circlet	Diadem	magic		skills_curses		3	3																					only			Necromancer
+Rose Branded Diadem	Circlet	Diadem	magic		skills_combat_paladin		3	3																					only			Paladin
+Cunning Diadem	Circlet	Diadem	magic		skills_traps		3	3																					only			Assassin
+Athlete's Diadem	Circlet	Diadem	magic		skills_passives		3	3																					only			Amazon
+Shadow Diadem	Circlet	Diadem	magic		skills_shadow		3	3																					only			Assassin
+Athlete's Amulet	Jewelry	Amulet	magic		skills_passives		3	3																					only			Amazon
+Lancer's Amulet	Jewelry	Amulet	magic		skills_javelins		3	3																					only			Amazon
+Archer's Amulet	Jewelry	Amulet	magic		skills_bows		3	3																					only			Amazon
+Volcanic Amulet	Jewelry	Amulet	magic		skills_fire		3	3																					only			Sorceress
+Powered Amulet	Jewelry	Amulet	magic		skills_lightning		3	3																					only			Sorceress
+Glacial Amulet	Jewelry	Amulet	magic		skills_cold		3	3																					only			Sorceress
+Accursed Amulet	Jewelry	Amulet	magic		skills_curses		3	3																					only			Necromancer
+Golemlord's Amulet	Jewelry	Amulet	magic		skills_summoning_necromancer		3	3																					only			Necromancer
+Venomous Amulet	Jewelry	Amulet	magic		skills_poisonBone		3	3																					only			Necromancer
+Rose Branded Amulet	Jewelry	Amulet	magic		skills_combat_paladin		3	3																					only			Paladin
+Marshal's Amulet	Jewelry	Amulet	magic		skills_offensive		3	3																					only			Paladin
+Guardian's Amulet	Jewelry	Amulet	magic		skills_defensive		3	3																					only			Paladin
+Echoing Amulet	Jewelry	Amulet	magic		skills_warcries		3	3																					only			Barbarian
+Keeper's Amulet	Jewelry	Amulet	magic		skills_summoning_druid		3	3																					only			Druid
+Communal Amulet	Jewelry	Amulet	magic		skills_shapeshifting		3	3																					only			Druid
+Gaea's Amulet	Jewelry	Amulet	magic		skills_elemental		3	3																					only			Druid
+Cunning Amulet	Jewelry	Amulet	magic		skills_traps		3	3																					only			Assassin
+Shadow Amulet	Jewelry	Amulet	magic		skills_shadow		3	3																					only			Assassin
+Kenshi's Amulet	Jewelry	Amulet	magic		skills_martial		3	3																					only			Assassin
+Athlete's Quiver	Quiver	Arrows	magic		skills_passives		3	3																					only			
+Archer's Quiver	Quiver	Arrows	magic		skills_bows		3	3																					only			
+Lore - Bone Helm	Helm	Bone Helm	rw		Runeword	Lore																							only			
+Splendor - Bone Shield	Shield	Bone Shield	rw		Runeword	Splendor																							only			
+Rhyme - Bone Shield	Offhand	Bone Shield	rw		Runeword	Rhyme																							only			
+Rhyme - Gargoyle Head	Offhand	Gargoyle Head	rw		Runeword	Rhyme																							only			Necromancer
+Splendor - Gargoyle Head	Offhand	Gargoyle Head	rw		Runeword	Splendor																							only			Necromancer
+Rhyme - Gargoyle Head - Teeth 	Offhand	Gargoyle Head	rw		Runeword	Rhyme			skill	Teeth		3																	only			Necromancer
+Splendor - Gargoyle Head - Teeth 	Offhand	Gargoyle Head	rw		Runeword	Splendor			skill	Teeth		3																	only			Necromancer
+Rhyme - Gargoyle Head - Bone Spear	Offhand	Gargoyle Head	rw		Runeword	Rhyme			skill	Bone Spear		3																	only			Necromancer
+Splendor - Gargoyle Head - Bone Spear	Offhand	Gargoyle Head	rw		Runeword	Splendor			skill	Bone Spear		3																	only			Necromancer
+Rhyme - Gargoyle Head - Corpse Explosion 	Offhand	Gargoyle Head	rw		Runeword	Rhyme			skill	Corpse Explosion		3																	only			Necromancer
+Splendor - Gargoyle Head - Corpse Explosion 	Offhand	Gargoyle Head	rw		Runeword	Splendor			skill	Corpse Explosion		3																	only			Necromancer
+Rhyme - Gargoyle Head - Poison Strike 	Offhand	Gargoyle Head	rw		Runeword	Rhyme			skill	Poison Strike		3																	only			Necromancer
+Splendor - Gargoyle Head - Poison Strike	Offhand	Gargoyle Head	rw		Runeword	Splendor			skill	Poison Strike		3																	only			Necromancer
+White - Tomb Wand - Teeth 	Wand	Tomb Wand	rw		Runeword	White			skill	Teeth		3																	only			Necromancer
+White - Tomb Wand - Bone Spear 	Wand	Tomb Wand	rw		Runeword	White			skill	Bone Spear		3																	only			Necromancer
+White - Tomb Wand - Corpse Explosion	Wand	Tomb Wand	rw		Runeword	White			skill	Corpse Explosion		3																	only			Necromancer
+Poison Strike - Dagger	Dagger	Dagger	magic		ias		20	20	skill	Poison Strike		3																	only			
+Athlete's Gloves of the Apprentice	Gloves	Gloves	magic		fcr		20	20	skills_passives		3	3																	only			Amazon
+Athlete's Gloves of Quickness	Gloves	Gloves	magic		ias		20	20	skills_passives		3	3																	only			Amazon
+Lancer's Gloves of Quickness	Gloves	Gloves	magic		ias		20	20	skills_javelins		3	3																	only			Amazon
+Archer's of Quickness	Gloves	Gloves	magic		ias		20	20	skills_bows		3	3																	only			Amazon
+Kenshi's Gloves of Quickness	Gloves	Gloves	magic		ias		20	20	skills_martial		3	3																	only			Assassin
+Oath - Crystal Sword	Sword	Crystal Sword	rw		Runeword	Oath																							only			
+Passion - Crystal Sword	Sword	Crystal Sword	rw		Runeword	Passion																							only			
+Passion - Demon Crossbow	Crossbow	Demon Crossbow	rw		Runeword	Passion																							only			
+Fire Cunning Greater Talons of Quickness	Claw	Greater Talons	magic		ias		20	20	skills_traps		3	3	skill	Wake of Fire		3	skill	Wake of Inferno		3									only			Assassin
+Lightning Cunning Greater Talons of Quickness	Claw	Greater Talons	magic		ias		20	20	skills_traps		3	3	skill	Lightning Sentry		3	skill	Chain Lightning Sentry		3									only			Assassin
+Neophyte - Scepter	Scepter	War Scepter	rw		Runeword	Neophyte																							only			
+Neophyte - Club - Raven	Club	Club	rw		Runeword	Neophyte			skill	Raven		3																	only			Druid
+Neophyte - Club - Grizzly 	Club	Club	rw		Runeword	Neophyte			skill	Summon Grizzly		3																	only			Druid
+Lore - Pelt - Raven	Helm	Spirit Mask	rw		Runeword	Lore			skill	Raven		3																	only			Druid
+Lore - Pelt - Grizzly	Helm	Spirit Mask	rw		Runeword	Lore			skill	Summon Grizzly		3																	only			Druid
+Stealth - Armor	Body Armor	Light Plate	rw		Runeword	Stealth																							only			
+Spirit - Rondache	Shield	Rondache	rw		Runeword	Spirit			all_res		30																		only			
+Golemlord's Minion Skull	Offhand	Minion Skull	magic						skills_summoning_necromancer		3	3																	only			Necromancer
+Spirit - Crystal Sword	Sword	Crystal Sword	rw		Runeword	Spirit																										
+Ancient's Pledge - Bone Shield	Shield	Bone Shield	rw		Runeword	Ancient's Pledge																										
+Heart of the Oak - Flail	Mace	Flail	rw		Runeword	Heart of the Oak																										
+Kenshi's Gloves of Giant	Gloves	Gloves	magic		str		15	15	skills_martial		3	3																	only			Assassin
+Unbending Will - Colossus Blade	Sword	Colossus Blade	rw		Runeword	Unbending Will			ethereal		1	1																				
+Delirium - Diadem	Circlet	Diadem	rw		Runeword	Delirium																										
+Stone - Archon Plate	Body Armor	Archon Plate	rw		Runeword	Stone			ethereal		1	1																				
+Stone - Sacred Armor	Body Armor	Sacred Armor	rw		Runeword	Stone			ethereal		1	1																				
+Smoke - Archon Plate	Body Armor	Archon Plate	rw		Runeword	Smoke																										
+Treachery - Archon Plate	Body Armor	Archon Plate	rw		Runeword	Treachery																										
+Bone - Archon Plate	Body Armor	Archon Plate	rw		Runeword	Bone																							only			Necromancer
+Enlightenment - Archon Plate	Body Armor	Archon Plate	rw		Runeword	Enlightenment																							only			Sorceress
+Myth - Archon Plate	Body Armor	Archon Plate	rw		Runeword	Myth																							only			Barbarian
+Rain - Archon Plate	Body Armor	Archon Plate	rw		Runeword	Rain																							only			Druid
+Plague - Cudgel	Club	Cudgel	rw		Runeword	Plague			skill	Oak Sage		3	skill	Heart of Wolverine		3													only			Druid
+Beast - Berserker Axe	Axe	Berserker Axe	rw		Runeword	Beast			ethereal		1	1																				
+Beast - Ogre Maul	Maul	Ogre Maul	rw		Runeword	Beast			ethereal		1	1																				
+Beast - Caduceus	Scepter	Caduceus	rw		Runeword	Beast			ethereal		1	1																				
+Echo Quiver - Sharp Arrows	Quiver	Sharp Arrows	rw		Runeword	Echo Quiver																										
+Brilliant Craft Ring	Jewelry	Ring	craft		all_res			5	half_freeze		1	1																				
+Brilliant Craft Ring + FCR	Jewelry	Ring	craft		all_res			5	half_freeze		1	1	fcr		10	10																
+Dual Leech Ring	Jewelry	Ring	rare		life_leech		8	8	mana_leech		5	5																				
+Doom - Berserker Axe	Axe	Berserker Axe	rw		Runeword	Doom			ethereal		1	1																				
+Phoenix - Aegis	Shield	Aegis	rw		Runeword	Phoenix																										
+Ancient's Foresight - Sharp Arrows	Quiver	Sharp Arrows	rw		Runeword	Ancient's Foresight																										
+Ancient's Scripture - Sharp Arrows	Quiver	Sharp Arrows	rw		Runeword	Ancient's Scripture																										
+Ancient's Foresight - War Bolts	Quiver	War Bolts	rw		Runeword	Ancient's Foresight																										
+Ancient's Scripture - War Bolts	Quiver	War Bolts	rw		Runeword	Ancient's Scripture																										
+Athlete's Gloves	Gloves	Gloves	magic		skills_passives		3	3																					only			Amazon
+Wealth - Breast Plate	Body Armor	Breast Plate	rw		Runeword	Wealth																										
+Caster Craft Belt	Belt	Sash	craft		fcr		10	10	mana		20	20	mana_regen		10	10																
+Caster Craft Gloves	Gloves	Gloves	craft		fcr		10	10	mana		20	20	mana_per_kill		3	3																
+2/20 Passive Bolts	Quiver	War Bolts	rare		ias		20	20	skills_passives		3	3																	only			Amazon
+2/20 Passive Arrows	Quiver	Sharp Arrows	rare		ias		20	20	skills_passives		3	3																	only			Amazon
+2/20 Bow Bolts	Quiver	War Bolts	rare		ias		20	20	skills_bows		3	3																	only			Amazon
+2/20 Bow Arrows	Quiver	Sharp Arrows	rare		ias		20	20	skills_bows		3	3																	only			Amazon
+Kenshi's Greater Talons MA	Claw	Greater Talons	magic		ias		40	40	skills_martial		3	3																	only			Assassin
+Kenshi's Greater Talons Trap	Claw	Greater Talons	magic		ias		40	40	skills_traps		3	3																	only			Assassin
+Lionheart - Breast Plate	Body Armor	Breast Plate	rw		Runeword	Lionheart																										
