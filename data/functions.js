@@ -227,6 +227,10 @@ function resetEquipment() {
 	for (group in corruptsEquipped) { equip(group, "none") }
 	resetCharms()
 	resetCorruptions()
+	equipSwap("weapon", "weapon")
+	equipSwap("offhand", "offhand")
+	corrupt("swap_weapon", "swap_weapon")
+	corrupt("swap_offhand", "swap_offhand")
 }
 
 // resetCharms - Resets all charms
@@ -611,9 +615,11 @@ function loadParams() {
 			// setup equipment
 			if (param_equipped != 0) {
 				for (group in corruptsEquipped) { if (param_equipped[group][0] != "none") {	// equipment
+					var isSwapGroup = group.startsWith("swap_");
 					var options = document.getElementById("dropdown_"+group).options;
 					for (let i = 0; i < options.length; i++) { if (options[i].innerHTML == param_equipped[group][0]) {  document.getElementById("dropdown_"+group).selectedIndex = i } }
-					equip(group,param_equipped[group][0])
+					if (isSwapGroup) { equipSwap(group.slice(5), param_equipped[group][0]) }
+					else { equip(group,param_equipped[group][0]) }
 				} }
 				for (group in corruptsEquipped) { if (param_equipped[group][2] != "none") {	// corruptions
 					var options = document.getElementById("corruptions_"+group).options;
@@ -621,11 +627,13 @@ function loadParams() {
 					corrupt(group,param_equipped[group][2])
 				} }
 				for (group in corruptsEquipped) {	// upgrades & downgrades
+					if (group.startsWith("swap_")) { continue; }
 					var baseDiff = ~~param_equipped[group][1] - ~~equipped[group].tier;
 					if (baseDiff < 0) { changeBase(group, "downgrade"); equipmentOut() }
 					if (baseDiff > 0) { changeBase(group, "upgrade"); equipmentOut() }
 				}
 				for (group in corruptsEquipped) {	// upgrades & downgrades (duplicated)
+					if (group.startsWith("swap_")) { continue; }
 					var baseDiff = ~~param_equipped[group][1] - ~~equipped[group].tier;
 					if (baseDiff < 0) { changeBase(group, "downgrade"); equipmentOut(); }
 					if (baseDiff > 0) { changeBase(group, "upgrade"); equipmentOut(); }
@@ -726,53 +734,65 @@ function loadParams() {
 //	val: name of corruption
 // ---------------------------------
 function corrupt(group, val) {
+    var isMerc = group.startsWith("merc_");
+    var isSwap = group.startsWith("swap_");
+    var baseGroup = (isMerc || isSwap) ? group.slice(5) : group;
+    var stats = isMerc ? mercenary : (isSwap ? {} : character);  // empty object for swap; character used directly for non-merc/non-swap
+    var itemEquipped = isMerc ? (mercEquipped[baseGroup] || {}) : (isSwap ? (swapEquipped[baseGroup] || {}) : equipped[group]);
+
     for (old_affix in corruptsEquipped[group]) {
-        character[old_affix] -= corruptsEquipped[group][old_affix]
+        if (isMerc) {
+            if (old_affix != "name" && old_affix != "base" && typeof stats[old_affix] !== 'undefined') {
+                stats[old_affix] -= corruptsEquipped[group][old_affix]
+            }
+        } else if (!isSwap) {
+            character[old_affix] -= corruptsEquipped[group][old_affix]
+        }
         corruptsEquipped[group][old_affix] = unequipped[old_affix]
     }
-    if (val == "­ ­ ­ ­ Corruption" || val == "none" || val == group || equipped[group].rarity == "rw" || equipped[group].rarity == "common" || (group == "offhand" && equipped[group].type != "quiver" && equipped.weapon.twoHanded == 1 && (equipped.weapon.type != "sword" || character.class_name != "Barbarian"))) {
+    if (val == "­ ­ ­ ­ Corruption" || val == "none" || val == group || itemEquipped.rarity == "rw" || itemEquipped.rarity == "common" || (group == "offhand" && itemEquipped.type != "quiver" && equipped.weapon.twoHanded == 1 && (equipped.weapon.type != "sword" || character.class_name != "Barbarian")) || (group == "swap_offhand" && itemEquipped.type != "quiver" && swapEquipped.weapon.twoHanded == 1 && (swapEquipped.weapon.type != "sword" || character.class_name != "Barbarian"))) {
         document.getElementById("corruptions_" + group).selectedIndex = 0
     } else {
         for (outcome in corruptions[group]) {
-            if (corruptions[group][outcome].name == val && (group != "offhand" || (offhandType == corruptions[group][outcome].base || offhandType == "none"))) {
+            if (corruptions[group][outcome].name == val && (group != "offhand" || (offhandType == corruptions[group][outcome].base || offhandType == "none")) && (group != "swap_offhand" || (swapOffhandType == corruptions[group][outcome].base || swapOffhandType == "none"))) {
                 var unlimitSockets = 0;
                 if (corruptions[group][outcome]["name"].includes("Sockets")) {
                     unlimitSockets = 1;
-                } else
-                if (equipped[group].twoHanded == 1) {
+                } else if (itemEquipped.twoHanded == 1) {
                     unlimitSockets = 1;
-                } else
-                if (group != "offhand" && group != "weapon") {
+                } else if (group != "offhand" && group != "weapon" && group != "merc_offhand" && group != "merc_weapon" && group != "swap_offhand" && group != "swap_weapon") {
                     unlimitSockets = 1;
                 }
                 for (affix in corruptions[group][outcome]) {
-                    if (affix == "sockets" & unlimitSockets == 0) {
-                        character[affix] += 2
+                    if (affix == "sockets" && unlimitSockets == 0) {
+                        if (typeof stats[affix] == 'undefined') stats[affix] = 0;
+                        stats[affix] += 2
                         corruptsEquipped[group][affix] = 2
-                    } else if (affix == "sockets" && (group == "weapon" || group == "offhand") && unlimitSockets == 1 && (typeof equipped[group].twoHanded == 'undefined' || equipped[group].twoHanded != 1)) {
-                        if (typeof equipped[group].type !== 'undefined' && equipped[group].type === "shield") {
-                            character[affix] += 3
+                    } else if (affix == "sockets" && (group == "weapon" || group == "offhand" || group == "merc_weapon" || group == "merc_offhand" || group == "swap_weapon" || group == "swap_offhand") && unlimitSockets == 1 && (typeof itemEquipped.twoHanded == 'undefined' || itemEquipped.twoHanded != 1)) {
+                        if (typeof itemEquipped.type !== 'undefined' && itemEquipped.type === "shield") {
+                            if (typeof stats[affix] == 'undefined') stats[affix] = 0;
+                            stats[affix] += 3
                             corruptsEquipped[group][affix] = 3
+                        } else if ((group == "offhand" || group == "merc_offhand" || group == "swap_offhand") && typeof itemEquipped.type !== 'undefined' && itemEquipped.type === "quiver") {
+                            if (typeof stats[affix] == 'undefined') stats[affix] = 0;
+                            stats[affix] += 2
+                            corruptsEquipped[group][affix] = 2
                         } else {
-                            // Treat offhand quivers with their own socket cap (2)
-                            if (group == "offhand" && typeof equipped[group].type !== 'undefined' && equipped[group].type === "quiver") {
-                                character[affix] += 2
-                                corruptsEquipped[group][affix] = 2
-                            } else {
-                                character[affix] += 4
-                                corruptsEquipped[group][affix] = 4
-                            }
+                            if (typeof stats[affix] == 'undefined') stats[affix] = 0;
+                            stats[affix] += 4
+                            corruptsEquipped[group][affix] = 4
                         }
                     } else {
                         corruptsEquipped[group][affix] = corruptions[group][outcome][affix]
                         if (affix != "name" && affix != "base") {
-                            character[affix] += corruptions[group][outcome][affix]
+                            if (typeof stats[affix] == 'undefined') stats[affix] = 0;
+                            stats[affix] += corruptions[group][outcome][affix]
                         }
                     }
                 }
             }
         }
-        if (val == "+ Sockets") {
+        if (val == "+ Sockets" && !isMerc && !isSwap) {
             adjustCorruptionSockets(group)
         }
     }
@@ -1183,6 +1203,72 @@ function equip(group, val) {
 	updateAllEffects()
 }
 
+// equipSwap - Equips an item to the weapon swap slot (does NOT affect character stats)
+//	group: "weapon" or "offhand"
+//	val: name of item
+// ---------------------------------
+function equipSwap(group, val) {
+	swapEquipped[group] = {name:"none", tier:0, type:""};
+	if (group == "weapon") { swapEquipped[group].twoHanded = 0 }
+
+	var src_group = group;
+	if (group == "offhand") {
+		var found = 0;
+		for (var item in equipment["offhand"]) { if (equipment["offhand"][item].name == val) { found = 1 } }
+		if (found == 0) { src_group = "weapon" }
+	}
+
+	if (group == val) {
+		document.getElementById("dropdown_swap_"+group).selectedIndex = 0
+	} else {
+		for (var item in equipment[src_group]) {
+			if (equipment[src_group][item].name == val) {
+				for (var affix in equipment[src_group][item]) {
+					swapEquipped[group][affix] = equipment[src_group][item][affix]
+				}
+				if (group == "weapon") { swapEquipped[group].twoHanded = ~~equipment[src_group][item].twoHanded }
+			}
+		}
+	}
+
+	// enforce weapon/offhand compatibility (same rules as normal slots)
+	if (swapEquipped.weapon.name != "none" && swapEquipped.offhand.name != "none") {
+		if (group == "offhand") {
+			var itemType = swapEquipped.offhand.type || "";
+			if (itemType == "quiver" && swapEquipped.weapon.type != "bow" && swapEquipped.weapon.type != "crossbow") { equipSwap("weapon", "weapon") }
+			else if (itemType != "quiver" && swapEquipped.weapon.twoHanded == 1 && (swapEquipped.weapon.type != "sword" || character.class_name != "Barbarian")) { equipSwap("weapon", "weapon") }
+		} else if (group == "weapon") {
+			var itemType = swapEquipped.weapon.type || "";
+			if (swapEquipped.offhand.type == "quiver" && itemType != "bow" && itemType != "crossbow") { equipSwap("offhand", "offhand") }
+			else if (swapEquipped.offhand.type != "quiver" && swapEquipped.weapon.twoHanded == 1 && (itemType != "sword" || character.class_name != "Barbarian")) { equipSwap("offhand", "offhand") }
+		}
+	}
+
+	// remove incompatible corruptions
+	if (group == "offhand") {
+		if (swapEquipped.offhand.rarity == "rw" || swapEquipped.offhand.rarity == "common" || ((swapEquipped.offhand.type == "shield" || swapEquipped.offhand.type == "quiver") && swapEquipped.offhand.type != corruptsEquipped.swap_offhand.base)) { corrupt("swap_offhand", "swap_offhand") }
+		// update swapOffhandType and reload corruption options
+		if (swapEquipped.offhand.type == "shield") { if (swapOffhandType == "quiver" || swapOffhandType == "weapon") { swapOffhandType = "shield"; reloadSwapOffhandCorruptions("shield"); } }
+		else if (swapEquipped.offhand.type == "quiver") { if (swapOffhandType != "quiver") { swapOffhandType = "quiver"; reloadSwapOffhandCorruptions("quiver"); } }
+		else if (swapEquipped.offhand.name != "none") { if (swapOffhandType != "weapon") { swapOffhandType = "weapon"; reloadSwapOffhandCorruptions("weapon"); } }
+		else { if (swapOffhandType == "quiver" || swapOffhandType == "weapon") { swapOffhandType = "none"; reloadSwapOffhandCorruptions("shield"); } }
+		if (swapEquipped.offhand.type == "shield") { swapOffhandType = "shield" } else if (swapEquipped.offhand.name == "none") { swapOffhandType = "none" }
+	} else if (group == "weapon") {
+		if (swapEquipped.weapon.rarity == "rw" || swapEquipped.weapon.rarity == "common") { corrupt("swap_weapon", "swap_weapon") }
+	}
+
+	// Update inventory image
+	var img = (group == "weapon") ? "./images/items/blank_weapon.png" : "./images/items/blank_offhand.png";
+	if (swapEquipped[group].name != "none") {
+		var src = (typeof swapEquipped[group].img != 'undefined') ? swapEquipped[group].img : "";
+		var base = (typeof swapEquipped[group].base != 'undefined') ? swapEquipped[group].base : "";
+		img = getItemImage(src_group, base, src, swapEquipped[group].type);
+	} else {
+		document.getElementById("tooltip_inventory").style.display = "none"
+	}
+	document.getElementById("swap_"+group+"_image").src = img;
+}
+
 // checkWield - Adjust base damage for two-handed swords (dependent on whether wielded with 1 or 2 hands)
 //	group: item's group (weapon or offhand)
 //	hands_used: number of hands used to wield the weapon
@@ -1225,6 +1311,21 @@ function reloadOffhandCorruptions(kind) {
 	}
 	document.getElementById("corruptions_offhand").innerHTML = choices
 	document.getElementById("corruptions_offhand").selectedIndex = 0
+}
+
+// reloadSwapOffhandCorruptions - reloads corruption dropdown options for swap offhand (when selected item changes types)
+//	kind: the group/type of the selected item
+// ---------------------------------
+function reloadSwapOffhandCorruptions(kind) {
+	corrupt("swap_offhand", "swap_offhand")
+	var choices = "<option>­ ­ ­ ­ Corruption</option>";
+	for (let m = 1; m < corruptions["swap_offhand"].length; m++) {
+		if (corruptions["swap_offhand"][m].base == kind) {
+			choices += "<option>" + corruptions["swap_offhand"][m].name + "</option>"
+		}
+	}
+	document.getElementById("corruptions_swap_offhand").innerHTML = choices
+	document.getElementById("corruptions_swap_offhand").selectedIndex = 0
 }
 
 // adjustCorruptionSockets - Adjusts the sockets granted by corruptions
@@ -1458,6 +1559,10 @@ function loadEquipment(className) {
 	var equipmentGroups = ["helm", "armor", "gloves", "boots", "belt", "amulet", "ring1", "ring2", "weapon", "offhand", "charms"];
 	var equipmentDropdowns = ["dropdown_helm", "dropdown_armor", "dropdown_gloves", "dropdown_boots", "dropdown_belt", "dropdown_amulet", "dropdown_ring1", "dropdown_ring2", "dropdown_weapon", "dropdown_offhand", "dropdown_charms"]
 	for (let i = 0; i < equipmentGroups.length; i++) { loadItems(equipmentGroups[i], equipmentDropdowns[i], className) }
+	loadItems("weapon", "dropdown_swap_weapon", className)
+	loadItems("offhand", "dropdown_swap_offhand", className)
+	document.getElementById("dropdown_swap_weapon").options[0].text = "­ ­ ­ ­ Swap Weapon"
+	document.getElementById("dropdown_swap_offhand").options[0].text = "­ ­ ­ ­ Swap Offhand"
 	loadMisc()
 	loadMerc()
 	loadCorruptions()
@@ -1569,11 +1674,13 @@ function loadSocketables() {
 // loadCorruptions - Loads corruption options
 // ---------------------------------
 function loadCorruptions() {
-	var groups = ["helm", "armor", "gloves", "boots", "belt", "amulet", "ring1", "ring2", "weapon", "offhand"];
+	var groups = ["helm", "armor", "gloves", "boots", "belt", "amulet", "ring1", "ring2", "weapon", "offhand",
+	              "merc_helm", "merc_armor", "merc_gloves", "merc_boots", "merc_belt", "merc_weapon", "merc_offhand",
+	              "swap_weapon", "swap_offhand"];
 	for (let i = 0; i < groups.length; i++) {
 		var choices = "<option>­ ­ ­ ­ Corruption</option>";
 		for (let m = 1; m < corruptions[groups[i]].length; m++) {
-			if (groups[i] == "offhand") { if (corruptions[groups[i]][m].base == "shield") { choices += "<option>" + corruptions[groups[i]][m].name + "</option>" } }
+			if (groups[i] == "offhand" || groups[i] == "swap_offhand") { if (corruptions[groups[i]][m].base == "shield") { choices += "<option>" + corruptions[groups[i]][m].name + "</option>" } }
 			else { choices += "<option>" + corruptions[groups[i]][m].name + "</option>" }
 		}
 		document.getElementById("corruptions_"+groups[i]).innerHTML = choices
@@ -1670,13 +1777,13 @@ function setMercenary(merc) {
 		}
 	}
 	mercenary.name = merc
-	if (document.getElementById("dropdown_merc_helm").innerHTML == "") { document.getElementById("dropdown_merc_helm").style.display = "none" } else { document.getElementById("dropdown_merc_helm").style.display = "block" }
-	if (document.getElementById("dropdown_merc_armor").innerHTML == "") { document.getElementById("dropdown_merc_armor").style.display = "none" } else { document.getElementById("dropdown_merc_armor").style.display = "block" }
-	if (document.getElementById("dropdown_merc_armor").innerHTML == "") { document.getElementById("dropdown_merc_gloves").style.display = "none" } else { document.getElementById("dropdown_merc_gloves").style.display = "block" }
-	if (document.getElementById("dropdown_merc_armor").innerHTML == "") { document.getElementById("dropdown_merc_boots").style.display = "none" } else { document.getElementById("dropdown_merc_boots").style.display = "block" }
-	if (document.getElementById("dropdown_merc_armor").innerHTML == "") { document.getElementById("dropdown_merc_belt").style.display = "none" } else { document.getElementById("dropdown_merc_belt").style.display = "block" }
-	if (document.getElementById("dropdown_merc_weapon").innerHTML == "") { document.getElementById("dropdown_merc_weapon").style.display = "none" } else { document.getElementById("dropdown_merc_weapon").style.display = "block" }
-	if (document.getElementById("dropdown_merc_offhand").innerHTML == "") { document.getElementById("dropdown_merc_offhand").style.display = "none" } else { document.getElementById("dropdown_merc_offhand").style.display = "block" }
+	if (document.getElementById("dropdown_merc_helm").innerHTML == "") { document.getElementById("dropdown_merc_helm").style.display = "none"; document.getElementById("corruptions_merc_helm").style.display = "none" } else { document.getElementById("dropdown_merc_helm").style.display = "block"; document.getElementById("corruptions_merc_helm").style.display = "block" }
+	if (document.getElementById("dropdown_merc_armor").innerHTML == "") { document.getElementById("dropdown_merc_armor").style.display = "none"; document.getElementById("corruptions_merc_armor").style.display = "none" } else { document.getElementById("dropdown_merc_armor").style.display = "block"; document.getElementById("corruptions_merc_armor").style.display = "block" }
+	if (document.getElementById("dropdown_merc_armor").innerHTML == "") { document.getElementById("dropdown_merc_gloves").style.display = "none"; document.getElementById("corruptions_merc_gloves").style.display = "none" } else { document.getElementById("dropdown_merc_gloves").style.display = "block"; document.getElementById("corruptions_merc_gloves").style.display = "block" }
+	if (document.getElementById("dropdown_merc_armor").innerHTML == "") { document.getElementById("dropdown_merc_boots").style.display = "none"; document.getElementById("corruptions_merc_boots").style.display = "none" } else { document.getElementById("dropdown_merc_boots").style.display = "block"; document.getElementById("corruptions_merc_boots").style.display = "block" }
+	if (document.getElementById("dropdown_merc_armor").innerHTML == "") { document.getElementById("dropdown_merc_belt").style.display = "none"; document.getElementById("corruptions_merc_belt").style.display = "none" } else { document.getElementById("dropdown_merc_belt").style.display = "block"; document.getElementById("corruptions_merc_belt").style.display = "block" }
+	if (document.getElementById("dropdown_merc_weapon").innerHTML == "") { document.getElementById("dropdown_merc_weapon").style.display = "none"; document.getElementById("corruptions_merc_weapon").style.display = "none" } else { document.getElementById("dropdown_merc_weapon").style.display = "block"; document.getElementById("corruptions_merc_weapon").style.display = "block" }
+	if (document.getElementById("dropdown_merc_offhand").innerHTML == "") { document.getElementById("dropdown_merc_offhand").style.display = "none"; document.getElementById("corruptions_merc_offhand").style.display = "none" } else { document.getElementById("dropdown_merc_offhand").style.display = "block"; document.getElementById("corruptions_merc_offhand").style.display = "block" }
 	if (merc == "none" || merc == "­ ­ ­ ­ Mercenary") { document.getElementById("mercenary_spacing").style.display = "none" } else { document.getElementById("mercenary_spacing").style.display = "block" }
 	if (mercType == "Iron Wolf" || mercType == "Rogue Scout") { document.getElementById("mercenary_spacing2").style.display = "block" } else { document.getElementById("mercenary_spacing2").style.display = "none" }
 	if (merc == "none" || merc == "­ ­ ­ ­ Mercenary") { document.getElementById("merc_space").style.display = "block" } else { document.getElementById("merc_space").style.display = "none" }
@@ -2971,10 +3078,11 @@ function equipmentHoverMerc(group) {
 	var base = "";
 //	console.log(group);
 	if (mercEquipped[group].name != "none" && (group == "helm" || group == "armor" || group == "weapon" || (group == "offhand"))) {
-		var sockets = ~~mercEquipped[group].sockets;//~~corruptsEquipped[groupId].sockets + ~~mercEquipped[group].sockets;
-		sockets = Math.min(sockets,mercEquipped[group].max_sockets)
-		if (mercEquipped[group].sockets > 0) {
-			if (typeof(corruptsEquipped[groupId]) == 'undefined' || corruptsEquipped[groupId].name == "none") { sock = "<font color='"+colors.Gray+"'> ["+sockets+"]</font>" }
+		var mercGroup = "merc_"+group;
+		var sockets = ~~corruptsEquipped[mercGroup].sockets + ~~mercEquipped[group].sockets;
+		sockets = Math.min(sockets, mercEquipped[group].max_sockets)
+		if (sockets > 0) {
+			if (corruptsEquipped[mercGroup].name == "none") { sock = "<font color='"+colors.Gray+"'> ["+sockets+"]</font>" }
 			else { sock = "<font color='"+colors.Red+"'> ["+sockets+"]</font>" }
 		}
 	}
@@ -2996,16 +3104,15 @@ function equipmentHoverMerc(group) {
 	var socketed_affixes = "";
 	var set_affixes = "";
 	var set_group_affixes = "";
-	if(false){ //  TODO corruptions
-	if (mercEquipped[group].name != "none" && corruptsEquipped[groupId].name != "none") {
-		for (affix in corruptsEquipped[groupId]) {
-			if ( stats[affix] != 1) {//stats[affix] != unmercEquipped[affix] &&
-				var halt = 0; if (affix == "sockets" && corruptsEquipped[groupId].name != "+ Sockets") { halt = 1; }
-				var affix_info = getAffixLine(affix,"corruptsEquipped",groupId,"");
+	var mercGroup = "merc_"+group;
+	if (mercEquipped[group].name != "none" && typeof corruptsEquipped[mercGroup] !== 'undefined' && corruptsEquipped[mercGroup].name != "none") {
+		for (affix in corruptsEquipped[mercGroup]) {
+			if (affix != "name" && affix != "base") {
+				var halt = 0; if (affix == "sockets" && corruptsEquipped[mercGroup].name != "+ Sockets") { halt = 1; }
+				var affix_info = getAffixLine(affix,"corruptsEquipped",mercGroup,"");
 				if (affix_info[1] != 0 && halt == 0) { corruption += affix_info[0]+"<br>" }
 			}
 		}
-	}
 	}
 	for (affix in mercEquipped[group]) {
 	//mercEquipped[group][affix] != unmercEquipped[affix] && stats[affix] != unmercEquipped[affix] &&
@@ -3017,11 +3124,12 @@ function equipmentHoverMerc(group) {
 			}
 		}
 	}
-	if (mercEquipped[group].name != "none" && (group == "helm" || group == "armor" || group == "weapon" || group == "offhand" || group == "belt" || group == "amulet")) {
+	if (mercEquipped[group].name != "none" && (group == "helm" || group == "armor" || group == "weapon" || group == "offhand" || group == "belt")) {
+		var mercGroup = "merc_"+group;
 		updateSocketTotals()
-		for (affix in socketed[group].totals) {
-			if (stats[affix] != 1 && affix != "req_level" && affix != "ctc") { //stats[affix] != unmercEquipped[affix] &&
-				var affix_info = getAffixLine(affix,"socketed",group,"");
+		for (affix in socketed[mercGroup].totals) {
+			if (stats[affix] != 1 && affix != "req_level" && affix != "ctc") {
+				var affix_info = getAffixLine(affix,"socketed",mercGroup,"");
 				if (affix_info[1] != 0) { socketed_affixes += affix_info[0]+"<br>" }
 			}
 		}
@@ -3183,6 +3291,114 @@ function equipmentHoverMerc(group) {
 		document.getElementById("tooltip_inventory").style.left = offset_x+"px"
 	}
 	if (name == "") { document.getElementById("tooltip_inventory").style.left = 950+"px" }
+}
+
+// equipSwapHover - shows weapon swap item info on mouse-over
+//	group: "weapon" or "offhand"
+// ---------------------------------
+function equipSwapHover(group) {
+	var name = "";
+	var sock = "";
+	var base = "";
+
+	if (typeof swapEquipped[group].base != 'undefined' && swapEquipped[group].base != "") { base = swapEquipped[group].base }
+	else if (swapEquipped[group].type == "quiver") { base = "Arrows" }
+	else if (swapEquipped[group].type == "jewel") { base = "Jewel" }
+
+	if (swapEquipped[group].name != "none" && (group == "weapon" || group == "offhand")) {
+		var swapGroup = "swap_"+group;
+		var sockets = ~~corruptsEquipped[swapGroup].sockets + ~~swapEquipped[group].sockets;
+		if (swapEquipped[group].max_sockets) { sockets = Math.min(sockets, swapEquipped[group].max_sockets) }
+		if (sockets > 0) {
+			if (corruptsEquipped[swapGroup].name == "none") { sock = "<font color='"+colors.Gray+"'> ["+sockets+"]</font>" }
+			else { sock = "<font color='"+colors.Red+"'> ["+sockets+"]</font>" }
+		}
+	}
+
+	if (swapEquipped[group].name != "none") { name = swapEquipped[group].name.split(" ­ ")[0].split(" (")[0]; }
+	if (base != "" && base.split("_")[0] != "Special") { base = "<br>"+base }
+	if (swapEquipped[group].rarity == "common" || swapEquipped[group].rarity == "magic") { base = "" }
+
+	var corruption = "";
+	var affixes = "";
+	var main_affixes = "";
+	var socketed_affixes = "";
+	var swapGroup = "swap_"+group;
+
+	if (swapEquipped[group].name != "none" && typeof corruptsEquipped[swapGroup] !== 'undefined' && corruptsEquipped[swapGroup].name != "none") {
+		for (affix in corruptsEquipped[swapGroup]) {
+			if (affix != "name" && affix != "base") {
+				var halt = 0; if (affix == "sockets" && corruptsEquipped[swapGroup].name != "+ Sockets") { halt = 1; }
+				var affix_info = getAffixLine(affix,"corruptsEquipped",swapGroup,"");
+				if (affix_info[1] != 0 && halt == 0) { corruption += affix_info[0]+"<br>" }
+			}
+		}
+	}
+	for (var affix in swapEquipped[group]) {
+		if (stats[affix] != 1 && affix != "velocity" && affix != "smite_min") {
+			var affix_info = getAffixLine(affix, "swapEquipped", group, "");
+			if (affix_info[1] != 0) {
+				if (affix == "boss_item" || affix == "base_damage_min" || affix == "base_defense" || affix == "req_level" || affix == "req_strength" || affix == "req_dexterity" || affix == "durability" || affix == "baseSpeed" || affix == "range" || affix == "throw_min" || affix == "base_min_alternate" || affix == "block" || affix == "velocity") { main_affixes += affix_info[0]+"<br>" }
+				else { affixes += affix_info[0]+"<br>" }
+			}
+		}
+	}
+	if (swapEquipped[group].name != "none") {
+		updateSocketTotals()
+		for (affix in socketed[swapGroup].totals) {
+			if (stats[affix] != 1 && affix != "req_level" && affix != "ctc") {
+				var affix_info = getAffixLine(affix,"socketed",swapGroup,"");
+				if (affix_info[1] != 0) { socketed_affixes += affix_info[0]+"<br>" }
+			}
+		}
+	}
+
+	var runeword = "";
+	if (swapEquipped[group].rarity == "rw") {
+		var rw_name = swapEquipped[group].name.split(" ­ ")[0].split(" ").join("_").split("'").join("");
+		var runes = "";
+		var i = 0;
+		for (i = 0; i < runewords[rw_name].length; i++) { runes += runewords[rw_name][i]; }
+		runeword = "<br>"+"<font color='"+colors.Gold+"'>'"+runes+"'</font>"
+		name = "<font color='"+colors.Gold+"'>"+name+"</font>"
+		affixes += "Socketed ("+i+")<br>"
+	}
+	if (socketed_affixes != "") { socketed_affixes = "<br>"+socketed_affixes }
+
+	document.getElementById("item_name").innerHTML = name+sock+base+runeword
+	document.getElementById("item_info").innerHTML = main_affixes
+	document.getElementById("item_corruption").innerHTML = corruption
+	document.getElementById("item_affixes").innerHTML = affixes
+	document.getElementById("item_set_affixes").innerHTML = ""
+	document.getElementById("item_socketed_affixes").innerHTML = socketed_affixes
+	document.getElementById("item_group_affixes").innerHTML = ""
+
+	var textColor = "Gold";
+	if (swapEquipped[group].rarity == "set") { textColor = "Green" }
+	else if (swapEquipped[group].rarity == "magic") { textColor = "Blue" }
+	else if (swapEquipped[group].rarity == "rare") { textColor = "Yellow" }
+	else if (swapEquipped[group].rarity == "craft") { textColor = "Orange" }
+	else if ((swapEquipped[group].rarity == "common" || swapEquipped[group].rarity == "rw") && swapEquipped[group].ethereal == 1) { textColor = "Gray" }
+	else if (swapEquipped[group].rarity == "common" || swapEquipped[group].rarity == "rw") { textColor = "White" }
+	document.getElementById("item_name").style.color = colors[textColor]
+
+	if (name === "") {
+		document.getElementById("tooltip_inventory").style.display = "none"
+	} else {
+		document.getElementById("tooltip_inventory").style.display = "block"
+		var tooltip = document.getElementById("tooltip_inventory");
+		var container = document.querySelector(".inventory_container");
+		var slotEl = document.getElementById("swap_"+group+"_");
+		var cRect = container.getBoundingClientRect();
+		var sRect = slotEl.getBoundingClientRect();
+		var tRect = tooltip.getBoundingClientRect();
+		var left = (sRect.left - cRect.left) + sRect.width/2 - tRect.width/2;
+		var top = (sRect.top - cRect.top) - tRect.height - 5;
+		if (left < 0) { left = 0; }
+		if (top < 0) { top = (sRect.bottom - cRect.top) + 5; }
+		tooltip.style.left = left + "px";
+		tooltip.style.top = top + "px";
+	}
 }
 
 // equipmentHover - shows equipment info on mouse-over
@@ -3426,6 +3642,7 @@ function getAffixLine(affix, loc, group, subgroup) {
 	var source;
 	if (loc == "equipped") { source = equipped[group]; }
     else if (loc == "mercEquipped") { source = mercEquipped[group]; }
+    else if (loc == "swapEquipped") { source = swapEquipped[group]; }
     else if (loc == "corruptsEquipped") { source = corruptsEquipped[group]; }
 	else if (loc == "charms") { source = equipped.charms[group]; }
 	else if (loc == "socketables") { source = socketables[group]; if (subgroup != "") { source = socketables[group][subgroup] } }
@@ -3763,6 +3980,10 @@ function handleSocket(event, group, source) {
 //	source: inventory space to drag from if event is null (used when loading a character)
 // ---------------------------------
 function socket(event, group, source) {
+	var isMerc = group.startsWith("merc_");
+	var isSwap = group.startsWith("swap_");
+	var baseGroup = (isMerc || isSwap) ? group.slice(5) : group;
+	var stats = isMerc ? mercenary : character;  // not used for swap
 	if (event == null && source > 0) {
 		var id = inv[0].in[source];
 		document.getElementById(group).appendChild(document.getElementById(id))
@@ -3781,12 +4002,15 @@ function socket(event, group, source) {
 	if (spaceFound == 1) {
 		var name = inv[0].onpickup.split('_')[0];
 		// Remove previous affixes, if being moved from another equipment item
-		var groups = ["helm", "armor", "weapon", "offhand", "amulet","belt"];
+		var groups = ["helm", "armor", "weapon", "offhand", "amulet", "belt", "merc_helm", "merc_armor", "merc_weapon", "merc_offhand", "merc_belt", "swap_weapon", "swap_offhand"];
 		for (let g = 0; g < groups.length; g++) {
+			var isGroupMerc = groups[g].startsWith("merc_");
+			var isGroupSwap = groups[g].startsWith("swap_");
+			var groupStats = isGroupMerc ? mercenary : character;
 			for (let i = 0; i < socketed[groups[g]].items.length; i++) {
 				if (inv[0].onpickup == socketed[groups[g]].items[i].id) {
 					for (affix in socketed[groups[g]].items[i]) { if (affix != "id") {
-						character[affix] -= socketed[groups[g]].items[i][affix]
+						if (!isGroupSwap) { groupStats[affix] -= socketed[groups[g]].items[i][affix] }
 						socketed[groups[g]].totals[affix] -= socketed[groups[g]].items[i][affix]
 					} }
 					socketed[groups[g]].items[i] = {id:"",name:""}
@@ -3800,17 +4024,18 @@ function socket(event, group, source) {
 			for (affix in socketables[k]) {
 				if (affix != "type" && affix != "rarity" && affix != "img") {
 					var affix_dest = affix;
-					if (affix == "e_damage") { if (group == "weapon" || (group == "offhand" && offhandType == "weapon")) { /*don't change*/ } else { affix_dest = "damage_bonus" } }
+					if (affix == "e_damage") { if (group == "weapon" || group == "merc_weapon" || group == "swap_weapon" || (group == "offhand" && offhandType == "weapon") || group == "merc_offhand" || (group == "swap_offhand" && swapOffhandType == "weapon")) { /*don't change*/ } else { affix_dest = "damage_bonus" } }
 					if (typeof(socketed[group].totals[affix_dest]) == 'undefined') { socketed[group].totals[affix_dest] = 0 }
 					socketed[group].items[index][affix_dest] = socketables[k][affix]
-					character[affix_dest] += socketables[k][affix]
+					if (!isSwap) { if (typeof stats[affix_dest] == 'undefined') stats[affix_dest] = 0; stats[affix_dest] += socketables[k][affix] }
 					socketed[group].totals[affix_dest] += socketables[k][affix]
 				}
-				if (affix == group || (affix == "armor" && group == "helm") || (affix == "armor" && group == "offhand" && typeof(socketables[k]["shield"]) == 'undefined' && offhandType != "weapon") || (affix == "shield" && group == "offhand" && offhandType != "weapon") || (affix == "weapon" && group == "offhand" && offhandType == "weapon")) {
+				var localOffhandType = (group == "swap_offhand") ? swapOffhandType : offhandType;
+				if (affix == baseGroup || (affix == "armor" && baseGroup == "helm") || (affix == "armor" && baseGroup == "offhand" && typeof(socketables[k]["shield"]) == 'undefined' && localOffhandType != "weapon") || (affix == "shield" && baseGroup == "offhand" && localOffhandType != "weapon") || (affix == "weapon" && baseGroup == "offhand" && localOffhandType == "weapon")) {
 					for (groupAffix in socketables[k][affix]) {
 						if (typeof(socketed[group].totals[groupAffix]) == 'undefined') { socketed[group].totals[groupAffix] = 0 }
 						socketed[group].items[index][groupAffix] = socketables[k][affix][groupAffix]
-						character[groupAffix] += socketables[k][affix][groupAffix]
+						if (!isSwap) { if (typeof stats[groupAffix] == 'undefined') stats[groupAffix] = 0; stats[groupAffix] += socketables[k][affix][groupAffix] }
 						socketed[group].totals[groupAffix] += socketables[k][affix][groupAffix]
 					}
 				}
@@ -3839,7 +4064,10 @@ function socket(event, group, source) {
 //	group: equipment group being mouse-over'd
 // ---------------------------------
 function allowSocket(event, group) {
-	socketed[group].sockets = ~~equipped[group].sockets + ~~corruptsEquipped[group].sockets
+	var isMerc = group.startsWith("merc_");
+	var isSwap = group.startsWith("swap_");
+	var itemEquipped = isMerc ? mercEquipped[group.slice(5)] : (isSwap ? swapEquipped[group.slice(5)] : equipped[group]);
+	socketed[group].sockets = ~~itemEquipped.sockets + ~~corruptsEquipped[group].sockets
 	var allow = 0;
 	if (socketed[group].sockets > 0 && socketed[group].socketsFilled < socketed[group].sockets) {
 		var name = inv[0].onpickup.split('_')[0];
@@ -5192,7 +5420,7 @@ function checkOffhand() {
 // updateSocketTotals - Updates the list of total stats gained from socketed jewels/runes/gems
 // ---------------------------------
 function updateSocketTotals() {
-	var groups = ["helm", "armor", "weapon", "offhand","belt", "amulet"];
+	var groups = ["helm", "armor", "weapon", "offhand", "belt", "amulet", "merc_helm", "merc_armor", "merc_weapon", "merc_offhand", "merc_belt", "swap_weapon", "swap_offhand"];
 	for (let g = 0; g < groups.length; g++) {
 		socketed[groups[g]].totals = {}
 		for (let i = 0; i < socketed[groups[g]].items.length; i++) {
@@ -5241,7 +5469,9 @@ function updateURL() {
 	//if (game_version == 2) {	// these features are only available on the PoD version
 		params.set('selected', selectedSkill[0]+','+selectedSkill[1])
 		for (group in corruptsEquipped) {
-			var param_equipped = equipped[group].name+','+equipped[group].tier+','+corruptsEquipped[group].name
+			var isSwapGroup = group.startsWith("swap_");
+			var equippedItem = isSwapGroup ? swapEquipped[group.slice(5)] : equipped[group];
+			var param_equipped = equippedItem.name+','+(equippedItem.tier||0)+','+corruptsEquipped[group].name
 			for (group_sock in socketed) { if (group == group_sock) {
 				for (let i = 0; i < socketed[group].items.length; i++) {
 					param_equipped += ','+socketed[group].items[i].name

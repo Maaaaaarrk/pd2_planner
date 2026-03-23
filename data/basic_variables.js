@@ -15,6 +15,7 @@ var offhandSetup = "";		// temporary variable
 var tempSetup = 0;			// temporary variable
 var mercenary = {name:"",level:1,base_aura:"",base_aura_level:1};
 var offhandType = "none";
+var swapOffhandType = "none";
 var lastCharm = "";			// last charm on mouse-over
 var lastSocketable = "";	// last gem/rune/jewel on mouse-over
 var lastSelected = "";
@@ -38,6 +39,8 @@ var socketed = {	// Gems/Runes/Jewels Socketed in Equipment
 	merc_armor:{sockets:0, socketsFilled:0, totals:{}, items:[{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""}]},
 	merc_weapon:{sockets:0, socketsFilled:0, totals:{}, items:[{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""}]},
 	merc_offhand:{sockets:0, socketsFilled:0, totals:{}, items:[{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""}]},
+	swap_weapon:{sockets:0, socketsFilled:0, totals:{}, items:[{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""}]},
+	swap_offhand:{sockets:0, socketsFilled:0, totals:{}, items:[{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""}]},
 };
 
 var inv = [		// Charm Inventory
@@ -66,10 +69,12 @@ var colors = {
 
 var equipped = { helm:{name:"none",tier:0}, armor:{name:"none",tier:0}, gloves:{name:"none",tier:0}, boots:{name:"none",tier:0}, belt:{name:"none",tier:0}, amulet:{name:"none",tier:0}, ring1:{name:"none",tier:0}, ring2:{name:"none",tier:0}, weapon:{name:"none",tier:0,twoHanded:0,type:""}, offhand:{name:"none",tier:0,type:""}, charms:{name:"none"} };
 var mercEquipped = { helm:{name:"none"}, armor:{name:"none"}, weapon:{name:"none"}, offhand:{name:"none"}, gloves:{name:"none"}, boots:{name:"none"}, belt:{name:"none"} };
+var swapEquipped = { weapon:{name:"none",tier:0,twoHanded:0,type:""}, offhand:{name:"none",tier:0,type:""} };
 var corruptsEquipped = {helm:{name:"none"}, armor:{name:"none"}, gloves:{name:"none"}, boots:{name:"none"}, belt:{name:"none"},
 amulet:{name:"none"}, ring1:{name:"none"}, ring2:{name:"none"}, weapon:{name:"none"}, offhand:{name:"none"},
 merc_helm:{name:"none"}, merc_armor:{name:"none"}, merc_gloves:{name:"none"}, merc_boots:{name:"none"}, merc_belt:{name:"none"},
-merc_weapon:{name:"none"}, merc_offhand:{name:"none"}};
+merc_weapon:{name:"none"}, merc_offhand:{name:"none"},
+swap_weapon:{name:"none"}, swap_offhand:{name:"none"}};
 var golemItem = {name:"none"};
 
 var oskills = ["oskill_Warp","oskill_Ball_Lightning","oskill_Inner_Sight","oskill_Lethal_Strike","oskill_Valkyrie","oskill_Magic_Arrow","oskill_Guided_Arrow","oskill_Multiple_Shot","oskill_Battle_Command","oskill_Battle_Orders","oskill_Battle_Cry","oskill_Bash","oskill_Edged_Weapon_Mastery","oskill_Lycanthropy","oskill_Werebear","oskill_Werewolf","oskill_Feral_Rage","oskill_Flame_Dash","oskill_Summon_Dire_Wolf","oskill_Desecrate","oskill_Zeal","oskill_Vengeance","oskill_Frigerate","oskill_Shiver_Armor","oskill_Cold_Mastery","oskill_Hydra","oskill_Fire_Ball","oskill_Fire_Wall","oskill_Meteor","oskill_Fire_Mastery","oskill_Whirlwind","oskill_Skeleton_Mastery","oskill_Raven","oskill_Heart_of_Wolverine"];
