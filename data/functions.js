@@ -4347,16 +4347,20 @@ function skillHover(skill) {
 			next_value = character.getSkillData(skill, (skill.level+skill.extra_levels+1), i)
 		}
 		next_value = round(next_value)
-		if (next_value < 0 && next_display.endsWith("+")) { next_display = next_display.substr(0,next_display.length-1) }
-		next_display += next_value
+		if (settings.skill_display_values) {
+			if (next_value < 0 && next_display.endsWith("+")) { next_display = next_display.substr(0,next_display.length-1) }
+			next_display += next_value
+		} else { next_display += settings.skill_value_placeholder }
 
 		current_display += skill.text[i]
 		//if (skill.level+skill.extra_levels <= LIMIT) { levels = skill.level+skill.extra_levels } else { levels = LIMIT }
 		levels = skill.level+skill.extra_levels
 		current_value = character.getSkillData(skill, levels, i)
 		current_value = round(current_value)
-		if (current_value < 0 && current_display.endsWith("+")) { current_display = current_display.substr(0,current_display.length-1) }
-		current_display += current_value
+		if (settings.skill_display_values) {
+			if (current_value < 0 && current_display.endsWith("+")) { current_display = current_display.substr(0,current_display.length-1) }
+			current_display += current_value
+		} else { current_display += settings.skill_value_placeholder }
 
 		if (skill.index[0] == (i+1)) {
 			if (skill.level > 0) { pre_display += current_display } else { pre_display += next_display }
