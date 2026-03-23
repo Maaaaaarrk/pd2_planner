@@ -602,7 +602,7 @@ input[type="file"] {
   left: 93px;
 }
 .equipped_weapon {
-  width: 60px; 
+  width: 60px;
   height: 118px;
   top: 1px;
   left: 1px;
@@ -612,6 +612,24 @@ input[type="file"] {
   height: 118px;
   top: 1px;
   left: 242px;
+}
+#gui_swap_container {
+  position: relative;
+  width: 130px;
+  height: 120px;
+  margin: 0 auto;
+}
+.swap_weapon {
+  width: 60px;
+  height: 118px;
+  top: 1px;
+  left: 1px;
+}
+.swap_offhand {
+  width: 60px;
+  height: 118px;
+  top: 1px;
+  left: 68px;
 }
 .equipment_image {
   position: absolute;
