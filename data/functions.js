@@ -557,7 +557,7 @@ function loadParams() {
 		var param_equipped = 0;											// per group: name,tier,corruption ...per socketable space: ,socketablename
 		if (params.has('helm') && params.has('armor') && params.has('gloves') && params.has('boots') && params.has('belt') && params.has('amulet') && params.has('ring1') && params.has('ring2') && params.has('weapon') && params.has('offhand')) {
 			param_equipped = {}
-			for (group in corruptsEquipped) { param_equipped[group] = params.get(group).split(',') }
+			for (group in corruptsEquipped) { var _p = params.get(group); param_equipped[group] = _p != null ? _p.split(',') : ["none","0","none"] }
 		}
 		for (e in param_effects) { param_effects[e] = param_effects[e].split(',') }
 
