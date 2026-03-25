@@ -1333,6 +1333,9 @@ function disableAllSelects() {
 // hide button
 	var el = document.getElementById('readonlybutton');
 	if (el) el.style.display = 'none';
+// hide controls guide
+	var cg = document.getElementById('controls_guide');
+	if (cg) cg.style.display = 'none';
 // Disable left (click) and right (context menu) globally; keep hover working
 // Block clicks globally but allow normal hyperlink navigation
 window.addEventListener('click', function (e) {
