@@ -61,7 +61,7 @@
 <body class="background" onload="initial_load()">
 
 <div class="navbar" style="font-size: 0.67em;color: #ffffff">
-	Originally by Betweenwalls updated by HiimMark for PD2 (NOTE: Some stats/values may not match the game)
+	Originally by Betweenwalls updated by HiimMark for PD2
 </div>
 <div id="main">
 
@@ -393,11 +393,8 @@
 						<a id="next"></a><br>
 						<a id="syn_title" class="green"></a>
 						<a id="syn_text"></a>
-						<a id="update_warning" style="color: gray;font-size: 0.8em;display:none;"><br/><br/>Most numbers
-							are from
-							Season
-							8<br/>Synergies & Elemental
-							Damage is updated</a>
+						<a id="update_warning" style="color: gray;font-size: 0.8em;"><br/><br/>All numbers
+							are from the Wiki<br/>Rely on the calculation at own risk</a>
 					</div> <!-- /skill hover text -->
 				</div> <!-- /GUI Skills -->
 
@@ -1243,6 +1240,20 @@ l-26 24 14 -25z"></path>
 					</span>
                 </span>
 
+					<div id="controls_guide2" style="position:absolute; width:600px; text-align:left;">
+						<div style="font-size:1.4em; margin-bottom:6px; margin-left:12px;">Controls</div>
+						<ul style="margin:0; padding-left:16px;">
+							<li>Click the character's level or class to change them</li>
+							<li>Right-click to remove points or items</li>
+							<li>Shift-click to add/remove 10 Stat or 10 Skill points</li>
+							<li>Ctrl-click to add/remove 100 Stat or Max Skill points</li>
+							<li>Shift-lick Charms to add 1 more</li>
+							<li>Ctrl-click Charms to add many more</li>
+							<li>Select corruptions via the narrow dropdowns to the left of each item slot</li>
+							<li>Ctrl-click an equipped item to upgrade it (Ctrl + right-click to downgrade)</li>
+							<li>Drag jewels, runes, or gems from the inventory to a socketed equipment slot</li>
+						</ul>
+					</div>
 
 				</div>
 			</div>
@@ -1322,8 +1333,23 @@ l-26 24 14 -25z"></path>
 			// hide button
 			var el = document.getElementById('unreadonlybutton');
 			if (el) el.style.display = 'none';
+			updateControlsGuideVisibility()
+			window.addEventListener('resize', updateControlsGuideVisibility)
 		}
 	}
+
+function updateControlsGuideVisibility() {
+	var cg = document.getElementById('controls_guide')
+	var cg2 = document.getElementById('controls_guide2')
+	if (!cg || !cg2) return
+	if (window.innerWidth < 1200) {
+		cg.style.display = 'none'
+		cg2.style.display = ''
+	} else {
+		cg.style.display = ''
+		cg2.style.display = 'none'
+	}
+}
 
 function disableAllSelects() {
 // Disable all drop downs
@@ -1336,6 +1362,8 @@ function disableAllSelects() {
 // hide controls guide
 	var cg = document.getElementById('controls_guide');
 	if (cg) cg.style.display = 'none';
+	var cg2 = document.getElementById('controls_guide2');
+	if (cg2) cg2.style.display = 'none';
 // Disable left (click) and right (context menu) globally; keep hover working
 // Block clicks globally but allow normal hyperlink navigation
 window.addEventListener('click', function (e) {
