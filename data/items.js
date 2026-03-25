@@ -263,6 +263,7 @@ var corruptions = {	// pdr
 		{name:"+ Life per kill", life_per_kill:3},
 		{name:"+ Mana per kill", mana_per_kill:3},
 		{name:"+ FBR", fbr:10},
+		{name:"+ All Resistances", all_res:8},
 	],
 	belt: [
 		{name:"Belt"},
@@ -415,6 +416,7 @@ var corruptions = {	// pdr
 		{name:"+ Life per kill", life_per_kill:3},
 		{name:"+ Mana per kill", mana_per_kill:3},
 		{name:"+ FBR", fbr:10},
+		{name:"+ All Resistances", all_res:8},
 	],
 	merc_belt: [
 		{name:"merc_belt"},
