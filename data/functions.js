@@ -4692,7 +4692,16 @@ function updatePrimaryStats() {
 	document.getElementById("life").innerHTML = lifeTotal
 	document.getElementById("mana").innerHTML = Math.floor((c.mana + c.level*c.mana_per_level + mana_addon) * (1 + c.max_mana/100))
 	document.getElementById("level").innerHTML = c.level
-	document.getElementById("class_name").innerHTML = c.class_name
+	//document.getElementById("class_name").innerHTML = c.class_name
+
+	if (c.class_name == "Amazon") { document.getElementById("class_name").innerHTML = "Amazon" }
+	if (c.class_name == "Druid") { document.getElementById("class_name").innerHTML = "Druid" }
+	if (c.class_name == "Necromancer") { document.getElementById("class_name").innerHTML = "Necro" }
+	if (c.class_name == "Sorceress") { document.getElementById("class_name").innerHTML = "Sorc" }
+	if (c.class_name == "Assassin") { document.getElementById("class_name").innerHTML = "Assassin" }
+	if (c.class_name == "Barbarian") { document.getElementById("class_name").innerHTML = "Barb" }
+	if (c.class_name == "Paladin") { document.getElementById("class_name").innerHTML = "Paladin" }
+
 	document.getElementById("remainingstats").innerHTML = c.statpoints
 	document.getElementById("remainingskills").innerHTML = c.skillpoints
 	document.getElementById("fres").innerHTML = (c.fRes + c.all_res - c.fRes_penalty + c.resistance_skillup) + " / " + Math.min(RES_CAP,(c.fRes_max_base + c.fRes_max + c.fRes_skillup)) + "%"

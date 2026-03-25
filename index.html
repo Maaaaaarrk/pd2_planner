@@ -183,8 +183,6 @@
 		</div>
 	</div>
 	<div id="full_interface" class="no_selection" oncontextmenu="return false">
-		<div id="side"></div>
-
 		<div id="interface">
 			<div class="effect_container">
 				<div class="hover" id="tooltip_effect">
@@ -972,7 +970,9 @@
 				<a id="unreadonlybutton"
 				   style="display:inline-block; background-image: url('images/blankbutton.png'); background-size: auto; background-position: center; background-repeat: no-repeat; height:36px;width:304px; cursor:pointer; line-height:36px; text-align:center; color:white; font-size: 1.1em;"
 				   onclick="setReadBuild()">Edit Build</a>
-				<a href="https://github.com/Maaaaaarrk/pd2_planner/issues/new" target="_blank" style="text-decoration:none; display:inline-block; background-image: url('images/blankbutton.png'); background-size: auto; background-position: center; background-repeat: no-repeat; height:36px;width:304px; cursor:pointer; line-height:36px; text-align:center; color:white; font-size: 1.1em;">Report an Issue</a>
+				<a href="https://github.com/Maaaaaarrk/pd2_planner/issues/new" target="_blank"
+				   style="text-decoration:none; display:inline-block; background-image: url('images/blankbutton.png'); background-size: auto; background-position: center; background-repeat: no-repeat; height:36px;width:304px; cursor:pointer; line-height:36px; text-align:center; color:white; font-size: 1.1em;">Report
+					an Issue</a>
 				<br/>
 				<br/>
 
@@ -1249,6 +1249,21 @@ l-26 24 14 -25z"></path>
 
 
 		</div>    <!-- /interface -->
+		<div id="side"></div>
+		<div id="controls_guide">
+			<div style="font-size:1.4em; margin-bottom:6px; margin-left:12px;">Controls</div>
+			<ul style="margin:0; padding-left:16px;">
+				<li>Click the character's level or class to change them</li>
+				<li>Right-click to remove points or items</li>
+				<li>Shift-click to add/remove 10 Stat or 10 Skill points</li>
+				<li>Ctrl-click to add/remove 100 Stat or Max Skill points</li>
+				<li>Shift-lick Charms to add 1 more</li>
+				<li>Ctrl-click Charms to add many more</li>
+				<li>Select corruptions via the narrow dropdowns to the left of each item slot</li>
+				<li>Ctrl-click an equipped item to upgrade it (Ctrl + right-click to downgrade)</li>
+				<li>Drag jewels, runes, or gems from the inventory to a socketed equipment slot</li>
+			</ul>
+		</div>
 	</div>    <!-- /full_interface -->
 </div>    <!-- /main -->
 </body>

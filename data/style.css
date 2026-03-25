@@ -19,13 +19,21 @@
   height:16px; 
 }
 #full_interface {
+  position: relative;
   width: 869px;
 }
 #side {
-  margin-top: 4px;
-  position: relative;
-  float: right;
   color: white;
+}
+#controls_guide {
+  position: fixed;
+  left: 875px;
+  top: 4px;
+  right: 0;
+  color: white;
+  font-size: 0.85em;
+  line-height: 1.6em;
+  text-align: left;
 }
 #interface {
   width: 869px;
@@ -137,6 +145,7 @@
   width: 97px;
   height: 38px;
   z-index: 4;
+  font-size: 1em;
 }
 .dropdown select, .dropdown-corruption select {
   color: #ddd;
