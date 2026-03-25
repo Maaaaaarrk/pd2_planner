@@ -4795,14 +4795,29 @@ function updateSecondaryStats() {
 	}
 
 	var fhr_f = c.fhr_frames;
-	for (let i = 1; i < c.fhr_bp.length; i++) { if (c.fhr >= c.fhr_bp[i]) { fhr_f -= 1 } }
+	var fhr_t = "";
+	for (let i = 1; i < c.fhr_bp.length; i++) {
+		if(i>1) { fhr_t += ", "; }
+		fhr_t += c.fhr_bp[i];
+		if (c.fhr >= c.fhr_bp[i]) { fhr_f -= 1 }
+	}
 	if (c.class_name == "Paladin") { if (equipped.weapon.type == "spear" || equipped.weapon.type == "staff") {
+		fhr_t = "";
 		fhr_f = c.fhr_frames_alt;
-		for (let i = 1; i < c.fhr_bp_alt.length; i++) { if (c.fhr >= c.fhr_bp_alt[i]) { fhr_f -= 1 } }
+		for (let i = 1; i < c.fhr_bp_alt.length; i++) {
+			if(i>1) { fhr_t += ", "; }
+			fhr_t += c.fhr_bp_alt[i];
+			if (c.fhr >= c.fhr_bp_alt[i]) { fhr_f -= 1 }
+		}
 	} }
 	if (c.class_name == "Druid") { if (equipped.weapon.twoHanded != 1 && (equipped.weapon.type == "axe" || equipped.weapon.type == "mace" || equipped.weapon.type == "sword" || equipped.weapon.type == "wand")) {	// TODO: Also include throwing axes?
+		fhr_t = "";
 		fhr_f = c.fhr_frames_alt;
-		for (let i = 1; i < c.fhr_bp_alt.length; i++) { if (c.fhr >= c.fhr_bp_alt[i]) { fhr_f -= 1 } }
+		for (let i = 1; i < c.fhr_bp_alt.length; i++) {
+			if(i>1) { fhr_t += ", "; }
+			fhr_t += c.fhr_bp_alt[i];
+			if (c.fhr >= c.fhr_bp_alt[i]) { fhr_f -= 1 }
+		}
 	} }
 
 	var fbr_f = c.fbr_frames;
@@ -4824,8 +4839,13 @@ function updateSecondaryStats() {
         	fcr_t+= character_all.druid.fcr_bp_werebear[i];
 		 if (fcrTotal >= character_all.druid.fcr_bp_werebear[i]) { fcr_f -= 1 }
 		 }
+		fhr_t = "";
 		fhr_f = character_all.druid.fhr_frames_werebear
-		for (let i = 1; i < character_all.druid.fhr_bp_werebear.length; i++) { if (c.fhr >= character_all.druid.fhr_bp_werebear[i]) { fhr_f -= 1 } }
+		for (let i = 1; i < character_all.druid.fhr_bp_werebear.length; i++) {
+			if(i>1) { fhr_t += ", "; }
+			fhr_t += character_all.druid.fhr_bp_werebear[i];
+			if (c.fhr >= character_all.druid.fhr_bp_werebear[i]) { fhr_f -= 1 }
+		}
 		fbr_f = character_all.druid.fbr_frames_werebear
 		for (let i = 1; i < character_all.druid.fbr_bp_werebear.length; i++) { if (c.fbr >= character_all.druid.fbr_bp_werebear[i]) { fbr_f -= 1 } }
 	} } }
@@ -4837,8 +4857,13 @@ function updateSecondaryStats() {
                 	fcr_t+= character_all.druid.fcr_bp_werewolf[i];
 		 if (fcrTotal >= character_all.druid.fcr_bp_werewolf[i]) { fcr_f -= 1 }
 		 }
+		fhr_t = "";
 		fhr_f = character_all.druid.fhr_frames_werewolf
-		for (let i = 1; i < character_all.druid.fhr_bp_werewolf.length; i++) { if (c.fhr >= character_all.druid.fhr_bp_werewolf[i]) { fhr_f -= 1 } }
+		for (let i = 1; i < character_all.druid.fhr_bp_werewolf.length; i++) {
+			if(i>1) { fhr_t += ", "; }
+			fhr_t += character_all.druid.fhr_bp_werewolf[i];
+			if (c.fhr >= character_all.druid.fhr_bp_werewolf[i]) { fhr_f -= 1 }
+		}
 		fbr_f = character_all.druid.fbr_frames_werewolf
 		for (let i = 1; i < character_all.druid.fbr_bp_werewolf.length; i++) { if (c.fbr >= character_all.druid.fbr_bp_werewolf[i]) { fbr_f -= 1 } }
 	} } }
@@ -4866,7 +4891,7 @@ function updateSecondaryStats() {
     }
 	if (fcrTotal > 0 || equipped.weapon.name != "none" || equipped.offhand.name != "none") {
 	document.getElementById("fcr").innerHTML += " ("+fcr_f+"f)<br/>["+ fcr_t+"]" }
-	if (c.fhr > 0 || equipped.weapon.name != "none" || equipped.offhand.name != "none") { document.getElementById("fhr").innerHTML += " ("+fhr_f+"f)" }
+	if (c.fhr > 0) { document.getElementById("fhr").innerHTML += " ("+fhr_f+"f)<br/>["+fhr_t+"]" }
 	if (c.fbr > 0 || c.block > 0 || c.block_skillup > 0) { document.getElementById("fbr").innerHTML += " ("+fbr_f+"f)" }
 
 	// actual movespeed
