@@ -4347,7 +4347,7 @@ function skillHover(skill) {
 			next_value = character.getSkillData(skill, (skill.level+skill.extra_levels+1), i)
 		}
 		next_value = round(next_value)
-		if (settings.skill_display_values) {
+		if (skill.updated) {
 			if (next_value < 0 && next_display.endsWith("+")) { next_display = next_display.substr(0,next_display.length-1) }
 			next_display += next_value
 		} else { next_display += settings.skill_value_placeholder }
@@ -4357,7 +4357,7 @@ function skillHover(skill) {
 		levels = skill.level+skill.extra_levels
 		current_value = character.getSkillData(skill, levels, i)
 		current_value = round(current_value)
-		if (settings.skill_display_values) {
+		if (skill.updated) {
 			if (current_value < 0 && current_display.endsWith("+")) { current_display = current_display.substr(0,current_display.length-1) }
 			current_display += current_value
 		} else { current_display += settings.skill_value_placeholder }
@@ -5005,6 +5005,12 @@ function updateSecondaryStats() {
 	}
 	{
 	var pierce_total = c.enemy_phyRes;
+	for (var s = 0; s < skills.length; s++) {
+		if (skills[s].name == "Penetrate" && skills[s].level > 0 && typeof(skills[s].data.values[2]) != 'undefined') {
+			pierce_total += -(skills[s].data.values[2][Math.min(skills[s].level, 20)] || 0);
+			break;
+		}
+	}
 	document.getElementById("phy_pierce").innerHTML = pierce_total;
 	  if (pierce_total > 0) {
              document.getElementById("phy_pierce_label").style.display = "block";
