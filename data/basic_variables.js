@@ -106,7 +106,7 @@ var non_items = [
 {i:7, name:"Shrine: Lightning Resist", lRes:75, duration:144, recharge:240, effect:"Resist_Lightning"},
 {i:8, name:"Shrine: Poison Resist", pRes:75, duration:144, recharge:240, effect:"Resist_Poison"},
 {i:9, name:"Potion: Thawing", cRes:50, duration:30, effect:"Thawing"},												// stackable duration (unimplemented)
-{i:10, name:"Potion: Antitode", pRes:50, duration:30, effect:"Antidote"},											// stackable duration (unimplemented)
+{i:10, name:"Potion: Antidote", pRes:50, duration:30, effect:"Antidote"},											// stackable duration (unimplemented)
 ];
 
 var mercenaries = [
