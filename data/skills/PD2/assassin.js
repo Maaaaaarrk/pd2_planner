@@ -379,7 +379,7 @@ var skills_pd2_assassin = [
 
 	Blade Fury
 	Synergies increased from 7% to 10%
-	now uninterruptable while channeling															...not mentioned in open beta notes
+	now uninterruptible while channeling															...not mentioned in open beta notes
 
 	Phoenix Strike
 	Third charge freeze duration reduced from 1 second to .5

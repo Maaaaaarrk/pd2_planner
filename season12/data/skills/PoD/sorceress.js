@@ -47,7 +47,7 @@ var character_sorceress = {class_name:"Sorceress", strength:10, dexterity:25, vi
 		if (skill.name == "Fire Ball" && elem < 2) { 					result *= ((1 + (0.06*sk[22].level + 0.06*sk[29].level)) * (1+c.fDamage/100)) }
 		if (skill.name == "Fire Wall" && elem < 2) { 					result *= ((1 + (0.04*sk[23].level + 0.04*sk[24].level)) * (1+c.fDamage/100)) }
 		if (skill.name == "Enflame" && elem < 4) { 						result *= ((1 + (0.08*sk[23].level)) * (1+c.fDamage/100)) }
-		if (skill.name == "Meteor" && elem < 2) { 						result *= ((1 + (0.06*sk[22].level + 0.06*sk[26].level)) * (1+c.fDamage/100)) }	// physical damage multipled by fire bonus (25% of total fire damage as extra physical damage)
+		if (skill.name == "Meteor" && elem < 2) { 						result *= ((1 + (0.06*sk[22].level + 0.06*sk[26].level)) * (1+c.fDamage/100)) }	// physical damage multiplied by fire bonus (25% of total fire damage as extra physical damage)
 		if (skill.name == "Meteor" && elem < 4 && elem > 1) { 			result *= ((1 + (0.06*sk[22].level + 0.06*sk[26].level)) * (1+c.fDamage/100)) }
 		if (skill.name == "Meteor" && elem < 6 && elem > 3) { 			result *= ((1 + (0.03*sk[24].level)) * (1+c.fDamage/100)) }
 		if (skill.name == "Hydra" && elem < 3 && elem > 0) { 			result *= ((1 + (0.01*sk[23].level + 0.02*sk[26].level)) * (1+c.fDamage/100)) }

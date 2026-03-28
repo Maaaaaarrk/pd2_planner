@@ -57,7 +57,7 @@
 //	choice: name of new character class
 // ---------------------------------
 function startup(choice) {
-	// TODO: prevent calculations from being done before info is loaded (e.g. when mouse is prepositioned over a skill while page loads)
+	// TODO: prevent calculations from being done before info is loaded (e.g. when mouse is pre-positioned over a skill while page loads)
 	var character_setup = character_all[choice]
 	for (stat in character_setup) { character[stat] = character_setup[stat] }
 	//loadMonsters()
@@ -2510,7 +2510,7 @@ function loadFileAsText() {
 	fileReader.readAsText(fileToLoad, "UTF-8");
 }
 
-// parseFile - Processes the text and converts it back to useable data
+// parseFile - Processes the text and converts it back to usable data
 //	file: text from file
 // ---------------------------------
 function parseFile(file) {
@@ -3411,7 +3411,7 @@ function equipmentHover(group) {
 // equipmentOut - stops showing equipment info (mouse-over ends)
 // ---------------------------------
 function equipmentOut() {
-	document.getElementById("tooltip_inventory").style.left = 350+"px"	// why does the prevent misalignment?
+	document.getElementById("tooltip_inventory").style.left = 350+"px"	// why does this prevent misalignment?
 	document.getElementById("tooltip_inventory").style.display = "none"
 }
 
