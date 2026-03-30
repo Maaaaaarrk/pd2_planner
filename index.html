@@ -967,6 +967,9 @@
 				<a id="unreadonlybutton"
 				   style="display:inline-block; background-image: url('images/blankbutton.png'); background-size: auto; background-position: center; background-repeat: no-repeat; height:36px;width:304px; cursor:pointer; line-height:36px; text-align:center; color:white; font-size: 1.1em;"
 				   onclick="setReadBuild()">Edit Build</a>
+				<label style="text-decoration:none; display:inline-block; background-image: url('images/blankbutton.png'); background-size: auto; background-position: center; background-repeat: no-repeat; height:36px;width:304px; cursor:pointer; line-height:36px; text-align:center; color:white; font-size: 1.1em;">Import Armory HTML
+					<input type="file" id="armoryFileToLoad" accept=".html,.htm" onchange="loadArmoryFile()" style="display:none;">
+				</label>
 				<a href="https://github.com/Maaaaaarrk/pd2_planner/issues/new" target="_blank"
 				   style="text-decoration:none; display:inline-block; background-image: url('images/blankbutton.png'); background-size: auto; background-position: center; background-repeat: no-repeat; height:36px;width:304px; cursor:pointer; line-height:36px; text-align:center; color:white; font-size: 1.1em;">Report
 					an Issue</a>
@@ -1254,6 +1257,13 @@ l-26 24 14 -25z"></path>
 							<li>Drag jewels, runes, or gems from the inventory to a socketed equipment slot</li>
 							<li>Sockets are added by corrupting an item (select any corruption to get the max possible)</li>
 						</ul>
+						<div style="font-size:1.4em; margin-bottom:6px; margin-left:12px; margin-top:16px;">Import from Official PD2 Armory</div>
+						<ul style="margin:0; padding-left:16px;">
+							<li>Save the armory page as an HTML file (Ctrl+S in browser)</li>
+							<li>Character and Mercenary must be imported separately (one tab per save)</li>
+							<li>Importing one will not clear the other</li>
+							<li>Items that can't be mapped (magic/rare with random rolls, socketables) must be set manually</li>
+						</ul>
 					</div>
 
 				</div>
@@ -1275,6 +1285,13 @@ l-26 24 14 -25z"></path>
 				<li>Ctrl-click an equipped item to upgrade it (Ctrl + right-click to downgrade)</li>
 				<li>Drag jewels, runes, or gems from the inventory to a socketed equipment slot</li>
 				<li>Sockets are added by corrupting an item (select any corruption to get the max possible)</li>
+			</ul>
+			<div style="font-size:1.4em; margin-bottom:6px; margin-left:12px; margin-top:16px;">Import from Official PD2 Armory</div>
+			<ul style="margin:0; padding-left:16px;">
+				<li>Save the armory page as an HTML file (Ctrl+S in browser)</li>
+				<li>Character and Mercenary must be imported separately (one tab per save)</li>
+				<li>Importing one will not clear the other</li>
+				<li>Items that can't be mapped (magic/rare with random rolls, socketables) must be set manually</li>
 			</ul>
 		</div>
 	</div>    <!-- /full_interface -->

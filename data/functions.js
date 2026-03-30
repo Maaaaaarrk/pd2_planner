@@ -2809,6 +2809,856 @@ function setCharacterInfo(className) {
 }
 
 
+// loadArmoryFile - Reads an HTML file from the PD2 armory and imports character data
+//	el: optional input element reference (for the secondary button)
+// ---------------------------------
+function loadArmoryFile(el) {
+	var fileInput = el || document.getElementById("armoryFileToLoad");
+	if (fileInput.files && fileInput.files[0]) {
+		var fileToLoad = fileInput.files[0];
+	} else {
+		return
+	}
+	var fileReader = new FileReader();
+	fileReader.onload = function(e) {
+		try {
+			var html = e.target.result;
+			var parsed = parseArmoryHTML(html);
+			if (parsed == null) { return }
+			applyArmoryImport(parsed);
+		} catch (err) {
+			alert("Armory import error: " + err.message + "\n\n" + err.stack);
+		}
+		fileInput.value = "";
+	};
+	fileReader.readAsText(fileToLoad, "UTF-8");
+}
+
+// parseArmoryHTML - Parses HTML from a PD2 armory page and extracts character or mercenary data
+//	html: raw HTML string
+//	returns: object with tab ("character" or "mercenary") and relevant data
+// ---------------------------------
+function parseArmoryHTML(html) {
+	var parser = new DOMParser();
+	var doc = parser.parseFromString(html, "text/html");
+
+	// Detect which tab is active
+	var activeTab = "character";
+	var tabButtons = doc.querySelectorAll(".nav-tabs .tab");
+	for (var t = 0; t < tabButtons.length; t++) {
+		if (tabButtons[t].className.indexOf("active") !== -1) {
+			var tabText = tabButtons[t].textContent.trim().toLowerCase();
+			if (tabText === "mercenary") { activeTab = "mercenary" }
+			break;
+		}
+	}
+
+	if (activeTab === "mercenary") {
+		return parseArmoryMercTab(doc);
+	} else {
+		return parseArmoryCharacterTab(doc);
+	}
+}
+
+// parseArmoryCharacterTab - Parses character data from armory HTML
+//	doc: parsed DOM document
+//	returns: object with tab, class_name, level, attributes, skills, items, charms, stashItems
+// ---------------------------------
+function parseArmoryCharacterTab(doc) {
+	var result = {
+		tab: "character",
+		class_name: "",
+		level: 1,
+		strength: 0,
+		dexterity: 0,
+		vitality: 0,
+		energy: 0,
+		skills: [],
+		items: [],
+		charms: [],
+		stashItems: []
+	};
+
+	// Find all stat boxes
+	var statBoxes = doc.querySelectorAll(".stat-box");
+	for (var i = 0; i < statBoxes.length; i++) {
+		var header = statBoxes[i].querySelector(".box-header");
+		if (!header) { continue }
+		var headerText = header.textContent.trim();
+
+		if (headerText === "Base Stats") {
+			var divs = statBoxes[i].querySelectorAll("div > div");
+			for (var d = 0; d < divs.length; d++) {
+				var text = divs[d].textContent.trim();
+				var match = text.match(/^Level:\s*(\d+)/);
+				if (match) { result.level = parseInt(match[1]) }
+			}
+		} else if (headerText === "Base Attributes") {
+			var divs = statBoxes[i].querySelectorAll("div > div");
+			for (var d = 0; d < divs.length; d++) {
+				var text = divs[d].textContent.trim();
+				var match = text.match(/^(Strength|Dexterity|Vitality|Energy):\s*(\d+)/);
+				if (match) {
+					result[match[1].toLowerCase()] = parseInt(match[2]);
+				}
+			}
+		} else if (headerText === "Base Skills") {
+			var divs = statBoxes[i].querySelectorAll("div > div");
+			for (var d = 0; d < divs.length; d++) {
+				var text = divs[d].textContent.trim();
+				var match = text.match(/^(.+):\s*(\d+)/);
+				if (match) {
+					result.skills.push({ name: match[1].trim(), level: parseInt(match[2]) });
+				}
+			}
+		}
+	}
+
+	// Detect class from skill names
+	result.class_name = detectClassFromSkills(result.skills);
+	if (result.class_name === "") {
+		alert("Could not detect character class from armory skills.");
+		return null
+	}
+
+	// Parse items from equipment columns
+	var itemColumns = doc.querySelectorAll(".item-column");
+	var slotMap = [
+		["weapon", "gloves"],
+		["ring1"],
+		["helm", "armor", "belt"],
+		["amulet", "ring2"],
+		["offhand", "boots"]
+	];
+
+	for (var c = 0; c < itemColumns.length && c < slotMap.length; c++) {
+		var col = itemColumns[c];
+		var itemBoxes = col.querySelectorAll(".item-box");
+		for (var b = 0; b < itemBoxes.length && b < slotMap[c].length; b++) {
+			var slot = slotMap[c][b];
+			var itemData = parseArmoryItem(itemBoxes[b]);
+			if (itemData != null) {
+				itemData.slot = slot;
+				result.items.push(itemData);
+			}
+		}
+	}
+
+	// Parse charms from the inventory section
+	var inventoryEl = doc.querySelector(".inventory");
+	if (inventoryEl) {
+		var charmHoverItems = inventoryEl.querySelectorAll(".item.hover-item");
+		for (var h = 0; h < charmHoverItems.length; h++) {
+			var nameEl = charmHoverItems[h].querySelector(".heading");
+			if (!nameEl) { continue }
+			var charmName = nameEl.textContent.replace(/\(Ethereal\)/g, "").trim();
+			var baseEl = charmHoverItems[h].querySelector(".base");
+			var baseText = baseEl ? baseEl.textContent.trim() : "";
+			if (baseText.indexOf("Charm") !== -1) {
+				result.charms.push(charmName);
+			}
+		}
+	}
+
+	// Parse stash items (potential swap weapons)
+	result.stashItems = parseArmoryStashItems(doc);
+
+	return result;
+}
+
+// parseArmoryMercTab - Parses mercenary data from armory HTML with Mercenary tab active
+//	doc: parsed DOM document
+//	returns: object with tab, mercType, items
+// ---------------------------------
+function parseArmoryMercTab(doc) {
+	var result = {
+		tab: "mercenary",
+		mercType: "",
+		items: []
+	};
+
+	// Get merc type from Info stat box
+	var statBoxes = doc.querySelectorAll(".stat-box");
+	for (var i = 0; i < statBoxes.length; i++) {
+		var header = statBoxes[i].querySelector(".box-header");
+		if (!header) { continue }
+		if (header.textContent.trim() === "Info") {
+			var divs = statBoxes[i].querySelectorAll("div > div");
+			for (var d = 0; d < divs.length; d++) {
+				var text = divs[d].textContent.trim();
+				var match = text.match(/^Type:\s*(.+)/);
+				if (match) { result.mercType = match[1].trim() }
+			}
+		}
+	}
+
+	// Parse merc equipment - same column layout as character
+	var itemColumns = doc.querySelectorAll(".item-column");
+	var slotMap = [
+		["merc_weapon", "merc_gloves"],
+		[],
+		["merc_helm", "merc_armor", "merc_belt"],
+		[],
+		["merc_offhand", "merc_boots"]
+	];
+
+	for (var c = 0; c < itemColumns.length && c < slotMap.length; c++) {
+		var col = itemColumns[c];
+		var itemBoxes = col.querySelectorAll(".item-box");
+		for (var b = 0; b < itemBoxes.length && b < slotMap[c].length; b++) {
+			var slot = slotMap[c][b];
+			if (!slot) { continue }
+			var itemData = parseArmoryItem(itemBoxes[b]);
+			if (itemData != null) {
+				itemData.slot = slot;
+				result.items.push(itemData);
+			}
+		}
+	}
+
+	return result;
+}
+
+// parseArmoryItem - Extracts item info from an armory item-box element
+//	itemBox: DOM element with class "item-box"
+//	returns: object with name, base, ethereal, corruption, slot
+// ---------------------------------
+function parseArmoryItem(itemBox) {
+	var hoverItem = itemBox.querySelector(".item.hover-item");
+	if (!hoverItem) { return null }
+
+	var nameEl = hoverItem.querySelector(".heading");
+	if (!nameEl) { return null }
+	var rawName = nameEl.textContent.trim();
+	var ethereal = rawName.indexOf("(Ethereal)") !== -1;
+	var name = rawName.replace(/\(Ethereal\)/g, "").trim();
+	if (name === "" || name === "none") { return null }
+
+	var baseEl = hoverItem.querySelector(".base");
+	var baseText = baseEl ? baseEl.childNodes[0].textContent.trim() : "";
+
+	// Extract corruption text from corrupted property lines
+	var corruptionTexts = [];
+	var propEls = hoverItem.querySelectorAll("p.property");
+	for (var p = 0; p < propEls.length; p++) {
+		var classes = propEls[p].className || "";
+		if (classes.indexOf("corrupted") !== -1 || classes.indexOf("desecrated") !== -1) {
+			var text = propEls[p].querySelector("span") ? propEls[p].querySelector("span").textContent.trim() : "";
+			if (text !== "" && text !== "Corrupted" && text !== "Desecrated") {
+				corruptionTexts.push(text);
+			}
+		}
+	}
+
+	return {
+		name: name,
+		base: baseText,
+		ethereal: ethereal,
+		corruption: corruptionTexts,
+		slot: ""
+	};
+}
+
+// detectClassFromSkills - Determines character class by matching skill names
+//	armorySkills: array of {name, level} from armory
+//	returns: lowercase class name string
+// ---------------------------------
+function detectClassFromSkills(armorySkills) {
+	if (armorySkills.length === 0) { return "" }
+
+	var classSkillSets = {
+		amazon: skills_pd2_amazon,
+		assassin: skills_pd2_assassin,
+		barbarian: skills_pd2_barbarian,
+		druid: skills_pd2_druid,
+		necromancer: skills_pd2_necromancer,
+		paladin: skills_pd2_paladin,
+		sorceress: skills_pd2_sorceress
+	};
+
+	var bestClass = "";
+	var bestCount = 0;
+
+	for (var cls in classSkillSets) {
+		var skillNames = [];
+		for (var s = 0; s < classSkillSets[cls].length; s++) {
+			if (classSkillSets[cls][s].name && classSkillSets[cls][s].name !== "None") {
+				skillNames.push(classSkillSets[cls][s].name);
+			}
+		}
+		var matchCount = 0;
+		for (var a = 0; a < armorySkills.length; a++) {
+			if (skillNames.indexOf(armorySkills[a].name) !== -1) { matchCount++ }
+		}
+		if (matchCount > bestCount) {
+			bestCount = matchCount;
+			bestClass = cls;
+		}
+	}
+
+	return bestClass;
+}
+
+// applyArmoryImport - Routes to character or mercenary import based on active tab
+//	data: object from parseArmoryHTML (has .tab field)
+// ---------------------------------
+function applyArmoryImport(data) {
+	if (data.tab === "mercenary") {
+		applyArmoryMercImport(data);
+	} else {
+		applyArmoryCharacterImport(data);
+	}
+}
+
+// applyArmoryCharacterImport - Applies parsed character data to the planner (does not touch merc)
+//	data: object from parseArmoryCharacterTab
+// ---------------------------------
+function applyArmoryCharacterImport(data) {
+	// Save current merc state so character import doesn't clear it
+	var savedMercName = mercenary.name || "";
+	var savedMercEquipped = {};
+	for (var mg in mercEquipped) { savedMercEquipped[mg] = { name: mercEquipped[mg].name || "none" } }
+	var savedMercCorrupts = {};
+	for (var mg in corruptsEquipped) {
+		if (mg.indexOf("merc_") === 0 && corruptsEquipped[mg].name !== "none" && corruptsEquipped[mg].name !== mg) {
+			savedMercCorrupts[mg] = corruptsEquipped[mg].name;
+		}
+	}
+
+	// Switch to PD2 version and correct class (this resets everything including merc)
+	changeVersion(3, data.class_name);
+	startup(data.class_name);
+
+	// Restore merc if one was previously set
+	if (savedMercName !== "" && savedMercName !== "none" && savedMercName !== "­ ­ ­ ­ Mercenary") {
+		setMercenary(savedMercName);
+		for (var mg in savedMercEquipped) {
+			if (savedMercEquipped[mg].name !== "none") {
+				var mercOptions = document.getElementById("dropdown_merc_" + mg).options;
+				for (var o = 0; o < mercOptions.length; o++) {
+					if (mercOptions[o].innerHTML === savedMercEquipped[mg].name) {
+						document.getElementById("dropdown_merc_" + mg).selectedIndex = o;
+						break;
+					}
+				}
+				equipMerc(mg, savedMercEquipped[mg].name);
+			}
+		}
+		for (var mg in savedMercCorrupts) {
+			corrupt(mg, savedMercCorrupts[mg]);
+		}
+	}
+
+	// Set level
+	var levelsToAdd = data.level - character.level;
+	if (levelsToAdd > 0) {
+		character.level += levelsToAdd;
+		character.skillpoints += levelsToAdd;
+		character.statpoints += 5 * levelsToAdd;
+		character.stamina += character.levelup_stamina * levelsToAdd;
+		character.life += character.levelup_life * levelsToAdd;
+		character.mana += character.levelup_mana * levelsToAdd;
+	}
+
+	// Enable quests (armory characters are assumed to have completed all quests)
+	if (character.quests_completed !== 1) {
+		document.getElementById("quests").checked = true;
+		toggleQuests(document.getElementById("quests"));
+	}
+
+	// Calculate and apply stat point allocation
+	var str_added = data.strength - character.starting_strength;
+	var dex_added = data.dexterity - character.starting_dexterity;
+	var vit_added = data.vitality - character.starting_vitality;
+	var ene_added = data.energy - character.starting_energy;
+	if (str_added > 0) { character.strength += str_added; character.statpoints -= str_added; character.strength_added = str_added; }
+	if (dex_added > 0) { character.dexterity += dex_added; character.statpoints -= dex_added; character.dexterity_added = dex_added; }
+	if (vit_added > 0) {
+		character.vitality += vit_added; character.statpoints -= vit_added; character.vitality_added = vit_added;
+		character.life += vit_added * character.life_per_vitality;
+		character.stamina += vit_added * character.stamina_per_vitality;
+	}
+	if (ene_added > 0) {
+		character.energy += ene_added; character.statpoints -= ene_added; character.energy_added = ene_added;
+		character.mana += ene_added * character.mana_per_energy;
+	}
+
+	// Apply skills
+	for (var s = 0; s < data.skills.length; s++) {
+		for (var sk = 0; sk < skills.length; sk++) {
+			if (skills[sk].name === data.skills[s].name) {
+				skillUp(null, skills[sk], data.skills[s].level);
+				break;
+			}
+		}
+	}
+	skillOut();
+
+	// Apply equipment items and corruptions
+	var unmatchedItems = [];
+	applyArmoryEquipment(data.items, unmatchedItems, false);
+
+	// Apply swap weapons from stash items
+	var unmatchedSwap = [];
+	if (data.stashItems.length > 0) {
+		var swapSlots = ["swap_weapon", "swap_offhand"];
+		var swapIndex = 0;
+		for (var si = 0; si < data.stashItems.length && swapIndex < swapSlots.length; si++) {
+			var stashItem = data.stashItems[si];
+			var swapMatched = matchArmoryItem({ name: stashItem.name, base: stashItem.base, slot: "weapon" });
+			if (swapMatched !== null) {
+				var swapGroup = swapSlots[swapIndex] === "swap_weapon" ? "weapon" : "offhand";
+				var swapDropdown = "dropdown_" + swapSlots[swapIndex];
+				var swapOptions = document.getElementById(swapDropdown).options;
+				for (var o = 0; o < swapOptions.length; o++) {
+					if (swapOptions[o].innerHTML === swapMatched) {
+						document.getElementById(swapDropdown).selectedIndex = o;
+						break;
+					}
+				}
+				equipSwap(swapGroup, swapMatched);
+				if (stashItem.corruption.length > 0) {
+					applyCorruption(swapSlots[swapIndex], stashItem.corruption);
+				}
+				swapIndex++;
+			} else {
+				unmatchedSwap.push(stashItem.name + " (swap)");
+			}
+		}
+	}
+
+	// Apply charms
+	var unmatchedCharms = [];
+	for (var c = 0; c < data.charms.length; c++) {
+		var charmMatched = matchArmoryCharm(data.charms[c]);
+		if (charmMatched !== null) {
+			addCharm(charmMatched);
+		} else {
+			unmatchedCharms.push(data.charms[c]);
+		}
+	}
+
+	// Update class dropdown
+	var class_names = ["","amazon","assassin","barbarian","druid","necromancer","paladin","sorceress"];
+	for (var cn = 1; cn < class_names.length; cn++) {
+		if (data.class_name === class_names[cn]) {
+			document.getElementById("dropdown_class").selectedIndex = cn;
+		}
+	}
+
+	update();
+
+	// Report results
+	var msg = "Character imported.";
+	var issues = [];
+	if (unmatchedItems.length > 0) { issues.push("Could not match items:\n  " + unmatchedItems.join("\n  ")) }
+	if (unmatchedCharms.length > 0) { issues.push("Could not match charms:\n  " + unmatchedCharms.join("\n  ")) }
+	if (unmatchedSwap.length > 0) { issues.push("Could not match swap items:\n  " + unmatchedSwap.join("\n  ")) }
+	if (issues.length > 0) {
+		msg += "\n\n" + issues.join("\n\n") + "\n\nThese may need to be set manually.";
+	}
+	alert(msg);
+}
+
+// applyArmoryMercImport - Applies parsed mercenary data to the planner (does not touch character)
+//	data: object from parseArmoryMercTab
+// ---------------------------------
+function applyArmoryMercImport(data) {
+	// Map armory merc type to planner mercenary name
+	var mercName = matchArmoryMercType(data.mercType);
+	if (mercName !== null) {
+		setMercenary(mercName);
+	}
+
+	// Apply merc equipment and corruptions
+	var unmatchedItems = [];
+	applyArmoryEquipment(data.items, unmatchedItems, true);
+
+	update();
+
+	// Report results
+	var msg = "Mercenary imported.";
+	if (mercName === null && data.mercType !== "") {
+		msg += "\nCould not match merc type: " + data.mercType + ". Select it manually from the Mercenary dropdown.";
+	}
+	if (unmatchedItems.length > 0) {
+		msg += "\n\nCould not match items:\n  " + unmatchedItems.join("\n  ") + "\n\nThese may need to be set manually.";
+	}
+	alert(msg);
+}
+
+// applyArmoryEquipment - Equips items and corruptions from parsed armory data
+//	items: array of item objects with slot, name, base, corruption
+//	unmatchedItems: array to push unmatched item names to
+//	isMerc: true if equipping to mercenary slots
+// ---------------------------------
+function applyArmoryEquipment(items, unmatchedItems, isMerc) {
+	// Equip items
+	for (var i = 0; i < items.length; i++) {
+		var item = items[i];
+		var equipGroup = isMerc ? item.slot.replace("merc_", "") : item.slot;
+		var matched = matchArmoryItem({ name: item.name, base: item.base, slot: equipGroup });
+		if (matched !== null) {
+			if (isMerc) {
+				var dropId = "dropdown_merc_" + equipGroup;
+				var options = document.getElementById(dropId).options;
+				for (var o = 0; o < options.length; o++) {
+					if (options[o].innerHTML === matched) {
+						document.getElementById(dropId).selectedIndex = o;
+						break;
+					}
+				}
+				equipMerc(equipGroup, matched);
+			} else {
+				var options = document.getElementById("dropdown_" + equipGroup).options;
+				for (var o = 0; o < options.length; o++) {
+					if (options[o].innerHTML === matched) {
+						document.getElementById("dropdown_" + equipGroup).selectedIndex = o;
+						break;
+					}
+				}
+				equip(equipGroup, matched);
+			}
+		} else {
+			unmatchedItems.push(item.name + " (" + item.slot + ")");
+		}
+	}
+
+	// Apply corruptions
+	for (var i = 0; i < items.length; i++) {
+		var item = items[i];
+		if (item.corruption.length === 0) { continue }
+		applyCorruption(item.slot, item.corruption);
+	}
+}
+
+// applyCorruption - Matches and applies a corruption to an equipment slot
+//	group: corruption group (helm, merc_helm, swap_weapon, etc.)
+//	corruptionTexts: array of corruption text strings
+// ---------------------------------
+function applyCorruption(group, corruptionTexts) {
+	var corrName = matchArmoryCorruption(corruptionTexts, group);
+	if (corrName !== null) {
+		var corrEl = document.getElementById("corruptions_" + group);
+		if (!corrEl) { return }
+		var corrOptions = corrEl.options;
+		for (var o = 0; o < corrOptions.length; o++) {
+			if (corrOptions[o].innerHTML === corrName) {
+				corrEl.selectedIndex = o;
+				break;
+			}
+		}
+		corrupt(group, corrName);
+	}
+}
+
+// matchArmoryMercType - Maps armory merc type string to planner mercenary name
+//	typeText: e.g. "Lightning Spells", "Fire Arrows", "Blessed Aim"
+//	returns: full mercenary name string for setMercenary(), or null
+// ---------------------------------
+function matchArmoryMercType(typeText) {
+	if (!typeText || typeText === "") { return null }
+
+	// Armory merc type -> planner mercenary aura mapping
+	var typeMap = {
+		// Rogue Scout (Act 1)
+		"Fire Arrows": "Meditation",
+		"Cold Arrows": "Vigor",
+		"Inner Sight": "Slow Movement",
+		// Desert Guard (Act 2)
+		"Blessed Aim": "Blessed Aim",
+		"Defiance": "Defiance",
+		"Thorns": "Thorns",
+		"Combat": "Blessed Aim",
+		"Offensive": "Blessed Aim",
+		"Defensive": "Defiance",
+		// Iron Wolf (Act 3)
+		"Fire Spells": "Prayer",
+		"Cold Spells": "Cleansing",
+		"Lightning Spells": "Static Field",
+		// Ascendant (Act 5 wave 1?)
+		"Amplify Damage": "Amplify Damage",
+		"Sanctuary": "Sanctuary",
+		// Barbarian (Act 5)
+		"Might": "Might",
+		"Battle Orders": "Battle Orders",
+		"Bash": "Might",
+	};
+
+	var aura = typeMap[typeText];
+	if (!aura) {
+		// Try partial matching
+		for (var key in typeMap) {
+			if (typeText.indexOf(key) !== -1 || key.indexOf(typeText) !== -1) {
+				aura = typeMap[key];
+				break;
+			}
+		}
+	}
+	if (!aura) { return null }
+
+	// Find the mercenary with this aura
+	for (var m = 1; m < mercenaries.length; m++) {
+		if (mercenaries[m].aura === aura) { return mercenaries[m].name }
+	}
+	return null;
+}
+
+// matchArmoryItem - Finds the best matching planner item for an armory item
+//	item: object with name, base, slot, ethereal
+//	returns: matching item name string, or null
+// ---------------------------------
+function matchArmoryItem(item) {
+	var group = item.slot;
+	if (group === "ring1" || group === "ring2") { group = "ring1" }
+
+	// Extract clean base name from armory (remove "Normal ", "Unique ", "Set ", "Superior " etc prefix)
+	var cleanBase = item.base.replace(/^(Normal|Unique|Set|Magic|Rare|Superior|Crafted)\s+/i, "").trim();
+
+	var groupsToSearch = [group];
+	if (group === "offhand") { groupsToSearch = ["offhand", "weapon"] }
+
+	// Pass 1: Exact name match
+	for (var g = 0; g < groupsToSearch.length; g++) {
+		var grp = groupsToSearch[g];
+		if (typeof(equipment[grp]) === 'undefined') { continue }
+		for (var e in equipment[grp]) {
+			if (equipment[grp][e].name === item.name) { return item.name }
+		}
+	}
+
+	// Pass 2: Runeword matching - armory name appears in planner name, prefer matching base
+	var bestMatch = null;
+	var bestMatchHasBase = false;
+	for (var g = 0; g < groupsToSearch.length; g++) {
+		var grp = groupsToSearch[g];
+		if (typeof(equipment[grp]) === 'undefined') { continue }
+		for (var e in equipment[grp]) {
+			var eName = equipment[grp][e].name;
+			if (!eName || eName === "none" || eName.length < 2) { continue }
+			// Check if the planner name contains the armory item name (e.g. "Infinity ... Elder Staff" contains "Infinity")
+			if (eName.indexOf(item.name) !== -1) {
+				var hasBase = cleanBase !== "" && eName.indexOf(cleanBase) !== -1;
+				if (hasBase && !bestMatchHasBase) {
+					bestMatch = eName;
+					bestMatchHasBase = true;
+				} else if (!bestMatch) {
+					bestMatch = eName;
+				}
+			}
+		}
+	}
+	if (bestMatch !== null) { return bestMatch }
+
+	// Pass 3: Armory name contains planner name (for items with short planner names)
+	for (var g = 0; g < groupsToSearch.length; g++) {
+		var grp = groupsToSearch[g];
+		if (typeof(equipment[grp]) === 'undefined') { continue }
+		for (var e in equipment[grp]) {
+			var eName = equipment[grp][e].name;
+			if (!eName || eName === "none" || eName.length < 3) { continue }
+			if (item.name.indexOf(eName) !== -1) { return eName }
+		}
+	}
+
+	return null;
+}
+
+// matchArmoryCharm - Finds the best matching planner charm for an armory charm name
+//	charmName: string name from armory
+//	returns: matching charm name string, or null
+// ---------------------------------
+function matchArmoryCharm(charmName) {
+	// Exact match first
+	for (var c in equipment["charms"]) {
+		if (equipment["charms"][c].name === charmName) { return charmName }
+	}
+
+	// Armory suffix to planner suffix mapping
+	// Armory uses D2 suffix names, planner uses abbreviated stat names for skillers
+	var suffixMap = {
+		"of Vita": "+ life",
+		"of Balance": "+ fhr",
+		"of Inertia": "+ frw",
+		"of Good Luck": "+ mf",
+		"of Substinence": "+ mana",
+		"of Life": "+ life",
+		"of Quality": "+ quality"
+	};
+
+	// Split armory name into base and suffix
+	var armoryBase = charmName;
+	var armorySuffix = "";
+	var ofIndex = charmName.indexOf(" of ");
+	if (ofIndex !== -1) {
+		armoryBase = charmName.substring(0, ofIndex);
+		armorySuffix = charmName.substring(ofIndex);
+	}
+
+	// Try matching with suffix conversion (for skillers: "Sparking Grand Charm of Vita" -> "+1 Sparking Grand Charm + life")
+	var convertedSuffix = suffixMap[armorySuffix.trim()] || "";
+	for (var c in equipment["charms"]) {
+		var eName = equipment["charms"][c].name;
+		if (!eName || eName === "Charms") { continue }
+
+		var cleanPlanner = eName.replace(/^\+\d+%?\s*/, "");
+		// Check: armory base matches planner base (ignoring +1 prefix)
+		if (cleanPlanner.indexOf(armoryBase) === 0 || armoryBase.indexOf(cleanPlanner.split(" + ")[0]) === 0) {
+			// If armory has no suffix, match the base-only planner version
+			if (armorySuffix === "" && eName.indexOf(" + ") === -1) { return eName }
+			// If armory has a suffix, try to match the converted suffix
+			if (convertedSuffix !== "" && eName.indexOf(convertedSuffix) !== -1) { return eName }
+		}
+	}
+
+	// Try matching just the base prefix (e.g. "Sparking Grand Charm" matches "+1 Sparking Grand Charm")
+	// Return the base version (no suffix) if available
+	for (var c in equipment["charms"]) {
+		var eName = equipment["charms"][c].name;
+		if (!eName || eName === "Charms") { continue }
+		var cleanPlanner = eName.replace(/^\+\d+%?\s*/, "");
+		if (cleanPlanner === armoryBase || armoryBase === cleanPlanner.split(" + ")[0]) {
+			return eName;
+		}
+	}
+
+	return null;
+}
+
+// matchArmoryCorruption - Maps armory corruption text to planner corruption name
+//	corruptionTexts: array of corruption text strings from armory
+//	group: equipment group (helm, armor, weapon, etc.)
+//	returns: matching corruption name string, or null
+// ---------------------------------
+function matchArmoryCorruption(corruptionTexts, group) {
+	if (corruptionTexts.length === 0) { return null }
+
+	var corrGroup = group;
+	if (corrGroup === "ring2") { corrGroup = "ring1" }
+	if (typeof(corruptions[corrGroup]) === 'undefined') { return null }
+
+	// Join all corruption texts to check for compound corruptions (e.g. ED + Deadly Strike = "+ ED Deadly")
+	var allText = corruptionTexts.join(" | ");
+
+	// Check for compound corruption patterns first (multi-stat corruptions)
+	var hasED = /Enhanced Damage/i.test(allText);
+	var hasDS = /Deadly Strike/i.test(allText);
+	var hasIAS = /Increased Attack Speed/i.test(allText);
+	var hasCB = /Crushing Blow/i.test(allText);
+
+	if (hasED && hasDS) {
+		for (var c = 0; c < corruptions[corrGroup].length; c++) {
+			if (corruptions[corrGroup][c].name === "+ ED Deadly") { return "+ ED Deadly" }
+		}
+	}
+	if (hasIAS && hasED) {
+		for (var c = 0; c < corruptions[corrGroup].length; c++) {
+			if (corruptions[corrGroup][c].name === "+ IAS Enhanced Damage") { return "+ IAS Enhanced Damage" }
+		}
+	}
+	if (hasIAS && hasCB) {
+		for (var c = 0; c < corruptions[corrGroup].length; c++) {
+			if (corruptions[corrGroup][c].name === "+ IAS Crushing Blow") { return "+ IAS Crushing Blow" }
+		}
+	}
+
+	// Single-stat corruption patterns
+	var textPatterns = [
+		{ pattern: /\+2 to All Skills/i, names: ["+ 2 All Skills"] },
+		{ pattern: /All Skills/i, names: ["+ Skill", "+ All Skills"] },
+		{ pattern: /Faster Cast Rate/i, names: ["+ Faster Cast Rate"] },
+		{ pattern: /Increased Attack Speed/i, names: ["+ Increased Attack Speed", "+ IAS"] },
+		{ pattern: /Faster Run/i, names: ["+ Faster Run Walk", "+ Faster Run/Walk"] },
+		{ pattern: /Cannot Be Frozen/i, names: ["+ CBF"] },
+		{ pattern: /Damage Redu/i, names: ["+ PDR", "+ Damage Reduction"] },
+		{ pattern: /Faster Hit Recovery/i, names: ["+ FHR"] },
+		{ pattern: /Faster Block Rate/i, names: ["+ FBR"] },
+		{ pattern: /Max(?:imum)? Life/i, names: ["+ Max Life", "+ Life %"] },
+		{ pattern: /Max(?:imum)? Fire Resist/i, names: ["+ Max Fire Resist"] },
+		{ pattern: /Max(?:imum)? Cold Resist/i, names: ["+ Max Cold Resist"] },
+		{ pattern: /Max(?:imum)? Lightning Resist/i, names: ["+ Max Lightning Resist"] },
+		{ pattern: /Max(?:imum)? Poison Resist/i, names: ["+ Max Poison Resist"] },
+		{ pattern: /Max(?:imum)? Resist/i, names: ["+ Max Resist", "+ 2 Max Resist", "+ 4 Max Resist"] },
+		{ pattern: /All Resistances/i, names: ["+ All Resistances"] },
+		{ pattern: /Fire Resist/i, names: ["+ Fire Resist"] },
+		{ pattern: /Cold Resist/i, names: ["+ Cold Resist"] },
+		{ pattern: /Lightning Resist/i, names: ["+ Lightning Resist"] },
+		{ pattern: /Poison Resist/i, names: ["+ Poison Resist"] },
+		{ pattern: /Enhanced Damage/i, names: ["+ Enhanced Damage", "+ 2 x Enhanced Damage"] },
+		{ pattern: /Deadly Strike/i, names: ["+ Deadly Strike"] },
+		{ pattern: /Crushing Blow/i, names: ["+ IAS Crushing Blow"] },
+		{ pattern: /Fire Pierce|Enemy Fire Resist/i, names: ["+ Fire Pierce"] },
+		{ pattern: /Cold Pierce|Enemy Cold Resist/i, names: ["+ Cold Pierce"] },
+		{ pattern: /Light(?:ning)? Pierce|Enemy Lightning Resist/i, names: ["+ Light Pierce"] },
+		{ pattern: /Poison Pierce|Enemy Poison Resist/i, names: ["+ Psn Pierce"] },
+		{ pattern: /Pierce/i, names: ["+ Pierce"] },
+		{ pattern: /Mana after each Kill|Mana per kill/i, names: ["+ Mana per kill"] },
+		{ pattern: /Life after each Kill|Life per kill/i, names: ["+ Life per kill"] },
+		{ pattern: /Mana Leech|Mana Stolen/i, names: ["+ Mana Leech"] },
+		{ pattern: /Life Leech|Life Stolen/i, names: ["+ Life Leech"] },
+		{ pattern: /Attack Rating/i, names: ["+ Attack Rating"] },
+		{ pattern: /Increased Chance of Blocking/i, names: ["+ ICB", "+ ICB FBR"] },
+		{ pattern: /Sockets/i, names: ["+ Sockets Helm", "+ Sockets Chest", "+ Sockets Weapon", "+ Sockets Off-hand"] },
+	];
+
+	// For each corruption text, find the best matching corruption in the group
+	for (var t = 0; t < corruptionTexts.length; t++) {
+		var text = corruptionTexts[t];
+		for (var p = 0; p < textPatterns.length; p++) {
+			if (textPatterns[p].pattern.test(text)) {
+				for (var n = 0; n < textPatterns[p].names.length; n++) {
+					for (var c = 0; c < corruptions[corrGroup].length; c++) {
+						if (corruptions[corrGroup][c].name === textPatterns[p].names[n]) {
+							return corruptions[corrGroup][c].name;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return null;
+}
+
+// parseArmoryStashItems - Extracts items from the stash/inventory section that may be swap weapons
+//	doc: parsed DOM document
+//	returns: array of item objects with name, base, corruption
+// ---------------------------------
+function parseArmoryStashItems(doc) {
+	var stashItems = [];
+	// Find all inventory-item elements that contain weapon/shield items
+	var invItems = doc.querySelectorAll(".inventory-item .item.hover-item");
+	for (var i = 0; i < invItems.length; i++) {
+		var nameEl = invItems[i].querySelector(".heading");
+		if (!nameEl) { continue }
+		var rawName = nameEl.textContent.replace(/\(Ethereal\)/g, "").trim();
+		if (rawName === "" || rawName === "none") { continue }
+		var baseEl = invItems[i].querySelector(".base");
+		var baseText = baseEl ? baseEl.textContent.trim() : "";
+		// Only include non-charm items (potential swap weapons/shields)
+		if (baseText.indexOf("Charm") === -1 && rawName !== "") {
+			// Extract corruption
+			var corruptionTexts = [];
+			var propEls = invItems[i].querySelectorAll("p.property");
+			for (var p = 0; p < propEls.length; p++) {
+				var classes = propEls[p].className || "";
+				if (classes.indexOf("corrupted") !== -1 || classes.indexOf("desecrated") !== -1) {
+					var text = propEls[p].querySelector("span") ? propEls[p].querySelector("span").textContent.trim() : "";
+					if (text !== "" && text !== "Corrupted" && text !== "Desecrated") {
+						corruptionTexts.push(text);
+					}
+				}
+			}
+			stashItems.push({ name: rawName, base: baseText, corruption: corruptionTexts, slot: "" });
+		}
+	}
+	return stashItems;
+}
+
+// parseArmoryMerc - Extracts mercenary info if the mercenary tab content is present
+//	doc: parsed DOM document
+//	returns: object with type and items array, or null if not found
+// ---------------------------------
 
 //=========================================================================================================================
 // INVENTORY ....
