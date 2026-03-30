@@ -1119,6 +1119,8 @@ skill_Exploding_Arrow:{index:["skill_Exploding_Arrow"], format:["+"," to Explodi
 skill_Strafe:{index:["skill_Strafe"], format:["+"," to Strafe (Amazon only)"]},
 skill_Immolation_Arrow:{index:["skill_Immolation_Arrow"], format:["+"," to Immolation Arrow (Amazon only)"]},
 skill_Freezing_Arrow:{index:["skill_Freezing_Arrow"], format:["+"," to Freezing Arrow (Amazon only)"]},
+skill_Critical_Strike:{index:["skill_Critical_Strike"], format:["+"," to Critical Strike (Amazon only)"]},
+skill_Javelin_and_Spear_Mastery:{index:["skill_Javelin_and_Spear_Mastery"], format:["+"," to Javelin and Spear Mastery (Amazon only)"]},
 
 skill_Dual_Strike:{index:["skill_Dual_Strike"], format:["+"," to Dual Strike (Assassin only)"]},
 skill_Fists_of_Ember:{index:["skill_Fists_of_Ember"], format:["+"," to Fists of Ember (Assassin only)"]},
@@ -1151,6 +1153,15 @@ skill_Wake_of_Inferno:{index:["skill_Wake_of_Inferno"], format:["+"," to Wake of
 skill_Death_Sentry:{index:["skill_Death_Sentry"], format:["+"," to Death Sentry (Assassin only)"]},
 skill_Blade_Shield:{index:["skill_Blade_Shield"], format:["+"," to Blade Shield (Assassin only)"]},
 skill_Dragon_Tail:{index:["skill_Dragon_Tail"], format:["+"," to Dragon Tail (Assassin only)"]},
+skill_Tiger_Strike:{index:["skill_Tiger_Strike"], format:["+"," to Tiger Strike (Assassin only)"]},
+skill_Cobra_Strike:{index:["skill_Cobra_Strike"], format:["+"," to Cobra Strike (Assassin only)"]},
+skill_Phoenix_Strike:{index:["skill_Phoenix_Strike"], format:["+"," to Phoenix Strike (Assassin only)"]},
+skill_Fists_of_Fire:{index:["skill_Fists_of_Fire"], format:["+"," to Fists of Fire (Assassin only)"]},
+skill_Claws_of_Thunder:{index:["skill_Claws_of_Thunder"], format:["+"," to Claws of Thunder (Assassin only)"]},
+skill_Claw_and_Dagger_Mastery:{index:["skill_Claw_and_Dagger_Mastery"], format:["+"," to Claw and Dagger Mastery (Assassin only)"]},
+skill_Blade_Sentinel:{index:["skill_Blade_Sentinel"], format:["+"," to Blade Sentinel (Assassin only)"]},
+skill_Chain_Lightning_Sentry:{index:["skill_Chain_Lightning_Sentry"], format:["+"," to Chain Lightning Sentry (Assassin only)"]},
+skill_Blade_Dance:{index:["skill_Blade_Dance"], format:["+"," to Blade Dance (Assassin only)"]},
 
 skill_Howl:{index:["skill_Howl"], format:["+"," to Howl (Barbarian only)"]},
 skill_Find_Potion:{index:["skill_Find_Potion"], format:["+"," to Find Potion (Barbarian only)"]},
@@ -1184,6 +1195,10 @@ skill_Whirlwind:{index:["skill_Whirlwind"], format:["+"," to Whirlwind (Barbaria
 skill_One_Handed_Weapon_Mastery:{index:["skill_One_Handed_Weapon_Mastery"], format:["+"," to One Handed Weapon Mastery (Barbarian only)"]},
 skill_Two_Handed_Weapon_Mastery:{index:["skill_Two_Handed_Weapon_Mastery"], format:["+"," to Two Handed Weapon Mastery (Barbarian only)"]},
 skill_Deep_Wounds:{index:["skill_Deep_Wounds"], format:["+"," to Deep Wounds (Barbarian only)"]},
+skill_Berserk:{index:["skill_Berserk"], format:["+"," to Berserk (Barbarian only)"]},
+skill_Double_Throw:{index:["skill_Double_Throw"], format:["+"," to Double Throw (Barbarian only)"]},
+skill_General_Mastery:{index:["skill_General_Mastery"], format:["+"," to General Mastery (Barbarian only)"]},
+skill_Split_Throw:{index:["skill_Split_Throw"], format:["+"," to Split Throw (Barbarian only)"]},
 skill_Holy_Sword:{index:["skill_Holy_Sword"], format:["+"," to Holy Sword (Paladin only)"]},
 
 skill_Firestorm:{index:["skill_Firestorm"], format:["+"," to Firestorm (Druid only)"]},
@@ -1254,6 +1269,8 @@ skill_Lower_Resist:{index:["skill_Lower_Resist"], format:["+"," to Lower Resist 
 skill_Blood_Warp:{index:["skill_Blood_Warp"], format:["+"," to Blood Warp (Necromancer only)"]},
 skill_Curse_Mastery:{index:["skill_Curse_Mastery"], format:["+"," to Curse Mastery (Necromancer only)"]},
 skill_Dark_Pact:{index:["skill_Dark_Pact"], format:["+"," to Dark Pact (Necromancer only)"]},
+skill_Poison_Strike:{index:["skill_Poison_Strike"], format:["+"," to Poison Strike (Necromancer only)"]},
+skill_Golem_Mastery:{index:["skill_Golem_Mastery"], format:["+"," to Golem Mastery (Necromancer only)"]},
 
 skill_Prayer:{index:["skill_Prayer"], format:["+"," to Prayer (Paladin only)"]},
 skill_Resist_Fire:{index:["skill_Resist_Fire"], format:["+"," to Resist Fire (Paladin only)"]},
@@ -1286,6 +1303,9 @@ skill_Conversion:{index:["skill_Conversion"], format:["+"," to Conversion (Palad
 skill_Holy_Shield:{index:["skill_Holy_Shield"], format:["+"," to Holy Shield (Paladin only)"]},
 skill_Fist_of_the_Heavens:{index:["skill_Fist_of_the_Heavens"], format:["+"," to Fist of the Heavens (Paladin only)"]},
 skill_Dashing_Strike:{index:["skill_Dashing_Strike"], format:["+"," to Dashing Strike (Paladin only)"]},
+skill_Thorns:{index:["skill_Thorns"], format:["+"," to Thorns (Paladin only)"]},
+skill_Holy_Light:{index:["skill_Holy_Light"], format:["+"," to Holy Light (Paladin only)"]},
+skill_Holy_Nova:{index:["skill_Holy_Nova"], format:["+"," to Holy Nova (Paladin only)"]},
 
 skill_Ice_Bolt:{index:["skill_Ice_Bolt"], format:["+"," to Ice Bolt (Sorceress only)"]},
 skill_Frigerate:{index:["skill_Frigerate"], format:["+"," to Frigerate (Sorceress only)"]},
@@ -1319,6 +1339,8 @@ skill_Enflame:{index:["skill_Enflame"], format:["+"," to Enflame (Sorceress only
 skill_Meteor:{index:["skill_Meteor"], format:["+"," to Meteor (Sorceress only)"]},
 skill_Fire_Mastery:{index:["skill_Fire_Mastery"], format:["+"," to Fire Mastery (Sorceress only)"]},
 skill_Hydra:{index:["skill_Hydra"], format:["+"," to Hydra (Sorceress only)"]},
+skill_Lightning:{index:["skill_Lightning"], format:["+"," to Lightning (Sorceress only)"]},
+skill_Ice_Barrage:{index:["skill_Ice_Barrage"], format:["+"," to Ice Barrage (Sorceress only)"]},
 
 
 oskill_Jab:{index:["oskill_Jab"], format:["+"," to Jab"]},
@@ -1550,6 +1572,14 @@ oskill_Fire_Mastery:{index:["oskill_Fire_Mastery"], format:["+"," to Fire Master
 oskill_Hydra:{index:["oskill_Hydra"], format:["+"," to Hydra"]},
 
 oskill_Blade_Dance:{index:["oskill_Blade_Dance"], format:["+"," to Blade Dance"]},
+oskill_Vampire_Form:{index:["oskill_Vampire_Form"], format:["+"," to Vampire Form"]},
+oskill_Critical_Strike:{index:["oskill_Critical_Strike"], format:["+"," to Critical Strike"]},
+oskill_Javelin_and_Spear_Mastery:{index:["oskill_Javelin_and_Spear_Mastery"], format:["+"," to Javelin and Spear Mastery"]},
+oskill_Slow_Movement:{index:["oskill_Slow_Movement"], format:["+"," to Slow Movement"]},
+oskill_Claw_and_Dagger_Mastery:{index:["oskill_Claw_and_Dagger_Mastery"], format:["+"," to Claw and Dagger Mastery"]},
+oskill_Golem_Mastery:{index:["oskill_Golem_Mastery"], format:["+"," to Golem Mastery"]},
+oskill_Poison_Strike:{index:["oskill_Poison_Strike"], format:["+"," to Poison Strike"]},
+oskill_Joust:{index:["oskill_Joust"], format:["+"," to Joust"]},
 
 skills_class:{index:["skills_class"], format:["+"," to Class Skills"]},		// unneeded once item customization gets implemented
 skills_tree1:{index:["skills_tree1"], format:["+"," to Tree #1 Skills"]},	// unused
@@ -1611,6 +1641,8 @@ mindmg_energy:{index:["mindmg_per_energy","mindmg_energy"], format:["+"," ,+"," 
 // TODO: implement these
 skills_lightning_all:{index:["skills_lightning_all"], format:["+"," to Lightning Skills"]},
 skills_magic_all:{index:["skills_magic_all"], format:["+"," to Magic Skills"]},
+bloody:{index:["bloody"], format:["","% Chance of Open Wound"]},
+crush_efficiency:{index:["crush_efficiency"], format:["+","% Crushing Blow Efficiency"]},
 owounds_dps:{index:["owounds_dps"], format:["+"," Wounds Bleed Damage per second"]},
 owounds_dps_per_level:{index:["owounds_dps_per_level","owounds_dps_per_level"], format:["+"," Wounds Bleed Damage per second ("," per level)"], mult:["level",1]},
 extra_mainhand_attack:{index:["extra_mainhand_attack"], format:["","% Chance for additional mainhand attack"]},
