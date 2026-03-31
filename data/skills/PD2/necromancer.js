@@ -1,4 +1,5 @@
 
+// Skill data is sourced from the PD2 wiki. Values beyond the wiki data (higher levels) are linearly extrapolated from the last two known values.
 var character_pd2_necromancer = {class_name:"Necromancer", strength:15, dexterity:25, vitality:15, energy:25, life:45, mana:25, stamina:179, levelup_life:2, levelup_stamina:1, levelup_mana:2, ar_per_dexterity:5, life_per_vitality:2, stamina_per_vitality:1, mana_per_energy:2, starting_strength:15, starting_dexterity:25, starting_vitality:15, starting_energy:25, ar_const:-10, block_const:6, skill_layout:"./images/skill_trees/PD2/necromancer.png", mana_regen:1.66,
 	weapon_frames:{dagger:18, sword:[18,22], axe:[18,19], mace:[18,19], thrown:[18,18], staff:19, polearm:19, scepter:18, wand:18, javelin:18, spear:23, bow:17, crossbow:19},
 	fcr_frames:15, fcr_bp:[0, 9, 18, 30, 48, 75, 125],

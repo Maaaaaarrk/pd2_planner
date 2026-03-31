@@ -1,4 +1,5 @@
 
+// Skill data is sourced from the PD2 wiki. Values beyond the wiki data (higher levels) are linearly extrapolated from the last two known values.
 var character_pd2_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:25, energy:20, life:55, mana:20, stamina:184, levelup_life:1.5, levelup_stamina:1, levelup_mana:2, ar_per_dexterity:5, life_per_vitality:2, stamina_per_vitality:1, mana_per_energy:2, starting_strength:15, starting_dexterity:20, starting_vitality:25, starting_energy:20, ar_const:5, block_const:6, skill_layout:"./images/skill_trees/PD2/druid.png", mana_regen:1.66,	// block_const = 5 while shapeshifted
 	weapon_frames:{dagger:18, sword:[18,20], axe:[18,16], mace:[18,16], thrown:[18,18], staff:16, polearm:16, scepter:18, wand:18, javelin:18, spear:22, bow:15, crossbow:19},
 	wereform_frames:{dagger:22, sword:[22,25], axe:[22,20], mace:[22,23], thrown:[22,22], staff:20, polearm:20, scepter:22, wand:22, javelin:27, spear:27, bow:19, crossbow:24},	// incorrect info?
