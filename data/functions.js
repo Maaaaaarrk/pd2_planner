@@ -357,7 +357,7 @@ function toggleParameters(parameters) {
 		window.history.replaceState({}, '', `${location.pathname}?${params}`)
 	} else {
 		settings.parameters = 0
-		window.history.replaceState({}, '', `${location.pathname}?v=PD2`)
+		window.history.replaceState({}, '', `${location.pathname}`)
 	}
 }
 
