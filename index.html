@@ -929,12 +929,11 @@
 				   style="display:inline-block; background-image: url('images/blankbutton.png'); background-size: auto; background-position: center; background-repeat: no-repeat; height:36px;width:304px; cursor:pointer; line-height:36px; text-align:center; color:white; font-size: 1.1em;"
 				   onclick="setReadBuild()">Edit Build</a>
 				<a id="shorturlbutton"
-				   style="display:none; background-image: url('images/blankbutton.png'); background-size: auto; background-position: center; background-repeat: no-repeat; height:36px;width:304px; cursor:pointer; line-height:36px; text-align:center; color:white; font-size: 1.1em;"
+				   style="display:none; text-decoration:none; display:none; background-image: url('images/blankbutton.png'); background-size: auto; background-position: center; background-repeat: no-repeat; height:36px;width:304px; cursor:pointer; line-height:36px; text-align:center; color:white; font-size: 1.1em;"
 				   onclick="generateShortUrl()">Generate Short URL</a>
-				<div id="tinyurl_display"
-				   style="display:none; background-image: url('images/blankbutton.png'); background-size: auto; background-position: center; background-repeat: no-repeat; height:36px;width:304px; line-height:36px; text-align:center; font-size: 1.1em;">
-					<a id="tinyurl_link" href="#" target="_blank" style="color:#6688ff; text-decoration:none;"></a>
-				</div>
+				<a id="tinyurl_display"
+				   style="display:none; text-decoration:none; background-image: url('images/blankbutton.png'); background-size: auto; background-position: center; background-repeat: no-repeat; height:36px;width:304px; cursor:pointer; line-height:36px; text-align:center; color:#6688ff; font-size: 1.1em;"
+				   onclick="copyShortUrl()"><span id="tinyurl_link"></span></a>
 				<label id="armoryImportLabel" style="text-decoration:none; display:inline-block; background-image: url('images/blankbutton.png'); background-size: auto; background-position: center; background-repeat: no-repeat; height:36px;width:304px; cursor:pointer; line-height:36px; text-align:center; color:white; font-size: 1.1em;">Import Armory HTML
 					<input type="file" id="armoryFileToLoad" accept=".html,.htm" onchange="loadArmoryFile()" style="display:none;">
 				</label>
@@ -1384,18 +1383,20 @@ function setReadBuild() {
   window.location.href = url.toString();
 }
 
+var generatedShortUrl = "";
+
 function generateShortUrl() {
   var btn = document.getElementById('shorturlbutton');
   var display = document.getElementById('tinyurl_display');
   var linkEl = document.getElementById('tinyurl_link');
   if (btn) btn.style.display = 'none';
-  if (display) display.style.display = 'block';
+  if (display) display.style.display = 'inline-block';
   if (linkEl) linkEl.innerHTML = 'Generating...';
   fetch('https://is.gd/create.php?format=json&url=' + encodeURIComponent(window.location.href))
     .then(function(response) { return response.json(); })
     .then(function(data) {
       if (linkEl && data.shorturl) {
-        linkEl.href = data.shorturl;
+        generatedShortUrl = data.shorturl;
         linkEl.innerHTML = data.shorturl;
       } else if (linkEl) {
         linkEl.innerHTML = 'Failed to generate short URL';
@@ -1404,6 +1405,15 @@ function generateShortUrl() {
     .catch(function() {
       if (linkEl) linkEl.innerHTML = 'Failed to generate short URL';
     });
+}
+
+function copyShortUrl() {
+  if (generatedShortUrl) {
+    navigator.clipboard.writeText(generatedShortUrl).then(function() {
+      var linkEl = document.getElementById('tinyurl_link');
+      if (linkEl) { linkEl.innerHTML = 'Copied!'; setTimeout(function() { linkEl.innerHTML = generatedShortUrl; }, 1500); }
+    });
+  }
 }
 
 </script>
