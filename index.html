@@ -1351,27 +1351,18 @@ window.addEventListener('contextmenu', function(e){ e.stopPropagation(); e.preve
   }, true);
 });
 
-// Generate TinyURL for readonly mode
-// API token from https://tinyurl.com/app/dev (free account required)
-var TINYURL_API_TOKEN = "";
-var tinyUrlDisplay = document.getElementById('tinyurl_display');
-if (tinyUrlDisplay && TINYURL_API_TOKEN) {
-    tinyUrlDisplay.style.display = 'block';
+// Generate short URL for readonly mode via is.gd
+var shortUrlDisplay = document.getElementById('tinyurl_display');
+if (shortUrlDisplay) {
+    shortUrlDisplay.style.display = 'block';
     var fullUrl = window.location.href;
-    fetch('https://api.tinyurl.com/create', {
-        method: 'POST',
-        headers: {
-            'Authorization': 'Bearer ' + TINYURL_API_TOKEN,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ url: fullUrl, domain: 'tinyurl.com' })
-    })
+    fetch('https://is.gd/create.php?format=json&url=' + encodeURIComponent(fullUrl))
         .then(function(response) { return response.json(); })
         .then(function(data) {
             var linkEl = document.getElementById('tinyurl_link');
-            if (linkEl && data.data && data.data.tiny_url) {
-                linkEl.href = data.data.tiny_url;
-                linkEl.innerHTML = data.data.tiny_url;
+            if (linkEl && data.shorturl) {
+                linkEl.href = data.shorturl;
+                linkEl.innerHTML = data.shorturl;
             } else if (linkEl) {
                 linkEl.innerHTML = 'Failed to generate short URL';
             }
