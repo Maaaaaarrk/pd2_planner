@@ -926,10 +926,10 @@
 				<a id="unreadonlybutton"
 				   style="display:inline-block; background-image: url('images/blankbutton.png'); background-size: auto; background-position: center; background-repeat: no-repeat; height:36px;width:304px; cursor:pointer; line-height:36px; text-align:center; color:white; font-size: 1.1em;"
 				   onclick="setReadBuild()">Edit Build</a>
-				<label style="text-decoration:none; display:inline-block; background-image: url('images/blankbutton.png'); background-size: auto; background-position: center; background-repeat: no-repeat; height:36px;width:304px; cursor:pointer; line-height:36px; text-align:center; color:white; font-size: 1.1em;">Import Armory HTML
+				<label id="armoryImportLabel" style="text-decoration:none; display:inline-block; background-image: url('images/blankbutton.png'); background-size: auto; background-position: center; background-repeat: no-repeat; height:36px;width:304px; cursor:pointer; line-height:36px; text-align:center; color:white; font-size: 1.1em;">Import Armory HTML
 					<input type="file" id="armoryFileToLoad" accept=".html,.htm" onchange="loadArmoryFile()" style="display:none;">
 				</label>
-				<a href="https://github.com/Maaaaaarrk/pd2_planner/issues/new" target="_blank"
+				<a id="reportIssueLink" href="https://github.com/Maaaaaarrk/pd2_planner/issues/new" target="_blank"
 				   style="text-decoration:none; display:inline-block; background-image: url('images/blankbutton.png'); background-size: auto; background-position: center; background-repeat: no-repeat; height:36px;width:304px; cursor:pointer; line-height:36px; text-align:center; color:white; font-size: 1.1em;">Report
 					an Issue</a>
 				<br/>
@@ -1328,6 +1328,9 @@ function disableAllSelects() {
 	if (cg) cg.style.display = 'none';
 	var cg2 = document.getElementById('controls_guide2');
 	if (cg2) cg2.style.display = 'none';
+// hide armory import button
+	var armoryLabel = document.getElementById('armoryImportLabel');
+	if (armoryLabel) armoryLabel.style.display = 'none';
 // Disable left (click) and right (context menu) globally; keep hover working
 // Block clicks globally but allow normal hyperlink navigation
 window.addEventListener('click', function (e) {
