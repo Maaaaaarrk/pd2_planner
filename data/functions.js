@@ -1523,8 +1523,7 @@ function loadItems(group, dropdown, className) {
 						if (group != "charms") { addon = "<option selected>" + "­ ­ ­ ­ " + item.name + "</option>" }
 						else { addon = "<option disabled selected>" + "­ ­ ­ ­ " + item.name + "</option>" }
 					} else {
-						if (typeof(item.pod) != 'undefined') { addon = "" }
-						else if (typeof(item.debug) != 'undefined') { addon = "<option class='dropdown-debug'>" + item.name + "</option>" }
+						if (typeof(item.debug) != 'undefined') { addon = "<option class='dropdown-debug'>" + item.name + "</option>" }
 						else if (typeof(item.rarity) != 'undefined') { addon = "<option class='dropdown-"+item.rarity+"'>" + item.name + "</option>" }
 						else { addon = "<option class='dropdown-unique'>" + item.name + "</option>" }
 					}
