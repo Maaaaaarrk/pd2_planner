@@ -412,7 +412,7 @@
 						                            onChange="setIronGolem(this.value)"
 						                            onContextMenu="setIronGolem('none')"></select><br></div>
 					</div>
-					<div id="equipment_c" class="equipment">
+					<div id="equipment_c" class="equipment" style="display:none;">
 						<br>
 						<select class="dropdown" id="dropdown_misc"
 						        onChange="addEffect('misc',this.value,this.selectedIndex,'')"></select>
@@ -1278,7 +1278,6 @@ l-26 24 14 -25z"></path>
 
 		// check URL parameters
 		params = new URLSearchParams(window.location.search);
-		params.set('v', 3)
 		if (params.has('class') == true) {
 			if (classes.includes(params.get('class').toLowerCase()) == true) {
 				initial_class = params.get('class').toLowerCase()

@@ -948,7 +948,6 @@ ring1: [
  {rarity:"magic", name:"Fine Small Charm of Balance", size:"small", req_level:29, damage_max:3, ar:20, fhr:5, pd2:1},
  {rarity:"magic", name:"Fine Small Charm of Inertia", size:"small", req_level:36, damage_max:3, ar:20, frw:3, pd2:1},
  {rarity:"magic", name:"Fine Small Charm of Vita", size:"small", req_level:39, damage_max:3, ar:20, life:20, pd2:1},
- {rarity:"magic", name:"Pestilent Small Charm of Anthrax", size:"small", req_level:80, pDamage_all:451, pDamage_duration:12, pod:1},
  {rarity:"magic", name:"Ruby Small Charm of Vita", size:"small", req_level:39, fRes:11, life:20, pd2:1},
  {rarity:"magic", name:"Serpent's Small Charm of Vita", size:"small", req_level:40, mana:17, life:20, pd2:1},
  {rarity:"magic", name:"Sapphire Small Charm of Vita", size:"small", req_level:39, cRes:11, life:20, pd2:1},
