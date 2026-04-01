@@ -5972,11 +5972,14 @@ function updateOther() {
 // ---------------------------------
 function removeInvalidSockets(group) {
 //	if (socketed[group].socketsFilled > socketed[group].sockets) {
+		var isMerc = group.startsWith("merc_");
+		var isSwap = group.startsWith("swap_");
+		var stats = isMerc ? mercenary : character;
 		var invalidSockets = Math.max(0, socketed[group].socketsFilled - socketed[group].sockets)
 		if (socketed[group].sockets == 0) { invalidSockets = 6 }
 		for (let i = socketed[group].items.length-1; i >= 0; i--) {
 			if (socketed[group].items[i].name != "" && invalidSockets > 0) {
-				for (affix in socketed[group].items[i]) { if (affix != "id") { character[affix] -= socketed[group].items[i][affix] } }
+				for (affix in socketed[group].items[i]) { if (affix != "id" && !isSwap) { stats[affix] -= socketed[group].items[i][affix] } }
 				document.getElementById(socketed[group].items[i].id).remove();
 				socketed[group].socketsFilled -= 1
 				socketed[group].items[i] = {id:"",name:""}
