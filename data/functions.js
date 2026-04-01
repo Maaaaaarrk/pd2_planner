@@ -319,10 +319,9 @@ function changeDifficulty(diff) {
 	character.difficulty = diff
 	var penalties = ["fRes_penalty", "cRes_penalty", "lRes_penalty", "pRes_penalty", "mRes_penalty"]
 	for (let p = 0; p < penalties.length; p++) {
-	//	if (diff == 1) { character[penalties[p]] = 0 }
-	//	else if (diff == 2) { character[penalties[p]] = 40 }
-		//else if (diff == 3) { character[penalties[p]] = 100 }
-        character[penalties[p]] = 100
+		if (diff == 1) { character[penalties[p]] = 0 }
+		else if (diff == 2) { character[penalties[p]] = 40 }
+		else { character[penalties[p]] = 100 }
 	}
 	//document.getElementById("difficulty"+diff).checked = true
 	updateStats()
