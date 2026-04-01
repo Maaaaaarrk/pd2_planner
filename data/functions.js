@@ -6345,7 +6345,6 @@ function updateURL() {
 //
 
 
-// TODO: update PoD skills when more info becomes available (Assassin martial arts skills & Barbarian passives)
 // TODO: Snapshotted skills don't apply correctly after loading the save file. The snapshot jumps to the last buff listed.
 // ...For example, I snapshotted Energy Shield with a Memory staff, and then switched to Spirit weapon and Spirit shield. After saving and loading, Energy Shield wasn't snapshotted and the last buff was instead (in my case, Prayer from my merc). When I removed my merc and repeated the process, Warmth was the last buff listed and snapshotted.
 // ...I couldn't find a way to remove the snapshot. I tried combinations of left and right clicking with ctrl and shift.
