@@ -1352,15 +1352,29 @@ window.addEventListener('contextmenu', function(e){ e.stopPropagation(); e.preve
 });
 
 // Generate TinyURL for readonly mode
+// API token from https://tinyurl.com/app/dev (free account required)
+var TINYURL_API_TOKEN = "";
 var tinyUrlDisplay = document.getElementById('tinyurl_display');
-if (tinyUrlDisplay) {
+if (tinyUrlDisplay && TINYURL_API_TOKEN) {
     tinyUrlDisplay.style.display = 'block';
     var fullUrl = window.location.href;
-    fetch('https://tinyurl.com/api-create.php?url=' + encodeURIComponent(fullUrl))
-        .then(function(response) { return response.text(); })
-        .then(function(shortUrl) {
+    fetch('https://api.tinyurl.com/create', {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer ' + TINYURL_API_TOKEN,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ url: fullUrl, domain: 'tinyurl.com' })
+    })
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
             var linkEl = document.getElementById('tinyurl_link');
-            if (linkEl) { linkEl.href = shortUrl; linkEl.innerHTML = shortUrl; }
+            if (linkEl && data.data && data.data.tiny_url) {
+                linkEl.href = data.data.tiny_url;
+                linkEl.innerHTML = data.data.tiny_url;
+            } else if (linkEl) {
+                linkEl.innerHTML = 'Failed to generate short URL';
+            }
         })
         .catch(function() {
             var linkEl = document.getElementById('tinyurl_link');
