@@ -2247,6 +2247,9 @@ function getAuraData(aura, lvl, source) {
 	for (let u = 0; u < auras_extra.length; u++) {
 		if (auras_extra[u].name == aura) { auras = auras_extra; a = u; }
 	}
+	for (let u = 0; u < skills_all["barbarian"].length; u++) {
+		if (skills_all["barbarian"][u].name == aura) { auras = skills_all["barbarian"]; a = u; }
+	}
 	// Defensive Auras
 	if (aura == "Prayer") { result.life_regen = 1; result.life_replenish = auras[a].data.values[0][lvl]; result.radius = 24; }
 	else if (aura == "Resist Fire") { result.fRes = auras[a].data.values[1][lvl];  result.radius = 28; result.fDamage = auras[a].data.values[2][lvl]; } //result.fRes_max = auras[a].data.values[2][lvl];
@@ -2274,6 +2277,8 @@ function getAuraData(aura, lvl, source) {
 	else if (aura == "Inner Sight") { result.enemy_defense_flat = auras[a].values[0][lvl]; result.radius = auras[a].values[1][lvl]; }
 	else if (aura == "Righteous Fire") { result.flamme = auras[a].values[0][lvl]; result.radius = 12; }		// No buffs. Deals 45% of max life as fire damage per second in a small area.
 	else if (aura == "Lifted Spirit") { result.damage_bonus = auras[a].values[0][lvl]; result.fDamage = auras[a].values[0][lvl]; result.cDamage = auras[a].values[0][lvl]; result.lDamage = auras[a].values[0][lvl]; result.pDamage = auras[a].values[0][lvl]; result.radius = 16; }	// TOCHECK: radius is a guess - get confirmation
+	// Barbarian
+	else if (aura == "Battle Orders") { result.max_life = Math.round(auras[a].data.values[2][lvl]/2); result.max_mana = Math.round(auras[a].data.values[3][lvl]/2); result.duration = auras[a].data.values[0][lvl]; }
 	// Paladin Synergies
 	if (character.class_name == "Paladin") {
 		if (aura == "Cleansing") { result.life_replenish = Math.min(1,(skills[0].level+skills[0].force_levels))*~~(skills[0].data.values[0][skills[0].level+skills[0].extra_levels]); }
