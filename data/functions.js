@@ -4425,7 +4425,7 @@ function getAffixLine(affix, loc, group, subgroup) {
 		if (affix == "aura" && (source[affix] == "Lifted Spirit" || source[affix] == "Righteous Fire")) { affix_line = source[affix]+" Aura when Equipped" }
 		if (halt == true) { value_combined = 0 }
 	} else {
-		affix_line == ""; value_combined = 1;
+		affix_line = ""; value_combined = 1;
 		if (affix == "ctc") {
 			for (let i = 0; i < source[affix].length; i++) {
 				var line = source[affix][i][0]+"% chance to cast level "+source[affix][i][1]+" "+source[affix][i][2]+" "+source[affix][i][3];
