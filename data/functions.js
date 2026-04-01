@@ -572,7 +572,7 @@ function loadParams() {
 			}
 
 			// setup effects
-			if (param_effects != []) {
+			if (param_effects.length > 0) {
 				for (e in param_effects) { for (let i = 1; i < non_items.length; i++) {		// shrine effects
 					if (param_effects[e][0] == non_items[i].effect) { addEffect('misc',non_items[i].name,i,'') }
 				} }
@@ -599,7 +599,7 @@ function loadParams() {
 							if (param_effects[e][3] == "oskill") { character["oskill_"+param_effects[e][0]] -= 1 }
 						}
 				} }
-				if (effects != {}) { for (effect in effects) { if (typeof(effects[effect].info.enabled) != 'undefined') { for (e in param_effects) { if (param_effects[e][0] == effect) { if (param_effects[e][1] != effects[effect].info.enabled) { toggleEffect(effect) } } } } } }
+				if (Object.keys(effects).length > 0) { for (effect in effects) { if (typeof(effects[effect].info.enabled) != 'undefined') { for (e in param_effects) { if (param_effects[e][0] == effect) { if (param_effects[e][1] != effects[effect].info.enabled) { toggleEffect(effect) } } } } } }
 			}
 
 			selectedSkill[0] = param_selected[0]
@@ -2692,7 +2692,7 @@ function setCharacterInfo(className) {
 				if (info.origin == "oskill") { character["oskill_"+effect] -= 1 }
 			}
 	} } }
-	if (effects != {}) { for (effect in effects) { if (typeof(effects[effect].info.enabled) != 'undefined') { if (fileInfo.effects[effect].info.enabled != effects[effect].info.enabled) { toggleEffect(effect) } } } }
+	if (Object.keys(effects).length > 0) { for (effect in effects) { if (typeof(effects[effect].info.enabled) != 'undefined') { if (typeof(fileInfo.effects[effect]) != 'undefined' && fileInfo.effects[effect].info.enabled != effects[effect].info.enabled) { toggleEffect(effect) } } } }
 	for (stat in fileInfo.character) { character[stat] = fileInfo.character[stat] }
 	if (settings.coupling != fileInfo.settings.coupling) { if (settings.coupling == 1) { document.getElementById("coupling").checked = false }; toggleCoupling(document.getElementById("coupling")) }
 	if (settings.autocast != fileInfo.settings.autocast) { if (settings.autocast == 1) { document.getElementById("autocast").checked = false }; toggleAutocast(document.getElementById("autocast")) }
