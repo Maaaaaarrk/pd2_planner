@@ -926,6 +926,9 @@
 				<a id="unreadonlybutton"
 				   style="display:inline-block; background-image: url('images/blankbutton.png'); background-size: auto; background-position: center; background-repeat: no-repeat; height:36px;width:304px; cursor:pointer; line-height:36px; text-align:center; color:white; font-size: 1.1em;"
 				   onclick="setReadBuild()">Edit Build</a>
+				<div id="tinyurl_display" style="display:none; padding:5px; margin-top:5px;">
+					<span style="color:gold;">Short URL: </span><a id="tinyurl_link" href="#" target="_blank" style="color:#6688ff;"></a>
+				</div>
 				<label style="text-decoration:none; display:inline-block; background-image: url('images/blankbutton.png'); background-size: auto; background-position: center; background-repeat: no-repeat; height:36px;width:304px; cursor:pointer; line-height:36px; text-align:center; color:white; font-size: 1.1em;">Import Armory HTML
 					<input type="file" id="armoryFileToLoad" accept=".html,.htm" onchange="loadArmoryFile()" style="display:none;">
 				</label>
@@ -1348,6 +1351,22 @@ window.addEventListener('contextmenu', function(e){ e.stopPropagation(); e.preve
   }, true);
 });
 
+// Generate TinyURL for readonly mode
+var tinyUrlDisplay = document.getElementById('tinyurl_display');
+if (tinyUrlDisplay) {
+    tinyUrlDisplay.style.display = 'block';
+    var fullUrl = window.location.href;
+    fetch('https://tinyurl.com/api-create.php?url=' + encodeURIComponent(fullUrl))
+        .then(function(response) { return response.text(); })
+        .then(function(shortUrl) {
+            var linkEl = document.getElementById('tinyurl_link');
+            if (linkEl) { linkEl.href = shortUrl; linkEl.innerHTML = shortUrl; }
+        })
+        .catch(function() {
+            var linkEl = document.getElementById('tinyurl_link');
+            if (linkEl) { linkEl.innerHTML = 'Failed to generate short URL'; }
+        });
+}
 
 }
 
