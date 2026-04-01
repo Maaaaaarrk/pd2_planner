@@ -4802,6 +4802,7 @@ function allowSocket(event, group) {
 	var isSwap = group.startsWith("swap_");
 	var itemEquipped = isMerc ? mercEquipped[group.slice(5)] : (isSwap ? swapEquipped[group.slice(5)] : equipped[group]);
 	socketed[group].sockets = ~~itemEquipped.sockets + ~~corruptsEquipped[group].sockets
+	if (itemEquipped.max_sockets != null) { socketed[group].sockets = Math.min(socketed[group].sockets, itemEquipped.max_sockets) }
 	var allow = 0;
 	if (socketed[group].sockets > 0 && socketed[group].socketsFilled < socketed[group].sockets) {
 		var name = inv[0].onpickup.split('_')[0];
