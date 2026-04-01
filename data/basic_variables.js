@@ -24,7 +24,6 @@ var monsterID = 2;
 var MAX = 20;				// Highest Skill Hardpoints
 var LIMIT = 60;				// Highest Skill Data
 var RES_CAP = 95;
-var game_version = 3;
 var loaded = 0;
 
 var socketed = {	// Gems/Runes/Jewels Socketed in Equipment
