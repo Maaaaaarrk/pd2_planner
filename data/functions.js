@@ -656,7 +656,9 @@ function corrupt(group, val) {
                 stats[old_affix] -= corruptsEquipped[group][old_affix]
             }
         } else if (!isSwap) {
-            character[old_affix] -= corruptsEquipped[group][old_affix]
+            if (old_affix != "name" && old_affix != "base" && typeof character[old_affix] !== 'undefined') {
+                character[old_affix] -= corruptsEquipped[group][old_affix]
+            }
         }
         corruptsEquipped[group][old_affix] = unequipped[old_affix]
     }
