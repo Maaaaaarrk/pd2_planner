@@ -306,11 +306,6 @@ function toggleRunning(running) {
 	updateURL()
 }
 
-// changeVersion - No longer needed, PD2 only
-// Kept as stub for any remaining references
-// ---------------------------------
-function changeVersion(v, char_class) {
-}
 
 // changeDifficulty - Changes the game difficulty
 //	diff: game difficulty (1-3)
@@ -2615,8 +2610,6 @@ function parseFile(file) {
 //	className: name of character class
 // ---------------------------------
 function setCharacterInfo(className) {
-	if (typeof(fileInfo.version) == 'undefined') { changeVersion(2,className) }
-	else { changeVersion(fileInfo.version,className) }
 	startup(className)
 	if (settings.coupling == 0) { document.getElementById("coupling").checked = true; toggleCoupling(document.getElementById("coupling")); }
 	if (settings.autocast == 0) { document.getElementById("autocast").checked = true; toggleAutocast(document.getElementById("autocast")); }
@@ -3020,8 +3013,7 @@ function applyArmoryCharacterImport(data) {
 		}
 	}
 
-	// Switch to PD2 version and correct class (this resets everything including merc)
-	changeVersion(3, data.class_name);
+	// Reset everything including merc, then start up with correct class
 	startup(data.class_name);
 
 	// Restore merc if one was previously set
