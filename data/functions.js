@@ -2069,8 +2069,8 @@ function updateAllEffects() {
 		else if (id == "Fists_of_Thunder") { if (equipped.weapon.type != "claw" && equipped.weapon.type != "dagger") { disableEffect(id) } }
 		else if (id == "Fists_of_Ice") { if (equipped.weapon.type != "claw" && equipped.weapon.type != "dagger") { disableEffect(id) } }
 		else if (id == "Frenzy") { if (offhandType != "weapon") { disableEffect(id) } }
-		else if (id == "Maul") { if (effects["Werebear"].info.enabled != 1) { disableEffect(id) } }
-		else if (id == "Feral_Rage") { if (effects["Werewolf"].info.enabled != 1) { disableEffect(id) } }
+		else if (id == "Maul") { if (typeof(effects["Werebear"]) == 'undefined' || effects["Werebear"].info.enabled != 1) { disableEffect(id) } }
+		else if (id == "Feral_Rage") { if (typeof(effects["Werewolf"]) == 'undefined' || effects["Werewolf"].info.enabled != 1) { disableEffect(id) } }
 		else if (id == "Holy_Shield") { if (offhandType != "shield") { disableEffect(id) } }
 		else if (id == "Weapon_Block") { if (equipped.weapon.type != "claw" || equipped.offhand.type != "claw") { disableEffect(id) } }
 	//	else if (id == "Claw_Mastery") { if (equipped.weapon.type != "claw" && equipped.offhand.type != "claw") { disableEffect(id) } else { enableEffect(id) } }
