@@ -3774,6 +3774,8 @@ function itemHover(ev, id) {
 	document.getElementById("item_name").style.color = colors[color]
 	document.getElementById("item_name").innerHTML = name+base
 	document.getElementById("item_info").innerHTML = main_affixes
+	var itemCodeEl = document.getElementById("item_code");
+	if (itemCodeEl) { itemCodeEl.innerHTML = ""; }
 	document.getElementById("item_corruption").innerHTML = ""
 	document.getElementById("item_affixes").innerHTML = affixes
 	document.getElementById("item_set_affixes").innerHTML = ""
@@ -3992,6 +3994,15 @@ function equipmentHoverMerc(group) {
 	}
 	document.getElementById("item_name").innerHTML = name+sock+base+runeword
 	document.getElementById("item_info").innerHTML = main_affixes
+	var itemCodeEl = document.getElementById("item_code");
+	if (itemCodeEl) {
+		var itemObj = mercEquipped[group];
+		if (itemObj && itemObj.code) {
+			itemCodeEl.innerHTML = "Item code: " + itemObj.code;
+		} else {
+			itemCodeEl.innerHTML = "";
+		}
+	}
 	document.getElementById("item_corruption").innerHTML = corruption
 	document.getElementById("item_affixes").innerHTML = affixes
 	document.getElementById("item_set_affixes").innerHTML = set_affixes
@@ -4108,6 +4119,15 @@ function equipSwapHover(group) {
 
 	document.getElementById("item_name").innerHTML = name+sock+base+runeword
 	document.getElementById("item_info").innerHTML = main_affixes
+	var itemCodeEl = document.getElementById("item_code");
+	if (itemCodeEl) {
+		var itemObj = swapEquipped[group];
+		if (itemObj && itemObj.code) {
+			itemCodeEl.innerHTML = "Item code: " + itemObj.code;
+		} else {
+			itemCodeEl.innerHTML = "";
+		}
+	}
 	document.getElementById("item_corruption").innerHTML = corruption
 	document.getElementById("item_affixes").innerHTML = affixes
 	document.getElementById("item_set_affixes").innerHTML = ""
@@ -4326,6 +4346,15 @@ function equipmentHover(group) {
 	}
 	document.getElementById("item_name").innerHTML = name+sock+base+runeword
 	document.getElementById("item_info").innerHTML = main_affixes
+	var itemCodeEl = document.getElementById("item_code");
+	if (itemCodeEl) {
+		var itemObj = equipped[group];
+		if (itemObj && itemObj.code) {
+			itemCodeEl.innerHTML = "Item code: " + itemObj.code;
+		} else {
+			itemCodeEl.innerHTML = "";
+		}
+	}
 	document.getElementById("item_corruption").innerHTML = corruption
 	document.getElementById("item_affixes").innerHTML = affixes
 	document.getElementById("item_set_affixes").innerHTML = set_affixes
