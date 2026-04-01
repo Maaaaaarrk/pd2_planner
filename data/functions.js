@@ -6274,6 +6274,7 @@ function updateURL() {
 	params.delete('charm')
 	for (charm in equipped.charms) { if (typeof(equipped.charms[charm].name) != 'undefined' && equipped.charms[charm].name != 'none') { params.append('charm', equipped.charms[charm].name) }}
 	
+	if (new URLSearchParams(window.location.search).has('readonly')) { params.set('readonly', 1) }
 	if (settings.parameters == 1) { window.history.replaceState({}, '', `${location.pathname}?${params}`) }
 	
 	// TODO: Shorten URL?
