@@ -4392,7 +4392,7 @@ function getAffixLine(affix, loc, group, subgroup) {
 	else if (loc == "charms") { source = equipped.charms[group]; }
 	else if (loc == "socketables") { source = socketables[group]; if (subgroup != "") { source = socketables[group][subgroup] } }
 	else if (loc == "socketed") { source = socketed[group].totals; }
-	else if (loc = "effects") { source = effects[group]; }
+	else if (loc == "effects") { source = effects[group]; }
 	var affix_line = "";
 //	console.log("affix "+affix+" loc "+ loc+ " group "+group+" subgroup "+ subgroup);
 	var value = source[affix];
