@@ -1,3 +1,4 @@
+// NOTE: Season 12 is ARCHIVED and NOT actively maintained.
 
 fileInfo = {character:{class_name:""},skills:[],equipped:{charms:[]},corruptsEquipped:{},mercEquipped:{},
 socketed:{belt:[],amulet:[],helm:[],armor:[],weapon:[],offhand:[]},effects:{},selectedSkill:["",""],mercenary:"",settings:{},ironGolem:""};

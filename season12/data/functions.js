@@ -1,3 +1,5 @@
+// NOTE: Season 12 is ARCHIVED and NOT actively maintained.
+// Known issues exist and will not be fixed.
 //=========================================================================================================================
 // functions.js
 //		This is a giant file with all common functions
