@@ -32,14 +32,6 @@
 	<script type="text/javascript" src="./data/item_metadata.js"></script>
 	<script type="text/javascript" src="./data/item_runewords.js"></script>
 	<script type="text/javascript" src="./data/basic_variables.js"></script>
-	<script type="text/javascript" src="./data/skills/PoD/amazon.js"></script>
-	<script type="text/javascript" src="./data/skills/PoD/assassin.js"></script>
-	<script type="text/javascript" src="./data/skills/PoD/barbarian.js"></script>
-	<script type="text/javascript" src="./data/skills/PoD/druid.js"></script>
-	<script type="text/javascript" src="./data/skills/PoD/necromancer.js"></script>
-	<script type="text/javascript" src="./data/skills/PoD/paladin.js"></script>
-	<script type="text/javascript" src="./data/skills/PoD/sorceress.js"></script>
-	<script type="text/javascript" src="./data/skills/PoD/universal_skills.js"></script>
 	<script type="text/javascript" src="./data/skills/PD2/amazon.js"></script>
 	<script type="text/javascript" src="./data/skills/PD2/assassin.js"></script>
 	<script type="text/javascript" src="./data/skills/PD2/barbarian.js"></script>
@@ -48,14 +40,6 @@
 	<script type="text/javascript" src="./data/skills/PD2/paladin.js"></script>
 	<script type="text/javascript" src="./data/skills/PD2/sorceress.js"></script>
 	<script type="text/javascript" src="./data/skills/PD2/universal_skills.js"></script>
-	<script type="text/javascript" src="./data/skills/vanilla/amazon.js"></script>
-	<script type="text/javascript" src="./data/skills/vanilla/assassin.js"></script>
-	<script type="text/javascript" src="./data/skills/vanilla/barbarian.js"></script>
-	<script type="text/javascript" src="./data/skills/vanilla/druid.js"></script>
-	<script type="text/javascript" src="./data/skills/vanilla/necromancer.js"></script>
-	<script type="text/javascript" src="./data/skills/vanilla/paladin.js"></script>
-	<script type="text/javascript" src="./data/skills/vanilla/sorceress.js"></script>
-	<script type="text/javascript" src="./data/skills/vanilla/universal_skills.js"></script>
 	<script type="text/javascript" src="./data/functions.js"></script>
 </head>
 <body class="background" onload="initial_load()">
@@ -86,31 +70,6 @@
 					</div>
 				</div>
 			</div>-->
-		<div class="nav-dropdown">
-			<button class="nav-dropbtn">Version</button>
-			<div class="nav-dropdown-content">
-				<div class="nav-dropdown-content-item">
-					<div class="nav-option">
-						<label for="version1" onclick="return changeVersion(1,'');"><input id="version1" type="radio"
-						                                                                   name="version">&nbsp;Vanilla&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-					</div>
-				</div>
-				<div class="nav-dropdown-content-item">
-					<div class="nav-option">
-						<label for="version2" onclick="return changeVersion(2,'');"><input id="version2" type="radio"
-						                                                                   name="version" checked>&nbsp;Path
-							of Diablo&nbsp;&nbsp;</label>
-					</div>
-				</div>
-				<div class="nav-dropdown-content-item">
-					<div class="nav-option">
-						<label for="version3" onclick="return changeVersion(3,'');"><input id="version3" type="radio"
-						                                                                   name="version">&nbsp;Project
-							D2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-					</div>
-				</div>
-			</div>
-		</div>
 		<div class="nav-dropdown">
 			<button class="nav-dropbtn">Preferences</button>
 			<div class="nav-dropdown-content">
@@ -1220,8 +1179,8 @@ l-26 24 14 -25z"></path>
 	// initial_load - selects a random class and starts the program
 	// ---------------------------------
 	function initial_load() {
-		skills_all = {amazon:skills_amazon, assassin:skills_assassin, barbarian:skills_barbarian, druid:skills_druid, necromancer:skills_necromancer, paladin:skills_paladin, sorceress:skills_sorceress}
-		character_all = {amazon:character_amazon, assassin:character_assassin, barbarian:character_barbarian, druid:character_druid, necromancer:character_necromancer, paladin:character_paladin, sorceress:character_sorceress, any:character_any}
+		skills_all = {amazon:skills_pd2_amazon, assassin:skills_pd2_assassin, barbarian:skills_pd2_barbarian, druid:skills_pd2_druid, necromancer:skills_pd2_necromancer, paladin:skills_pd2_paladin, sorceress:skills_pd2_sorceress}
+		character_all = {amazon:character_pd2_amazon, assassin:character_pd2_assassin, barbarian:character_pd2_barbarian, druid:character_pd2_druid, necromancer:character_pd2_necromancer, paladin:character_pd2_paladin, sorceress:character_pd2_sorceress, any:character_pd2_any}
 
 		// select random class
 		var random = Math.floor(Math.random() * 7);
@@ -1235,17 +1194,8 @@ l-26 24 14 -25z"></path>
 		auras_extra[1].values = skills_all.amazon[10].data.values
 
 		// check URL parameters
-		var version = 3// game_version;
 		params = new URLSearchParams(window.location.search);
-		if (params.has('v') == true) {
-			var v = params.get('v');
-			if (v.toLowerCase() == "van" || v == "vanilla" || v == "1") { version = 1 }
-			else if (v.toLowerCase() == "pod" || v == "2") { version = 2 }
-			else if (v.toLowerCase() == "pd2" || v == "3") { version = 3 }
-			else { params.set('v', version) }
-		} else {
-			params.set('v', version)
-		}
+		params.set('v', 3)
 		if (params.has('class') == true) {
 			if (classes.includes(params.get('class').toLowerCase()) == true) {
 				initial_class = params.get('class').toLowerCase()
@@ -1254,11 +1204,7 @@ l-26 24 14 -25z"></path>
 		}
 
 		// begin program
-		if (version != 2) {
-			changeVersion(version, initial_class)	// version = Project D2 or vanilla
-		} else {
-			startup(initial_class)	// version = Path of Diablo  (default)
-		}
+		startup(initial_class)
 		loaded = 1
 		loadParams()
 		skillHover(skills[0])

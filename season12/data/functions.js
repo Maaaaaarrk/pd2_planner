@@ -124,8 +124,7 @@ function setIconSources(className) {
 	for (let s = 0, len = skills.length; s < len; s++) {
 		var iconId = "i"+skills[s].key;
 		var iconName = skills[s].name;
-		if (game_version == 2 && iconName == "Lightning Mastery") { iconName = "Lightning_Mastery" }
-		else if (game_version == 3 && iconName == "Golem Mastery") { iconName = "Golem_Mastery" }
+		if (iconName == "Golem Mastery") { iconName = "Golem_Mastery" }
 		document.getElementById(iconId).src = prefix+iconName+".png"
 	}
 }
@@ -303,97 +302,10 @@ function toggleRunning(running) {
 	updateURL()
 }
 
-// changeVersion - Changes the version of the game
-//	v: game version (1-3)
-//  char_class: chosen character class or blank ("")
+// changeVersion - No longer needed, PD2 only
+// Kept as stub for any remaining references
 // ---------------------------------
 function changeVersion(v, char_class) {
-	if (game_version != v && document.getElementById("version"+v).disabled != true) {
-		game_version = v
-		document.getElementById("version"+v).checked = true
-		if (v == 1) {
-			skills_all = {amazon:skills_amazon_vanilla, assassin:skills_assassin_vanilla, barbarian:skills_barbarian_vanilla, druid:skills_druid_vanilla, necromancer:skills_necromancer_vanilla, paladin:skills_paladin_vanilla, sorceress:skills_sorceress_vanilla}
-			character_all = {amazon:character_amazon_vanilla, assassin:character_assassin_vanilla, barbarian:character_barbarian_vanilla, druid:character_druid_vanilla, necromancer:character_necromancer_vanilla, paladin:character_paladin_vanilla, sorceress:character_sorceress_vanilla, any:character_any_vanilla}
-			document.getElementById("stats").style.display = "none"
-			document.getElementById("skill_details_active").style.display = "none"
-			document.getElementById("gui_equipment").style.display = "none"
-			document.getElementById("equipment_corruptions").style.display = "none"
-			document.getElementById("equipment_a").style.display = "none"
-			document.getElementById("equipment_b").style.display = "none"
-			document.getElementById("equipment_c").style.display = "none"
-			document.getElementById("side").style.display = "none"
-			document.getElementById("nav_autocast").style.display = "none"
-			document.getElementById("nav_running").style.display = "none"
-			document.getElementById("version_spacing").style.display = "block"
-			//document.getElementById("skill_details_inactive").style.display = "block"
-			//document.getElementById("skill_details_inactive").innerHTML = "<br>Additional features aren't implemented for this version"
-			settings.autocast = 1
-		} else if (v == 2) {
-			skills_all = {amazon:skills_amazon, assassin:skills_assassin, barbarian:skills_barbarian, druid:skills_druid, necromancer:skills_necromancer, paladin:skills_paladin, sorceress:skills_sorceress}
-			character_all = {amazon:character_amazon, assassin:character_assassin, barbarian:character_barbarian, druid:character_druid, necromancer:character_necromancer, paladin:character_paladin, sorceress:character_sorceress, any:character_any}
-			document.getElementById("stats").style.display = "block"
-			document.getElementById("skill_details_active").style.display = "block"
-			document.getElementById("gui_equipment").style.display = "block"
-			document.getElementById("equipment_corruptions").style.display = "block"
-			document.getElementById("equipment_a").style.display = "block"
-			document.getElementById("equipment_b").style.display = "block"
-			document.getElementById("equipment_c").style.display = "block"
-			document.getElementById("side").style.display = "block"
-			document.getElementById("nav_autocast").style.display = "block"
-			document.getElementById("nav_running").style.display = "block"
-			document.getElementById("version_spacing").style.display = "none"
-			//document.getElementById("skill_details_inactive").style.display = "none"
-		} else if (v == 3) {
-			skills_all = {amazon:skills_pd2_amazon, assassin:skills_pd2_assassin, barbarian:skills_pd2_barbarian, druid:skills_pd2_druid, necromancer:skills_pd2_necromancer, paladin:skills_pd2_paladin, sorceress:skills_pd2_sorceress}
-			character_all = {amazon:character_pd2_amazon, assassin:character_pd2_assassin, barbarian:character_pd2_barbarian, druid:character_pd2_druid, necromancer:character_pd2_necromancer, paladin:character_pd2_paladin, sorceress:character_pd2_sorceress, any:character_pd2_any}
-			document.getElementById("stats").style.display = "none"
-			document.getElementById("skill_details_active").style.display = "none"
-			document.getElementById("gui_equipment").style.display = "block"
-			document.getElementById("equipment_corruptions").style.display = "block"
-			document.getElementById("equipment_a").style.display = "block"
-			document.getElementById("equipment_b").style.display = "block"
-			document.getElementById("equipment_c").style.display = "none"
-			document.getElementById("side").style.display = "none"
-			document.getElementById("nav_autocast").style.display = "none"
-			document.getElementById("nav_running").style.display = "none"
-			document.getElementById("version_spacing").style.display = "block"
-			//document.getElementById("skill_details_inactive").style.display = "block"
-			//document.getElementById("skill_details_inactive").innerHTML = "<br>Additional features aren't implemented for this version"
-			settings.autocast = 1
-		}
-
-		// character class handling
-		char_class = char_class.toLowerCase()
-		var rand_class = character.class_name;
-		var classes = ["amazon","assassin","barbarian","druid","necromancer","paladin","sorceress"];
-		if (typeof(rand_class) == 'undefined') {	// select random class if page hasn't loaded yet
-			var random = Math.floor(Math.random() * 7);
-			var rand_class = classes[random];
-		}
-		if (classes.includes(char_class) == false) { char_class = rand_class }
-
-		// reset some things		TODO: fix normal reset functionality & updating 		...this is only necessary for Lightning Mastery when switching from PD2 to PoD? Why? ...something to do with the other masteries (Fire & Cold) being oskills?
-		for (id in effects) {
-			effects[id].info.enabled = 0
-			effects[id].info.snapshot = 0
-			skills[effects[id].info.index].level = 0
-			updateEffect(id)
-			disableEffect(id)
-			removeEffect(id,null)
-		}
-
-		// update URL
-		params.set('v', v)
-		if (settings.parameters == 1) {
-			window.history.replaceState({}, '', `${location.pathname}?${params}`)
-		} else {
-			if (v == 2) { window.history.replaceState({}, '', `${location.pathname}?v=PoD`) }
-			else if (v == 3) { window.history.replaceState({}, '', `${location.pathname}?v=PD2`) }
-			else { window.history.replaceState({}, '', `${location.pathname}`) }
-		}
-
-		reset(char_class)
-	}
 }
 
 // changeDifficulty - Changes the game difficulty
@@ -441,9 +353,7 @@ function toggleParameters(parameters) {
 		window.history.replaceState({}, '', `${location.pathname}?${params}`)
 	} else {
 		settings.parameters = 0
-		if (game_version == 2) { window.history.replaceState({}, '', `${location.pathname}?v=PoD`) }
-		else if (game_version == 3) { window.history.replaceState({}, '', `${location.pathname}?v=PD2`) }
-		else { window.history.replaceState({}, '', `${location.pathname}`) }
+		window.history.replaceState({}, '', `${location.pathname}?v=PD2`)
 	}
 }
 
@@ -1515,23 +1425,10 @@ function loadItems(group, dropdown, className) {
 						if (group != "charms") { addon = "<option selected>" + "­ ­ ­ ­ " + item.name + "</option>" }
 						else { addon = "<option disabled selected>" + "­ ­ ­ ­ " + item.name + "</option>" }
 					} else {
-						if (game_version == 2) {	// PoD item loading
-							if (typeof(item.pd2) != 'undefined') { addon = "" }
-							else if (typeof(item.debug) != 'undefined') { addon = "<option class='dropdown-debug'>" + item.name + "</option>" }
-							else if (typeof(item.rarity) != 'undefined') { addon = "<option class='dropdown-"+item.rarity+"'>" + item.name + "</option>" }
-							else { addon = "<option class='dropdown-unique'>" + item.name + "</option>" }
-						} else {
-							if (typeof(item.pod) != 'undefined') { addon = "" }
-							else {
-								if (game_version == 1 && typeof(item.pd2) != 'undefined') {
-									addon = ""
-								} else {
-									if (typeof(item.debug) != 'undefined') { addon = "<option class='dropdown-debug'>" + item.name + "</option>" }
-									else if (typeof(item.rarity) != 'undefined') { addon = "<option class='dropdown-"+item.rarity+"'>" + item.name + "</option>" }
-									else { addon = "<option class='dropdown-unique'>" + item.name + "</option>" }
-								}
-							}
-						}
+						if (typeof(item.pod) != 'undefined') { addon = "" }
+						else if (typeof(item.debug) != 'undefined') { addon = "<option class='dropdown-debug'>" + item.name + "</option>" }
+						else if (typeof(item.rarity) != 'undefined') { addon = "<option class='dropdown-"+item.rarity+"'>" + item.name + "</option>" }
+						else { addon = "<option class='dropdown-unique'>" + item.name + "</option>" }
 					}
 					choices += addon
 					if (className == "assassin" && item.name == "Offhand") { choices += offhandSetup }	// weapons inserted into offhand dropdown list
@@ -2474,9 +2371,7 @@ function saveTextAsFile() {
 	var textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"});
 	var textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob);
 
-	var file_prefix = "";
-	if (game_version == 2) { file_prefix = "pod_" }
-	else if (game_version == 3) { file_prefix = "pd2_" }
+	var file_prefix = "pd2_";
 	var downloadLink = document.createElement("a");
 	downloadLink.download = file_prefix+character.class_name.toLowerCase();
 	downloadLink.innerHTML = "Download File";
@@ -5215,16 +5110,14 @@ function updateURL() {
 	params.set('level', ~~character.level)
 	params.set('difficulty', ~~character.difficulty)
 	params.set('quests', param_quests)
-	if (game_version == 2) { params.set('running', param_run) } else if (params.has('running')) { params.delete('running') }
-	//params.set('running', param_run)
+	if (params.has('running')) { params.delete('running') }
 	params.set('strength', ~~character.strength_added)
 	params.set('dexterity', ~~character.dexterity_added)
 	params.set('vitality', ~~character.vitality_added)
 	params.set('energy', ~~character.energy_added)
 	params.set('url', ~~settings.parameters)
 	params.set('coupling', ~~settings.coupling)
-	if (game_version == 2) { params.set('autocast', ~~settings.autocast) } else if (params.has('autocast')) { params.delete('autocast') }
-	//params.set('autocast', ~~settings.autocast)
+	if (params.has('autocast')) { params.delete('autocast') }
 	var param_skills = '';
 	for (let s = 0; s < skills.length; s++) {
 		var skill_level = skills[s].level;
