@@ -481,7 +481,7 @@ function loadParams() {
 		}
 		if (param_run == 1) {
 			document.getElementById("running").checked = true
-			toggleRunning(param_run)
+			toggleRunning(document.getElementById("running"))
 			character.running = 1
 		}
 		if (param_quests == 1) {
@@ -495,7 +495,7 @@ function loadParams() {
 		}
 		if (param_url == 1) {
 			document.getElementById("parameters").checked = true
-			toggleParameters(param_url)
+			toggleParameters(document.getElementById("parameters"))
 			// are these needed?
 			settings.parameters = 1
 			params.set('url', ~~settings.parameters)
