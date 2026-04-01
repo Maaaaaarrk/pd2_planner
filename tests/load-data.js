@@ -25,7 +25,7 @@ function loadDataFiles() {
 function loadSkillFiles() {
   const context = createContext({ skills: [] });
   const results = {};
-  const mods = ['PD2', 'PoD', 'vanilla'];
+  const mods = ['PD2'];
   const classes = ['amazon', 'assassin', 'barbarian', 'druid', 'necromancer', 'paladin', 'sorceress'];
 
   for (const mod of mods) {
@@ -37,13 +37,8 @@ function loadSkillFiles() {
         const code = readFileSync(filePath, 'utf-8');
         runInContext(code, freshContext, { filename: `${mod}/${cls}.js` });
 
-        // Find the skills array and character object by naming convention
-        const skillsKey = mod === 'PoD' ? `skills_${cls}`
-          : mod === 'PD2' ? `skills_pd2_${cls}`
-          : `skills_${cls}_vanilla`;
-        const charKey = mod === 'PoD' ? `character_${cls}`
-          : mod === 'PD2' ? `character_pd2_${cls}`
-          : `character_${cls}_vanilla`;
+        const skillsKey = `skills_pd2_${cls}`;
+        const charKey = `character_pd2_${cls}`;
 
         results[mod][cls] = {
           skills: freshContext[skillsKey] || null,
