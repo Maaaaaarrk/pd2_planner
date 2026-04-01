@@ -931,8 +931,9 @@
 				<a id="shorturlbutton"
 				   style="display:none; background-image: url('images/blankbutton.png'); background-size: auto; background-position: center; background-repeat: no-repeat; height:36px;width:304px; cursor:pointer; line-height:36px; text-align:center; color:white; font-size: 1.1em;"
 				   onclick="generateShortUrl()">Generate Short URL</a>
-				<div id="tinyurl_display" style="display:none; padding:5px; margin-top:5px; text-align:center;">
-					<a id="tinyurl_link" href="#" target="_blank" style="color:#6688ff;"></a>
+				<div id="tinyurl_display"
+				   style="display:none; background-image: url('images/blankbutton.png'); background-size: auto; background-position: center; background-repeat: no-repeat; height:36px;width:304px; line-height:36px; text-align:center; font-size: 1.1em;">
+					<a id="tinyurl_link" href="#" target="_blank" style="color:#6688ff; text-decoration:none;"></a>
 				</div>
 				<label id="armoryImportLabel" style="text-decoration:none; display:inline-block; background-image: url('images/blankbutton.png'); background-size: auto; background-position: center; background-repeat: no-repeat; height:36px;width:304px; cursor:pointer; line-height:36px; text-align:center; color:white; font-size: 1.1em;">Import Armory HTML
 					<input type="file" id="armoryFileToLoad" accept=".html,.htm" onchange="loadArmoryFile()" style="display:none;">
