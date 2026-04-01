@@ -520,8 +520,6 @@ function loadParams() {
 		character.mana += (character.levelup_mana*(character.level-1))
 		character.stamina += (character.levelup_stamina*(character.level-1))
 
-		//if (game_version == 2) {	// these features are only available on the PoD version
-
 			// setup equipment
 			if (param_equipped != 0) {
 				for (group in corruptsEquipped) { if (param_equipped[group][0] != "none") {	// equipment
@@ -6227,7 +6225,6 @@ function updateURL() {
 	var param_quests = ~~character.quests_completed; if (param_quests == -1) { param_quests = 0 };
 	var param_run = ~~character.running; if (param_run == -1) { param_run = 0 };
 
-	//params.set('v', game_version)		// handled elsewhere currently
 	params.set('class', character.class_name.toLowerCase())
 	params.set('level', ~~character.level)
 	params.set('difficulty', ~~character.difficulty)
@@ -6253,7 +6250,6 @@ function updateURL() {
 	//params.delete('mercenary')
 	params.delete('irongolem')
 
-	//if (game_version == 2) {	// these features are only available on the PoD version
 		params.set('selected', selectedSkill[0]+','+selectedSkill[1])
 		for (group in corruptsEquipped) {
 			var isSwapGroup = group.startsWith("swap_");
@@ -6266,8 +6262,7 @@ function updateURL() {
 			} }
 			params.set(group, param_equipped)
 		}
-	//}
-	
+
 	for (id in effects) { if (typeof(effects[id].info.enabled) != 'undefined') {
 		var param_effect = id+','+effects[id].info.enabled+','+effects[id].info.snapshot;
 		if (effects[id].info.snapshot == 1) {
@@ -6279,14 +6274,12 @@ function updateURL() {
 		params.append('effect', param_effect)
 	} }
 		
-	//if (game_version == 2) {	// these features are only available on the PoD version
 		var param_mercenary = mercenary.name;
 		if (mercenary.name == "­ ­ ­ ­ Mercenary") { param_mercenary = "none" }
 		for (group in mercEquipped) { param_mercenary += ','+mercEquipped[group].name }
 		params.set('mercenary', param_mercenary)
 		if (golemItem.name != "none") { params.set('irongolem', golemItem.name) }
-	//}
-	
+
 	params.delete('charm')
 	for (charm in equipped.charms) { if (typeof(equipped.charms[charm].name) != 'undefined' && equipped.charms[charm].name != 'none') { params.append('charm', equipped.charms[charm].name) }}
 	
