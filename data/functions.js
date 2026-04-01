@@ -440,7 +440,7 @@ function loadParams() {
 		var spent_skillpoints = 0;
 		var param_level = Math.floor(Math.max(1,Math.min(99,~~params.get('level'))));
 		var param_diff = ~~params.get('difficulty');
-		var param_quests = 1;//~~params.get('quests');
+		var param_quests = params.has('quests') ? ~~params.get('quests') : 1;
 		var param_run = ~~params.get('running');
 		var param_str = Math.max(0,Math.min(505,~~params.get('strength')));
 		var param_dex = Math.max(0,Math.min(505,~~params.get('dexterity')));
