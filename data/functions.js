@@ -6232,14 +6232,14 @@ function updateURL() {
 	params.set('level', ~~character.level)
 	params.set('difficulty', ~~character.difficulty)
 	params.set('quests', param_quests)
-	if (params.has('running')) { params.delete('running') }
+	params.set('running', ~~character.running)
 	params.set('strength', ~~character.strength_added)
 	params.set('dexterity', ~~character.dexterity_added)
 	params.set('vitality', ~~character.vitality_added)
 	params.set('energy', ~~character.energy_added)
 	params.set('url', ~~settings.parameters)
 	params.set('coupling', ~~settings.coupling)
-	if (params.has('autocast')) { params.delete('autocast') }
+	params.set('autocast', ~~settings.autocast)
 	var param_skills = '';
 	for (let s = 0; s < skills.length; s++) {
 		var skill_level = skills[s].level;
