@@ -1363,6 +1363,9 @@ function setReadonlyBuild() {
 }
 
 function setReadBuild() {
+  // Show armory import button when returning to editable mode
+  var armoryLabel = document.getElementById('armoryImportLabel');
+  if (armoryLabel) armoryLabel.style.display = 'inline-block';
   const url = new URL(window.location.href);
   url.searchParams.delete('readonly');
   // Force reload with the updated URL
