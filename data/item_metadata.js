@@ -1676,3 +1676,124 @@ lDamage_max:{index:["lDamage_max"], format:["+"," to Maximum Lightning Damage"]}
 pDamage_min:{index:["pDamage_min","pDamage_duration"], format:["+"," to Minimum Poison Damage over "," seconds"]},
 pDamage_max:{index:["pDamage_max","pDamage_duration"], format:["+"," to Maximum Poison Damage over "," seconds"]},
 };
+
+var base_codes = {
+	// Helms
+	Cap:"cap", Skull_Cap:"skp", Helm:"hlm", Full_Helm:"fhl", Mask:"msk", Bone_Helm:"bhm", Great_Helm:"ghm", Crown:"crn",
+	War_Hat:"xap", Sallet:"xkp", Casque:"xlm", Basinet:"xhl", Death_Mask:"xsk", Grim_Helm:"xh9", Winged_Helm:"xhm", Grand_Crown:"xrn",
+	Shako:"uap", Hydraskull:"ukp", Armet:"ulm", Giant_Conch:"uhl", Demonhead:"usk", Bone_Visage:"uh9", Spired_Helm:"uhm", Corona:"urn",
+	Circlet:"ci0", Coronet:"ci1", Tiara:"ci2", Diadem:"ci3",
+	// Druid Pelts
+	Wolf_Head:"dr1", Hawk_Helm:"dr2", Antlers:"dr3", Falcon_Mask:"dr4", Spirit_Mask:"dr5",
+	Alpha_Helm:"dr6", Griffon_Headdress:"dr7", Hunters_Guise:"dr8", Sacred_Feathers:"dr9", Totemic_Mask:"dra",
+	Blood_Spirit:"drb", Sun_Spirit:"drc", Earth_Spirit:"drd", Sky_Spirit:"dre", Dream_Spirit:"drf",
+	// Barbarian Helms
+	Jawbone_Cap:"ba1", Fanged_Helm:"ba2", Horned_Helm:"ba3", Assault_Helmet:"ba4", Avenger_Guard:"ba5",
+	Jawbone_Visor:"ba6", Lion_Helm:"ba7", Rage_Mask:"ba8", Savage_Helmet:"ba9", Slayer_Guard:"baa",
+	Carnage_Helm:"bab", Fury_Visor:"bac", Destroyer_Helm:"bad", Conqueror_Crown:"bae", Guardian_Crown:"baf",
+	// Armor
+	Quilted_Armor:"qui", Leather_Armor:"lea", Hard_Leather_Armor:"hla", Studded_Leather:"stu", Ring_Mail:"rng", Scale_Mail:"scl", Chain_Mail:"chn",
+	Breast_Plate:"brs", Splint_Mail:"spl", Plate_Mail:"plt", Field_Plate:"fld", Gothic_Plate:"gth", Light_Plate:"ltp", Full_Plate_Mail:"ful", Ancient_Armor:"aar",
+	Ghost_Armor:"xui", Serpentskin_Armor:"xea", Demonhide_Armor:"xla", Trellised_Armor:"xtu", Linked_Mail:"xng", Tigulated_Mail:"xcl", Mesh_Armor:"xhn",
+	Cuirass:"xrs", Russet_Armor:"xpl", Templar_Coat:"xlt", Sharktooth_Armor:"xld", Embossed_Plate:"xth", Mage_Plate:"xtp", Chaos_Armor:"xul", Ornate_Plate:"xar",
+	Dusk_Shroud:"uui", Wyrmhide:"uea", Scarab_Husk:"ula", Wire_Fleece:"utu", Diamond_Mail:"ung", Loricated_Mail:"ucl", Boneweave:"uhn",
+	Great_Hauberk:"urs", Balrog_Skin:"upl", Hellforge_Plate:"ult", Kraken_Shell:"uld", Lacquered_Plate:"uth", Archon_Plate:"utp", Shadow_Plate:"uul", Sacred_Armor:"uar",
+	// Shields
+	Buckler:"buc", Small_Shield:"sml", Large_Shield:"lrg", Kite_Shield:"kit", Tower_Shield:"tow", Gothic_Shield:"gts", Bone_Shield:"bsh", Spiked_Shield:"spk",
+	Defender:"xuc", Round_Shield:"xml", Scutum:"xrg", Dragon_Shield:"xit", Pavise:"xow", Ancient_Shield:"xts", Grim_Shield:"xsh", Barbed_Shield:"xpk",
+	Heater:"uuc", Luna:"uml", Hyperion:"urg", Monarch:"uit", Aegis:"uow", Ward:"uts", Troll_Nest:"ush", Blade_Barrier:"upk",
+	// Paladin Shields
+	Targe:"pa1", Rondache:"pa2", Heraldic_Shield:"pa3", Aerin_Shield:"pa4", Crown_Shield:"pa5",
+	Akaran_Targe:"pa6", Akaran_Rondache:"pa7", Protector_Shield:"pa8", Gilded_Shield:"pa9", Royal_Shield:"paa",
+	Sacred_Targe:"pab", Sacred_Rondache:"pac", Kurast_Shield:"pad", Zakarum_Shield:"pae", Vortex_Shield:"paf",
+	// Necromancer Shields
+	Preserved_Head:"ne1", Zombie_Head:"ne2", Unraveller_Head:"ne3", Gargoyle_Head:"ne4", Demon_Head:"ne5",
+	Mummified_Trophy:"ne6", Fetish_Trophy:"ne7", Sexton_Trophy:"ne8", Cantor_Trophy:"ne9", Hierophant_Trophy:"nea",
+	Minion_Skull:"neb", Hellspawn_Skull:"neg", Overseer_Skull:"ned", Succubae_Skull:"nee", Bloodlord_Skull:"nef",
+	// Gloves
+	Leather_Gloves:"lgl", Heavy_Gloves:"vgl", Chain_Gloves:"mgl", Light_Gauntlets:"tgl", Gauntlets:"hgl",
+	Demonhide_Gloves:"xlg", Sharkskin_Gloves:"xvg", Heavy_Bracers:"xmg", Battle_Gauntlets:"xtg", War_Gauntlets:"xhg",
+	Bramble_Mitts:"ulg", Vampirebone_Gloves:"uvg", Vambraces:"umg", Crusader_Gauntlets:"utg", Ogre_Gauntlets:"uhg",
+	// Boots
+	Boots:"lbt", Heavy_Boots:"vbt", Chain_Boots:"mbt", Light_Plated_Boots:"tbt", Greaves:"hbt",
+	Demonhide_Boots:"xlb", Sharkskin_Boots:"xvb", Mesh_Boots:"xmb", Battle_Boots:"xtb", War_Boots:"xhb",
+	Wyrmhide_Boots:"ulb", Scarabshell_Boots:"uvb", Boneweave_Boots:"umb", Mirrored_Boots:"utb", Myrmidon_Greaves:"uhb",
+	// Belts
+	Sash:"lbl", Light_Belt:"vbl", Belt:"mbl", Heavy_Belt:"tbl", Plated_Belt:"hbl",
+	Demonhide_Sash:"zlb", Sharkskin_Belt:"zvb", Mesh_Belt:"zmb", Battle_Belt:"ztb", War_Belt:"zhb",
+	Spiderweb_Sash:"ulc", Vampirefang_Belt:"uvc", Mithril_Coil:"umc", Troll_Belt:"utc", Colossus_Girdle:"uhc",
+	// Axes
+	Hand_Axe:"hax", Axe:"axe", Double_Axe:"2ax", Military_Pick:"mpi", War_Axe:"wax",
+	Large_Axe:"lax", Broad_Axe:"bax", Battle_Axe:"btx", Great_Axe:"gax", Giant_Axe:"gix",
+	Hatchet:"9ha", Cleaver:"9ax", Twin_Axe:"92a", Crowbill:"9mp", Naga:"9wa",
+	Military_Axe:"9la", Bearded_Axe:"9ba", Tabar:"9bt", Gothic_Axe:"9ga", Ancient_Axe:"9gi",
+	Tomahawk:"7ha", Small_Crescent:"7ax", Ettin_Axe:"72a", War_Spike:"7mp", Berserker_Axe:"7wa",
+	Feral_Axe:"7la", Silver_Edged_Axe:"7ba", Decapitator:"7bt", Champion_Axe:"7ga", Glorious_Axe:"7gi",
+	// Maces
+	Club:"clb", Spiked_Club:"spc", Mace:"mac", Morning_Star:"mst", Flail:"fla", War_Hammer:"whm", Maul:"mau", Great_Maul:"gma",
+	Cudgel:"9cl", Barbed_Club:"9sp", Flanged_Mace:"9ma", Jagged_Star:"9mt", Knout:"9fl", Battle_Hammer:"9wh", War_Club:"9m9", Martel_De_Fer:"9gm",
+	Truncheon:"7cl", Tyrant_Club:"7sp", Reinforced_Mace:"7ma", Devil_Star:"7mt", Scourge:"7fl", Legendary_Mallet:"7wh", Ogre_Maul:"7m7", Thunder_Maul:"7gm",
+	// Swords
+	Short_Sword:"ssd", Scimitar:"scm", Saber:"sbr", Falchion:"flc", Crystal_Sword:"crs", Broad_Sword:"bsd", Long_Sword:"lsd", War_Sword:"wsd",
+	Two_Handed_Sword:"2hs", Claymore:"clm", Giant_Sword:"gis", Bastard_Sword:"bsw", Flamberge:"flb", Great_Sword:"gsd",
+	Gladius:"9ss", Cutlass:"9sm", Shamshir:"9sb", Tulwar:"9fc", Dimensional_Blade:"9cr", Battle_Sword:"9bs", Rune_Sword:"9ls", Ancient_Sword:"9wd",
+	Espandon:"92h", Dacian_Falx:"9cm", Tusk_Sword:"9gs", Gothic_Sword:"9b9", Zweihander:"9fb", Executioner_Sword:"9gd",
+	Falcata:"7ss", Ataghan:"7sm", Elegant_Blade:"7sb", Hydra_Edge:"7fc", Phase_Blade:"7cr", Conquest_Sword:"7bs", Cryptic_Sword:"7ls", Mythical_Sword:"7wd",
+	Legend_Sword:"72h", Highland_Blade:"7cm", Balrog_Blade:"7gs", Champion_Sword:"7b7", Colossus_Sword:"7fb", Colossus_Blade:"7gd",
+	// Daggers
+	Dagger:"dgr", Dirk:"dir", Kris:"kri", Blade:"bld",
+	Poignard:"9dg", Rondel:"9di", Cinquedeas:"9kr", Stiletto:"9bl",
+	Bone_Knife:"7dg", Mithril_Point:"7di", Fanged_Knife:"7kr", Legend_Spike:"7bl",
+	// Throwing
+	Throwing_Knife:"tkf", Throwing_Axe:"tax", Balanced_Knife:"bkf", Balanced_Axe:"bal",
+	Battle_Dart:"9tk", Francisca:"9ta", War_Dart:"9bk", Hurlbat:"9b8",
+	Flying_Knife:"7tk", Flying_Axe:"7ta", Winged_Knife:"7bk", Winged_Axe:"7b8",
+	// Javelins
+	Javelin:"jav", Pilum:"pil", Short_Spear:"ssp", Glaive:"glv", Throwing_Spear:"tsp",
+	War_Javelin:"9ja", Great_Pilum:"9pi", Simbilan:"9s9", Spiculum:"9gl", Harpoon:"9ts",
+	Hyperion_Javelin:"7ja", Stygian_Pilum:"7pi", Balrog_Spear:"7s7", Ghost_Glaive:"7gl", Winged_Harpoon:"7ts",
+	// Spears
+	Spear:"spr", Trident:"tri", Brandistock:"brn", Spetum:"spt", Pike:"pik",
+	War_Spear:"9sr", Fuscina:"9tr", War_Fork:"9br", Yari:"9st", Lance:"9p9",
+	Hyperion_Spear:"7sr", Stygian_Pike:"7tr", Mancatcher:"7br", Ghost_Spear:"7st", War_Pike:"7p7",
+	// Polearms
+	Bardiche:"bar", Voulge:"vou", Scythe:"scy", Poleaxe:"pax", Halberd:"hal", War_Scythe:"wsc",
+	Lochaber_Axe:"9b7", Bill:"9vo", Battle_Scythe:"9s8", Partizan:"9pa", Bec_de_Corbin:"9h9", Grim_Scythe:"9wc",
+	Ogre_Axe:"7o7", Colossus_Voulge:"7vo", Thresher:"7s8", Cryptic_Axe:"7pa", Great_Poleaxe:"7h7", Giant_Thresher:"7wc",
+	// Bows
+	Short_Bow:"sbw", Hunters_Bow:"hbw", Long_Bow:"lbw", Composite_Bow:"cbw", Short_Battle_Bow:"sbb", Long_Battle_Bow:"lbb", Short_War_Bow:"swb", Long_War_Bow:"lwb",
+	Edge_Bow:"8sb", Razor_Bow:"8hb", Cedar_Bow:"8lb", Double_Bow:"8cb", Short_Siege_Bow:"8s8", Long_Siege_Bow:"8l8", Rune_Bow:"8sw", Gothic_Bow:"8lw",
+	Spider_Bow:"6sb", Blade_Bow:"6hb", Shadow_Bow:"6lb", Great_Bow:"6cb", Diamond_Bow:"6s7", Crusader_Bow:"6l7", Ward_Bow:"6sw", Hydra_Bow:"6lw",
+	// Crossbows
+	Light_Crossbow:"lxb", Crossbow:"mxb", Heavy_Crossbow:"hxb", Repeating_Crossbow:"rxb",
+	Arbalest:"8lx", Siege_Crossbow:"8mx", Ballista:"8hx", Chu_Ko_Nu:"8rx",
+	Pellet_Bow:"6lx", Gorgon_Crossbow:"6mx", Colossus_Crossbow:"6hx", Demon_Crossbow:"6rx",
+	// Staves
+	Short_Staff:"sst", Long_Staff:"lst", Gnarled_Staff:"cst", Battle_Staff:"bst", War_Staff:"wst",
+	Jo_Staff:"8ss", Quarterstaff:"8ls", Cedar_Staff:"8cs", Gothic_Staff:"8bs", Rune_Staff:"8ws",
+	Walking_Stick:"6ss", Stalagmite:"6ls", Elder_Staff:"6cs", Shillelagh:"6bs", Archon_Staff:"6ws",
+	// Wands
+	Wand:"wnd", Yew_Wand:"ywn", Bone_Wand:"bwn", Grim_Wand:"gwn",
+	Burnt_Wand:"9wn", Petrified_Wand:"9yw", Tomb_Wand:"9bw", Grave_Wand:"9gw",
+	Polished_Wand:"7wn", Ghost_Wand:"7yw", Lich_Wand:"7bw", Unearthed_Wand:"7gw",
+	// Scepters
+	Scepter:"scp", Grand_Scepter:"gsc", War_Scepter:"wsp",
+	Rune_Scepter:"9sc", Holy_Water_Sprinkler:"9qs", Divine_Scepter:"9ws",
+	Mighty_Scepter:"7sc", Seraph_Rod:"7qs", Caduceus:"7ws",
+	// Assassin Claws
+	Katar:"ktr", Wrist_Blade:"wrb", Hatchet_Hands:"axf", Cestus:"ces", Claws:"clw", Blade_Talons:"btl", Scissors_Katar:"skr",
+	Quhab:"9ar", Wrist_Spike:"9wb", Fascia:"9xf", Hand_Scythe:"9cs", Greater_Claws:"9lw", Greater_Talons:"9tw", Scissors_Quhab:"9qr",
+	Suwayyah:"7ar", Wrist_Sword:"7wb", War_Fist:"7xf", Battle_Cestus:"7cs", Feral_Claws:"7lw", Runic_Talons:"7tw", Scissors_Suwayyah:"7qr",
+	// Sorceress Orbs
+	Eagle_Orb:"ob1", Sacred_Globe:"ob2", Smoked_Sphere:"ob3", Clasped_Orb:"ob4", Jareds_Stone:"ob5",
+	Glowing_Orb:"ob6", Crystalline_Globe:"ob7", Cloudy_Sphere:"ob8", Sparkling_Ball:"ob9", Swirling_Crystal:"oba",
+	Heavenly_Stone:"obb", Eldritch_Orb:"obc", Demon_Heart:"obd", Vortex_Orb:"obe", Dimensional_Shard:"obf",
+	// Amazon Bows
+	Stag_Bow:"am1", Reflex_Bow:"am2", Ashwood_Bow:"am6", Ceremonial_Bow:"am7", Matriarchal_Bow:"amb", Grand_Matron_Bow:"amc",
+	// Amazon Spears/Pikes
+	Maiden_Spear:"am3", Maiden_Pike:"am4", Ceremonial_Spear:"am8", Ceremonial_Pike:"am9", Matriarchal_Spear:"amd", Matriarchal_Pike:"ame",
+	// Amazon Javelins
+	Maiden_Javelin:"am5", Ceremonial_Javelin:"ama", Matriarchal_Javelin:"amf",
+	// Ammo
+	Arrows:"aqv", Sharp_Arrows:"aqv", Bolts:"cqv",
+};

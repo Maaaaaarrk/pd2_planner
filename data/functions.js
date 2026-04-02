@@ -3997,8 +3997,13 @@ function equipmentHoverMerc(group) {
 	var itemCodeEl = document.getElementById("item_code");
 	if (itemCodeEl) {
 		var itemObj = mercEquipped[group];
-		if (itemObj && itemObj.code) {
-			itemCodeEl.innerHTML = "Item code: " + itemObj.code;
+		if (itemObj && itemObj.base && typeof(base_codes) != 'undefined') {
+			var baseId = getBaseId(itemObj.base);
+			if (base_codes[baseId]) {
+				itemCodeEl.innerHTML = "Item code: " + base_codes[baseId];
+			} else {
+				itemCodeEl.innerHTML = "";
+			}
 		} else {
 			itemCodeEl.innerHTML = "";
 		}
@@ -4122,8 +4127,13 @@ function equipSwapHover(group) {
 	var itemCodeEl = document.getElementById("item_code");
 	if (itemCodeEl) {
 		var itemObj = swapEquipped[group];
-		if (itemObj && itemObj.code) {
-			itemCodeEl.innerHTML = "Item code: " + itemObj.code;
+		if (itemObj && itemObj.base && typeof(base_codes) != 'undefined') {
+			var baseId = getBaseId(itemObj.base);
+			if (base_codes[baseId]) {
+				itemCodeEl.innerHTML = "Item code: " + base_codes[baseId];
+			} else {
+				itemCodeEl.innerHTML = "";
+			}
 		} else {
 			itemCodeEl.innerHTML = "";
 		}
@@ -4349,8 +4359,13 @@ function equipmentHover(group) {
 	var itemCodeEl = document.getElementById("item_code");
 	if (itemCodeEl) {
 		var itemObj = equipped[group];
-		if (itemObj && itemObj.code) {
-			itemCodeEl.innerHTML = "Item code: " + itemObj.code;
+		if (itemObj && itemObj.base && typeof(base_codes) != 'undefined') {
+			var baseId = getBaseId(itemObj.base);
+			if (base_codes[baseId]) {
+				itemCodeEl.innerHTML = "Item code: " + base_codes[baseId];
+			} else {
+				itemCodeEl.innerHTML = "";
+			}
 		} else {
 			itemCodeEl.innerHTML = "";
 		}
