@@ -3858,8 +3858,7 @@ function equipmentHoverMerc(group) {
 		}
 	}
 	for (affix in mercEquipped[group]) {
-	//mercEquipped[group][affix] != unmercEquipped[affix] && stats[affix] != unmercEquipped[affix] &&
-		if (stats[affix] != 1 && affix != "velocity" && affix != "smite_min") {
+		if (stats[affix] != null && stats[affix] != 1 && affix != "velocity" && affix != "smite_min") {
 			var affix_info = getAffixLine(affix,"mercEquipped",group,"");
 			if (affix_info[1] != 0) {
 				if (affix == "boss_item" || affix == "base_damage_min" || affix == "base_defense" || affix == "req_level" || affix == "req_strength" || affix == "req_dexterity" || affix == "durability" || affix == "baseSpeed" || affix == "range" || affix == "throw_min" || affix == "base_min_alternate" || affix == "block" || affix == "velocity") { main_affixes += affix_info[0]+"<br>" }
@@ -4092,7 +4091,7 @@ function equipSwapHover(group) {
 		}
 	}
 	for (var affix in swapEquipped[group]) {
-		if (stats[affix] != 1 && affix != "velocity" && affix != "smite_min") {
+		if (stats[affix] != null && stats[affix] != 1 && affix != "velocity" && affix != "smite_min") {
 			var affix_info = getAffixLine(affix, "swapEquipped", group, "");
 			if (affix_info[1] != 0) {
 				if (affix == "boss_item" || affix == "base_damage_min" || affix == "base_defense" || affix == "req_level" || affix == "req_strength" || affix == "req_dexterity" || affix == "durability" || affix == "baseSpeed" || affix == "range" || affix == "throw_min" || affix == "base_min_alternate" || affix == "block" || affix == "velocity") { main_affixes += affix_info[0]+"<br>" }
