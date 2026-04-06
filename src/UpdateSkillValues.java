@@ -271,7 +271,7 @@ public class UpdateSkillValues {
         int current = level1Start;
 
         // Level 1
-        out.append(current);
+        out.append((int) (current * damageHitShift));
 
         for (int level = 2; level <= totalLevels; level++) {
             int inc;
@@ -536,17 +536,17 @@ public class UpdateSkillValues {
 
     static Map<String, String> necromancer_skill_map = Map.ofEntries(
             Map.entry("Skeleton Mastery", "d111"),
-            Map.entry("Skeleton Warrior", "d113"),
-            Map.entry("Skeleton Archer", "d153"),
+            Map.entry("Raise Skeleton", "d113"),
+            Map.entry("Raise Skeleton Archer", "d153"),
             Map.entry("Clay Golem", "d122"),
             Map.entry("Golem Mastery", "d131"),
-            Map.entry("Skeletal Mage", "d133"),
-            Map.entry("Blood Golem", "d142"),
+            Map.entry("Raise Skeletal Mage", "d133"),
+            Map.entry("BloodGolem", "d142"),
             Map.entry("Blood Warp", "d151"),
-            Map.entry("Iron Golem", "d152"),
-            Map.entry("Fire Golem", "d162"),
+            Map.entry("IronGolem", "d152"),
+            Map.entry("FireGolem", "d162"),
             Map.entry("Revive", "d163"),
-            Map.entry("Poison Strike", "d211"),
+            Map.entry("Poison Dagger", "d211"),
             Map.entry("Teeth", "d212"),
             Map.entry("Bone Armor", "d223"),
             Map.entry("Corpse Explosion", "d221"),
@@ -556,7 +556,7 @@ public class UpdateSkillValues {
             Map.entry("Bone Spirit", "d262"),
             Map.entry("Poison Nova", "d261"),
             Map.entry("Bone Prison", "d253"),
-            Map.entry("Amplify Damage", "d312")
+            Map.entry("AmpDmg", "d312")
     );
 
     static Map<String, String> paladin_skill_map = new LinkedHashMap<>();
