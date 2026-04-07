@@ -964,6 +964,10 @@
 					<font size="2" id="phy_pierce_label">Physical Pierce: <font size="2"
 					                                                            id="phy_pierce"></font><br></font>
 					<br/>
+					<font size="2" id="cblow_total_label">Crushing Blow: <font size="2" id="cblow_total"></font><br></font>
+					<font size="2" id="dstrike_total_label">Deadly Strike: <font size="2" id="dstrike_total"></font><br></font>
+					<font size="2" id="cstrike_total_label">Critical Strike: <font size="2" id="cstrike_total"></font><br></font>
+					<br/>
 					<font size="2" id="fdamage_label">Fire Mastery: <font size="2" id="fdamage"></font><br></font>
 					<font size="2" id="cdamage_label">Cold Mastery: <font size="2" id="cdamage"></font><br></font>
 					<font size="2" id="ldamage_label">Lightning Mastery: <font size="2" id="ldamage"></font><br></font>
@@ -1285,6 +1289,7 @@ l-26 24 14 -25z"></path>
 	function initial_load() {
 		skills_all = {amazon:skills_pd2_amazon, assassin:skills_pd2_assassin, barbarian:skills_pd2_barbarian, druid:skills_pd2_druid, necromancer:skills_pd2_necromancer, paladin:skills_pd2_paladin, sorceress:skills_pd2_sorceress}
 		character_all = {amazon:character_pd2_amazon, assassin:character_pd2_assassin, barbarian:character_pd2_barbarian, druid:character_pd2_druid, necromancer:character_pd2_necromancer, paladin:character_pd2_paladin, sorceress:character_pd2_sorceress, any:character_pd2_any}
+		character_any = character_pd2_any
 
 		// select random class
 		var random = Math.floor(Math.random() * 7);
