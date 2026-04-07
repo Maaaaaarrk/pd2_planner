@@ -5817,6 +5817,36 @@ function updateSecondaryStats() {
 	document.getElementById("cstrike").innerHTML = c.cstrike + c.cstrike_skillup; if (c.cstrike > 0 || c.cstrike_skillup > 0) { document.getElementById("cstrike").innerHTML += "%" }
 	document.getElementById("owounds").innerHTML = c.owounds; if (c.owounds > 0) { document.getElementById("owounds").innerHTML += "%" }
 
+	// Crushing Blow total
+	var cblow_total = c.cblow;
+	document.getElementById("cblow_total").innerHTML = cblow_total;
+	if (cblow_total > 0) {
+		document.getElementById("cblow_total_label").style.display = "block";
+		document.getElementById("cblow_total").innerHTML += "%";
+	} else {
+		document.getElementById("cblow_total_label").style.display = "none";
+	}
+
+	// Deadly Strike total
+	var dstrike_total = c.dstrike + Math.floor(c.level*c.dstrike_per_level);
+	document.getElementById("dstrike_total").innerHTML = dstrike_total;
+	if (dstrike_total > 0) {
+		document.getElementById("dstrike_total_label").style.display = "block";
+		document.getElementById("dstrike_total").innerHTML += "%";
+	} else {
+		document.getElementById("dstrike_total_label").style.display = "none";
+	}
+
+	// Critical Strike total
+	var cstrike_total = c.cstrike + c.cstrike_skillup;
+	document.getElementById("cstrike_total").innerHTML = cstrike_total;
+	if (cstrike_total > 0) {
+		document.getElementById("cstrike_total_label").style.display = "block";
+		document.getElementById("cstrike_total").innerHTML += "%";
+	} else {
+		document.getElementById("cstrike_total_label").style.display = "none";
+	}
+
 	var mf = Math.floor(c.mf + c.level*c.mf_per_level);
 	var eMF = Math.floor(mf*250/(mf+250));
 	document.getElementById("mf").innerHTML = mf; if (c.mf != 0 || c.mf_per_level != 0) { document.getElementById("mf").innerHTML += "% ("+eMF+"%)" }
