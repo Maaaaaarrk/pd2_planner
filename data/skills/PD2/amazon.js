@@ -68,12 +68,12 @@ var character_pd2_amazon = {class_name:"Amazon", strength:20, dexterity:25, vita
 
 		// unsupported
 		/*
+		if (skill.name == "Critical Strike") { result.cstrike = skill.data.values[0][lvl]; }
 		if (skill.name == "Inner Sight") { result.enemy_attack = skill.data.values[1][lvl]; result.enemy_defense_flat = skill.data.values[2][lvl]; result.radius = skill.data.values[3][lvl]; result.duration:skill.data.values[0][lvl]; }
 		if (skill.name == "Slow Movement") { slows_enemies:skill.data.values[0][lvl]; result.duration = 5; }
-		if (skill.name == "Critical Strike") { result.cstrike = skill.data.values[0][lvl]; }
 		if (skill.name == "Penetrate") { result.ar_bonus = skill.data.values[1][lvl]; result.target_defense = skill.data.values[0][lvl]; }
 		if (skill.name == "Pierce") { result.pierce = skill.data.values[0][lvl]; }
-		if (skill.name == "Dodge") { result.dodge = skill.data.values[0][lvl]; }
+		if (skill.name == "Dodge") { result.dodge = skill.data.values[1][lvl]; }
 		if (skill.name == "Evade") { result.evade = skill.data.values[0][lvl]; }
 		// No stat buffs:
 		if (skill.name == "Decoy") { result.duration = skill.data.values[8][lvl]; }
