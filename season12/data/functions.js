@@ -4657,6 +4657,26 @@ function updateSecondaryStats() {
 	document.getElementById("cstrike").innerHTML = c.cstrike + c.cstrike_skillup; if (c.cstrike > 0 || c.cstrike_skillup > 0) { document.getElementById("cstrike").innerHTML += "%" }
 	document.getElementById("owounds").innerHTML = c.owounds; if (c.owounds > 0) { document.getElementById("owounds").innerHTML += "%" }
 
+	// Open Wounds total
+	var owounds_total = c.owounds;
+	document.getElementById("owounds_total").innerHTML = owounds_total;
+	if (owounds_total > 0) {
+		document.getElementById("owounds_total_label").style.display = "block";
+		document.getElementById("owounds_total").innerHTML += "%";
+	} else {
+		document.getElementById("owounds_total_label").style.display = "none";
+	}
+
+	// Open Wounds Damage total
+	var owounds_damage_total = Math.floor(c.owounds_dps + c.level*c.owounds_dps_per_level);
+	document.getElementById("owounds_damage_total").innerHTML = owounds_damage_total;
+	if (owounds_damage_total > 0) {
+		document.getElementById("owounds_damage_total_label").style.display = "block";
+		document.getElementById("owounds_damage_total").innerHTML += " per second";
+	} else {
+		document.getElementById("owounds_damage_total_label").style.display = "none";
+	}
+
 	var mf = Math.floor(c.mf + c.level*c.mf_per_level);
 	var eMF = Math.floor(mf*250/(mf+250));
 	document.getElementById("mf").innerHTML = mf; if (c.mf != 0 || c.mf_per_level != 0) { document.getElementById("mf").innerHTML += "% ("+eMF+"%)" }
