@@ -5814,7 +5814,18 @@ function updateSecondaryStats() {
 	document.getElementById("pierce").innerHTML = c.pierce + c.pierce_skillup; if (c.pierce > 0 || c.pierce_skillup > 0) { document.getElementById("pierce").innerHTML += "%" }
 	document.getElementById("cblow").innerHTML = c.cblow; if (c.cblow > 0) { document.getElementById("cblow").innerHTML += "%" }
 	document.getElementById("dstrike").innerHTML = c.dstrike + Math.floor(c.level*c.dstrike_per_level); if (c.dstrike > 0 || c.dstrike_per_level > 0) { document.getElementById("dstrike").innerHTML += "%" }
-	document.getElementById("cstrike").innerHTML = c.cstrike + c.cstrike_skillup; if (c.cstrike > 0 || c.cstrike_skillup > 0) { document.getElementById("cstrike").innerHTML += "%" }
+	// Critical Strike from Amazon passive or oskill
+	var cstrike_skill = 0;
+	var cs_data = skills_all["amazon"][11].data.values[0];
+	if (c.class_name == "Amazon") {
+		var cs_lvl = skills[11].level + skills[11].extra_levels;
+		if (cs_lvl > 0) { cstrike_skill = cs_data[cs_lvl] || 0; }
+	} else {
+		var cs_lvl = ~~c.oskill_Critical_Strike + c.all_skills + Math.ceil(c.all_skills_per_level*c.level);
+		if (cs_lvl > 0) { cstrike_skill = cs_data[cs_lvl] || 0; }
+	}
+
+	document.getElementById("cstrike").innerHTML = c.cstrike + c.cstrike_skillup + cstrike_skill; if (c.cstrike > 0 || c.cstrike_skillup > 0 || cstrike_skill > 0) { document.getElementById("cstrike").innerHTML += "%" }
 	document.getElementById("owounds").innerHTML = c.owounds; if (c.owounds > 0) { document.getElementById("owounds").innerHTML += "%" }
 
 	// Crushing Blow total
@@ -5838,7 +5849,7 @@ function updateSecondaryStats() {
 	}
 
 	// Critical Strike total
-	var cstrike_total = c.cstrike + c.cstrike_skillup;
+	var cstrike_total = c.cstrike + c.cstrike_skillup + cstrike_skill;
 	document.getElementById("cstrike_total").innerHTML = cstrike_total;
 	if (cstrike_total > 0) {
 		document.getElementById("cstrike_total_label").style.display = "block";
