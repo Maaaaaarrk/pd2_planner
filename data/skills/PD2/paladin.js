@@ -34,7 +34,7 @@ var character_pd2_paladin = {class_name:"Paladin", strength:25, dexterity:20, vi
 		if (skill.name == "Holy Shock" && (elem == 1 || elem == 3)) {	result *= ((1 + 0.09*skills[5].level + 0.09*skills[9].level + 0.09*skills[13].level) * (1+character.lDamage/100)) }	// excludes minimum lightning damage (synergies don't apply)
 		if (skill.name == "Sanctuary" && elem>0 && elem<3) {	result *= ((1 + 0.10*skills[10].level + 0.10*skills[13].level + 0.10*skills[27].level)) }								// attack
 		if (skill.name == "Sanctuary" && elem>2 && elem<5) {	result *= ((1 + 0.10*skills[10].level + 0.10*skills[13].level + 0.10*skills[27].level) * (1+character.mDamage/100)) }	// aura
-		if (skill.name == "Thorns" && elem == 1) {				result *= (1 + 0.20*skills[10].level + 0.20*skills[2].level) }
+		if (skill.name == "Thorns" && (elem == 1 || elem == 3 || elem == 4)) {	result *= (1 + 0.20*skills[10].level + 0.20*skills[2].level) }
 		if (skill.name == "Concentration" && elem == 1) {		result = skill.data.values[2][lvl]/2 }									// party damage
 		if (skill.name == "Concentration" && elem == 4) {		result = ((skill.data.values[2][lvl]/2) * (1+character.mDamage/100)) }	// magic hammer skill damage
 		if (skill.name == "Fanaticism" && elem == 1) {			result = skill.data.values[2][lvl]/2 }
