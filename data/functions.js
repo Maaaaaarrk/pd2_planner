@@ -5858,8 +5858,20 @@ function updateSecondaryStats() {
 		document.getElementById("cstrike_total_label").style.display = "none";
 	}
 
+	// Deep Wounds (Barbarian passive) open wounds contribution
+	var dw_owounds = 0;
+	var dw_owounds_dps = 0;
+	if (c.class_name == "Barbarian") {
+		var dw_skill = skills[12];
+		var dw_lvl = dw_skill.level + dw_skill.extra_levels;
+		if (dw_lvl > 0) {
+			dw_owounds = dw_skill.data.values[1][dw_lvl] || 0;
+			dw_owounds_dps = Math.floor((dw_skill.data.values[0][dw_lvl] || 0) * (1 + 0.04*skills[7].level));
+		}
+	}
+
 	// Open Wounds total
-	var owounds_total = c.owounds;
+	var owounds_total = c.owounds + dw_owounds;
 	document.getElementById("owounds_total").innerHTML = owounds_total;
 	if (owounds_total > 0) {
 		document.getElementById("owounds_total_label").style.display = "block";
@@ -5869,7 +5881,7 @@ function updateSecondaryStats() {
 	}
 
 	// Open Wounds Damage total
-	var owounds_damage_total = Math.floor(c.owounds_dps + c.level*c.owounds_dps_per_level);
+	var owounds_damage_total = Math.floor(c.owounds_dps + c.level*c.owounds_dps_per_level) + dw_owounds_dps;
 	document.getElementById("owounds_damage_total").innerHTML = owounds_damage_total;
 	if (owounds_damage_total > 0) {
 		document.getElementById("owounds_damage_total_label").style.display = "block";
