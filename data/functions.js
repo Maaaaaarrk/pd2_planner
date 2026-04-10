@@ -530,13 +530,13 @@ function loadParams() {
 					corrupt(group,param_equipped[group][2])
 				} }
 				for (group in corruptsEquipped) {	// upgrades & downgrades
-					if (group.startsWith("swap_")) { continue; }
+					if (group.startsWith("swap_") || group.startsWith("merc_")) { continue; }
 					var baseDiff = ~~param_equipped[group][1] - ~~equipped[group].tier;
 					if (baseDiff < 0) { changeBase(group, "downgrade"); equipmentOut() }
 					if (baseDiff > 0) { changeBase(group, "upgrade"); equipmentOut() }
 				}
 				for (group in corruptsEquipped) {	// upgrades & downgrades (duplicated)
-					if (group.startsWith("swap_")) { continue; }
+					if (group.startsWith("swap_") || group.startsWith("merc_")) { continue; }
 					var baseDiff = ~~param_equipped[group][1] - ~~equipped[group].tier;
 					if (baseDiff < 0) { changeBase(group, "downgrade"); equipmentOut(); }
 					if (baseDiff > 0) { changeBase(group, "upgrade"); equipmentOut(); }
@@ -2633,11 +2633,13 @@ function setCharacterInfo(className) {
 		corrupt(group,fileInfo.corruptsEquipped[group].name)
 	}
 	for (group in corruptsEquipped) {	// upgrades & downgrades
+		if (group.startsWith("swap_") || group.startsWith("merc_")) { continue; }
 		var baseDiff = ~~fileInfo.equipped[group].tier - ~~equipped[group].tier;
 		if (baseDiff < 0) { changeBase(group, "downgrade"); equipmentOut(); }
 		if (baseDiff > 0) { changeBase(group, "upgrade"); equipmentOut(); }
 	}
 	for (group in corruptsEquipped) {	// upgrades & downgrades (duplicated)
+		if (group.startsWith("swap_") || group.startsWith("merc_")) { continue; }
 		var baseDiff = ~~fileInfo.equipped[group].tier - ~~equipped[group].tier;
 		if (baseDiff < 0) { changeBase(group, "downgrade"); equipmentOut(); }	// duplicated (things break for some reason when a while/for loop is used instead)
 		if (baseDiff > 0) { changeBase(group, "upgrade"); equipmentOut(); }		// duplicated (things break for some reason when a while/for loop is used instead)
