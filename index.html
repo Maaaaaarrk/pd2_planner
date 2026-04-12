@@ -41,6 +41,7 @@
 	<script type="text/javascript" src="./data/skills/PD2/sorceress.js"></script>
 	<script type="text/javascript" src="./data/skills/PD2/universal_skills.js"></script>
 	<script type="text/javascript" src="./data/functions.js"></script>
+	<script type="text/javascript" src="./data/export_d2s.js"></script>
 </head>
 <body class="background" onload="initial_load()">
 
@@ -1279,6 +1280,15 @@ l-26 24 14 -25z"></path>
 				<li>Importing one will not clear the other</li>
 				<li>Items that can't be mapped (magic/rare with random rolls, socketables) must be set manually</li>
 			</ul>
+			<div style="font-size:1.4em; margin-bottom:6px; margin-left:12px; margin-top:16px;">Export to Game Save File (.d2s)</div>
+			<ul style="margin:0; padding-left:16px;">
+				<li>Exports your current build to a .d2s game save file via the <a href="https://exiledagain.github.io/bug-free-eureka/export.html" target="_blank" style="color:#6666bb;">PD2 Export Tool</a></li>
+				<li>Character stats, skills, and equipment will be converted</li>
+				<li>The export tool will open in a new tab - paste the data and click Download</li>
+			</ul>
+			<div style="margin-left:12px; margin-top:8px;">
+				<button onclick="exportToGameFile()" style="padding:8px 16px; background:#9b885e; color:#fff; border:1px solid #666; cursor:pointer; font-size:1em;">Export to Game File (.d2s)</button>
+			</div>
 		</div>
 	</div>    <!-- /full_interface -->
 </div>    <!-- /main -->
