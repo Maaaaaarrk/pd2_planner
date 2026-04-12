@@ -394,12 +394,11 @@ function buildRipJson() {
 		["Energy", (character.starting_energy || 0) + (character.energy_added || 0)]
 	];
 
-	// Add skills with levels > 0
+	// Add skills - include all class skills so the external tool can
+	// determine the character class even when no skill points are allocated
 	if (typeof skills !== 'undefined') {
 		for (var s = 0; s < skills.length; s++) {
-			if (skills[s].level > 0) {
-				stats.push([skills[s].name, skills[s].level]);
-			}
+			stats.push([skills[s].name, skills[s].level]);
 		}
 	}
 
