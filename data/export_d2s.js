@@ -395,10 +395,13 @@ function buildRipJson() {
 	];
 
 	// Add skills - include all class skills so the external tool can
-	// determine the character class even when no skill points are allocated
+	// determine the character class even when no skill points are allocated.
+	// Skip placeholder skills (e.g. "None") that the external tool cannot map.
 	if (typeof skills !== 'undefined') {
 		for (var s = 0; s < skills.length; s++) {
-			stats.push([skills[s].name, skills[s].level]);
+			if (skills[s].name && skills[s].name !== "None") {
+				stats.push([skills[s].name, skills[s].level]);
+			}
 		}
 	}
 
