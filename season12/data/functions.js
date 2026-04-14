@@ -1391,27 +1391,6 @@ function loadItems(group, dropdown, className) {
 			var item = equipment[group][itemNew];
 			// || item.only == className) {
 				var halt = 0;
-				if(typeof(item.only) != 'undefined'){
-                     if(item.only != className){
-                   //  console.log ("item.only "+item.only+" "+className)
-                        halt = 1;
-                        if (className == "Barb (merc)" && item.only  == "barbarian"){
-                            halt = 0;
-                        }
-                        if (className == "Rogue Scout" && item.only  == "amazon" && (item.type == "bow" || item.type == "crossbow")){
-                            halt = 0;
-                        }
-                        if (className == "Iron Wolf" && item.only  == "sorceress"){
-                            halt = 0;
-                        }
-                        if (className == "Iron Wolf" && item.only  == "paladin"){
-                            halt = 0;
-                        }
-                        if (className === item.only){
-                            halt = 0;
-                        }
-                     }
-				 }
 				if (halt == 0) {
                     if (className == "clear") { halt = 1 }
                     if (typeof(item.not) != 'undefined') { for (let l = 0; l < item.not.length; l++) { if (item.not[l] == className) { halt = 1 } } }
