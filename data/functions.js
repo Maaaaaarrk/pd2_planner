@@ -5869,7 +5869,7 @@ function updateSecondaryStats() {
 	if (c.class_name == "Barbarian") {
 		var dw_skill = skills[12];
 		var dw_lvl = dw_skill.level + dw_skill.extra_levels;
-		if (dw_lvl > 0) {
+		if (dw_lvl > 0 && (dw_skill.level > 0 || dw_skill.force_levels > 0)) {
 			dw_owounds = dw_skill.data.values[1][dw_lvl] || 0;
 			dw_owounds_dps = Math.floor((dw_skill.data.values[0][dw_lvl] || 0) * (1 + 0.04*skills[7].level));
 		}
