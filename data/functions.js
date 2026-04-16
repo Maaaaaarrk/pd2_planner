@@ -5821,10 +5821,13 @@ function updateSecondaryStats() {
 	var cs_data = skills_all["amazon"][11].data.values[0];
 	if (c.class_name == "Amazon") {
 		var cs_lvl = skills[11].level + skills[11].extra_levels;
-		if (cs_lvl > 0) { cstrike_skill = cs_data[cs_lvl] || 0; }
+		if (cs_lvl > 0 && (skills[11].level > 0 || skills[11].force_levels > 0)) { cstrike_skill = cs_data[cs_lvl] || 0; }
 	} else {
-		var cs_lvl = ~~c.oskill_Critical_Strike + c.all_skills + Math.ceil(c.all_skills_per_level*c.level);
-		if (cs_lvl > 0) { cstrike_skill = cs_data[cs_lvl] || 0; }
+		var cs_oskill = ~~c.oskill_Critical_Strike;
+		if (cs_oskill > 0) {
+			var cs_lvl = cs_oskill + c.all_skills + Math.ceil(c.all_skills_per_level*c.level);
+			cstrike_skill = cs_data[cs_lvl] || 0;
+		}
 	}
 
 	document.getElementById("cstrike").innerHTML = c.cstrike + c.cstrike_skillup + cstrike_skill; if (c.cstrike > 0 || c.cstrike_skillup > 0 || cstrike_skill > 0) { document.getElementById("cstrike").innerHTML += "%" }
