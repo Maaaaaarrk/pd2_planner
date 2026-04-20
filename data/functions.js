@@ -487,11 +487,12 @@ function loadParams() {
 		if (param_quests == 1) {
 			document.getElementById("quests").checked = true
 			character.quests_completed = param_quests
-			//character.life += 60
-			//character.fRes += 30
-		//	character.cRes += 30
-		//	character.lRes += 30
-		//	character.pRes += 30
+			// PD2 quest rewards (Prison of Ice etc.) grant +60 life and +30 all-res; mirror toggleQuests/resetQuests so the initial load shows the same post-quest baseline (e.g. Hell all-res -70 instead of -100).
+			character.life += 60
+			character.fRes += 30
+			character.cRes += 30
+			character.lRes += 30
+			character.pRes += 30
 		}
 		if (param_url == 1) {
 			document.getElementById("parameters").checked = true
