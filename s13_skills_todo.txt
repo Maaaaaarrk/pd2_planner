@@ -1,0 +1,240 @@
+Season 13 "Betrayal" — Skill changes NOT yet applied to the planner
+====================================================================
+
+These items are deferred because they need one of:
+  (a) Full level 1-101 damage-curve rebuilds (Category B)
+  (b) New mechanics/flags the planner's schema doesn't model yet
+  (c) Game-state changes that aren't build-planner relevant
+
+Items already applied on feat/season13-updates are NOT listed here.
+
+
+AMAZON
+------
+- Critical Strike:        [SCHEMA] 1.5x multiplier -> 2x multiplier
+                          (description updated; crit damage display now
+                          shows 200% base; underlying dmg calc not changed
+                          because planner shows only % chance)
+- Fend:                   (description splash 20/40/60 already applied)
+- Valkyrie:               [CURVE] Strength per level +20 -> +10
+                                  Dexterity per level +15 -> +10
+                                  Power Strike scaling adjusted across all lvl ranges
+- Decoy:                  [CURVE] Base damage 35-50 -> 14-18
+                                  Lvl 1-8 dmg scaling 4-6 -> 2-4
+                                  Lvl 8-16 dmg scaling 6-8 -> 5-7
+                                  Lvl 16-22 dmg scaling 9-11 -> 8-10
+                                  Lvl 28+ dmg scaling 15-17 -> 17-19
+- Fire Arrow:             [MECHANIC] Full rework: arrows leave ground fire
+                                     that deals DoT on impact
+- Javelin and Spear Mastery:
+                          [MECHANIC + SCHEMA] Remove chance of Critical Strike,
+                                              replace with +% critical strike
+                                              multiplier (additive with new 200%
+                                              crit base). Use crit_strike_multiplier
+                                              field now available.
+- Charged Strike:         [CURVE] Base min dmg 1 -> 7
+                                  Lvl 1-8 min scaling 0 -> 2
+                                  Lvl 8-16 min scaling 0 -> 2
+                                  Lvl 16-22 min scaling 0 -> 3
+                                  Lvl 22-28 min scaling 0 -> 4
+                                  Lvl 28+ min scaling 0 -> 4
+- Lightning Strike:       [CURVE] Base min dmg 1 -> 6
+                                  Min damage scaling up significantly per bucket
+- Lightning Bolt:         [CURVE] Base min dmg 1 -> 5
+                                  Min damage scaling up
+- Lightning Fury:         [CURVE] Base min dmg 1 -> 14
+                                  Lvl 1-8 / 8-16 / 16-22 / 22-28 min scaling 0 -> 2
+                                  Lvl 28+ min scaling 0 -> 3
+- Multiple Shot:          [CURVE] Base ED 40 -> 30%, per-level 3 -> 2%
+- Guided Arrow:           [CURVE] Base ED 0 -> +25%
+- Strafe:                 [CURVE] Base ED 100 -> 80%, per-level 15 -> 12%
+- Evade:                  [MECHANIC] Movement speed no longer capped at 65%
+                                     Now gains +1% move speed per level at 28+
+- Cold Arrow:             (synergy 17% -> 15% already applied)
+
+
+ASSASSIN
+--------
+- Shock Web:              [CURVE] Base min dmg 1 -> 2, per-bucket scaling up
+- Lightning Sentry:       [CURVE] Base min dmg 1 -> 7, per-bucket scaling up
+- Chain Lightning Sentry: [CURVE + MECHANIC]
+                                  Max chains 7 -> 8
+                                  Base min dmg 1 -> 9, per-bucket scaling up
+- Fire Blast:             [MECHANIC] Extra bomb every 3 soft points
+                                     (was every N base levels)
+                                     Max bombs 7 -> 9
+- Blade Sentinel:         [MECHANIC] AoE damage -> 3/4 of collision damage
+                                     Removed extra AoE explosion on sentinel death
+                                     Increased min travel time before explosions
+- Claw and Dagger Mastery:
+                          [SCHEMA] Crit multiplier 1.5x -> 2x
+                                   (use crit_strike_multiplier field)
+- Shadow Master / Shadow Warrior:
+                          [MECHANIC] Traps no longer belong to player,
+                                     owned by shadow instead
+                                     Blade Sentinel uses shadow's weapon/stats
+- Tiger Strike:           [MECHANIC] Melee splash bonus now applies only to
+                                     Tiger Strike itself (not carried over)
+- Dragon Talon:           [CURVE] Lvl 1 mana 6 -> 2, per-level +0.25
+                                  Base ED 50 -> 60%, per-level 25 -> 30%
+                          (synergy 22% -> 25% already applied)
+
+
+BARBARIAN
+---------
+- Split Throw:            (added in task #15)
+- Concentrate:            (description splash note already applied)
+- Berserk:                (description splash note already applied)
+- Frenzy:                 [MECHANIC] Melee splash bonus applies only to Frenzy
+                                     Changed to static 5 stacks max at all levels
+- One Hand Mastery (renamed from General Mastery):
+                          [CURVE] Base AR 28 -> 35%, per-level AR 10 -> 12%
+                                  Applies to any one-hand melee weapon
+                                  +1% splash radius per soft point (up to +20%)
+                                  Crit multiplier 1.5x -> 2x
+- Two Hand Mastery (renamed from Polearm and Spear Mastery):
+                          [CURVE] Applies to any two-hand melee weapon
+                                  Base ED 30 -> 45%, per-level 10 -> 15%
+                                  Removed chance of critical strike
+                                  +20% splash at L1, +1% per soft point (up to +40%)
+                                  Grants % chance of crushing blow
+                                  Grants % crushing blow efficiency
+- Throwing Mastery:       [MECHANIC + CURVE]
+                                  Fix pierce not applying properly
+                                  Crit multiplier 1.5x -> 2x
+- War Cry:                [CURVE] Radius +~15%
+- Taunt:                  [CURVE] Radius +25%; visual speed faster (cosmetic)
+
+
+DRUID
+-----
+- Summon Ravens (still internally "Raven"):
+                          [CURVE + MECHANIC]
+                                  Max raven limit now per 2 levels (was per level)
+                                  100% cold conversion (was 50/50 phys/cold)
+                                  Base damage 4-6 -> 2-3
+                                  Synergies 10% -> 8%
+- Fury:                   (description splash note already applied)
+- Arctic Blast:           [MECHANIC] Base cold pierce -2 -> -5
+                                     No longer caps at -50%
+- Twister:                [CURVE] Reduces Gust cooldown by -0.25 -> -0.5s
+                                  Lvl 22-28 scaling 17.5-18.5 -> 20-21
+- Tornado:                [CURVE] Reduces Gust cooldown by -0.25 -> -0.5s
+                                  Lvl 22-28 scaling 28-30 -> 30-32
+                                  Lvl 28+ scaling 34-36 -> 38-40
+- Cyclone Armor:          [MECHANIC] Adds Twister synergy (+10 absorb/lvl)
+                                     Adds Tornado synergy (+10 absorb/lvl)
+- Spirit of Barbs:        [MECHANIC] +8% deadly strike +1% per 2 soft levels
+                                     +1% max deadly strike chance per 4 base pts
+- Heart of the Wolverine: [CURVE] Per-level ED 10 -> 8%, AR 10 -> 8%
+- Volcano:                [CURVE] Base min dmg 16 -> 14
+                                  Lvl 1-8 min scaling 6 -> 4
+                                  Lvl 8-16 min scaling 10 -> 8
+                                  Lvl 16-22 min scaling 14 -> 10
+                                  Lvl 22-28 min scaling 16 -> 12
+                                  Lvl 28+ min scaling 18 -> 12
+                          (synergy 9% -> 8% already applied)
+- Armageddon:             [MECHANIC] Fix synergies not applying to fire DoT
+                          (Molten Boulder/Volcano 12 -> 10% and Fireclaw
+                           +5% synergy already applied)
+
+
+NECROMANCER
+-----------
+- Desecrate:              (synergy 20 -> 22% and mana 12 -> 9 already applied)
+- Skeleton Mages:         [CURVE] Lvl 22+ damage scaling increased
+                          [UI] Fix Skeleton Mastery synergy value display
+- Corpse Explosion:       [CURVE] Maximum radius reduced ~12%
+
+
+PALADIN
+-------
+- Zeal:                   [CURVE/DESC] Splash 0/20/40 -> 20/40/60 (same pattern
+                                       as Fend/Fury — description fix)
+- Sacrifice:              [CURVE] Max radius -16%
+- Fist of the Heavens:    [VISUAL] Holy bolt projectile speed +25%
+                                   Added projectile speed acceleration
+- Resist Lightning Aura:  [CURVE] Lvl 22+ elemental damage bonus
+                                  1%/level -> 2%/level
+- Resist Fire Aura:       [CURVE] Lvl 22+ elemental damage bonus
+                                  1%/level -> 2%/level
+- Resist Cold Aura:       [CURVE] Lvl 22+ elemental damage bonus
+                                  1%/level -> 2%/level
+- Cleansing:              [CURVE] Base curse resistance +5 -> +10%
+                                  (passive curse duration reduction arrays are
+                                  empty in planner; needs data population)
+- Vengeance:              (chain chance 16 -> 24 at lvl 1 already applied)
+
+
+SORCERESS
+---------
+- Lightning:              [CURVE] Base min dmg 1 -> 8
+                                  Per-bucket min scaling increased
+- Chain Lightning:        [CURVE] Base min dmg 1 -> 8
+                                  Per-bucket min scaling increased
+- Inferno:                [MECHANIC] Base fire pierce -2 -> -5
+                                     No longer caps at -30%
+- Static Field:           [MECHANIC] Base lightning pierce -2 -> -5
+                                     No longer caps at -40%
+- Fire Wall:              (mana base 22 -> 15 and per-level 1 -> 0.75
+                          already applied; damage scaling curve rebuild still
+                          pending — significantly lower early, similar late)
+- Hydra:                  [MECHANIC] Now pierces; AoE reduced
+                          (description note already applied)
+- Nova:                   [CURVE] Lvl 1-8 min scaling 6 -> 4
+                                  Lvl 8-16 min scaling 7 -> 5
+                                  Lvl 16-22 min scaling 8 -> 6
+                                  Lvl 22-28 min scaling 8 -> 6
+                                  Lvl 28+ min scaling 6 -> 4
+                                  Radius slightly reduced
+- Frost Nova:             [CURVE] Radius slightly reduced
+- Charged Bolt:           [CURVE] Lvl 16-22 min scaling 2 -> 1
+                                  Lvl 22-28 min scaling 3 -> 2
+                                  Lvl 28+ min scaling 4 -> 2
+- Fire Enchant:           [CURVE] Lvl 1-8 scaling 6-8 -> 8-10
+                                  Lvl 8-16 scaling 12-14 -> 14-16
+                                  Lvl 16-22 scaling 20-22 -> 24-26
+                                  Lvl 22-28 scaling 34-36 -> 36-38
+                                  Lvl 28+ scaling 50-52 -> 46-48
+- Cold Enchant:           [CURVE] Lvl 8-16 scaling 5-6 -> 6-7
+                                  Lvl 16-22 scaling 11-12 -> 12-13
+                                  Lvl 22-28 scaling 20-21 -> 20-22
+                                  Lvl 28+ scaling 29-30 -> 27-30
+- Telekinesis:            [CURVE] Base min dmg 1 -> 2
+                                  Per-bucket min scaling increased
+
+
+GENERAL / SYSTEM
+----------------
+- Critical Strike "all sources combined":
+                          [REFACTOR] Pool cstrike + dstrike chances on the
+                                     character sheet. Currently shown separately.
+- Crushing Blow formula:  [MATH] Base 1/8hp -> 1/7hp
+                                 Prime evil: 1/(80 + missing_hp^2) ->
+                                             1/(70 + missing_hp*10)
+                                 Map bosses: 1/30hp
+                                 Player count modifier reduced
+                                 Ranged 1.5x penalty re-added
+                          (Planner displays % chance only, does not compute
+                           CB damage — no change needed unless tooltips added.)
+- Superior item bonuses:  [DATA] Ranges improved per patch. Planner does not
+                                 model per-superior rolls at that granularity.
+
+
+LEGEND
+------
+[CURVE]      = Needs regeneration of per-level arrays in data/skills/PD2/*.js.
+               Unblocked by fixing UpdateSkillValues.java label mismatches
+               (paladin d123/d131/d133/d332/d343/d353; sorc d211/d213/d133/
+               d243/d251/d263/d153) and running the Java pipeline.
+[MECHANIC]   = New behavior not representable in current planner model
+               (ownership flags, pierce uncap, stack rules, AoE modifiers).
+[SCHEMA]     = New field needed in unequipped template and aggregation.
+               crit_strike_multiplier + deadly_strike_multiplier are now in
+               place; masteries can consume them once the mastery data is
+               rebuilt per patch spec.
+[VISUAL]     = Cosmetic / projectile speed / animation — not tracked by planner.
+[UI]         = Tooltip / display bug — small fix in metadata or format strings.
+[REFACTOR]   = Structural change to character output aggregation.
+[MATH]       = Damage calculation change — planner does not compute that math.
+[DATA]       = Upstream .txt ranges; planner models a single point value.
