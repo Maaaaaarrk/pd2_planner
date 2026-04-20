@@ -5853,6 +5853,15 @@ function updateSecondaryStats() {
 		document.getElementById("dstrike_total_label").style.display = "none";
 	}
 
+	// Deadly Damage total — base 150%, additive with deadly_strike_multiplier
+	var ddamage_total = 150 + (c.deadly_strike_multiplier || 0);
+	document.getElementById("ddamage_total").innerHTML = ddamage_total + "%";
+	if (dstrike_total > 0) {
+		document.getElementById("ddamage_total_label").style.display = "block";
+	} else {
+		document.getElementById("ddamage_total_label").style.display = "none";
+	}
+
 	// Critical Strike total
 	var cstrike_total = c.cstrike + c.cstrike_skillup + cstrike_skill;
 	document.getElementById("cstrike_total").innerHTML = cstrike_total;
@@ -5861,6 +5870,17 @@ function updateSecondaryStats() {
 		document.getElementById("cstrike_total").innerHTML += "%";
 	} else {
 		document.getElementById("cstrike_total_label").style.display = "none";
+	}
+
+	// Crit Damage total — base 200%, additive with crit_strike_multiplier.
+	// Throwing knives (type "thrown" + subtype "dagger") grant an implicit +15% crit multiplier per S13.
+	var throwing_knife_bonus = (equipped.weapon.type == "thrown" && equipped.weapon.subtype == "dagger") ? 15 : 0;
+	var cdamage_total = 200 + (c.crit_strike_multiplier || 0) + throwing_knife_bonus;
+	document.getElementById("cdamage_total").innerHTML = cdamage_total + "%";
+	if (cstrike_total > 0) {
+		document.getElementById("cdamage_total_label").style.display = "block";
+	} else {
+		document.getElementById("cdamage_total_label").style.display = "none";
 	}
 
 	// Deep Wounds (Barbarian passive) open wounds contribution

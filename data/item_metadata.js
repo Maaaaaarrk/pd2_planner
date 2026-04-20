@@ -1198,7 +1198,7 @@ skill_Two_Handed_Weapon_Mastery:{index:["skill_Two_Handed_Weapon_Mastery"], form
 skill_Deep_Wounds:{index:["skill_Deep_Wounds"], format:["+"," to Deep Wounds (Barbarian only)"]},
 skill_Berserk:{index:["skill_Berserk"], format:["+"," to Berserk (Barbarian only)"]},
 skill_Double_Throw:{index:["skill_Double_Throw"], format:["+"," to Double Throw (Barbarian only)"]},
-skill_General_Mastery:{index:["skill_General_Mastery"], format:["+"," to General Mastery (Barbarian only)"]},
+skill_General_Mastery:{index:["skill_General_Mastery"], format:["+"," to One Hand Mastery (Barbarian only)"]},
 skill_Split_Throw:{index:["skill_Split_Throw"], format:["+"," to Split Throw (Barbarian only)"]},
 skill_Holy_Sword:{index:["skill_Holy_Sword"], format:["+"," to Holy Sword (Paladin only)"]},
 
