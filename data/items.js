@@ -39,7 +39,7 @@ var unequipped = {			strength:0, dexterity:0, vitality:0, energy:0, life:0, mana
 							skills_lightning_all:0, skills_magic_all:0, mDamage:0,
 							owounds_duration:0, owounds_dps:0, owounds_dps_per_level:0, extra_mainhand_attack:0, mDamage_per_frenzy_charge:0, frenzy_duration:0, thrown_cstrike:0, counterattack:0, pulverize:0, charge_tiger:0, charge_cobra:0, charge_bonus_explosion:0, charge_bonus_meteor:0, charge_bonus_fork:0, charge_bonus_static:0, charge_bonus_icicles:0, charge_bonus_accuracy:0, charge_bonus_reduce:0, charge_bonus_leech:0,
 
-/* PD2 skills			*/	skill_Javelin_and_Spear_Mastery:0, skill_Slow_Movement:0, skill_Claw_and_Dagger_Mastery:0, skill_Chain_Lightning_Sentry:0, skill_General_Mastery:0, skill_Throwing_Mastery:0, skill_Polearm_and_Spear_Mastery:0, skill_Combat_Reflexes:0, skill_Gust:0, skill_Raise_Skeleton_Archer:0, skill_Blood_Warp:0, skill_Poison_Strike:0, skill_Curse_Mastery:0, skill_Dark_Pact:0, skill_Holy_Light:0, skill_Joust:0, skill_Holy_Nova:0, skill_Cold_Enchant:0, skill_Ice_Barrage:0, skill_Lesser_Hydra:0, skill_Enchant_Fire:0, skill_Combustion:0, skill_Deep_Wounds:0, skill_Holy_Sword:0, skill_Split_Throw:0,
+/* PD2 skills			*/	skill_Javelin_and_Spear_Mastery:0, skill_Slow_Movement:0, skill_Claw_and_Dagger_Mastery:0, skill_Chain_Lightning_Sentry:0, skill_One_Hand_Mastery:0, skill_Two_Hand_Mastery:0, skill_Throwing_Mastery:0, skill_Combat_Reflexes:0, skill_Gust:0, skill_Raise_Skeleton_Archer:0, skill_Blood_Warp:0, skill_Poison_Strike:0, skill_Curse_Mastery:0, skill_Dark_Pact:0, skill_Holy_Light:0, skill_Joust:0, skill_Holy_Nova:0, skill_Cold_Enchant:0, skill_Ice_Barrage:0, skill_Lesser_Hydra:0, skill_Enchant_Fire:0, skill_Combustion:0, skill_Deep_Wounds:0, skill_Holy_Sword:0, skill_Split_Throw:0,
 };
 
 /*
