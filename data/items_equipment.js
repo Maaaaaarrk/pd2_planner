@@ -887,8 +887,12 @@ ring1: [
 
  charms: [
  {name:"Charms"},
- // Large
+ // Unique
  {name:"Hellfire Torch", size:"large", req_level:75, skills_class:2, vitality:60, energy:20, all_res:20, light_radius:8},
+ {name:"Annihilus", size:"small", req_level:80, all_skills:1, all_attributes:20, all_res:20, experience:10},
+ {name:"Annihilus +2", size:"small", req_level:80, all_skills:2, all_attributes:20, all_res:20, experience:10},
+ {name:"Gheed's Fortune", size:"grand", req_level:62, gf:160, mf:40, discount:15},
+ // Large
  {rarity:"magic", name:"+3% Conduit Large Charm", size:"large", req_level:42, lDamage:3, pd2:1},
  {rarity:"magic", name:"+3% Conduit Large Charm of Vita", size:"large", req_level:42, lDamage:3, life:35, pd2:1},
  {rarity:"magic", name:"+3% Conduit Large Charm of Balance", size:"large", req_level:42, lDamage:3, fhr:8, pd2:1},
@@ -911,6 +915,8 @@ ring1: [
  {rarity:"magic", name:"+3% Scintillating Large Charm of Inertia", size:"large", req_level:42, mDamage:3, frw:5, pd2:1},
  {rarity:"magic", name:"Arcane Large Charm", size:"large", req_level:48, fcr:6},
  {rarity:"magic", name:"Arcane Large Charm of Vita", size:"large", req_level:48, fcr:6, life:35},
+ {rarity:"magic", name:"Arcane Large Charm of Balance", size:"large", req_level:48, fcr:6, fhr:8},
+ {rarity:"magic", name:"Arcane Large Charm of Inertia", size:"large", req_level:48, fcr:6, frw:5},
  {rarity:"magic", name:"Quick Large Charm", size:"large", req_level:48, ias:7},
  {rarity:"magic", name:"Quick Large Charm of Balance", size:"large", req_level:48, fhr:8, ias:7},
  {rarity:"magic", name:"Quick Large Charm of Inertia", size:"large", req_level:48, frw:5, ias:7},
@@ -918,7 +924,6 @@ ring1: [
  {rarity:"magic", name:"Quick Large Charm of Vita", size:"large", req_level:48, ias:7, life:35},
  {rarity:"magic", name:"Sharp Large Charm of Vita", size:"large", req_level:66, damage_max:6, ar:48, life:35, pd2:1},
  // Grand
- {name:"Gheed's Fortune", size:"grand", req_level:62, gf:160, mf:40, discount:15},
  {rarity:"magic", name:"Lucky Grand Charm of Greed", size:"grand", req_level:55, mf:12, gf:40, pd2:1},
  {rarity:"magic", name:"Sharp Grand Charm of Quality", size:"grand", req_level:83, damage_max:14, ar:76, pd2:1},
  {rarity:"magic", name:"Sharp Grand Charm", size:"grand", req_level:83, damage_max:10, ar:76, pd2:1},
@@ -1010,8 +1015,6 @@ ring1: [
  {only:"sorceress", rarity:"magic", name:"+1 Sparking Grand Charm + frw", size:"grand", req_level:42, skills_lightning:1, frw: 7},
  {only:"sorceress", rarity:"magic", name:"+1 Sparking Grand Charm + life", size:"grand", req_level:42, skills_lightning:1, life: 45},
  // Small
- {name:"Annihilus", size:"small", req_level:80, all_skills:1, all_attributes:20, all_res:20, experience:10},
- {name:"Annihilus +2", size:"small", req_level:80, all_skills:2, all_attributes:20, all_res:20, experience:10},
  {rarity:"magic", name:"Amber Small Charm of Vita", size:"small", req_level:39, lRes:11, life:20, pd2:1},
  {rarity:"magic", name:"Emerald Small Charm of Vita", size:"small", req_level:39, pRes:11, life:20, pd2:1},
  {rarity:"magic", name:"Fine Small Charm of Balance", size:"small", req_level:29, damage_max:3, ar:20, fhr:5, pd2:1},
