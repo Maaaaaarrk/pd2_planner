@@ -5884,6 +5884,28 @@ function updateSecondaryStats() {
 		document.getElementById("cdamage_total_label").style.display = "none";
 	}
 
+	// Life After Each Kill total
+	var life_per_kill_total = c.life_per_kill;
+	if (c.life_per_demon_kill > 0) {
+		document.getElementById("life_per_kill_total").innerHTML = life_per_kill_total + " , " + c.life_per_demon_kill + " (demons)";
+	} else {
+		document.getElementById("life_per_kill_total").innerHTML = life_per_kill_total;
+	}
+	if (life_per_kill_total > 0 || c.life_per_demon_kill > 0) {
+		document.getElementById("life_per_kill_total_label").style.display = "block";
+	} else {
+		document.getElementById("life_per_kill_total_label").style.display = "none";
+	}
+
+	// Mana After Each Kill total
+	var mana_per_kill_total = c.mana_per_kill;
+	document.getElementById("mana_per_kill_total").innerHTML = mana_per_kill_total;
+	if (mana_per_kill_total > 0) {
+		document.getElementById("mana_per_kill_total_label").style.display = "block";
+	} else {
+		document.getElementById("mana_per_kill_total_label").style.display = "none";
+	}
+
 	// Deep Wounds (Barbarian passive) open wounds contribution
 	var dw_owounds = 0;
 	var dw_owounds_dps = 0;
