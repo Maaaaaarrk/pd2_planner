@@ -565,6 +565,15 @@ function loadParams() {
 				setIronGolem(param_irongolem)
 			}
 
+			// Apply ethereal toggles from URL (issue #112). Each listed group has its ethereal state flipped from the item default.
+			if (params.has('eth')) {
+				var ethList = params.get('eth').split(',');
+				for (var ei = 0; ei < ethList.length; ei++) {
+					var g = ethList[ei];
+					if (g != "") { toggleEthereal(g); }
+				}
+			}
+
 			// setup effects
 			if (param_effects.length > 0) {
 				for (e in param_effects) { for (let i = 1; i < non_items.length; i++) {		// shrine effects
@@ -3569,6 +3578,7 @@ function parseArmoryStashItems(doc) {
 	getAffixLine
 	inventoryLeftClick
 	inventoryRightClick
+	toggleEthereal
 	changeBase
 */
 
@@ -4506,8 +4516,16 @@ function inventoryLeftClick(event, group) {
 
 // inventoryRightClick - Handles equipment inventory right clicks
 //	group: equipment group name
+//	Modifiers:
+//		shift or ctrl = downgrade base
+//		alt           = toggle ethereal (issue #112)
+//		(none)        = unequip
 // ---------------------------------
 function inventoryRightClick(event, group) {
+	if (event.altKey) {
+		toggleEthereal(group)
+		return
+	}
 	var mod = 0;
 	if (event.shiftKey) { mod = 1 }
 	if (event.ctrlKey) { mod = 2 }
@@ -4516,6 +4534,82 @@ function inventoryRightClick(event, group) {
 	} else {
 		equip(group, group)	// right click = unequip
 	}
+}
+
+// toggleEthereal - Toggles the ethereal flag on an equipped item (issue #112)
+//	group: equipment group name (e.g. "helm", "weapon", "merc_armor")
+//	Only applies to items that have a defined base (armors and weapons).
+//	Updates base damage / requirements via the same multiplier the equip path uses,
+//	flips opacity on the inventory image, and refreshes character stats / URL state.
+// ---------------------------------
+function toggleEthereal(group) {
+	// determine which equipped object owns this group
+	var isMerc = group.indexOf("merc_") === 0;
+	var isSwap = group.indexOf("swap_") === 0;
+	var baseGroup = (isMerc || isSwap) ? group.slice(5) : group;
+	var owner = isMerc ? mercEquipped[baseGroup] : (isSwap ? swapEquipped[baseGroup] : equipped[group]);
+	var stats = isMerc ? mercenary : (isSwap ? null : character);
+	if (!owner || owner.name == "none" || typeof owner.name == "undefined") return;
+	// rings, amulets and charms can never be ethereal in D2
+	if (baseGroup == "amulet" || baseGroup == "ring1" || baseGroup == "ring2" || baseGroup == "charms") return;
+	// quivers can't be ethereal either
+	if (typeof owner.type != 'undefined' && owner.type == "quiver") return;
+	// items without a base entry (special items, charms) can't be toggled
+	if (typeof owner.base == 'undefined') return;
+	var srcGroup = baseGroup;
+	if (baseGroup == "offhand" && typeof equipment["offhand"] != 'undefined') {
+		var found = 0;
+		for (var i in equipment["offhand"]) { if (equipment["offhand"][i].name == owner.name) { found = 1; break; } }
+		if (found == 0) { srcGroup = "weapon" }
+	}
+	var base = getBaseId(owner.base);
+	if (typeof bases[base] == 'undefined') return;
+
+	var oldEth = (owner.ethereal == 1) ? 1 : 0;
+	var newEth = 1 - oldEth;
+	var multEthNew = newEth ? 1.5 : 1;
+	var reqEthNew = newEth ? 10 : 0;
+	var multReq = 1;
+	if (typeof owner["req"] != 'undefined') { multReq += (owner["req"]/100); }
+
+	// recompute base damage / throw / alternate damage from base table using the new multiplier
+	var dmgAffixes = ["base_damage_min","base_damage_max","throw_min","throw_max","base_min_alternate","base_max_alternate"];
+	for (var d = 0; d < dmgAffixes.length; d++) {
+		var aff = dmgAffixes[d];
+		if (typeof bases[base][aff] != 'undefined') {
+			var newVal = Math.ceil(multEthNew * bases[base][aff]);
+			var oldVal = ~~owner[aff];
+			if (stats && typeof stats[aff] != 'undefined') { stats[aff] += (newVal - oldVal); }
+			owner[aff] = newVal;
+		}
+	}
+	// recompute strength / dexterity requirements (base requirement, then take max with item-level override)
+	var reqAffixes = ["req_strength","req_dexterity"];
+	for (var r = 0; r < reqAffixes.length; r++) {
+		var aff = reqAffixes[r];
+		if (typeof bases[base][aff] != 'undefined') {
+			var fromBase = Math.max(0, Math.ceil(multReq*bases[base][aff] - reqEthNew));
+			var fromItem = 0;
+			if (typeof equipment[srcGroup] != 'undefined') {
+				for (var it in equipment[srcGroup]) {
+					if (equipment[srcGroup][it].name == owner.name && typeof equipment[srcGroup][it][aff] != 'undefined') {
+						fromItem = equipment[srcGroup][it][aff];
+					}
+				}
+			}
+			owner[aff] = Math.max(fromBase, fromItem);
+		}
+	}
+	// flip the flag (defense calc reads owner.ethereal directly so it picks up automatically)
+	owner.ethereal = newEth;
+
+	// update inventory image opacity to match
+	var imgId = isMerc ? ("merc_" + baseGroup + "_image") : (isSwap ? ("swap_" + baseGroup + "_image") : (baseGroup + "_image"));
+	var imgEl = document.getElementById(imgId);
+	if (imgEl) { imgEl.style.opacity = newEth ? "0.5" : "1"; }
+
+	if (isMerc) { updateMercenary(); updateStats(); updateAllEffects(); }
+	else { update(); }
 }
 
 // changeBase - Modifies the base for an equipped item (upgrading)
@@ -6428,6 +6522,43 @@ function updateURL() {
 			} }
 			params.set(group, param_equipped)
 		}
+		// Persist ethereal toggles (issue #112). Listed groups have ethereal flipped from the item's default.
+		params.delete('eth')
+		var ethGroups = [];
+		for (var ethGroup in corruptsEquipped) {
+			var ethSwap = ethGroup.startsWith("swap_");
+			var ethOwner = ethSwap ? swapEquipped[ethGroup.slice(5)] : equipped[ethGroup];
+			if (!ethOwner || ethOwner.name == "none") continue;
+			var defaultEth = 0;
+			var ethSrcGroup = ethSwap ? ethGroup.slice(5) : ethGroup;
+			if (typeof equipment[ethSrcGroup] != 'undefined') {
+				for (var ethIt in equipment[ethSrcGroup]) {
+					if (equipment[ethSrcGroup][ethIt].name == ethOwner.name) {
+						defaultEth = (equipment[ethSrcGroup][ethIt].ethereal == 1) ? 1 : 0;
+						break;
+					}
+				}
+			}
+			var currentEth = (ethOwner.ethereal == 1) ? 1 : 0;
+			if (currentEth != defaultEth) { ethGroups.push(ethGroup); }
+		}
+		// merc slots
+		for (var mGroup in mercEquipped) {
+			var mOwner = mercEquipped[mGroup];
+			if (!mOwner || mOwner.name == "none") continue;
+			var mDefault = 0;
+			if (typeof equipment[mGroup] != 'undefined') {
+				for (var mIt in equipment[mGroup]) {
+					if (equipment[mGroup][mIt].name == mOwner.name) {
+						mDefault = (equipment[mGroup][mIt].ethereal == 1) ? 1 : 0;
+						break;
+					}
+				}
+			}
+			var mCurrent = (mOwner.ethereal == 1) ? 1 : 0;
+			if (mCurrent != mDefault) { ethGroups.push("merc_" + mGroup); }
+		}
+		if (ethGroups.length > 0) { params.set('eth', ethGroups.join(',')); }
 
 	for (id in effects) { if (typeof(effects[id].info.enabled) != 'undefined') {
 		var param_effect = id+','+effects[id].info.enabled+','+effects[id].info.snapshot;
