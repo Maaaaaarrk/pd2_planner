@@ -122,8 +122,8 @@ var propKeyToText = {
 	defense_bonus: function(v) { return v + "% Enhanced Defense" },
 	defense_per_level: function(v) { return "+" + v + " Defense (Based on Character Level)" },
 	block: function(v) { return v + "% Increased Chance of Blocking" },
-	pdr: function(v) { return "Damage Reduced by " + v + "%" },
-	damage_reduced: function(v) { return "Damage Reduced by " + v },
+	pdr: function(v) { return "Physical Damage Taken Reduced by " + v + "%" },
+	damage_reduced: function(v) { return "Physical Damage Taken Reduced by " + v },
 	mDamage_reduced: function(v) { return "Magic Damage Reduced by " + v },
 
 	// Absorb
