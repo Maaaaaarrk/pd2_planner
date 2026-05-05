@@ -4519,7 +4519,7 @@ function getAffixLine(affix, loc, group, subgroup) {
 //	corrSource: corruption object for the same slot (corruptsEquipped[group] or corruptsEquipped["merc_"+group] etc.), may be undefined
 //	Weapon storage detail: base_damage_min/max in equipped objects are already multiplied by 1.5 when ethereal
 //	(see equip()/equipMerc()/toggleEthereal()), so the eth multiplier is NOT re-applied to weapons here.
-//	Armor base_defense is stored raw, so the eth multiplier (1.5x) is applied at calc time, matching item_defense in updatePrimaryStats().
+//	Armor base_defense is stored raw, so the eth multiplier (1.25x in PD2) is applied at calc time, matching item_defense in updatePrimaryStats().
 // ---------------------------------
 function getItemEffectiveStatsLines(source, sockTotals, corrSource) {
 	if (typeof source == 'undefined' || source == null || source.name == "none") return "";
@@ -4548,7 +4548,7 @@ function getItemEffectiveStatsLines(source, sockTotals, corrSource) {
 	// Armors
 	var bDef = ~~source.base_defense;
 	if (bDef > 0) {
-		var multEth = (source.ethereal == 1) ? 1.5 : 1;
+		var multEth = (source.ethereal == 1) ? 1.25 : 1;
 		var itemEDef = ~~source.e_def + sockEDef + corrEDef;
 		var flatDef = ~~source.defense;
 		var effDef = Math.ceil(multEth * (1 + itemEDef/100) * bDef) + flatDef;
