@@ -3879,6 +3879,12 @@ function equipmentHoverMerc(group) {
 			}
 		}
 	}
+	// Effective damage / defense calc for the merc's item itself (issue #119)
+	if (mercEquipped[group].name != "none") {
+		var mercGroupEff = "merc_"+group;
+		updateSocketTotals()
+		main_affixes += getItemEffectiveStatsLines(mercEquipped[group], socketed[mercGroupEff] && socketed[mercGroupEff].totals, corruptsEquipped[mercGroupEff])
+	}
 	if (mercEquipped[group].name != "none" && (group == "helm" || group == "armor" || group == "weapon" || group == "offhand" || group == "belt")) {
 		var mercGroup = "merc_"+group;
 		updateSocketTotals()
@@ -4114,6 +4120,8 @@ function equipSwapHover(group) {
 	}
 	if (swapEquipped[group].name != "none") {
 		updateSocketTotals()
+		// Effective damage / defense calc for the item itself (issue #119)
+		main_affixes += getItemEffectiveStatsLines(swapEquipped[group], socketed[swapGroup] && socketed[swapGroup].totals, corruptsEquipped[swapGroup])
 		for (affix in socketed[swapGroup].totals) {
 			if (stats[affix] != 1 && affix != "req_level" && affix != "ctc") {
 				var affix_info = getAffixLine(affix,"socketed",swapGroup,"");
@@ -4238,6 +4246,11 @@ function equipmentHover(group) {
 				else { affixes += affix_info[0]+"<br>" }
 			}
 		}
+	}
+	// Effective damage / defense calc for the item itself (issue #119)
+	if (equipped[group].name != "none") {
+		updateSocketTotals()
+		main_affixes += getItemEffectiveStatsLines(equipped[group], socketed[group] && socketed[group].totals, corruptsEquipped[group])
 	}
 	if (equipped[group].name != "none" && (group == "helm" || group == "armor" || group == "weapon" || group == "offhand" || group == "belt" || group == "amulet")) {
 		updateSocketTotals()
@@ -4498,6 +4511,51 @@ function getAffixLine(affix, loc, group, subgroup) {
 	}
 	var result = [affix_line,value_combined];
 	return result
+}
+
+// getItemEffectiveStatsLines - Builds the "actual" damage / defense lines for a weapon or armor (issue #119)
+//	source: the equipped item object (equipped[group], mercEquipped[group], or swapEquipped[group])
+//	sockTotals: socketed totals for the same slot (socketed[group].totals or socketed["merc_"+group].totals etc.), may be undefined
+//	corrSource: corruption object for the same slot (corruptsEquipped[group] or corruptsEquipped["merc_"+group] etc.), may be undefined
+//	Weapon storage detail: base_damage_min/max in equipped objects are already multiplied by 1.5 when ethereal
+//	(see equip()/equipMerc()/toggleEthereal()), so the eth multiplier is NOT re-applied to weapons here.
+//	Armor base_defense is stored raw, so the eth multiplier (1.5x) is applied at calc time, matching item_defense in updatePrimaryStats().
+// ---------------------------------
+function getItemEffectiveStatsLines(source, sockTotals, corrSource) {
+	if (typeof source == 'undefined' || source == null || source.name == "none") return "";
+	var lines = "";
+	var sockE = ~~(sockTotals && sockTotals.e_damage);
+	var sockMin = ~~(sockTotals && sockTotals.damage_min);
+	var sockMax = ~~(sockTotals && sockTotals.damage_max);
+	var sockEDef = ~~(sockTotals && sockTotals.e_def);
+	var corrE = ~~(corrSource && corrSource.e_damage);
+	var corrMin = ~~(corrSource && corrSource.damage_min);
+	var corrMax = ~~(corrSource && corrSource.damage_max);
+	var corrEDef = ~~(corrSource && corrSource.e_def);
+
+	// Weapons
+	var bMin = ~~source.base_damage_min;
+	var bMax = ~~source.base_damage_max;
+	if (bMin > 0 || bMax > 0) {
+		var itemED = ~~source.e_damage + sockE + corrE;
+		var flatMin = ~~source.damage_min + sockMin + corrMin;
+		var flatMax = ~~source.damage_max + sockMax + corrMax;
+		var effMin = Math.floor(bMin * (1 + itemED/100) + flatMin);
+		var effMax = Math.floor(bMax * (1 + itemED/100) + flatMax);
+		lines += "Damage: " + effMin + "-" + effMax + "<br>";
+	}
+
+	// Armors
+	var bDef = ~~source.base_defense;
+	if (bDef > 0) {
+		var multEth = (source.ethereal == 1) ? 1.5 : 1;
+		var itemEDef = ~~source.e_def + sockEDef + corrEDef;
+		var flatDef = ~~source.defense;
+		var effDef = Math.ceil(multEth * (1 + itemEDef/100) * bDef) + flatDef;
+		lines += "Defense: " + effDef + "<br>";
+	}
+
+	return lines;
 }
 
 // inventoryLeftClick - Handles equipment inventory left clicks
