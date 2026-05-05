@@ -889,8 +889,8 @@ ring1: [
  {name:"Charms"},
  // Unique
  {name:"Hellfire Torch", size:"large", req_level:75, skills_class:2, vitality:60, energy:20, all_res:20, light_radius:8},
- {name:"Annihilus", size:"small", req_level:80, all_skills:1, all_attributes:20, all_res:20, experience:10},
- {name:"Annihilus +2", size:"small", req_level:80, all_skills:2, all_attributes:20, all_res:20, experience:10},
+ {name:"Annihilus", size:"small", req_level:80, all_skills:1, vitality:60, energy:20, all_res:20, experience:10},
+ {name:"Annihilus +2", size:"small", req_level:80, all_skills:2, vitality:60, energy:20, all_res:20, experience:10},
  {name:"Gheed's Fortune", size:"grand", req_level:62, gf:160, mf:40, discount:15},
  // Large
  {rarity:"magic", name:"+3% Conduit Large Charm", size:"large", req_level:42, lDamage:3, pd2:1},

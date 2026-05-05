@@ -125,8 +125,8 @@
  {only:"sorceress", rarity:"magic", name:"+1 Sparking Grand Charm + frw", size:"grand", req_level:42, skills_lightning:1, frw: 7},
  {only:"sorceress", rarity:"magic", name:"+1 Sparking Grand Charm + life", size:"grand", req_level:42, skills_lightning:1, life: 45},
  // Small
- {name:"Annihilus", size:"small", req_level:80, all_skills:1, all_attributes:20, all_res:20, experience:10},
- {name:"Annihilus +2", size:"small", req_level:80, all_skills:2, all_attributes:20, all_res:20, experience:10},
+ {name:"Annihilus", size:"small", req_level:80, all_skills:1, vitality:60, energy:20, all_res:20, experience:10},
+ {name:"Annihilus +2", size:"small", req_level:80, all_skills:2, vitality:60, energy:20, all_res:20, experience:10},
  {rarity:"magic", name:"Amber Small Charm of Vita", size:"small", req_level:39, lRes:11, life:20, pd2:1},
  {rarity:"magic", name:"Emerald Small Charm of Vita", size:"small", req_level:39, pRes:11, life:20, pd2:1},
  {rarity:"magic", name:"Fine Small Charm of Balance", size:"small", req_level:29, damage_max:3, ar:20, fhr:5, pd2:1},
