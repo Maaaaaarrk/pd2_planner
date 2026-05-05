@@ -743,7 +743,7 @@ function equipMerc(group, val) {
 					var multED = 1;
 					var multReq = 1;
 					var reqEth = 0;
-					if (typeof(equipment[group][item]["ethereal"]) != 'undefined') { if (equipment[group][item]["ethereal"] == 1) { multEth = 1.5; reqEth = 10; } }
+					if (typeof(equipment[group][item]["ethereal"]) != 'undefined') { if (equipment[group][item]["ethereal"] == 1) { multEth = 1.25; reqEth = 10; } }
 					if (typeof(equipment[group][item]["e_def"]) != 'undefined') { multED += (equipment[group][item]["e_def"]/100) }
 					if (typeof(equipment[group][item]["req"]) != 'undefined') { multReq += (equipment[group][item]["req"]/100) }
 					for (affix in bases[base]) {
@@ -929,7 +929,7 @@ function equip(group, val) {
 				var multED = 1;
 				var multReq = 1;
 				var reqEth = 0;
-				if (typeof(equipment[src_group][item]["ethereal"]) != 'undefined') { if (equipment[src_group][item]["ethereal"] == 1) { multEth = 1.5; reqEth = 10; } }
+				if (typeof(equipment[src_group][item]["ethereal"]) != 'undefined') { if (equipment[src_group][item]["ethereal"] == 1) { multEth = 1.25; reqEth = 10; } }
 				if (typeof(equipment[src_group][item]["e_def"]) != 'undefined') { multED += (equipment[src_group][item]["e_def"]/100) }
 				if (typeof(equipment[src_group][item]["req"]) != 'undefined') { multReq += (equipment[src_group][item]["req"]/100) }
 				if (typeof(bases[base]) != 'undefined') { for (affix in bases[base]) {
@@ -4517,7 +4517,7 @@ function getAffixLine(affix, loc, group, subgroup) {
 //	source: the equipped item object (equipped[group], mercEquipped[group], or swapEquipped[group])
 //	sockTotals: socketed totals for the same slot (socketed[group].totals or socketed["merc_"+group].totals etc.), may be undefined
 //	corrSource: corruption object for the same slot (corruptsEquipped[group] or corruptsEquipped["merc_"+group] etc.), may be undefined
-//	Weapon storage detail: base_damage_min/max in equipped objects are already multiplied by 1.5 when ethereal
+//	Weapon storage detail: base_damage_min/max in equipped objects are already multiplied by 1.25 when ethereal
 //	(see equip()/equipMerc()/toggleEthereal()), so the eth multiplier is NOT re-applied to weapons here.
 //	Armor base_defense is stored raw, so the eth multiplier (1.25x in PD2) is applied at calc time, matching item_defense in updatePrimaryStats().
 // ---------------------------------
@@ -4625,7 +4625,7 @@ function toggleEthereal(group) {
 
 	var oldEth = (owner.ethereal == 1) ? 1 : 0;
 	var newEth = 1 - oldEth;
-	var multEthNew = newEth ? 1.5 : 1;
+	var multEthNew = newEth ? 1.25 : 1;
 	var reqEthNew = newEth ? 10 : 0;
 	var multReq = 1;
 	if (typeof owner["req"] != 'undefined') { multReq += (owner["req"]/100); }
@@ -4689,7 +4689,7 @@ function changeBase(group, change) {
 		var multED = 1;
 		var multReq = 1;
 		var reqEth = 0;
-		if (typeof(equipped[group]["ethereal"]) != 'undefined') { if (equipped[group]["ethereal"] == 1) { multEth = 1.5; reqEth = 10; } }
+		if (typeof(equipped[group]["ethereal"]) != 'undefined') { if (equipped[group]["ethereal"] == 1) { multEth = 1.25; reqEth = 10; } }
 		if (typeof(equipped[group]["e_def"]) != 'undefined') { multED += (equipped[group]["e_def"]/100) }
 		if (typeof(equipped[group]["req"]) != 'undefined') { multReq += (equipped[group]["req"]/100) }
 		for (affix in bases[base]) { if (affix != "group" && affix != "type" && affix != "upgrade" && affix != "downgrade" && affix != "subtype" && affix != "only" && affix != "def_low" && affix != "def_high" && affix != "durability" && affix != "range" && affix != "twoHands") {
@@ -5541,7 +5541,7 @@ function updatePrimaryStats() {
 		if (typeof(equipped[group].base_defense) != 'undefined') { if (equipped[group].base_defense != unequipped.base_defense) {
 			var multEth = 1;
 			var multED = 1;
-			if (typeof(equipped[group]["ethereal"]) != 'undefined') { if (equipped[group]["ethereal"] == 1) { multEth = 1.5; } }
+			if (typeof(equipped[group]["ethereal"]) != 'undefined') { if (equipped[group]["ethereal"] == 1) { multEth = 1.25; } }
 			if (typeof(equipped[group]["e_def"]) != 'undefined') { multED += (equipped[group]["e_def"]/100) }
 			if (typeof(corruptsEquipped[group]["e_def"]) != 'undefined') { multED += (corruptsEquipped[group]["e_def"]/100) }
 			if (group == "helm" || group == "armor" || group == "weapon" || group == "offhand") { if (typeof(socketed[group].totals["e_def"]) != 'undefined') { multED += (socketed[group].totals["e_def"]/100) } }
