@@ -976,8 +976,10 @@ amulet: [
 ring1: [
 {name:"Ring"},
     {req_level: 12, name: "Angelic Halo", rarity: "set", set_Angelic: 1, set_bonuses: ["set_Angelic", {},     {ar_per_level: 3.0},     {mf: 50},     {},     {},     {}], life_replenish: 6, life: 20},
+    {req_level: 5, rarity: "craft", name: "Blood Craft Ring (Phys)", strength: 10, life_leech: 3, life: 20, damage_min: 13, damage_max: 14},
     {req_level: 5, rarity: "craft", name: "Brilliant Craft Ring", all_res: 5, half_freeze: 1},
     {req_level: 5, rarity: "craft", name: "Brilliant Craft Ring + FCR", all_res: 5, half_freeze: 1, fcr: 10},
+    {req_level: 5, rarity: "craft", name: "Brilliant Craft Ring (Phys)", all_res: 5, half_freeze: 1, damage_min: 13, damage_max: 14},
     {req_level: 58, name: "Bul Katho's Wedding Band", life_per_level: 0.5, all_skills: 1, life_leech: 6, stamina: 50},
     {req_level: 69, name: "Bul-Kathos' Death Band", rarity: "set", set_BK: 1, set_bonuses: ["set_BK", {},     {cbf: 1},     {},     {},     {},     {}], e_damage: 30, ar: 100, lRes: 25, pdr: 8},
     {req_level: 60, name: "Carrion Wind", missile_defense: 160, life_leech: 9, pRes: 55, thorns: 300, charges_skill: "Carrion Vine", charges_charges: 35, charges_level: 11, strike_skill: "Twister", strike_chance: 8, strike_level: 30, frw: 20},
