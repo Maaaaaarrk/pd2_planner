@@ -4549,7 +4549,9 @@ function getItemEffectiveStatsLines(source, sockTotals, corrSource) {
 	var bDef = ~~source.base_defense;
 	if (bDef > 0) {
 		var multEth = (source.ethereal == 1) ? 1.25 : 1;
-		var itemEDef = ~~source.e_def + sockEDef + corrEDef;
+		// Unique armors store their own ED roll in defense_bonus (e.g. Shaftstop 220).
+		// Sockets/runes/affixes use e_def. Both contribute to per-item effective defense.
+		var itemEDef = ~~source.e_def + ~~source.defense_bonus + sockEDef + corrEDef;
 		var flatDef = ~~source.defense;
 		var effDef = Math.ceil(multEth * (1 + itemEDef/100) * bDef) + flatDef;
 		lines += "Defense: " + effDef + "<br>";
