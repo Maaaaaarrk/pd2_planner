@@ -106,7 +106,7 @@ var propKeyToText = {
 
 	// Misc combat
 	cblow: function(v) { return v + "% Chance of Crushing Blow" },
-	dstrike: function(v) { return v + "% Deadly Strike" },
+	dstrike: function(v) { return v + "% Chance of Deadly Strike" },
 	owounds: function(v) { return v + "% Chance of Open Wounds" },
 	pmh: function(v) { return "Prevent Monster Heal" },
 	itd: function(v) { return "Ignore Target's Defense" },
@@ -124,12 +124,14 @@ var propKeyToText = {
 	block: function(v) { return v + "% Increased Chance of Blocking" },
 	pdr: function(v) { return "Physical Damage Taken Reduced by " + v + "%" },
 	damage_reduced: function(v) { return "Physical Damage Taken Reduced by " + v },
-	mDamage_reduced: function(v) { return "Magic Damage Reduced by " + v },
+	mDamage_reduced: function(v) { return "Magic Damage Taken Reduced by " + v },
 
 	// Absorb
-	fAbsorb: function(v) { return v + "% Fire Absorb" },
-	cAbsorb: function(v) { return v + "% Cold Absorb" },
-	lAbsorb: function(v) { return v + "% Lightning Absorb" },
+	// Percent absorb grammar expects "<element> Absorb N%"; the flat variants
+	// keep the leading "+N Element Absorb" wording.
+	fAbsorb: function(v) { return "Fire Absorb " + v + "%" },
+	cAbsorb: function(v) { return "Cold Absorb " + v + "%" },
+	lAbsorb: function(v) { return "Lightning Absorb " + v + "%" },
 	fAbsorb_flat: function(v) { return "+" + v + " Fire Absorb" },
 	cAbsorb_flat: function(v) { return "+" + v + " Cold Absorb" },
 	lAbsorb_flat: function(v) { return "+" + v + " Lightning Absorb" },
@@ -143,12 +145,17 @@ var propKeyToText = {
 	experience: function(v) { return "+" + v + "% to Experience Gained" },
 	life_replenish: function(v) { return "Replenish Life +" + v },
 	life_per_kill: function(v) { return "+" + v + " Life after each Kill" },
-	mana_per_kill: function(v) { return "+" + v + " Mana after each Kill" },
+	// "to Mana" is required by the eureka grammar (item_manaafterkill rule);
+	// life_per_kill has no "to" because item_healafterkill omits it. See
+	// ProjectDiablo2PropGrammar.g4 lines 119 and 189.
+	mana_per_kill: function(v) { return "+" + v + " to Mana after each Kill" },
 	life_per_hit: function(v) { return "+" + v + " Life after each Hit" },
+	// NOTE: eureka has no item_manaafterhit grammar rule, so this string
+	// cannot be parsed by the external tool. Left as-is until PD2 adds the stat.
 	mana_per_hit: function(v) { return "+" + v + " Mana after each Hit" },
 	thorns: function(v) { return "Attacker Takes Damage of " + v },
 	thorns_per_level: function(v) { return "Attacker Takes Damage of " + v + " (Based on Character Level)" },
-	damage_to_mana: function(v) { return v + "% Damage Taken Goes to Mana" },
+	damage_to_mana: function(v) { return v + "% Damage Taken Gained as Mana when Hit" },
 	req: function(v) { return "Requirements " + v + "%" },
 	sockets: function(v) { return "Socketed (" + v + ")" },
 	indestructible: function(v) { return "Indestructible" },
@@ -163,7 +170,7 @@ var propKeyToText = {
 
 	// Regen
 	mana_regen: function(v) { return "Regenerate Mana " + v + "%" },
-	pierce: function(v) { return v + "% chance of Piercing Attack" },
+	pierce: function(v) { return v + "% Chance to Pierce" },
 };
 
 // Keys to skip when building property text (these are metadata, not D2 properties)
