@@ -480,48 +480,42 @@ function buildRipJson() {
 
 // Export to .d2s game file via external tool
 function exportToGameFile() {
-	var rip = buildRipJson();
+	// Build the rip JSON. Wrap in try/catch so unexpected errors surface to the
+	// console (and the user) instead of silently producing empty/partial output.
+	var rip;
+	try {
+		rip = buildRipJson();
+	} catch (e) {
+		console.error("Export to Game File failed while building data:", e);
+		alert("Export failed: " + (e && e.message ? e.message : e) +
+			"\n\nSee the browser devtools console for details.");
+		return;
+	}
 	if (!rip) return;
 
 	var json = JSON.stringify(rip, null, 2);
 
-	// Copy to clipboard
+	// Always show the export modal. The external tool runs on a different
+	// origin (exiledagain.github.io) so we cannot inject the JSON into its
+	// textarea programmatically (same-origin policy). Showing the JSON in a
+	// modal here makes the data visible to the user and gives them an
+	// explicit "Copy & Open Export Tool" button so they can paste it.
+	//
+	// We still write to the clipboard in the background as a convenience, but
+	// success no longer depends on it (some browsers/contexts deny clipboard
+	// access without a user gesture). Either way the user can grab the JSON
+	// from the textarea in the modal.
 	if (navigator.clipboard && navigator.clipboard.writeText) {
-		navigator.clipboard.writeText(json).then(function() {
-			// Open the external export tool
-			var exportUrl = "https://exiledagain.github.io/bug-free-eureka/export.html";
-			var w = window.open(exportUrl, "_blank");
-			if (w) {
-				// Try to inject the JSON after the page loads
-				var attempts = 0;
-				var inject = setInterval(function() {
-					attempts++;
-					try {
-						var textarea = w.document.querySelector('#json');
-						if (textarea) {
-							textarea.value = json;
-							clearInterval(inject);
-						}
-					} catch(e) {
-						// Cross-origin - can't inject, user will paste manually
-						clearInterval(inject);
-					}
-					if (attempts > 30) {
-						clearInterval(inject);
-					}
-				}, 500);
-			}
-			showExportMessage("Character data copied to clipboard and export tool opened in new tab. If the data wasn't auto-filled, paste it (Ctrl+V) into the text area, then click Download.");
-		}).catch(function() {
-			fallbackExportCopy(json);
-		});
-	} else {
-		fallbackExportCopy(json);
+		navigator.clipboard.writeText(json).catch(function() { /* no-op */ });
 	}
+	showExportModal(json);
 }
 
-// Fallback: show the JSON in a textarea for manual copy
-function fallbackExportCopy(json) {
+// Show the export modal with the JSON in a textarea and a button to copy &
+// open the external export tool. This is the primary (and only) UI path —
+// cross-origin restrictions prevent us from auto-populating the external
+// tool's textarea, so the user always pastes manually.
+function showExportModal(json) {
 	var exportUrl = "https://exiledagain.github.io/bug-free-eureka/export.html";
 
 	// Create modal overlay
@@ -533,10 +527,10 @@ function fallbackExportCopy(json) {
 	modal.style.cssText = "background:#1a1a2e;border:2px solid #9b885e;padding:20px;max-width:600px;width:90%;max-height:80vh;display:flex;flex-direction:column;color:#ddd;font-family:sans-serif;";
 
 	modal.innerHTML = '<h3 style="color:#9b885e;margin-top:0;">Export to Game File</h3>' +
-		'<p>Copy the data below and paste it into the <a href="' + exportUrl + '" target="_blank" style="color:#6666bb;">PD2 Export Tool</a>, then click Download.</p>' +
+		'<p>Click <b>Copy &amp; Open Export Tool</b> below. The data is copied to your clipboard and the external tool opens in a new tab — paste (Ctrl+V) into its text area, then click Download.</p>' +
 		'<textarea id="export_json_textarea" style="width:100%;height:300px;background:#111;color:#ddd;border:1px solid #444;padding:8px;font-size:12px;resize:vertical;" readonly></textarea>' +
 		'<div style="margin-top:10px;display:flex;gap:10px;">' +
-		'<button onclick="document.getElementById(\'export_json_textarea\').select();document.execCommand(\'copy\');window.open(\'' + exportUrl + '\',\'_blank\');" style="padding:8px 16px;background:#9b885e;color:#fff;border:none;cursor:pointer;">Copy & Open Export Tool</button>' +
+		'<button onclick="document.getElementById(\'export_json_textarea\').select();document.execCommand(\'copy\');window.open(\'' + exportUrl + '\',\'_blank\');" style="padding:8px 16px;background:#9b885e;color:#fff;border:none;cursor:pointer;">Copy &amp; Open Export Tool</button>' +
 		'<button onclick="document.getElementById(\'export_overlay\').remove();" style="padding:8px 16px;background:#444;color:#fff;border:none;cursor:pointer;">Close</button>' +
 		'</div>';
 
@@ -549,16 +543,7 @@ function fallbackExportCopy(json) {
 	});
 }
 
-// Show a brief status message
-function showExportMessage(msg) {
-	var el = document.getElementById("export_message");
-	if (!el) {
-		el = document.createElement("div");
-		el.id = "export_message";
-		el.style.cssText = "position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1a2e;border:2px solid #9b885e;color:#ddd;padding:15px 25px;z-index:10000;font-family:sans-serif;max-width:500px;text-align:center;";
-		document.body.appendChild(el);
-	}
-	el.textContent = msg;
-	el.style.display = "block";
-	setTimeout(function() { el.style.display = "none"; }, 8000);
+// Backwards-compatible alias (kept in case anything else calls this name).
+function fallbackExportCopy(json) {
+	showExportModal(json);
 }
