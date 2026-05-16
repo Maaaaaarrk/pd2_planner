@@ -301,19 +301,50 @@ function getItemRarity(item) {
 }
 
 
+// Map a charm's "size" field to the eureka base-item name.
+// Eureka rip2d2s parses `type` as "<Rarity> <Base>" and looks up <Base> in
+// nameToItemEntry, which is keyed by the readable namestr of each item code
+// (cm1 = "Small Charm", cm2 = "Large Charm", cm3 = "Grand Charm"). See
+// bug-free-eureka/rip2d2s.js:849-851 (rejuv.base parse) and 1057-1070
+// (nameToItemEntry construction).
+var charmSizeToBase = {
+	small: "Small Charm",
+	large: "Large Charm",
+	grand: "Grand Charm"
+};
+
+// Derive the base item name for items whose data entries omit `base:`.
+// Amulets, rings, and charms in items_equipment.js are all defined without a
+// `base` field because their slot uniquely determines the base item code. The
+// previous fallback used item.name as the base, which produced strings like
+// "Unique Highlord's Wrath" and made eureka throw `unknown item: Highlord's
+// Wrath` at rip2d2s.js:1302.
+function deriveBaseFromSource(item, sourceArray) {
+	if (sourceArray === "amulet") return "Amulet";
+	if (sourceArray === "ring1" || sourceArray === "ring2") return "Ring";
+	if (sourceArray === "charms") {
+		var size = item.size;
+		if (size && charmSizeToBase[size]) return charmSizeToBase[size];
+	}
+	return "";
+}
+
 // Build a rip-format item from a planner equipment entry
 function buildRipItem(itemName, slotGroup) {
 	if (!itemName || itemName === "none") return null;
 
 	// Find the item in equipment arrays
-	var item = findEquipmentItem(itemName, slotGroup);
-	if (!item) return null;
+	var found = findEquipmentItem(itemName, slotGroup);
+	if (!found) return null;
+	var item = found.item;
 
-	// Get the base name
+	// Get the base name. Most items have an explicit `base` field; amulets,
+	// rings, and charms in items_equipment.js do not — derive their base from
+	// the equipment array (and `size` for charms) so the emitted `type`
+	// matches what eureka's nameToItemEntry table expects.
 	var baseName = item.base || "";
-	if (!baseName && typeof bases !== 'undefined') {
-		// For charms and other items without a base field
-		baseName = item.name;
+	if (!baseName) {
+		baseName = deriveBaseFromSource(item, found.sourceArray);
 	}
 
 	var rarity = getItemRarity(item);
@@ -360,19 +391,25 @@ function buildRipItem(itemName, slotGroup) {
 }
 
 
-// Find an equipment item by name across all equipment arrays
+// Find an equipment item by name across all equipment arrays. Returns
+// { item, sourceArray } so callers can derive a default base item name from
+// the array the entry came from (amulet → "Amulet", ring → "Ring", charms →
+// per-size charm base). Returns null if the item is not found.
 function findEquipmentItem(name, slotGroup) {
 	if (typeof equipment === 'undefined') return null;
 
-	// Search all equipment arrays
+	// Search all equipment arrays. ring2 is included for completeness even
+	// though the planner data file leaves ring2 empty (rings live under
+	// "ring1") — callers may still pass slotGroup "ring2".
 	var arrays = ["weapon", "helm", "armor", "offhand", "gloves", "boots", "belt",
-		"amulet", "ring1", "charms"];
+		"amulet", "ring1", "ring2", "charms"];
 
 	for (var a = 0; a < arrays.length; a++) {
-		var arr = equipment[arrays[a]];
+		var arrName = arrays[a];
+		var arr = equipment[arrName];
 		if (!arr) continue;
 		for (var i = 0; i < arr.length; i++) {
-			if (arr[i].name === name) return arr[i];
+			if (arr[i].name === name) return { item: arr[i], sourceArray: arrName };
 		}
 	}
 
