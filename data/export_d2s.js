@@ -329,6 +329,60 @@ function deriveBaseFromSource(item, sourceArray) {
 	return "";
 }
 
+// Translation table mapping the planner's readable base names to the readable
+// names eureka's nameToItemEntry actually contains. Eureka builds that table
+// by walking Misc.txt / Weapons.txt / Armor.txt and resolving each entry's
+// `namestr` through patchstring.tbl, expansionstring.tbl, and string.tbl in
+// that order (StringResolver, d2data.js:1608-1637; eureka resolver wiring at
+// d2data.js:2145-2154; nameToItemEntry build at rip2d2s.js:1057-1070). The
+// throw site is rip2d2s.js:1300-1302.
+//
+// Every mapping below is backed by a direct lookup against eureka's data:
+//
+//   Arrows           → Blunt Arrows   (Misc.txt aqv,  namestr=aqv resolved by
+//                                       patchstring.tbl to "Blunt Arrows")
+//   Bolts            → Light Bolts    (Misc.txt cqv,  patchstring.tbl)
+//   Long Siege Bow   → Large Siege Bow (Weapons.txt 8l8, string.tbl);
+//                                       Cliffkiller is UniqueItems.txt code=8l8
+//   Martel De Fer    → Martel de Fer  (Weapons.txt 9gm, string.tbl;
+//                                       lowercase "de" — only the casing
+//                                       differs in PD2's data); The Gavel of
+//                                       Pain is UniqueItems.txt code=9gm
+//   Sacred Plate     → Sacred Armor   (Armor.txt uar, expansionstring.tbl);
+//                                       Innocence runeword body armor — eureka
+//                                       only knows "Sacred Armor"
+//   Silver Edged Axe → Silver-edged Axe (Weapons.txt 7ba, expansionstring.tbl;
+//                                       hyphenated, lowercase "edged"); Ethereal
+//                                       Edge is UniqueItems.txt code=7ba
+//   Succubae Skull   → Succubus Skull (Armor.txt nee, expansionstring.tbl);
+//                                       Boneflame is UniqueItems.txt code=nee
+//   Two Handed Sword → Two-Handed Sword (Weapons.txt 2hs, string.tbl; hyphen);
+//                                       Shadowfang is UniqueItems.txt code=2hs
+//
+// All 405 distinct `base:` values in data/items_equipment.js were checked
+// against the rebuilt nameToItemEntry map; the eight above are the only
+// mismatches. The remaining 397 base names already resolve correctly without
+// translation.
+var plannerBaseToEurekaBase = {
+	"Arrows":           "Blunt Arrows",
+	"Bolts":            "Light Bolts",
+	"Long Siege Bow":   "Large Siege Bow",
+	"Martel De Fer":    "Martel de Fer",
+	"Sacred Plate":     "Sacred Armor",
+	"Silver Edged Axe": "Silver-edged Axe",
+	"Succubae Skull":   "Succubus Skull",
+	"Two Handed Sword": "Two-Handed Sword"
+};
+
+// Translate a planner base name to the readable form eureka's nameToItemEntry
+// is keyed on. Returns the input unchanged for any base eureka already knows.
+function translateBaseForEureka(baseName) {
+	if (baseName && plannerBaseToEurekaBase[baseName]) {
+		return plannerBaseToEurekaBase[baseName];
+	}
+	return baseName;
+}
+
 // Build a rip-format item from a planner equipment entry
 function buildRipItem(itemName, slotGroup) {
 	if (!itemName || itemName === "none") return null;
@@ -346,6 +400,13 @@ function buildRipItem(itemName, slotGroup) {
 	if (!baseName) {
 		baseName = deriveBaseFromSource(item, found.sourceArray);
 	}
+
+	// Translate planner base names to the readable form eureka's lookup table
+	// uses. The planner's `base:` strings come from PD2's in-game labels, which
+	// differ in a handful of cases from the readable namestr eureka resolves
+	// off Misc/Weapons/Armor.txt + the .tbl string tables. See
+	// plannerBaseToEurekaBase above for the audited list of mismatches.
+	baseName = translateBaseForEureka(baseName);
 
 	var rarity = getItemRarity(item);
 	var socketCount = item.sockets || 0;
