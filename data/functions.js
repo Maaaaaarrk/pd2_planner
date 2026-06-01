@@ -5527,6 +5527,79 @@ function updateStats() { if (loaded == 1) { updatePrimaryStats(); updateOther();
 
 // updatePrimaryStats - Updates stats shown by the default (original D2) stat page
 // ---------------------------------
+// Map the planner's weapon `type` (+ twoHanded flag) to the Attack Speed
+// Calculator's weapon-type label. Returns null for types the calculator does
+// not model (e.g. orb). club/hammer collapse to mace exactly as the FPA
+// computation below does.
+function mapWeaponTypeForCalc(w) {
+	if (!w) { return null; }
+	var two = (w.twoHanded == 1);
+	switch (w.type) {
+		case "sword":    return two ? "2H Sword" : "1H Sword";
+		case "axe":      return two ? "2H Axe"   : "Axe";
+		case "mace":
+		case "club":
+		case "hammer":   return two ? "2H Mace"  : "Mace";
+		case "polearm":  return "Polearm";
+		case "spear":    return "Spear";
+		case "javelin":  return "Spear";
+		case "dagger":   return "Dagger";
+		case "thrown":   return "Throwing";
+		case "claw":     return "Claw";
+		case "bow":      return "Bow";
+		case "crossbow": return "Crossbow";
+		case "staff":    return "Staff";
+		case "wand":     return "Wand";
+		case "scepter":  return "Scepter";
+		default:         return null; // orb, etc. — not an attack-speed weapon
+	}
+}
+
+// Deep-link the "Attack Speed Calculator" button to the Hiim PD2 Resources
+// calculator with the current build pre-filled (issue #139). `ias` is the
+// build's applicable item IAS (off-weapon already had the offhand removed for
+// dual-wield); the on-weapon portion is split back out from equipped.weapon.ias.
+// The weapon base is conveyed via WSM rather than name, because runeword /
+// unique / set weapons hide their base — the calculator resolves a matching
+// base from the WSM. Called every render so the link always reflects the build.
+function updateAttackSpeedCalcLink(c, ias) {
+	var link = document.getElementById("attackSpeedCalcLink");
+	if (!link) { return; }
+	var base = "https://maaaaaarrk.github.io/Hiim-PD2-Resources/attackspeedcalc.html";
+	var calcClasses = { Amazon:1, Sorceress:1, Necromancer:1, Paladin:1, Barbarian:1, Druid:1, Assassin:1 };
+	if (!calcClasses[c.class_name]) { link.href = base; return; }
+
+	var p = ["cls=" + encodeURIComponent(c.class_name)];
+
+	// Druid shapeshift form (only meaningful for Druid; harmless otherwise).
+	var form = "human";
+	if (typeof(effects["Werewolf"]) != 'undefined' && effects["Werewolf"].info && effects["Werewolf"].info.enabled == 1) { form = "werewolf"; }
+	else if (typeof(effects["Werebear"]) != 'undefined' && effects["Werebear"].info && effects["Werebear"].info.enabled == 1) { form = "werebear"; }
+	p.push("form=" + form);
+
+	var w = equipped.weapon;
+	var calcType = mapWeaponTypeForCalc(w);
+	if (w && w.type != "" && w.special != 1 && calcType) {
+		var weaponIAS = ~~w.ias;
+		var wsm = c.baseSpeed - ~~equipped.offhand.baseSpeed;
+		p.push("wt=" + encodeURIComponent(calcType));
+		p.push("wsm=" + (~~wsm));
+		// The base name lets the calc pick the exact base for white/magic/rare
+		// weapons; for runewords/uniques/sets it won't match a base option and
+		// the calc falls back to WSM resolution.
+		if (w.name && w.name != "none" && w.name != "Weapon") { p.push("wb=" + encodeURIComponent(w.name)); }
+		p.push("wias=" + weaponIAS);
+		p.push("gias=" + Math.max(0, ias - weaponIAS));
+	} else {
+		// No (or non-standard) weapon — still seed the total item IAS as gear IAS.
+		p.push("wias=0");
+		p.push("gias=" + Math.max(0, ~~ias));
+	}
+	p.push("sias=" + (~~c.ias_skill));
+
+	link.href = base + "#" + p.join("&");
+}
+
 function updatePrimaryStats() {
 	var c = character;
 	var strTotal = (c.strength + c.all_attributes + c.level*c.strength_per_level);
@@ -5665,6 +5738,8 @@ function updatePrimaryStats() {
 	} else {
              document.getElementById("ias_label").style.display = "none"
 	}
+
+	updateAttackSpeedCalcLink(c, ias);
 
 	if (equipped.weapon.type != "" && equipped.weapon.special != 1) {
 		var weaponType = equipped.weapon.type;
