@@ -877,6 +877,19 @@
 					</div>
 				</div>
 
+				<!-- Aggregated affixes (issue #118): gear-derived skill/CTC/aura affix lines, grouped broad->specific.
+				     Skill lines are intentionally NOT merged (e.g. "+1 to All Skills" and "+2 Holy Bolt" stay split,
+				     game-style, so the user sums them). The header mirrors the in-game stats page totals. -->
+				<div class="stat-text-wrapper" id="aggregated_affixes" style="width:304px; float:left;">
+					<font size="3" style="color:#c0c0ff;">Character Stats</font><br>
+					<font size="2">Defense: </font><font size="2" id="agg_defense"></font><br>
+					<font size="2">Life: </font><font size="2" id="agg_life"></font><br>
+					<font size="2">Mana: </font><font size="2" id="agg_mana"></font><br>
+					<font size="2">Stamina: </font><font size="2" id="agg_stamina"></font><br>
+					<br>
+					<div id="aggregated_affixes_list"><font size="2" id="agg_affix_lines"></font></div>
+				</div>
+
 				<div id="stats_positioning_alignment">
 					<div><br><br><br><br><br><br><br><br><br><br><br><br><br></div>
 					<div id="stats_column_5">
