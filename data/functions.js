@@ -6417,11 +6417,17 @@ function formatAggregatedSkillLine(affix, value) {
 function updateAggregatedAffixes() {
 	var c = character;
 
-	// Mirror the in-game stats-page totals into the aggregated section header.
-	document.getElementById("agg_defense").innerHTML = document.getElementById("defense").innerHTML
-	document.getElementById("agg_life").innerHTML = document.getElementById("life").innerHTML
-	document.getElementById("agg_mana").innerHTML = document.getElementById("mana").innerHTML
-	document.getElementById("agg_stamina").innerHTML = document.getElementById("stamina").innerHTML
+	// Mirror the full in-game stats-page ("a" key) totals into the aggregated section
+	// header, in panel order: attributes, then core stats, then resistances (#118).
+	var statMirror = [
+		["strength","agg_strength"], ["dexterity","agg_dexterity"], ["vitality","agg_vitality"], ["energy","agg_energy"],
+		["defense","agg_defense"], ["stamina","agg_stamina"], ["life","agg_life"], ["mana","agg_mana"],
+		["fres","agg_fres"], ["cres","agg_cres"], ["lres","agg_lres"], ["pres","agg_pres"]
+	];
+	for (let i = 0; i < statMirror.length; i++) {
+		var src = document.getElementById(statMirror[i][0]), dst = document.getElementById(statMirror[i][1]);
+		if (src != null && dst != null) { dst.innerHTML = src.innerHTML }
+	}
 
 	var html = "";
 
