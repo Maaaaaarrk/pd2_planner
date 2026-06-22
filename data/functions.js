@@ -521,7 +521,7 @@ function loadParams() {
 				for (group in corruptsEquipped) { if (param_equipped[group][0] != "none") {	// equipment
 					var isSwapGroup = group.startsWith("swap_");
 					var options = document.getElementById("dropdown_"+group).options;
-					for (let i = 0; i < options.length; i++) { if (options[i].innerHTML == param_equipped[group][0]) {  document.getElementById("dropdown_"+group).selectedIndex = i } }
+					for (let i = 0; i < options.length; i++) { if (options[i].value == param_equipped[group][0]) {  document.getElementById("dropdown_"+group).selectedIndex = i } }
 					if (isSwapGroup) { equipSwap(group.slice(5), param_equipped[group][0]) }
 					else { equip(group,param_equipped[group][0]) }
 				} }
@@ -553,7 +553,7 @@ function loadParams() {
 				for (group in mercEquipped) {
 					if (param_mercenary[g] != 'none') {
 						var options = document.getElementById("dropdown_merc_"+group).options;
-						for (let i = 0; i < options.length; i++) { if (options[i].innerHTML == param_mercenary[g]) {  document.getElementById("dropdown_merc_"+group).selectedIndex = i } }
+						for (let i = 0; i < options.length; i++) { if (options[i].value == param_mercenary[g]) {  document.getElementById("dropdown_merc_"+group).selectedIndex = i } }
 						equipMerc(group,param_mercenary[g])
 					}
 					g += 1
@@ -1544,9 +1544,13 @@ function loadItems(group, dropdown, className) {
 					} else {
 						var addon = "";
 						var label = item.name + itemLevelLabel(item);
-						if (typeof(item.debug) != 'undefined') { addon = "<option class='dropdown-debug'>" + label + "</option>" }
-						else if (typeof(item.rarity) != 'undefined') { addon = "<option class='dropdown-"+item.rarity+"'>" + label + "</option>" }
-						else { addon = "<option class='dropdown-unique'>" + label + "</option>" }
+						// Pin the option value to the bare item name so the displayed level
+						// label doesn't change what equip()/equipMerc()/equipSwap() and the
+						// build-restore loop match on (they compare against item.name). (#118)
+						var optVal = " value=\"" + item.name + "\"";
+						if (typeof(item.debug) != 'undefined') { addon = "<option"+optVal+" class='dropdown-debug'>" + label + "</option>" }
+						else if (typeof(item.rarity) != 'undefined') { addon = "<option"+optVal+" class='dropdown-"+item.rarity+"'>" + label + "</option>" }
+						else { addon = "<option"+optVal+" class='dropdown-unique'>" + label + "</option>" }
 						keptItems.push({item: item, addon: addon});
 					}
 				}
