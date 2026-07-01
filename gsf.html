@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GSF Bingo Board</title>
+<style>
+  :root {
+    /* Interior grid inset over gsf.jpg (768x1152), measured from the carved
+       cells: grid spans x 64-704, y 167-975. */
+    --grid-left: 8.33%;
+    --grid-top: 14.5%;
+    --grid-right: 8.33%;
+    --grid-bottom: 15.36%;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: #0a0a0c;
+    color: #d8c7a0;
+    font-family: "Trajan Pro", "Palatino Linotype", Georgia, serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  button.tool {
+    background: linear-gradient(#2a2620, #16130f);
+    color: #d8c7a0;
+    border: 1px solid #5a4a2c;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font: inherit;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    text-shadow: 0 1px 1px #000;
+  }
+  button.tool:hover { border-color: #a9863f; color: #f0e2b8; }
+  button.tool:active { transform: translate(-50%, -50%) translateY(1px); }
+
+  /* Buttons flanking the gem in the bottom frame of the board image */
+  .board-btn {
+    position: absolute;
+    top: 90%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    font-size: clamp(8px, 1.5vh, 13px);
+    padding: 6px 12px;
+    z-index: 3;
+  }
+  .board-btn.left  { left: 25%; }
+  .board-btn.right { left: 75%; }
+
+  /* Board keeps the 768:1152 aspect of gsf.jpg */
+  .board {
+    position: relative;
+    width: min(95vw, 62vh);
+    aspect-ratio: 768 / 1152;
+    margin: 24px auto 40px;
+    background: url("images/gsf.jpg") center/contain no-repeat;
+    user-select: none;
+  }
+  .grid {
+    position: absolute;
+    left: var(--grid-left);
+    top: var(--grid-top);
+    right: var(--grid-right);
+    bottom: var(--grid-bottom);
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 2%;
+  }
+
+  /* Animated glows overlaid on the baked-in skull eyes and gem */
+  .fx {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    border-radius: 50%;
+    mix-blend-mode: screen;
+    z-index: 2;
+    aspect-ratio: 1;
+  }
+  .fx.eye {
+    width: 4.5%;
+    background: radial-gradient(circle,
+      rgba(255,170,60,0.95) 0%,
+      rgba(255,70,10,0.7) 32%,
+      rgba(255,20,0,0) 70%);
+    animation: eyeFlicker 1.7s infinite ease-in-out;
+    will-change: opacity, transform;
+  }
+  .fx.eye.left  { left: 47.4%; top: 8.2%; }
+  .fx.eye.right { left: 52.3%; top: 8.1%; animation-delay: -0.55s; }
+  .fx.gem {
+    width: 14%;
+    background: radial-gradient(circle,
+      rgba(160,255,200,0.9) 0%,
+      rgba(40,230,140,0.55) 30%,
+      rgba(0,190,95,0) 68%);
+    left: 50.4%;
+    top: 91.6%;
+    animation: gemPulse 3s infinite ease-in-out;
+    will-change: opacity, transform;
+  }
+  @keyframes eyeFlicker {
+    0%, 100% { opacity: 0.5;  transform: translate(-50%,-50%) scale(1); }
+    18%      { opacity: 1;    transform: translate(-50%,-50%) scale(1.18); }
+    34%      { opacity: 0.65; transform: translate(-50%,-50%) scale(1.05); }
+    52%      { opacity: 1;    transform: translate(-50%,-50%) scale(1.12); }
+    70%      { opacity: 0.55; transform: translate(-50%,-50%) scale(1.02); }
+    85%      { opacity: 0.9;  transform: translate(-50%,-50%) scale(1.1); }
+  }
+  @keyframes gemPulse {
+    0%, 100% { opacity: 0.45; transform: translate(-50%,-50%) scale(0.88); }
+    50%      { opacity: 1;    transform: translate(-50%,-50%) scale(1.15); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fx { animation: none !important; opacity: 0.8; }
+  }
+  .cell {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 4% 3% 3%;
+    cursor: pointer;
+    overflow: hidden;
+    transition: background 0.15s;
+  }
+  .cell:hover { background: rgba(120, 90, 30, 0.14); }
+  .cell .icons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6%;
+    height: 42%;
+    width: 100%;
+    margin-top: 16%;
+    pointer-events: none;
+  }
+  .cell .icon {
+    height: 100%;
+    max-width: 60%;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.8));
+  }
+  .cell .icons.multi .icon { max-width: 46%; }
+  .cell .name {
+    margin-top: auto;
+    text-align: center;
+    line-height: 1.05;
+    font-size: clamp(6px, 1.55vh, 12px);
+    color: #e6d5a8;
+    text-shadow: 0 1px 2px #000, 0 0 4px #000;
+    pointer-events: none;
+  }
+  .cell .completor {
+    width: 100%;
+    margin-top: 3%;
+    background: rgba(0,0,0,0.35);
+    border: none;
+    border-bottom: 1px solid rgba(120,95,45,0.5);
+    color: #7fd08a;
+    font: inherit;
+    font-size: clamp(5px, 1.25vh, 10px);
+    text-align: center;
+    padding: 1px 2px;
+    outline: none;
+  }
+  .cell .completor::placeholder { color: rgba(160,140,100,0.35); }
+  .cell .completor:focus { background: rgba(0,0,0,0.55); }
+
+  /* Completed state */
+  .cell.done .icon { filter: grayscale(0.4) brightness(0.7); }
+  .cell.done::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(20, 70, 30, 0.32);
+    box-shadow: inset 0 0 0 2px rgba(90, 200, 110, 0.55);
+    pointer-events: none;
+  }
+  .cell .check {
+    position: absolute;
+    top: 4%;
+    right: 6%;
+    font-size: clamp(12px, 3vh, 26px);
+    color: #7fe08a;
+    text-shadow: 0 0 6px #000, 0 1px 2px #000;
+    opacity: 0;
+    transition: opacity 0.15s;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .cell.done .check { opacity: 1; }
+
+  .hint {
+    text-align: center;
+    font-size: 12px;
+    color: #7a6c4c;
+    margin: 0 auto 30px;
+    max-width: 600px;
+  }
+
+  /* ---- BINGO celebration ---- */
+  #celebration {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at 50% 45%, rgba(60,0,0,0.55), rgba(0,0,0,0.82));
+    overflow: hidden;
+    cursor: pointer;
+    animation: fadeIn 0.25s ease;
+  }
+  #celebration.show { display: flex; }
+  #gore {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .bingo-gif {
+    position: relative;
+    z-index: 3;
+    width: min(62vw, 340px);
+    max-height: 70vh;
+    object-fit: contain;
+    filter: drop-shadow(0 0 30px rgba(255,0,0,0.55)) drop-shadow(0 6px 14px #000);
+    animation: gifPop 0.5s cubic-bezier(.2,1.4,.4,1) both;
+  }
+  .bingo-text {
+    position: absolute;
+    top: 6%;
+    z-index: 7;
+    font-size: clamp(48px, 15vw, 150px);
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    color: #d40000;
+    text-shadow:
+      0 0 12px #ff2a00, 0 0 28px #a00,
+      3px 4px 0 #400, -2px 2px 0 #400,
+      0 8px 22px rgba(0,0,0,0.9);
+    animation: bingoThrob 0.9s ease-in-out infinite alternate;
+    pointer-events: none;
+  }
+  .bingo-dismiss {
+    position: absolute;
+    bottom: 5%;
+    z-index: 7;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(220,180,120,0.75);
+    text-shadow: 0 1px 3px #000;
+    pointer-events: none;
+  }
+
+  /* D2-style gore: tiny pixel gibs that spray out, land and pile up */
+  .gib {
+    position: absolute;
+    image-rendering: pixelated;
+    transform: translate(-50%, -50%) translate(var(--tx), var(--ty)) rotate(var(--rot));
+    animation: gibFly var(--dur) cubic-bezier(.12,.7,.35,1) both;
+    transition: opacity 0.6s linear;
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes gifPop {
+    0%   { opacity: 0; transform: scale(0.3) rotate(-8deg); }
+    100% { opacity: 1; transform: scale(1) rotate(0); }
+  }
+  @keyframes bingoThrob {
+    from { transform: scale(1);    filter: brightness(1); }
+    to   { transform: scale(1.08); filter: brightness(1.3); }
+  }
+  /* fly from the burst origin out to (--tx,--ty), then stay put */
+  @keyframes gibFly {
+    0%   { transform: translate(-50%,-50%) translate(0,0) rotate(var(--rot)); }
+    100% { transform: translate(-50%,-50%) translate(var(--tx),var(--ty)) rotate(var(--rot)); }
+  }
+</style>
+</head>
+<body>
+  <div class="board">
+    <div class="grid" id="grid"></div>
+    <div class="fx eye left"></div>
+    <div class="fx eye right"></div>
+    <div class="fx gem"></div>
+    <button class="tool board-btn left" id="shuffle">Shuffle</button>
+    <button class="tool board-btn right" id="reset">Reset Progress</button>
+  </div>
+  <p class="hint">Click a square to toggle completion &middot; type the completor's name below each square &middot; progress is saved in your browser.</p>
+
+  <div id="celebration">
+    <div id="gore"></div>
+    <div class="bingo-text">BINGO!</div>
+    <img class="bingo-gif" src="images/x8rip0zu8vbe1.gif" alt="BINGO!">
+    <div class="bingo-dismiss">click anywhere to close</div>
+  </div>
+
+<script>
+  // Each square: display name, image, completor name, completion flag.
+  const SQUARES = [
+    { name: "Dclone",                  image: "images/items/Annihilus.png" },
+    { name: "Rathma",                  image: "images/items/twss.png" },
+    { name: "Lucion",                  image: "images/items/lucionamu.png" },
+    { name: "Vial/Mirror",             images: ["images/items/lilith-mirror.png", "images/items/vial-lightsong.png"] },
+    { name: "Anniversary Item",        image: "images/items/wshako.png" },
+    { name: "Uber Trist",              image: "images/items/charms/charm2u.png" },
+    { name: "Uber Ancients",           image: "images/items/socketables/Standard_of_Heroes.png" },
+    { name: "PBox",                    image: "images/items/larzuk-puzzlebox.png" },
+    { name: "5/5 Facet",               image: "images/items/socketables/jewel/Jewel_white.png" },
+    { name: "Zod",                     image: "images/items/socketables/rune/Zod_Rune.png" },
+    { name: "Cham",                    image: "images/items/socketables/rune/Cham_Rune.png" },
+    { name: "Jah",                     image: "images/items/socketables/rune/Jah_Rune.png" },
+    { name: "Ber",                     image: "images/items/socketables/rune/Ber_Rune.png" },
+    { name: "Sur",                     image: "images/items/socketables/rune/Sur_Rune.png" },
+    { name: "Lo",                      image: "images/items/socketables/rune/Lo_Rune.png" },
+    { name: "Ohm",                     image: "images/items/socketables/rune/Ohm_Rune.png" },
+    { name: "Vex",                     image: "images/items/socketables/rune/Vex_Rune.png" },
+    { name: "Tyreals",                 image: "images/items/armor/special/Tyrael's_Might.png" },
+    { name: "Templars",                image: "images/items/armor/special/Templar's_Might.png" },
+    { name: "Mangsong",                image: "images/items/weapon/staff/special/Mang_Song's_Lesson.png" },
+    { name: "500 ED Weapon",           image: "images/items/weapon/sword/Crystal_Sword.png" },
+    { name: "TP/ID Book",              images: ["images/items/horadric-almanac.png", "images/items/horadric-navigator.png"] },
+    { name: "45 Life Skiller",         image: "images/items/charms/charm3u.png" },
+    { name: "Eth Indest Shield/Chest", images: ["images/items/offhand/Gothic_Shield.png", "images/items/armor/Ancient_Armor.png"] },
+    { name: "+8 Skill Staff",          image: "images/items/weapon/staff/War_Staff.png" },
+  ];
+
+  // Pre-mark squares as completed by a given person. Key = square display name
+  // (exactly as above), value = completor name shown on the tile. These are
+  // applied on every load, so they act as global/authoritative completions.
+  const PRESET_COMPLETIONS = {
+  };
+
+  function applyPresets(board) {
+    board.forEach(tile => {
+      const who = PRESET_COMPLETIONS[tile.name];
+      if (who != null) {
+        tile.completed = true;
+        tile.completor = who;
+      }
+    });
+    return board;
+  }
+
+  const STORAGE_KEY = "gsf_bingo_v2";
+
+  function shuffled(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  // State: array of 25 tiles in board order, each { name, images[], completor, completed }
+  let state = load();
+
+  function load() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const saved = JSON.parse(raw);
+        if (Array.isArray(saved) && saved.length === SQUARES.length) return applyPresets(saved);
+      }
+    } catch (e) { /* ignore */ }
+    return newBoard();
+  }
+
+  function newBoard() {
+    return applyPresets(shuffled(SQUARES).map(sq => ({
+      name: sq.name,
+      images: sq.images || [sq.image],
+      completor: "",
+      completed: false,
+    })));
+  }
+
+  function save() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  function render() {
+    const grid = document.getElementById("grid");
+    grid.innerHTML = "";
+    state.forEach((tile, i) => {
+      const cell = document.createElement("div");
+      cell.className = "cell" + (tile.completed ? " done" : "");
+
+      const check = document.createElement("div");
+      check.className = "check";
+      check.textContent = "✔";
+
+      const icons = document.createElement("div");
+      icons.className = "icons" + (tile.images.length > 1 ? " multi" : "");
+      tile.images.forEach(src => {
+        const icon = document.createElement("img");
+        icon.className = "icon";
+        icon.src = src;
+        icon.alt = tile.name;
+        icon.onerror = () => { icon.style.visibility = "hidden"; };
+        icons.appendChild(icon);
+      });
+
+      const name = document.createElement("div");
+      name.className = "name";
+      name.textContent = tile.name;
+
+      const completor = document.createElement("input");
+      completor.className = "completor";
+      completor.type = "text";
+      completor.placeholder = "who?";
+      completor.value = tile.completor;
+      completor.addEventListener("click", e => e.stopPropagation());
+      completor.addEventListener("input", () => {
+        state[i].completor = completor.value;
+        save();
+      });
+
+      cell.addEventListener("click", () => {
+        state[i].completed = !state[i].completed;
+        cell.classList.toggle("done", state[i].completed);
+        save();
+        checkBingo();
+      });
+
+      cell.append(check, icons, name, completor);
+      grid.appendChild(cell);
+    });
+  }
+
+  document.getElementById("shuffle").addEventListener("click", () => {
+    if (confirm("Shuffle the board? This reshuffles positions and clears all progress.")) {
+      state = newBoard();
+      save();
+      render();
+      knownBingos = new Set(completeLines());
+    }
+  });
+
+  document.getElementById("reset").addEventListener("click", () => {
+    if (confirm("Clear all completion marks and completor names? (Positions stay the same.)")) {
+      state.forEach(t => { t.completed = false; t.completor = ""; });
+      applyPresets(state);
+      save();
+      render();
+      knownBingos = new Set(completeLines());
+    }
+  });
+
+  /* ---------- BINGO detection + gory celebration ---------- */
+  const LINES = (() => {
+    const lines = [];
+    for (let r = 0; r < 5; r++) lines.push({ key: "r" + r, idx: [0,1,2,3,4].map(c => r*5 + c) });
+    for (let c = 0; c < 5; c++) lines.push({ key: "c" + c, idx: [0,1,2,3,4].map(r => r*5 + c) });
+    lines.push({ key: "d1", idx: [0,6,12,18,24] });
+    lines.push({ key: "d2", idx: [4,8,12,16,20] });
+    return lines;
+  })();
+
+  function completeLines() {
+    return LINES.filter(l => l.idx.every(i => state[i].completed)).map(l => l.key);
+  }
+
+  // Lines already complete are "known" so we only celebrate NEW bingos.
+  let knownBingos = new Set(completeLines());
+
+  function checkBingo() {
+    const now = completeLines();
+    const fresh = now.filter(k => !knownBingos.has(k));
+    knownBingos = new Set(now);
+    if (fresh.length) celebrate();
+  }
+
+  let goreTimer = null;
+  function celebrate() {
+    const el = document.getElementById("celebration");
+    el.classList.add("show");
+    // restart the gif from frame 1 each time
+    const gif = el.querySelector(".bingo-gif");
+    const src = gif.getAttribute("src");
+    gif.src = ""; gif.src = src;
+
+    const gore = document.getElementById("gore");
+    if (goreTimer) clearInterval(goreTimer);
+    gore.innerHTML = "";
+    goreParticles = [];
+    // opening blast around the centre, then keep spraying while shown
+    for (let b = 0; b < 5; b++) spawnBurst(gore, 45 + Math.random()*10, 45 + Math.random()*10);
+    goreTimer = setInterval(() => {
+      const bursts = 2 + Math.floor(Math.random() * 3);
+      for (let b = 0; b < bursts; b++) {
+        spawnBurst(gore, 8 + Math.random() * 84, 8 + Math.random() * 84);
+      }
+    }, 220);
+  }
+
+  function endCelebrate() {
+    document.getElementById("celebration").classList.remove("show");
+    document.getElementById("gore").innerHTML = "";
+    goreParticles = [];
+    if (goreTimer) { clearInterval(goreTimer); goreTimer = null; }
+  }
+  document.getElementById("celebration").addEventListener("click", endCelebrate);
+
+  // Dark-crimson Diablo palette, mostly deep maroon with a few brighter bits
+  const GORE_COLORS = ["#3d0000","#4d0000","#5c0202","#6b0000","#7a0000","#8a0000","#a00000","#b81010"];
+  let goreParticles = [];       // live gib elements, oldest first
+  const GORE_CAP = 900;         // cap DOM nodes; recycle oldest when exceeded
+
+  function track(container, el, lifeMs) {
+    container.appendChild(el);
+    const rec = { el };
+    goreParticles.push(rec);
+    // fade + remove after it has settled and lived a while
+    rec.timer = setTimeout(() => {
+      el.style.opacity = "0";
+      setTimeout(() => el.remove(), 1000);
+      const i = goreParticles.indexOf(rec);
+      if (i >= 0) goreParticles.splice(i, 1);
+    }, lifeMs);
+    // enforce cap
+    while (goreParticles.length > GORE_CAP) {
+      const old = goreParticles.shift();
+      clearTimeout(old.timer);
+      old.el.remove();
+    }
+  }
+
+  // One burst = a splash of many tiny gibs from (cx,cy)%
+  function spawnBurst(container, cx, cy) {
+    const n = 22 + Math.floor(Math.random() * 26);
+    for (let k = 0; k < n; k++) {
+      const g = document.createElement("div");
+      g.className = "gib";
+      g.style.left = cx + "%";
+      g.style.top = cy + "%";
+      const ang = Math.random() * Math.PI * 2;
+      const dist = Math.pow(Math.random(), 0.6) * (110 + Math.random() * 90);
+      g.style.setProperty("--tx", Math.round(Math.cos(ang) * dist) + "px");
+      g.style.setProperty("--ty", Math.round(Math.sin(ang) * dist * 0.7 + dist * 0.25 + 8) + "px");
+      g.style.setProperty("--rot", Math.floor(Math.random() * 90) + "deg");
+      g.style.setProperty("--dur", (0.35 + Math.random() * 0.4).toFixed(2) + "s");
+      const w = 2 + Math.floor(Math.random() * 7);
+      const h = Math.max(2, w - Math.floor(Math.random() * 2));
+      g.style.width = w + "px";
+      g.style.height = h + "px";
+      g.style.borderRadius = Math.random() < 0.5 ? "1px" : "40%";
+      g.style.background = GORE_COLORS[Math.floor(Math.random() * GORE_COLORS.length)];
+      track(container, g, 4200 + Math.random() * 3400);
+    }
+  }
+
+  render();
+</script>
+</body>
+</html>
