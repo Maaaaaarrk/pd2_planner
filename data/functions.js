@@ -521,7 +521,7 @@ function loadParams() {
 				for (group in corruptsEquipped) { if (param_equipped[group][0] != "none") {	// equipment
 					var isSwapGroup = group.startsWith("swap_");
 					var options = document.getElementById("dropdown_"+group).options;
-					for (let i = 0; i < options.length; i++) { if (options[i].innerHTML == param_equipped[group][0]) {  document.getElementById("dropdown_"+group).selectedIndex = i } }
+					for (let i = 0; i < options.length; i++) { if (options[i].value == param_equipped[group][0]) {  document.getElementById("dropdown_"+group).selectedIndex = i } }
 					if (isSwapGroup) { equipSwap(group.slice(5), param_equipped[group][0]) }
 					else { equip(group,param_equipped[group][0]) }
 				} }
@@ -553,7 +553,7 @@ function loadParams() {
 				for (group in mercEquipped) {
 					if (param_mercenary[g] != 'none') {
 						var options = document.getElementById("dropdown_merc_"+group).options;
-						for (let i = 0; i < options.length; i++) { if (options[i].innerHTML == param_mercenary[g]) {  document.getElementById("dropdown_merc_"+group).selectedIndex = i } }
+						for (let i = 0; i < options.length; i++) { if (options[i].value == param_mercenary[g]) {  document.getElementById("dropdown_merc_"+group).selectedIndex = i } }
 						equipMerc(group,param_mercenary[g])
 					}
 					g += 1
@@ -1495,6 +1495,11 @@ function loadItems(group, dropdown, className) {
 	else {
 		var choices = "";
 		var choices_offhand = "";
+		// Items kept after class/slot filtering. The first kept item is the slot
+		// placeholder (e.g. "Weapon") and is pinned at the top; the rest are sorted
+		// by rarity -> level -> name below (issue #118).
+		var keptItems = [];
+		var placeholder = null;	// {item, addon}
 		for (itemNew in equipment[group]) {
 			var item = equipment[group][itemNew];
 			// || item.only == className) {
@@ -1530,26 +1535,81 @@ function loadItems(group, dropdown, className) {
                     if (className == "Barb (merc)") { if (group == "offhand" || (group == "weapon" && item.type != "sword" && item.type != "axe" && item.name != "Weapon" && item.subtype != "hammer" && item.subtype != "mace")) { halt = 1 } }
 				}
 				if (halt == 0) {
-					var addon = "";
-					if (choices == "") {
+					if (placeholder == null) {
+						// First kept item is the slot placeholder (selected, pinned to top).
+						var addon = "";
 						if (group != "charms") { addon = "<option selected>" + "­ ­ ­ ­ " + item.name + "</option>" }
 						else { addon = "<option disabled selected>" + "­ ­ ­ ­ " + item.name + "</option>" }
+						placeholder = {item: item, addon: addon};
 					} else {
-						if (typeof(item.debug) != 'undefined') { addon = "<option class='dropdown-debug'>" + item.name + "</option>" }
-						else if (typeof(item.rarity) != 'undefined') { addon = "<option class='dropdown-"+item.rarity+"'>" + item.name + "</option>" }
-						else { addon = "<option class='dropdown-unique'>" + item.name + "</option>" }
+						var addon = "";
+						var label = item.name + itemLevelLabel(item);
+						// Pin the option value to the bare item name so the displayed level
+						// label doesn't change what equip()/equipMerc()/equipSwap() and the
+						// build-restore loop match on (they compare against item.name). (#118)
+						var optVal = " value=\"" + item.name + "\"";
+						if (typeof(item.debug) != 'undefined') { addon = "<option"+optVal+" class='dropdown-debug'>" + label + "</option>" }
+						else if (typeof(item.rarity) != 'undefined') { addon = "<option"+optVal+" class='dropdown-"+item.rarity+"'>" + label + "</option>" }
+						else { addon = "<option"+optVal+" class='dropdown-unique'>" + label + "</option>" }
+						keptItems.push({item: item, addon: addon});
 					}
-					choices += addon
-					if (className == "assassin" && item.name == "Offhand") { choices += offhandSetup }	// weapons inserted into offhand dropdown list
-					if (className == "assassin" && item.type == "claw") { choices_offhand += addon }
-					if (className == "barbarian" && item.name != "Weapon" && (typeof(item.twoHanded) == 'undefined' || item.twoHanded != 1 || item.type == "sword")) { choices_offhand += addon }
 				}
 
+		}
+		// Sort the non-placeholder items by rarity -> level -> name (issue #118).
+		keptItems.sort(compareItemsForDropdown);
+		if (placeholder != null) {
+			choices += placeholder.addon
+			if (className == "assassin" && placeholder.item.name == "Offhand") { choices += offhandSetup }	// weapons inserted into offhand dropdown list
+		}
+		for (let k = 0; k < keptItems.length; k++) {
+			var item = keptItems[k].item;
+			var addon = keptItems[k].addon;
+			choices += addon
+			if (className == "assassin" && item.name == "Offhand") { choices += offhandSetup }	// weapons inserted into offhand dropdown list
+			if (className == "assassin" && item.type == "claw") { choices_offhand += addon }
+			if (className == "barbarian" && item.name != "Weapon" && (typeof(item.twoHanded) == 'undefined' || item.twoHanded != 1 || item.type == "sword")) { choices_offhand += addon }
 		}
 		if (group == "weapon") { offhandSetup = choices_offhand }
 		if (className == "barbarian" && group == "offhand") { choices += offhandSetup }	// weapons inserted into offhand dropdown list
 		document.getElementById(dropdown).innerHTML = choices
 	}
+}
+
+// itemLevelLabel - returns a " (lvl N)" suffix for an equipment item, or "" when
+//	there's no meaningful required level (e.g. runewords store req_level as "").
+// ---------------------------------
+function itemLevelLabel(item) {
+	var lvl = item.req_level;
+	if (typeof(lvl) == 'number' && lvl > 0) { return " ­ ­ (lvl " + lvl + ")" }
+	return ""
+}
+
+// dropdownRarityRank - sort rank for an item's rarity (issue #118).
+//	Order: normal/base -> magic -> rare -> craft -> set -> runeword -> unique.
+//	Items without a rarity field are uniques (matching loadItems' dropdown-unique default).
+// ---------------------------------
+function dropdownRarityRank(item) {
+	switch (item.rarity) {
+		case "common": return 0;
+		case "magic": return 1;
+		case "rare": return 2;
+		case "craft": return 3;
+		case "set": return 4;
+		case "rw": return 5;	// runewords as their own bucket between set and unique
+		default: return 6;		// no rarity field -> unique
+	}
+}
+
+// compareItemsForDropdown - primary rarity, then required level, then name (issue #118).
+// ---------------------------------
+function compareItemsForDropdown(a, b) {
+	var ra = dropdownRarityRank(a.item), rb = dropdownRarityRank(b.item);
+	if (ra != rb) { return ra - rb }
+	var la = (typeof(a.item.req_level) == 'number') ? a.item.req_level : 0;
+	var lb = (typeof(b.item.req_level) == 'number') ? b.item.req_level : 0;
+	if (la != lb) { return la - lb }
+	return String(a.item.name).localeCompare(String(b.item.name))
 }
 
 // loadMisc - Loads non-item effects to the 'Miscellaneous' dropdown menu
@@ -6275,6 +6335,7 @@ function updateTertiaryStats() {
 	document.getElementById("statlines").innerHTML = statlines
 	updateCTC()
 	updateChargeSkills()
+	updateAggregatedAffixes()
 }
 
 // updateCTC - Updates CTC (chance to cast) stats gained from items
@@ -6324,6 +6385,115 @@ function updateChargeSkills() {
 		}
 	}
 	document.getElementById("cskill").innerHTML = stats
+}
+
+// formatAggregatedSkillLine - formats a single aggregated skill affix line using the
+//	shared `stats` metadata (item_metadata.js) so wording matches the rest of the tool.
+//	" to Class Skills" is rewritten to the active class, mirroring getAffixLine().
+//	affix: affix key (e.g. "all_skills", "skills_combat_paladin", "skill_Holy_Bolt")
+//	value: aggregated total from the character object
+// ---------------------------------
+function formatAggregatedSkillLine(affix, value) {
+	var meta = stats[affix];
+	if (meta != null && meta.format != null && meta.format.length >= 2) {
+		var text = meta.format[meta.format.length-1];
+		if (text == " to Class Skills") { text = " to " + character.class_name + " Skills" }
+		return meta.format[0] + value + text;
+	}
+	// Fallback: derive a label from the key (e.g. "skill_Holy_Bolt" -> "+N to Holy Bolt").
+	var name = affix.replace(/^o?skill_/, "").split("_").join(" ");
+	return "+" + value + " to " + name;
+}
+
+// updateAggregatedAffixes - Builds the "aggregated affixes" section (issue #118).
+//	Lists every gear-derived skill/CTC/aura affix, grouped broad->specific:
+//	+all skills -> +class skills -> +tab skills -> +single skills -> +charges,
+//	then a CTC block, then on-kill/oskill/aura lines.
+//	Skill lines are intentionally NOT merged (e.g. "+1 to All Skills" and
+//	"+2 Holy Bolt" stay split, game-style) so the user can sum them.
+//	Totals are read from the `character` object, which already sums every equipped
+//	source (gear, charms, sockets, corruptions, set bonuses).
+// ---------------------------------
+function updateAggregatedAffixes() {
+	var c = character;
+
+	// Mirror the full in-game stats-page ("a" key) totals into the aggregated section
+	// header, in panel order: attributes, then core stats, then resistances (#118).
+	var statMirror = [
+		["strength","agg_strength"], ["dexterity","agg_dexterity"], ["vitality","agg_vitality"], ["energy","agg_energy"],
+		["defense","agg_defense"], ["stamina","agg_stamina"], ["life","agg_life"], ["mana","agg_mana"],
+		["fres","agg_fres"], ["cres","agg_cres"], ["lres","agg_lres"], ["pres","agg_pres"]
+	];
+	for (let i = 0; i < statMirror.length; i++) {
+		var src = document.getElementById(statMirror[i][0]), dst = document.getElementById(statMirror[i][1]);
+		if (src != null && dst != null) { dst.innerHTML = src.innerHTML }
+	}
+
+	var html = "";
+
+	// Skill-tab keys, in a stable broad-ish order (all classes, then class-specific tabs).
+	var tabKeys = [
+		"skills_fire_all", "skills_cold_all", "skills_lightning_all", "skills_poison_all", "skills_magic_all",
+		"skills_javelins", "skills_passives", "skills_bows",
+		"skills_martial", "skills_shadow", "skills_traps",
+		"skills_warcries", "skills_masteries", "skills_combat_barbarian",
+		"skills_elemental", "skills_shapeshifting", "skills_summoning_druid",
+		"skills_summoning_necromancer", "skills_poisonBone", "skills_curses",
+		"skills_offensive", "skills_defensive", "skills_combat_paladin",
+		"skills_cold", "skills_lightning", "skills_fire"
+	];
+
+	// 1) +X to All Skills (broadest)
+	if (c.all_skills > 0) { html += formatAggregatedSkillLine("all_skills", c.all_skills) + "<br>" }
+	// 2) +X to <Class> Skills
+	if (c.skills_class > 0) { html += formatAggregatedSkillLine("skills_class", c.skills_class) + "<br>" }
+	// 3) +X to <tab> Skills
+	for (let i = 0; i < tabKeys.length; i++) {
+		if (c[tabKeys[i]] > 0) { html += formatAggregatedSkillLine(tabKeys[i], c[tabKeys[i]]) + "<br>" }
+	}
+	// 4) +X to <single skill> (each its own line, not merged into the broader lines above)
+	var singleKeys = [];
+	for (var key in c) {
+		if (key.indexOf("skill_") == 0 && c[key] > 0) { singleKeys.push(key) }
+	}
+	singleKeys.sort(function(a, b) {
+		return formatAggregatedSkillLine(a, c[a]).localeCompare(formatAggregatedSkillLine(b, c[b]))
+	});
+	for (let i = 0; i < singleKeys.length; i++) {
+		html += formatAggregatedSkillLine(singleKeys[i], c[singleKeys[i]]) + "<br>"
+	}
+	// 5) Charge skills (most specific in the skills group)
+	for (group in equipped) {
+		if (typeof(equipped[group].cskill) != 'undefined' && equipped[group].cskill != "") {
+			for (let i = 0; i < equipped[group].cskill.length; i++) {
+				html += "Level " + equipped[group].cskill[i][0] + " " + equipped[group].cskill[i][1] + " (" + equipped[group].cskill[i][2] + " charges)<br>"
+			}
+		}
+	}
+
+	// 6) Chance-to-cast block (reuses the #ctc lines already built by updateCTC()).
+	var ctcHtml = document.getElementById("ctc").innerHTML;
+	if (ctcHtml != "") { html += "<br>" + ctcHtml }
+
+	// 7) Oskills (granted skills the class doesn't natively have) + auras.
+	var oskillKeys = [];
+	for (var key in c) {
+		if (key.indexOf("oskill_") == 0 && c[key] > 0) { oskillKeys.push(key) }
+	}
+	oskillKeys.sort(function(a, b) {
+		return formatAggregatedSkillLine(a, c[a]).localeCompare(formatAggregatedSkillLine(b, c[b]))
+	});
+	var extraHtml = "";
+	for (let i = 0; i < oskillKeys.length; i++) {
+		extraHtml += formatAggregatedSkillLine(oskillKeys[i], c[oskillKeys[i]]) + "<br>"
+	}
+	if (typeof(c.aura) == 'string' && c.aura != "") {
+		extraHtml += "Level " + (c.aura_lvl > 0 ? c.aura_lvl : "") + " " + c.aura + " Aura When Equipped<br>"
+	}
+	if (extraHtml != "") { html += "<br>" + extraHtml }
+
+	if (html == "") { html = "<font style='color:#808080;'>No skill or chance-to-cast affixes from gear.</font>" }
+	document.getElementById("agg_affix_lines").innerHTML = html
 }
 
 // updateOther - Updates other interface elements
